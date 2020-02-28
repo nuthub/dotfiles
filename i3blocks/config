@@ -1,0 +1,53 @@
+# i3blocks configuration file
+#
+# The i3blocks man page describes the usage of the binary,
+# and its website describes the configuration:
+#
+#     https://vivien.github.io/i3blocks
+
+
+# Global properties
+separator=true
+separator_block_width=15
+
+[uptime]
+command=~/.config/i3blocks/uptime.sh
+interval=60
+
+[loadavg]
+command=~/.config/i3blocks/load.sh
+interval=10
+
+[memory]
+command=~/.config/i3blocks/memory.sh
+interval=10
+
+[disk]
+command=~/.config/i3blocks/disk.sh
+interval=10
+
+[brightness]
+command=~/.config/i3blocks/brightness.sh
+interval=1
+
+[volume]
+command=~/.config/i3blocks/volume.sh
+interval=1
+
+[battery]
+command=~/.config/i3blocks/battery.sh
+interval=10
+
+[doorstatus]
+command=~/.config/i3blocks/doorstatus.sh
+interval=60
+
+[wireless]
+command=~/.config/i3blocks/wireless.sh
+interval=5
+
+[time]
+command=date +"%e.%m.%G %H:%M"
+interval=5
+
+
