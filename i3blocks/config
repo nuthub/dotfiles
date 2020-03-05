@@ -16,27 +16,29 @@ interval=60
 
 [loadavg]
 command=~/.config/i3blocks/load.sh
-interval=10
+interval=20
 
 [memory]
 command=~/.config/i3blocks/memory.sh
-interval=10
+interval=20
 
 [disk]
 command=~/.config/i3blocks/disk.sh
-interval=10
+interval=20
 
 [brightness]
 command=~/.config/i3blocks/brightness.sh
-interval=1
+interval=5
+signal=11
 
 [volume]
 command=~/.config/i3blocks/volume.sh
-interval=1
+interval=20
+signal=10
 
 [battery]
 command=~/.config/i3blocks/battery.sh
-interval=10
+interval=20
 
 [doorstatus]
 command=~/.config/i3blocks/doorstatus.sh
@@ -44,10 +46,10 @@ interval=60
 
 [wireless]
 command=~/.config/i3blocks/wireless.sh
-interval=5
+interval=10
 
 [time]
-command=date +"%e.%m.%G %H:%M"
+command=date +"%d.%m.%Y %H:%M"
 interval=5
 
 

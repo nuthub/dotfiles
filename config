@@ -13,6 +13,8 @@ set $mod Mod4
 
 # useful for lower latency
 set $refresh_i3status killall -SIGUSR1 i3status
+set $refresh_volume $refresh_i3status & exec pkill -SIGRTMIN+10 i3blocks
+set $refresh_brightness $refresh_i3status & exec pkill -SIGRTMIN+11 i3blocks
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -21,7 +23,6 @@ set $refresh_i3status killall -SIGUSR1 i3status
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
 font pango:DejaVu Sans Mono 9
-
 # The combination of xss-lock, nm-applet and pactl is a popular choice, so
 # they are included here as an example. Modify as you see fit.
 
@@ -34,14 +35,14 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- lockscreen
 exec --no-startup-id nm-applet
 
 # Use pactl to adjust volume in PulseAudio.
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
-bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_volume
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_volume
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_volume
+bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_volume
 
 # Screen brightness controls
-bindsym XF86MonBrightnessUp exec xbacklight -inc 10 && xbacklight -get > ~/.config/brightness && $refresh_i3status
-bindsym XF86MonBrightnessDown exec xbacklight -dec 10 && xbacklight -get > ~/.config/brightness && $refresh_i3status
+bindsym XF86MonBrightnessUp exec xbacklight -inc 10 && xbacklight -get > ~/.config/brightness && $refresh_brightness
+bindsym XF86MonBrightnessDown exec xbacklight -dec 10 && xbacklight -get > ~/.config/brightness && $refresh_brightness
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
