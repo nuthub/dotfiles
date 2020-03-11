@@ -18,6 +18,10 @@ interval=60
 command=~/.config/i3blocks/load.sh
 interval=20
 
+[cpu_usage]
+command=~/.config/i3blocks/cpu_usage.sh
+interval=5
+
 [memory]
 command=~/.config/i3blocks/memory.sh
 interval=20
