@@ -1,6 +1,9 @@
 #!/bin/bash
 
 UPTIME=$(uptime -p)
+UPTIME=$(echo $UPTIME | sed 's/ day[s]\?,/d /')
+UPTIME=$(echo $UPTIME | sed 's/ hour[s]\?,/h /')
+UPTIME=$(echo $UPTIME | sed 's/ minute[s]\?/m/')
 
 # 1st row: full text
 echo " $UPTIME"
