@@ -8,6 +8,8 @@ echo " $GBFREE GB"
 # 2nd row: Short text
 echo " $GBFREE GB"
 # 3rd row: Color
-[ ${FREE} -le 1048576 ] && echo "#FF8000"
+# 1GB=1048576
+# 500MB=524288
+[ ${FREE} -le 524288 ] && echo "#FF8000"
 
 exit 0
