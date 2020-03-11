@@ -254,7 +254,6 @@ for_window [class="Arandr"] floating enable
 bindsym $mod+Tab workspace next_on_output
 bindsym $mod+Shift+Tab workspace prev_on_output
 bindsym $mod+Escape workspace back_and_forth
-
 # for second output
 bindsym $mod+o move workspace to output right
 
@@ -271,3 +270,8 @@ workspace $ws6 output primary
 workspace $ws7 output primary
 workspace $ws8 output primary
 workspace $ws9 output primary
+
+# avoid title bars
+default_border pixel
+# default_floating_border normal
+
