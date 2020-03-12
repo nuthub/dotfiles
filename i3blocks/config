@@ -52,6 +52,10 @@ interval=60
 command=~/.config/i3blocks/wireless.sh
 interval=10
 
+[updates]
+command=~/.config/i3blocks/updates.sh
+interval=600
+
 [time]
 command=date +"%d.%m.%Y %H:%M"
 interval=5
