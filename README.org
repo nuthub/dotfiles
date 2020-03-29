@@ -1,0 +1,16 @@
+* My emacs configuration
+  - Should be documented
+  - Should be version controlled
+  - Shoud be used on several machines
+
+* More Info
+  - https://www.emacswiki.org/emacs/DotEmacsStructuring
+
+* TODOs
+  - wombat or zenburn or solarized-theme or ...
+  - powerline / smart-mode-line theme
+  - ivy oder helm
+  - OrgDotemacs
+  - linum (line numbers in column)
+  - pdf-tools?
+  - winner-mode / switch-window / ace-jump-mode
