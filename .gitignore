@@ -1,5 +1,7 @@
 *
-
-!.gitignore
-!init.el
-!README.org
+!./.gitignore
+!./init.el
+!./README.org
+!conf/
+conf/*
+!conf/init.org

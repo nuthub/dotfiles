@@ -1,0 +1,162 @@
+#+TITLE: Emacs Configuration
+#+TODO: BROKEN CHECK TODO
+
+* CHECK Personal data
+  This is used to identify myself, and to find my own GnuPG key
+  
+#+BEGIN_SRC emacs-lisp
+(setq user-full-name "Julian Flake")
+(setq user-mail-address "julian@flake.de")
+#+END_SRC
+
+* Add package repositories and initialize package.el
+  There is also marmalade repository, but I am not sure, if it is still maintained. In 2020 they used a SSL certificate that was valid until 2018.
+#+BEGIN_SRC emacs-lisp
+(require 'package)
+;; standard elpa
+(add-to-list 'package-archives '("gnu"       . "http://elpa.gnu.org/packages/"))
+;; melpa stable
+(add-to-list 'package-archives '("melpa"     . "https://stable.melpa.org/packages/"))
+;; melpa unstable
+;;(add-to-list 'package-archives '("melpa"     . "http://melpa.org/packages/"))
+;; initialize package.el
+(package-initialize)
+#+END_SRC
+
+* Install (if required) and Initialize use-package.el
+#+BEGIN_SRC emacs-lisp
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+(eval-when-compile (require 'use-package))
+;; set :ensure t with all packages
+(require 'use-package-ensure)
+(setq use-package-always-ensure t)
+;;(setq use-package-always-defer t)
+#+END_SRC
+
+* Packages with package dependent configuration 
+** undo-tree (C-x u)
+#+BEGIN_SRC emacs-lisp
+(use-package undo-tree
+  :config
+  (global-undo-tree-mode))
+#+END_SRC
+
+** Treemacs
+#+BEGIN_SRC emacs-lisp
+(use-package treemacs
+  :defer t)
+#+END_SRC
+
+** Git support
+#+BEGIN_SRC emacs-lisp
+(use-package magit
+  :defer t)
+#+END_SRC
+
+** CHECK Line number column
+#+BEGIN_SRC emacs-lisp
+(use-package linum
+  :config
+  (linum-mode))
+#+END_SRC
+
+** ivy mode (vs helm vs ido?)
+#+BEGIN_SRC emacs-lisp
+(use-package ivy)
+#+END_SRC
+
+** A beautiful modeline
+#+BEGIN_SRC emacs-lisp
+(use-package powerline
+  :config
+  (powerline-center-theme))
+#+END_SRC
+
+** org-mode
+#+BEGIN_SRC emacs-lisp
+(use-package org
+  :defer t
+  :config
+;;  (setq org-directory "~/org/")
+  (setq org-tag-alist (quote (("@home" . ?h) ("@notebook" . ?n) ("@office" . ?o) ("@phone" . ?p))))
+  (setq org-agenda-files (quote ("~/org/GTD.org" "~/org/Tickler.org" "~/org/Someday.org"))))
+(use-package org-bullets
+;;  :defer t
+  :hook (org-mode . org-bullets-mode))
+;; used by org to export to HTML
+(use-package htmlize)
+#+END_SRC
+
+** Markdown mode
+#+BEGIN_SRC emacs-lisp
+(use-package markdown-mode)
+  ;;:defer t)
+#+END_SRC
+
+** LaTeX stuff
+#+BEGIN_SRC emacs-lisp
+(use-package auctex
+  :defer t
+  :init
+  ;; https://askubuntu.com/questions/1041919/integration-of-emacs-lualatex-with-evince-zathura-not-working-in-ubuntu-18-04-h
+  (setq TeX-view-program-selection '((output-pdf "Zathura")))
+  (setq TeX-source-correlate-method 'synctex)
+  (setq TeX-source-correlate-start-server t)
+  (setq TeX-auto-save t)
+  (setq TeX-parse-self t)
+  (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode))
+#+END_SRC
+* Look & Feel
+#+BEGIN_SRC emacs-lisp
+(setq inhibit-startup-screen t) ;; don't show splash
+(load-theme 'wombat) ; load standard dark theme
+(menu-bar-mode -1) ; switch off menu bar
+(tool-bar-mode -1) ; switch off tool bar
+(scroll-bar-mode -1) ; switch off scroll bar
+(column-number-mode t) ; show column number next to line number
+(show-paren-mode t) ; show matching parenthesis
+#+END_SRC
+
+* Global key bindings
+This allows to open the file under cursor:
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-x f") 'find-file-at-point)
+#+END_SRC
+
+This is a global key binding for the org-agenda:
+#+BEGIN_SRC emacs-lisp
+(global-set-key "\C-ca" 'org-agenda)
+#+END_SRC
+
+* Global behaviour
+Use Chromium as default browser:
+#+BEGIN_SRC emacs-lisp
+(setq browse-url-browser-function 'browse-url-chromium)
+#+END_SRC
+
+* TODO Automatically added stuff
+I think, I can remove this here
+#+BEGIN_SRC emacs-lisp
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (counsel ivy use-package undo-tree treemacs smart-mode-line powerline markdown-mode magit helm auctex))))
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+#+END_SRC

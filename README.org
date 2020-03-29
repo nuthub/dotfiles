@@ -1,16 +1,52 @@
+#+TITLE: Emacs Configuration
 * My emacs configuration
   - Should be documented
   - Should be version controlled
   - Shoud be used on several machines
 
-* More Info
-  - https://www.emacswiki.org/emacs/DotEmacsStructuring
+* Installation
 
-* TODOs
-  - wombat or zenburn or solarized-theme or ...
+#+BEGIN_SRC bash
+git clone git@github.com:nuthub/emacs.d.git ~/.emacs.d
+emacs
+#+END_SRC
+
+* Systemd unit & alias
+Run emacs as a server:
+
+#+BEGIN_SRC 
+[Unit]
+Description=Emacs text editor
+Documentation=info:emacs man:emacs(1) https://gnu.org/software/emacs/
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/emacs --daemon
+ExecStop=/usr/bin/emacsclient --eval "(kill-emacs)"
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
+#+END_SRC
+
+Reload systemd daemon and start the server:
+#+begin_src bash
+systemctl --user daemon-reload
+systemctl --user start emacs.service
+#+end_src
+
+Connect client to server:
+
+#+begin_src bash
+emacsclient -nc
+#+end_src
+
+* TODO Theme
+  - wombat or zenburn or solarized-theme or
+* TODO Modeline
   - powerline / smart-mode-line theme
-  - ivy oder helm
-  - OrgDotemacs
-  - linum (line numbers in column)
+* TODO Minibuffer completion
+  - ivy or helm
+* TODO Check further packages
   - pdf-tools?
   - winner-mode / switch-window / ace-jump-mode
