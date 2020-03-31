@@ -79,11 +79,12 @@
 (use-package org
   :defer t
   :config
-;;  (setq org-directory "~/org/")
   (setq org-tag-alist (quote (("@home" . ?h) ("@notebook" . ?n) ("@office" . ?o) ("@phone" . ?p))))
   (setq org-agenda-files (quote ("~/org/GTD.org" "~/org/Tickler.org" "~/org/Someday.org"))))
+;; Markdown export
+(use-package ox-md)
+;; Beautiful bullets
 (use-package org-bullets
-;;  :defer t
   :hook (org-mode . org-bullets-mode))
 ;; used by org to export to HTML
 (use-package htmlize)
