@@ -40,15 +40,3 @@ Connect client to server:
 #+begin_src bash
 emacsclient -nc
 #+end_src
-* TODO Minibuffer completion
-  - ivy or helm
-
-* TODO Theme
-  - wombat or zenburn or solarized-theme or
-* TODO Modeline
-  - powerline / smart-mode-line theme
-* TODO Check further packages
-  - pdf-tools?
-  - winner-mode / switch-window / ace-jump-mode
-* TODO org-refile targets
-* TODO web-mode anschauen?
