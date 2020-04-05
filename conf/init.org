@@ -53,7 +53,8 @@
 ** Solarized Theme
    
    #+BEGIN_SRC emacs-lisp
-   (use-package 'solarized-theme')
+   (use-package solarized-theme
+     :config (load-theme 'solarized-dark t))
    #+END_SRC
 
 ** Diminish
@@ -239,7 +240,6 @@
 * Look & Feel
 
   #+BEGIN_SRC emacs-lisp
-  (load-theme 'solarized-dark) ; load standard dark theme
 ;;  (set-frame-font "Hack 10" nil t)
   (menu-bar-mode -1) ; switch off menu bar
   (tool-bar-mode -1) ; switch off tool bar
