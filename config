@@ -22,7 +22,8 @@ set $refresh_brightness $refresh_i3status & exec pkill -SIGRTMIN+11 i3blocks
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
-font pango:DejaVu Sans Mono 9
+#font pango:DejaVu Sans Mono 10
+font pango:Hack 9
 # The combination of xss-lock, nm-applet and pactl is a popular choice, so
 # they are included here as an example. Modify as you see fit.
 
@@ -86,9 +87,10 @@ bindsym $mod+Shift+Right move right
 
 # split in horizontal orientation
 bindsym $mod+h split h
-
 # split in vertical orientation
 bindsym $mod+v split v
+# toggle split orientation
+bindsym $mod+t split toggle
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
@@ -112,16 +114,16 @@ bindsym $mod+a focus parent
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
-set $ws1 "1:com"
+set $ws1 "1:mail"
 set $ws2 "2:web"
 set $ws3 "3:file"
 set $ws4 "4"
 set $ws5 "5"
 set $ws6 "6"
-set $ws7 "7:term"
+set $ws7 "7"
 set $ws8 "8:chat"
-set $ws9 "9:music"
-#set $ws10 "0"
+set $ws9 "9:term"
+set $ws10 "0"
 
 # switch to workspace
 bindsym $mod+1 workspace number $ws1
@@ -133,7 +135,7 @@ bindsym $mod+6 workspace number $ws6
 bindsym $mod+7 workspace number $ws7
 bindsym $mod+8 workspace number $ws8
 bindsym $mod+9 workspace number $ws9
-#bindsym $mod+0 workspace number $ws10
+bindsym $mod+0 workspace number $ws10
 
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace number $ws1
@@ -145,7 +147,7 @@ bindsym $mod+Shift+6 move container to workspace number $ws6
 bindsym $mod+Shift+7 move container to workspace number $ws7
 bindsym $mod+Shift+8 move container to workspace number $ws8
 bindsym $mod+Shift+9 move container to workspace number $ws9
-#bindsym $mod+Shift+0 move container to workspace number $ws10
+bindsym $mod+Shift+0 move container to workspace number $ws10
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -188,7 +190,7 @@ mode "$mode_system" {
     bindsym s exec --no-startup-id systemctl suspend, mode "default"
 #    bindsym h exec --no-startup-id systemctl hibernate, mode "default"
     bindsym r exec --no-startup-id systemctl reboot, mode "default"
-    bindsym c exec --no-startup-id emacs ~/.config/i3/config, mode "default"
+    bindsym c exec --no-startup-id emacsclient -nc ~/.config/i3/config, mode "default"
     bindsym Shift+s exec --no-startup-id systemctl poweroff, mode "default"
 
     # back to normal: Enter or Escape or $mod+Delete
@@ -219,7 +221,8 @@ bindsym XF86Display exec arandr
 bar {
 #        status_command i3status
 	status_command i3blocks
-	font pango:DejaVu Sans Mono, Awesome 9
+#	font pango:DejaVu Sans Mono, Awesome 9
+	font pango:Hack, Awesome 9
 	tray_output primary
 	position top
 }
@@ -231,6 +234,7 @@ exec --no-startup-id msm_notifier
 exec --no-startup-id pasystray --volume-max=100 --notify=all
 exec --no-startup-id pamac-tray
 exec --no-startup-id blueman-applet
+exec_always --no-startup-id udiskie -s
 exec --no-startup-id nextcloud
 exec --no-startup-id thunderbird
 exec --no-startup-id chromium
@@ -244,11 +248,12 @@ assign [class="Chromium"] $ws2
 assign [class="Thunar"] $ws3
 assign [class="Franz"] $ws8
 assign [class="Rocket.Chat"] $ws8
-for_window [class="Spotify"] move --no-auto-back-and-forth to workspace $ws9
+# for_window [class="Spotify"] move --no-auto-back-and-forth to workspace $ws9
 
 # Set some windows to float by default
 for_window [class="Shutter"] floating enable
 for_window [class="Arandr"] floating enable
+for_window [class="SimpleScreenRecorder"] floating enable
 
 # additional key bindings of workspace management
 bindsym $mod+Tab workspace next_on_output
@@ -260,6 +265,9 @@ bindsym $mod+o move workspace to output right
 # Screen lock
 bindsym Control+mod1+Delete exec lockscreen
 
+# start capture.sh
+bindsym $mod+i exec ~/.local/bin/capture.sh
+
 # by default send all workspaces on primary output
 workspace $ws1 output primary
 workspace $ws2 output primary
@@ -270,8 +278,9 @@ workspace $ws6 output primary
 workspace $ws7 output primary
 workspace $ws8 output primary
 workspace $ws9 output primary
+workspace $ws0 output secondary
 
 # avoid title bars
-default_border pixel
+default_border normal
 # default_floating_border normal
 
