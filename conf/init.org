@@ -210,6 +210,12 @@
    (use-package web-mode)
    #+END_SRC
 
+** yaml-mode
+
+   #+BEGIN_SRC emacs-lisp
+   (use-package yaml-mode)
+   #+END_SRC
+
 ** markdown-mode
 
    #+BEGIN_SRC emacs-lisp
