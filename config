@@ -259,8 +259,9 @@ for_window [class="SimpleScreenRecorder"] floating enable
 bindsym $mod+Tab workspace next_on_output
 bindsym $mod+Shift+Tab workspace prev_on_output
 bindsym $mod+Escape workspace back_and_forth
-# for second output
+# move workspace to neighbouring output
 bindsym $mod+o move workspace to output right
+bindsym $mod+Shift+o move workspace to output left
 
 # Screen lock
 bindsym Control+mod1+Delete exec lockscreen
@@ -284,3 +285,6 @@ workspace $ws0 output secondary
 default_border normal
 # default_floating_border normal
 
+
+# do not move mouse on window movement (which would change the focused window otherwise)
+mouse_warping none
