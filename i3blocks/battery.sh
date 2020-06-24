@@ -4,10 +4,15 @@ BAT=$(acpi -b | grep -E -o '[0-9]?[0-9][0-9]?%')
 TIME=$(acpi -b | grep -E -o '[0-9][0-9]:[0-9][0-9]')
 STATE=$(acpi -b | awk '{ print $3 }')
 
-# Some symbols:      
-SYMBOL="? "
-[ ${STATE} == "Full," ] || [ ${STATE} == "Charging," ] && SYMBOL=" "
-[ ${STATE} == "Discharging," ] && SYMBOL="  "
+# Some symbols:      
+
+SYMBOL=" "
+[ ${BAT%?} -le 75 ] && $SYMBOL = ""
+[ ${BAT%?} -le 25 ] && $SYMBOL = ""
+[ ${BAT%?} -le 10 ] && $SYMBOL = ""
+
+[ ${STATE} == "Full," ] || [ ${STATE} == "Charging," ] && SYMBOL+=" "
+[ ${STATE} == "Discharging," ] && SYMBOL="  "
 [ ! -z $TIME ] && TIME=" ($TIME)"
 
 # Full (1st row) and short texts (2nd row)
