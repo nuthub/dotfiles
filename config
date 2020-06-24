@@ -187,14 +187,14 @@ bindsym $mod+Ctrl+Up resize shrink height 10 px or 10 ppt
 bindsym $mod+Ctrl+Right resize grow width 10 px or 10 ppt
 
 
-set $mode_system System: (l) lock, (e) logout, (s) suspend, (r) reboot, (c) edit config, (Shift+s) shutdown
+set $mode_system System: (l) lock, (e) logout, (s) suspend, (c) edit config, (Shift+r) reboot, (Shift+s) shutdown
 mode "$mode_system" {
     bindsym l exec --no-startup-id lockscreen, mode "default"
     bindsym e exec --no-startup-id i3-msg exit, mode "default"
     bindsym s exec --no-startup-id systemctl suspend, mode "default"
 #    bindsym h exec --no-startup-id systemctl hibernate, mode "default"
-    bindsym r exec --no-startup-id systemctl reboot, mode "default"
     bindsym c exec --no-startup-id emacsclient -nc ~/.config/i3/config, mode "default"
+    bindsym Shift+r exec --no-startup-id systemctl reboot, mode "default"
     bindsym Shift+s exec --no-startup-id systemctl poweroff, mode "default"
 
     # back to normal: Enter or Escape or $mod+Delete
