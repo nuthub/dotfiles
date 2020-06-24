@@ -121,8 +121,8 @@ set $ws4 "4"
 set $ws5 "5"
 set $ws6 "6"
 set $ws7 "7"
-set $ws8 "8:chat"
-set $ws9 "9:term"
+set $ws8 "8"
+set $ws9 "9:chat"
 set $ws10 "0"
 
 # switch to workspace
@@ -230,25 +230,28 @@ bar {
 # autostart
 exec_always --no-startup-id picom
 exec --no-startup-id ~/.fehbg &
-exec --no-startup-id msm_notifier
-exec --no-startup-id pasystray --volume-max=100 --notify=all
-exec --no-startup-id pamac-tray
+exec --no-startup-id msm_notifier # manjaro settings manager notification (new kernels etc)
+exec --no-startup-id pasystray --volume-max=100 --notify=all # pulseaudio
+#exec --no-startup-id pamac-tray # manjaro's package manager
 exec --no-startup-id blueman-applet
-exec_always --no-startup-id udiskie -s
+exec --no-startup-id udiskie -s
 exec --no-startup-id nextcloud
 exec --no-startup-id thunderbird
 exec --no-startup-id chromium
-exec --no-startup-id thunar
+#exec --no-startup-id thunar
 exec --no-startup-id rocketchat-desktop
-exec --no-startup-id franz
+# exec --no-startup-id telegram-desktop
+# exec --no-startup-id franz
 
 # window rules
 assign [class="Thunderbird"] $ws1
 assign [class="Chromium"] $ws2
 assign [class="Thunar"] $ws3
-assign [class="Franz"] $ws8
-assign [class="Rocket.Chat"] $ws8
-# for_window [class="Spotify"] move --no-auto-back-and-forth to workspace $ws9
+assign [class="Franz"] $ws9
+assign [class="Rocket.Chat"] $ws9
+assign [class="TelegramDesktop"] $ws9
+assign [class="Mattermost"] $ws9
+ # for_window [class="Spotify"] move --no-auto-back-and-forth to workspace $ws9
 
 # Set some windows to float by default
 for_window [class="Shutter"] floating enable
