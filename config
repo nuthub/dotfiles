@@ -114,6 +114,7 @@ bindsym $mod+a focus parent
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
+set $ws0 "0"
 set $ws1 "1:mail"
 set $ws2 "2:web"
 set $ws3 "3:file"
@@ -123,9 +124,13 @@ set $ws6 "6"
 set $ws7 "7"
 set $ws8 "8"
 set $ws9 "9:chat"
-set $ws10 "0"
+set $ws10 "10"
+set $ws11 "11"
+set $ws12 "12"
+set $ws13 "13"
 
 # switch to workspace
+bindsym $mod+dead_circumflex workspace number $ws0
 bindsym $mod+1 workspace number $ws1
 bindsym $mod+2 workspace number $ws2
 bindsym $mod+3 workspace number $ws3
@@ -136,8 +141,12 @@ bindsym $mod+7 workspace number $ws7
 bindsym $mod+8 workspace number $ws8
 bindsym $mod+9 workspace number $ws9
 bindsym $mod+0 workspace number $ws10
+bindsym $mod+ssharp workspace number $ws11
+bindsym $mod+dead_grave workspace number $ws12
+bindsym $mod+BackSpace workspace number $ws13
 
 # move focused container to workspace
+bindsym $mod+Shift+dead_circumflex move container to workspace number $ws0
 bindsym $mod+Shift+1 move container to workspace number $ws1
 bindsym $mod+Shift+2 move container to workspace number $ws2
 bindsym $mod+Shift+3 move container to workspace number $ws3
@@ -148,6 +157,9 @@ bindsym $mod+Shift+7 move container to workspace number $ws7
 bindsym $mod+Shift+8 move container to workspace number $ws8
 bindsym $mod+Shift+9 move container to workspace number $ws9
 bindsym $mod+Shift+0 move container to workspace number $ws10
+bindsym $mod+Shift+ssharp move container to workspace number $ws11
+bindsym $mod+Shift+dead_grave move container to workspace number $ws12
+bindsym $mod+Shift+BackSpace move container to workspace number $ws13
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
