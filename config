@@ -51,6 +51,9 @@ floating_modifier $mod
 # start a terminal
 bindsym $mod+Return exec i3-sensible-terminal
 
+# create new emacs frame
+bindsym $mod+Shift+Return exec em
+
 # kill focused window
 bindsym $mod+Shift+q kill
 
@@ -254,7 +257,7 @@ exec --no-startup-id udiskie -s
 exec --no-startup-id nextcloud
 exec --no-startup-id thunderbird
 exec --no-startup-id chromium
-#exec --no-startup-id thunar
+exec --no-startup-id thunar
 exec --no-startup-id rocketchat-desktop
 # exec --no-startup-id telegram-desktop
 # exec --no-startup-id franz
