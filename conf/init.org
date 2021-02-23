@@ -1,6 +1,8 @@
 #+TITLE: Emacs Configuration
 #+TODO: TODO CHECK BROKEN DISABLED
 
+For useful and good packages, see also [[https://github.com/emacs-tw/awesome-emacs#web-feed]].
+
 * Personal data
   
   This is used to identify myself, and to find my own GnuPG key
@@ -246,7 +248,8 @@
 * Look & Feel
 
   #+BEGIN_SRC emacs-lisp
-;;  (set-frame-font "Hack 10" nil t)
+  (add-to-list 'default-frame-alist
+             '(font . "Hack-12"))
   (menu-bar-mode -1) ; switch off menu bar
   (tool-bar-mode -1) ; switch off tool bar
   (scroll-bar-mode -1) ; switch off scroll bar
