@@ -56,7 +56,8 @@ For useful and good packages, see also [[https://github.com/emacs-tw/awesome-ema
    
    #+BEGIN_SRC emacs-lisp
    (use-package solarized-theme
-     :config (load-theme 'solarized-dark t))
+;     :config (load-theme 'solarized-dark t))
+     :config (load-theme 'solarized-light t))
    #+END_SRC
 
 ** Diminish
