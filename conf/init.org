@@ -192,19 +192,36 @@ For useful and good packages, see also [[https://github.com/emacs-tw/awesome-ema
 ** org-mode
 
   #+BEGIN_SRC emacs-lisp
-  (use-package org
-    :defer t
-    :config
-    (setq org-tag-alist (quote (("@home" . ?h) ("@notebook" . ?n) ("@office" . ?o) ("@phone" . ?p))))
-    (setq org-agenda-files (quote ("~/org/GTD.org" "~/org/Tickler.org" "~/org/Someday.org")))
-    (setq org-refile-targets (quote (("~/org/GTD.org" :maxlevel . 2))))
-    (setq org-export-backends (quote (ascii beamer html icalendar latex md odt)))
-    :bind ("C-c a" . org-agenda))
-  ;; Beautiful bullets
-  (use-package org-bullets
-    :hook (org-mode . org-bullets-mode))
-  ;; used by org to export to HTML
-  (use-package htmlize)
+    (use-package org
+      :defer t
+      :config
+      (setq org-directory "~/org")
+      (setq org-agenda-files (quote ("~/org/GTD.org" "~/org/Tickler.org" "~/org/Someday.org" "~/org/Food.org")))
+      (setq org-refile-targets (quote (("~/org/GTD.org" :maxlevel . 1) ("~/org/Someday.org" :maxlevel . 1))))
+      (setq org-default-notes-file (concat org-directory "/Notes.org"))
+      (setq org-export-backends (quote (ascii beamer html icalendar latex md odt)))
+      :bind (("C-c c" . org-capture)
+	     ("C-c l" . org-store-link)
+	     ("C-c a" . org-agenda)))
+    (use-package org-journal
+      :ensure t
+      :defer t
+      :config
+      (setq org-journal-dir "~/org/journal/")
+      (setq org-journal-file-type 'weekly)
+      (setq org-journal-file-format "%Y-%m-%d.org")
+      (setq org-journal-date-format "%A, %d %B %Y")
+      (setq org-journal-time-format "")
+      :bind
+      (("C-c j" . org-journal-new-entry)))
+    ;; Beautiful bullets
+    (use-package org-bullets
+      :hook (org-mode . org-bullets-mode))
+    ;; TRIGGER and BLOCKER properties
+    (use-package org-edna
+      :hook (org-mode . org-edna-mode))
+    ;; used by org to export to HTML
+    (use-package htmlize)
   #+END_SRC
 
 ** web-mode
