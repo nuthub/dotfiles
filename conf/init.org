@@ -246,15 +246,18 @@ For useful and good packages, see also [[https://github.com/emacs-tw/awesome-ema
 
    #+BEGIN_SRC emacs-lisp
    (use-package auctex
-     :defer t
-     :init
-     ;; https://askubuntu.com/questions/1041919/integration-of-emacs-lualatex-with-evince-zathura-not-working-in-ubuntu-18-04-h
-     (setq TeX-view-program-selection '((output-pdf "Zathura")))
-     (setq TeX-source-correlate-method 'synctex)
-     (setq TeX-source-correlate-start-server t)
-     (setq TeX-auto-save t)
-     (setq TeX-parse-self t)
-     (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode))
+   :defer t
+   :init
+   ;; https://askubuntu.com/questions/1041919/integration-of-emacs-lualatex-with-evince-zathura-not-working-in-ubuntu-18-04-h
+   (setq TeX-view-program-selection '((output-pdf "Zathura")))
+   (setq TeX-source-correlate-method 'synctex)
+   (setq TeX-source-correlate-start-server t)
+   (setq TeX-auto-save t)
+   (setq TeX-parse-self t)
+   (setq-default TeX-master nil)
+   (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
+   (add-to-list 'load-path "/usr/bin/vendor_perl")
+   )
    #+END_SRC
 
 ** Platform.io
