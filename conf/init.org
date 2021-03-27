@@ -3,7 +3,7 @@
 
 For useful and good packages, see also [[https://github.com/emacs-tw/awesome-emacs#web-feed]].
 
-* Personal data
+* Basic personal information
   
   This is used to identify myself, and to find my own GnuPG key
   
@@ -11,6 +11,12 @@ For useful and good packages, see also [[https://github.com/emacs-tw/awesome-ema
   (setq user-full-name "Julian Flake")
   (setq user-mail-address "julian@flake.de")
   #+END_SRC
+
+  My default browser is chromium:
+  #+BEGIN_SRC emacs-lisp
+  (setq browse-url-browser-function 'browse-url-chromium)
+  #+END_SRC
+
 
 * Package management
 
@@ -25,7 +31,7 @@ For useful and good packages, see also [[https://github.com/emacs-tw/awesome-ema
   ;; melpa unstable
   ;;(add-to-list 'package-archives '("melpa"     . "http://melpa.org/packages/"))
   ;; initialize package.el
-  (package-initialize)
+;;  (package-initialize)
   #+END_SRC
 
   Install (if required) and initialize use-package.el:
@@ -52,22 +58,6 @@ For useful and good packages, see also [[https://github.com/emacs-tw/awesome-ema
   #+END_SRC
 
 * Minor modes & Common packages
-** Solarized Theme
-   
-   #+BEGIN_SRC emacs-lisp
-   (use-package solarized-theme
-;     :config (load-theme 'solarized-dark t))
-     :config (load-theme 'solarized-light t))
-   #+END_SRC
-
-** Diminish
-    
-   This is to hide minor modes from mode line. You can use `:diminish foo-mode` then in use-package(...)
-
-   #+BEGIN_SRC emacs-lisp
-   (use-package diminish
-     :ensure t)
-   #+END_SRC
 ** undo-tree (C-x u)
 
    #+BEGIN_SRC emacs-lisp
@@ -192,37 +182,54 @@ For useful and good packages, see also [[https://github.com/emacs-tw/awesome-ema
 ** org-mode
 
   #+BEGIN_SRC emacs-lisp
-    (use-package org
-      :defer t
-      :config
-      (setq org-directory "~/org")
-      (setq org-agenda-files (quote ("~/org/GTD.org" "~/org/Tickler.org" "~/org/Someday.org" "~/org/Food.org")))
-      (setq org-refile-targets (quote (("~/org/GTD.org" :maxlevel . 1) ("~/org/Someday.org" :maxlevel . 1))))
-      (setq org-default-notes-file (concat org-directory "/Notes.org"))
-      (setq org-export-backends (quote (ascii beamer html icalendar latex md odt)))
-      :bind (("C-c c" . org-capture)
-	     ("C-c l" . org-store-link)
-	     ("C-c a" . org-agenda)))
-    (use-package org-journal
-      :ensure t
-      :defer t
-      :config
-      (setq org-journal-dir "~/org/journal/")
-      (setq org-journal-file-type 'weekly)
-      (setq org-journal-file-format "%Y-%m-%d.org")
-      (setq org-journal-date-format "%A, %d %B %Y")
-      (setq org-journal-time-format "")
-      :bind
-      (("C-c j" . org-journal-new-entry)))
-    ;; Beautiful bullets
-    (use-package org-bullets
-      :hook (org-mode . org-bullets-mode))
-    ;; TRIGGER and BLOCKER properties
-    (use-package org-edna
-      :hook (org-mode . org-edna-mode))
-    ;; used by org to export to HTML
-    (use-package htmlize)
-  #+END_SRC
+(use-package org
+:defer t
+:config
+(setq org-directory "~/org")
+(setq org-agenda-files (quote ("~/org/GTD.org" "~/org/Tickler.org" "~/org/Someday.org" "~/org/Food.org" "~/org/Einkaufen.org")))
+(setq org-refile-targets (quote (("~/org/GTD.org" :maxlevel . 1) ("~/org/Someday.org" :maxlevel . 1) ("~/org/Einkaufen.org" :maxlevel . 1))))
+(setq org-agenda-window-setup "only-window")
+(setq org-agenda-span 1)
+(setq org-default-notes-file (concat org-directory "/Notes.org"))
+(setq org-export-backends (quote (ascii beamer html icalendar latex md odt)))
+(setq org-archive-location "~/org/archive/Archive.org::datetree/")
+(setq org-startup-indented t)
+(setq org-startup-truncated nil)
+(setq org-log-done 'time))
+
+;; org-journal
+(use-package org-journal
+:after org
+:ensure t
+:defer t
+:config
+(setq org-journal-dir "~/org/journal/")
+(setq org-journal-file-type 'weekly)
+(setq org-journal-file-format "journal-%Y.org")
+(setq org-journal-date-format "%A, %d %B %Y")
+(setq org-journal-time-format ""))
+
+;; org-ref
+;;    (use-package org-ref
+;;    :after org
+;;    :ensure t
+;;    :defer t
+;;    :config
+;;    (setq org-ref-default-bibliography '("~/Dokumente/Literatur/Literatur.bib"))
+;;    (setq org-ref-bibliography-notes "~/Dokumente/Literatur/Notes.org")
+;;    (setq org-ref-pdf-directory "~/Dokumente/Literatur/bibtex-pdfs/"))
+
+;; Beautiful bullets
+(use-package org-bullets
+  :hook (org-mode . org-bullets-mode))
+
+;; TRIGGER and BLOCKER properties
+(use-package org-edna
+  :hook (org-mode . org-edna-mode))
+
+;; used by org to export to HTML
+(use-package htmlize)
+#+END_SRC
 
 ** web-mode
 
@@ -267,25 +274,55 @@ For useful and good packages, see also [[https://github.com/emacs-tw/awesome-ema
    #+END_SRC
 
 * Look & Feel
+** Solarized Theme
+   
+   #+BEGIN_SRC emacs-lisp
+   (use-package solarized-theme
+;     :config (load-theme 'solarized-dark t))
+     :config (load-theme 'solarized-light t))
+   #+END_SRC
 
+** Diminish
+    
+This is to hide minor modes from mode line. You can use `:diminish foo-mode` then in use-package(...)
+
+   #+BEGIN_SRC emacs-lisp
+   (use-package diminish
+     :ensure t)
+   #+END_SRC
+   
+** Font
   #+BEGIN_SRC emacs-lisp
   (add-to-list 'default-frame-alist
              '(font . "Hack-12"))
-  (menu-bar-mode -1) ; switch off menu bar
-  (tool-bar-mode -1) ; switch off tool bar
-  (scroll-bar-mode -1) ; switch off scroll bar
-  (column-number-mode t) ; show column number next to line number
-  (setq inhibit-startup-screen t) ;; don't show splash
   #+END_SRC
 
-* Global behaviour
+** Other
+   #+BEGIN_SRC emacs-lisp
+   (menu-bar-mode -1) ; switch off menu bar
+   (tool-bar-mode -1) ; switch off tool bar
+   (scroll-bar-mode -1) ; switch off scroll bar
+   (column-number-mode t) ; show column number next to line number
+   (setq inhibit-startup-screen t) ;; don't show splash
+   #+END_SRC
 
+* Global key bindings
   Open the file under cursor:
   #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-x f") 'find-file-at-point)
   #+END_SRC
 
-  Use chromium as default browser:
+  Replace some commands by its helm variants
   #+BEGIN_SRC emacs-lisp
-  (setq browse-url-browser-function 'browse-url-chromium) ;; use Chromium as default browser
+  (global-set-key (kbd "M-x") 'helm-M-x)
+  (global-set-key (kbd "C-x C-f") 'helm-find-files)
+  (global-set-key (kbd "C-x C-b") 'helm-buffers-list)
+  #+END_SRC
+
+  Replace some commands by its helm variants
+  #+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-c a") 'org-agenda)
+  (global-set-key (kbd "C-c j") 'org-journal-new-entry)
+  (global-set-key (kbd "C-c c") 'org-store-link)
+  (global-set-key (kbd "C-c l") 'org-capture)
   #+END_SRC
