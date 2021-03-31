@@ -24,7 +24,7 @@
 ;; Load org-mode init file
 (straight-use-package 'org)
 (org-babel-load-file
- (expand-file-name "conf/init.org" user-emacs-directory))
+ (expand-file-name "config.org" user-emacs-directory))
 
 (provide 'init)
 ;;; init.el ends here

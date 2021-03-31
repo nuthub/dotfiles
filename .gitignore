@@ -4,7 +4,6 @@ bookmarks
 .cache
 .last-package-update-day
 .org-id-locations
-conf/init.c
-conf/init.el
+config.el
 straight/
 transient/

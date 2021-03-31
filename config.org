@@ -205,6 +205,7 @@ Incremental completions and narrowing selections:
         (setq org-journal-file-type 'weekly)
         (setq org-journal-file-format "journal-%Y.org")
         (setq org-journal-date-format "%A, %d %B %Y")
+        (setq org-journal-created-property-timestamp-format "%Y-%m-%d")
         (setq org-journal-time-format ""))
 
         ;; org-ref
