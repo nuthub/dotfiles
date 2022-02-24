@@ -6,4 +6,9 @@ bookmarks
 .org-id-locations
 config.el
 straight/
+network-security.data
+elpa/
+image-dired/
 transient/
+url/
+eshell/
