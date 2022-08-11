@@ -4,10 +4,8 @@
 
 For useful and good packages, see also [[https://github.com/emacs-tw/awesome-emacs#web-feed]].
 
-TODO: I need branches for different computers: Org files can be found on notebook but not on servers, etc.
-
 * Package management
-Package management is done with straigh.el now. The bootstrapping of this has been moved to my init.el since this allows to use straight.el to load org mode which is required for the literate configuration you see here. Otherwise emacs would use the built-in version of org which may be too old for the more bleeding edge character of a straight.el maintained emacs installation.
+Package management is done with straight.el now. The bootstrapping of this has been moved to my init.el since this allows to use straight.el to load org mode which is required for the literate configuration you see here. Otherwise emacs would use the built-in version of org which may be too old for the more bleeding edge character of a straight.el maintained emacs installation.
 
 * Basic personal information
   
@@ -150,7 +148,9 @@ An alternative to /smartparens/ is /paren/.
 Incremental completions and narrowing selections:
 
 #+BEGIN_SRC emacs-lisp
-(use-package helm)
+  (use-package helm
+    :config
+    (helm-mode))
 #+END_SRC
 
 ** which-key
