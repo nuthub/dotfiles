@@ -1,20 +1,21 @@
 #+TITLE: Emacs Configuration
-#+STARTUP: content
-#+TODO: TODO CHECK BROKEN DISABLED
+#+STARTUP: overview
+#+TODO: TODO CHECK
 
 For useful and good packages, see also [[https://github.com/emacs-tw/awesome-emacs#web-feed]].
 
 * Package management
 Package management is done with straight.el now. The bootstrapping of this has been moved to my init.el since this allows to use straight.el to load org mode which is required for the literate configuration you see here. Otherwise emacs would use the built-in version of org which may be too old for the more bleeding edge character of a straight.el maintained emacs installation.
+straight.el offers the 'use-package' command (see also init.el).
 
 * Basic personal information
   
-**  This is used to identify myself, and to find my own GnuPG key
+** This is used to identify myself, and to find my own GnuPG key
   
-  #+BEGIN_SRC emacs-lisp
-  (setq user-full-name "Julian Flake")
-  (setq user-mail-address "julian@flake.de")
-  #+END_SRC
+#+BEGIN_SRC emacs-lisp
+(setq user-full-name "Julian Flake")
+(setq user-mail-address "julian@flake.de")
+#+END_SRC
 
 ** My default browser is chromium:
   #+BEGIN_SRC emacs-lisp
@@ -77,12 +78,17 @@ Holidays are not shown in agenda-hoidays (org-agenda 'h')
   (setq visible-bell t)
   (setq inhibit-startup-screen t) ;; don't show splash
 #+END_SRC
-** Solarized Theme
-   
-   #+BEGIN_SRC emacs-lisp
-   (use-package solarized-theme
-     :config (load-theme 'solarized-light t))
-   #+END_SRC
+** Theme
+*** solarized
+#+BEGIN_SRC emacs-lisp
+;;  (use-package solarized-theme
+;;    :config (load-theme 'solarized-dark t))
+#+END_SRC
+*** zenburn
+#+BEGIN_SRC emacs-lisp
+  (use-package zenburn-theme
+      :config (load-theme 'zenburn t))
+#+END_SRC
 
 ** Diminish
 
@@ -98,29 +104,12 @@ This is to hide minor modes from mode line. You can use `:diminish foo-mode` the
   '(font . "Hack-12"))
 #+END_SRC
 
-* Minor modes & Common packages
-** undo-tree (C-x u)
-
-   #+BEGIN_SRC emacs-lisp
-   (use-package undo-tree
-     :diminish undo-tree-mode
-     :config
-       (global-undo-tree-mode))
-   #+END_SRC
-
-** Treemacs
-
-   Tree file explorer
-
-   #+BEGIN_SRC emacs-lisp
-   (use-package treemacs)
-   #+END_SRC
-
-** Projectile
-
-   #+BEGIN_SRC emacs-lisp
-   (use-package projectile)
-   #+END_SRC
+** line numbers on the left
+   
+Since Emacs 26 there is `display-line-numbers-mode`:
+#+BEGIN_SRC emacs-lisp
+  (global-display-line-numbers-mode)
+#+END_SRC
 
 ** A beautiful modeline
 
@@ -128,6 +117,20 @@ This is to hide minor modes from mode line. You can use `:diminish foo-mode` the
    (use-package powerline
      :config
      (powerline-center-theme))
+   #+END_SRC
+
+** beacon: find cursors
+
+   #+BEGIN_SRC emacs-lisp
+   (use-package beacon
+     :config
+     (progn
+       (setq beacon-blink-when-focused t)
+       (setq beacon-blink-when-buffer-changes t)
+       (setq beacon-blink-when-window-scrolls t)
+       (setq beacon-blink-when-window-changes t)
+       (setq beacon-blink-when-point-moves t)
+       (beacon-mode 1)))
    #+END_SRC
 
 ** Smart paranthesis
@@ -143,6 +146,207 @@ An alternative to /smartparens/ is /paren/.
       (smartparens-global-mode t)
       (show-paren-mode t)))
 #+END_SRC
+
+* Org Mode
+** org
+#+BEGIN_SRC emacs-lisp
+  (use-package org
+    :config
+    (add-to-list 'org-modules 'org-protocol)
+    ;;    (add-hook 'org-mode-hook 'turn-on-auto-fill)
+    (setq org-directory "~/org")
+    (setq org-agenda-files (quote ("~/org/gtd.org" "~/org/tickler.org")))
+    (setq org-refile-targets (quote (("~/org/gtd.org" :maxlevel . 4)
+                                     ("~/org/someday.org" :maxlevel . 1)
+                                     ("~/org/tickler.org" :maxlevel . 1))))
+    (setq org-refile-use-outline-path 'file)
+    (setq org-outline-path-complete-in-steps nil)
+    (setq org-refile-allow-creating-parent-nodes 'confirm)
+    (setq org-default-notes-file (concat org-directory "/inbox.org"))
+    (setq org-archive-location (concat org-directory "/archive/archive-" (format-time-string "%Y" (current-time)) ".org::datetree/"))
+    (setq org-export-backends (quote (ascii beamer html icalendar latex md odt)))
+    (setq org-tag-alist '(("@home" . ?h) ("@work" . ?w) ("@phone" . ?p) ("@boat" . ?b) ("@org" . ?o) ("@city" . ?c) ("@ToRead" . ?r)))
+    (setq org-todo-keywords '((sequence "TODO(t)" "FREQ(f)" "PROJ(p)" "WAIT(w@/!)" "|" "DONE(d!)" "CNCL(c@/!)")))
+    (setq org-todo-repeat-to-state t)
+    (setq org-startup-indented t)
+    (setq org-startup-truncated nil)
+    (setq org-log-done 'time)
+    (setq org-log-into-drawer t)
+    (setq org-num-skip-unnumbered t)
+    (setq org-agenda-window-setup "only-window")
+    (setq org-agenda-span 1)
+    (setq org-stuck-projects
+          '("+LEVEL=2/-DONE-CNCL-FREQ"
+            ("TODO" "NEXT" "WAIT" "PROJ")
+            nil ""))
+    (setq org-capture-templates
+          '(
+            ("t" "Todo" entry (file "~/org/inbox.org") "* TODO %?\n  %i")
+            ))
+    (setq org-src-tab-acts-natively t)
+    (setq org-ellipsis " ⤵") 
+    (set-face-underline 'org-ellipsis nil) ;; …, ⤵, ▼, ↴, ⬎, ⤷, ⋱
+    (setq org-ctrl-k-protect-subtree t)
+    (setq org-return-follows-link t)
+    
+  )
+#+END_SRC
+
+** org-journal
+#+BEGIN_SRC emacs-lisp
+  ;; org-journal
+  (use-package org-journal
+    :after org
+    :config
+    (setq org-journal-dir "~/org/journal/")
+    (setq org-journal-file-type 'weekly)
+    (setq org-journal-file-format "journal-%Y.org")
+    (setq org-journal-date-format "%A, %d %B %Y")
+    (setq org-journal-created-property-timestamp-format "%Y-%m-%d")
+    (setq org-journal-time-format ""))
+#+END_SRC
+
+** org-ref
+#+BEGIN_SRC emacs-lisp
+  ;; org-ref
+  (use-package org-ref
+    :after org
+    :config
+    (setq bibtex-completion-bibliography '("~/Dokumente/Literatur/Literatur.bib")
+          bibtex-completion-library-path '("~/Dokumente/Literatur/bibtex-pdfs/")
+          bibtex-completion-notes-path "~/Dokumente/Literatur/notes/"
+          bibtex-completion-notes-template-multiple-files "* ${author-or-editor}, ${title}, ${journal}, (${year}) :${=type=}: \n\nSee [[cite:&${=key=}]]\n"
+          bibtex-completion-additional-search-fields '(keywords)
+          bibtex-completion-pdf-open-function
+          (lambda (fpath)
+            (call-process "open" nil 0 nil fpath))))
+    ;;          bibtex-completion-display-formats
+    ;;          '((article       . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${journal:40}")
+    ;;            (inbook        . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} Chapter ${chapter:32}")
+    ;;            (incollection  . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
+    ;;            (inproceedings . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
+    ;;            (t             . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*}"))
+    ;;          bibtex-completion-pdf-open-function
+    ;;          (lambda (fpath)
+    ;;            (call-process "open" nil 0 nil fpath))))
+
+      ;;        (setq bibtex-dialect 'biblatex)
+      ;;        (setq org-latex-pdf-process
+      ;;               '("latexmk -shell-escape -bibtex -pdf %f")))
+#+END_SRC
+
+** helm-bibtex
+
+#+BEGIN_SRC emacs-lisp
+  (use-package helm-bibtex
+    :config
+    (setq bibtex-completion-cite-prompt-for-optional-arguments nil)
+    (helm-delete-action-from-source "Insert Citation" helm-source-bibtex)
+    (helm-add-action-to-source "Insert Citation" 
+                               'helm-bibtex-insert-citation 
+                               helm-source-bibtex 0))
+#+END_SRC
+
+** org-superstar
+
+- Beautiful bullets
+- org-superstar is a descendent of org-bullets
+
+#+BEGIN_SRC emacs-lisp
+  (use-package org-superstar
+    :after org
+    :hook (org-mode . org-superstar-mode))
+#+END_SRC
+
+** htmlize
+
+- used by org to export to HTML
+  
+#+BEGIN_SRC emacs-lisp
+  (use-package htmlize)
+#+END_SRC
+
+* Other major modes
+** AucTeX
+
+#+BEGIN_SRC emacs-lisp
+   (use-package auctex
+   :defer t
+   :init
+   (setq TeX-auto-save t)
+   (setq TeX-parse-self t)
+   (setq-default TeX-master nil)
+   ;; https://askubuntu.com/questions/1041919/integration-of-emacs-lualatex-with-evince-zathura-not-working-in-ubuntu-18-04-h
+   (setq TeX-source-correlate-method 'synctex)
+   (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
+   (setq TeX-source-correlate-start-server t)
+   (setq TeX-view-program-selection '((output-pdf "Zathura")))
+   (add-to-list 'load-path "/usr/bin/vendor_perl")
+   )
+#+END_SRC
+
+** RefTex
+#+BEGIN_SRC emacs-lisp
+
+  (use-package reftex
+    :init
+    (setq reftex-default-bibliography '("~/Dokumente/Literatur/Literatur.bib")))
+#+END_SRC
+
+** web-mode & php-mode
+
+   #+BEGIN_SRC emacs-lisp
+   (use-package web-mode)
+   (use-package php-mode)
+   #+END_SRC
+
+** yaml-mode
+
+   #+BEGIN_SRC emacs-lisp
+   (use-package yaml-mode)
+   #+END_SRC
+
+** markdown-mode
+
+   #+BEGIN_SRC emacs-lisp
+   (use-package markdown-mode)
+   #+END_SRC
+
+** Platform.io
+
+#+BEGIN_SRC emacs-lisp
+  (use-package platformio-mode)
+#+END_SRC
+* Minor modes & Common packages
+** undo-tree (C-x u)
+
+   #+BEGIN_SRC emacs-lisp
+   (use-package undo-tree
+     :diminish undo-tree-mode
+     :config
+       (global-undo-tree-mode))
+   #+END_SRC
+
+** Treemacs
+
+Tree file explorer
+
+#+BEGIN_SRC emacs-lisp
+(use-package treemacs)
+#+END_SRC
+
+** Agressive Indent
+
+#+BEGIN_SRC emacs-lisp
+  (use-package aggressive-indent
+    :config (aggressive-indent-global-mode))
+#+END_SRC
+
+** Projectile
+
+   #+BEGIN_SRC emacs-lisp
+   (use-package projectile)
+   #+END_SRC
 
 ** helm
 Incremental completions and narrowing selections:
@@ -180,186 +384,32 @@ Incremental completions and narrowing selections:
  
 ** Git support
 
-   #+BEGIN_SRC emacs-lisp
-   (use-package magit
-     :bind (("C-M-g" . magit-status)))
-   #+END_SRC
-
-** beacon: find cursors
-
-   #+BEGIN_SRC emacs-lisp
-   (use-package beacon
-     :config
-     (progn
-       (setq beacon-blink-when-focused t)
-       (setq beacon-blink-when-buffer-changes t)
-       (setq beacon-blink-when-window-scrolls t)
-       (setq beacon-blink-when-window-changes t)
-       (setq beacon-blink-when-point-moves t)
-       (beacon-mode 1)))
-   #+END_SRC
-
-** nlinum (line numbers on the left)
-   
-   Currently disabled, I like the minimalism at the moment.
-
-   #+BEGIN_SRC emacs-lisp
-   ;;(use-package linum)
-   ;; NLinum is a replacement of linum
-   (use-package nlinum)
-   #+END_SRC
-
-** ace-window
-   
-More convenient switch to other windows:
 #+BEGIN_SRC emacs-lisp
-(use-package ace-window
-  :bind ("M-o" . ace-window))
-#+END_SRC
-
-** all-the-icons
-
-You have to install the fonts after installing the package:
-`M-x all-the-icons-install-fonts`
-
-#+BEGIN_SRC emacs-lisp
-(use-package all-the-icons)
-#+END_SRC
-
-* Major modes
-** org-mode
-
-#+BEGIN_SRC emacs-lisp
-  (use-package org
-    :config
-    (add-to-list 'org-modules 'org-protocol)
-    (add-hook 'org-mode-hook 'turn-on-auto-fill)
-    (setq org-directory "~/org")
-    (setq org-refile-targets (quote (("~/org/gtd.org" :maxlevel . 3)
-                                     ("~/org/someday.org" :maxlevel . 1)
-                                     ("~/org/food.org" :maxlevel . 1)
-                                     ("~/org/tickler.org" :maxlevel . 1))))
-    (setq org-default-notes-file (concat org-directory "/inbox.org"))
-    (setq org-archive-location (concat org-directory "/archive/archive-" (format-time-string "%Y" (current-time)) ".org::datetree/"))
-
-    (setq org-export-backends (quote (ascii beamer html icalendar latex md odt)))
-    (setq org-tag-alist '(("@home" . ?h) ("@work" . ?w) ("@phone" . ?p) ("@boat" . ?b) ("@org" . ?o) ("@city" . ?c) ("@ToRead" . ?r)))
-    (setq org-todo-keywords '((sequence "TODO(t)" "PROJ(p)" "NEXT(n)" "WAIT(w@/!)" "|" "DONE(d!)" "CANCELLED(c@/!)")))
-    (setq org-startup-indented t)
-    (setq org-startup-truncated nil)
-    (setq org-log-done 'time)
-    (setq org-log-into-drawer t)
-    (setq org-num-skip-unnumbered t)
-    (setq org-agenda-files (quote ("~/org/gtd.org" "~/org/tickler.org" "~/org/food.org")))
-    (setq org-agenda-window-setup "only-window")
-    (setq org-agenda-span 1)
-    (setq org-stuck-projects
-          '("+LEVEL=2/-DONE-CANCELLED"
-            ("TODO" "NEXT" "WAIT" "PROJ")
-            nil ""))
-    (setq org-capture-templates
-          '(("t" "Todo" entry (file "~/org/inbox.org")
-             "* TODO %?\n  %i")))
-    (setq org-src-tab-acts-natively t)
-    (setq org-ellipsis "⤵"))
-
-  ;; org-journal
-  (use-package org-journal
-    :after org
-    :config
-    (setq org-journal-dir "~/org/journal/")
-    (setq org-journal-file-type 'weekly)
-    (setq org-journal-file-format "journal-%Y.org")
-    (setq org-journal-date-format "%A, %d %B %Y")
-    (setq org-journal-created-property-timestamp-format "%Y-%m-%d")
-    (setq org-journal-time-format ""))
-
-  ;; org-ref
-  (use-package org-ref
-    :after org
-    :config
-    (setq reftex-default-bibliography '("~/Dokumente/Literatur/Literatur.bib"))
-    (setq org-ref-default-bibliography '("~/Dokumente/Literatur/Literatur.bib"))
-    (setq org-ref-bibliography-notes "~/Dokumente/Literatur/Notes.org")
-    (setq org-ref-pdf-directory "~/Dokumente/Literatur/bibtex-pdfs/")
-    (setq bibtex-dialect 'biblatex)
-    (setq org-latex-pdf-process
-           '("latexmk -shell-escape -bibtex -pdf %f")))
-
-  ;; Beautiful bullets
-  (use-package org-bullets
-    :after org
-    :hook (org-mode . org-bullets-mode))
-
-  ;; TRIGGER and BLOCKER properties
-  (use-package org-edna
-    :after org
-    :hook (org-mode . org-edna-mode))
-
-  ;; used by org to export to HTML
-  (use-package htmlize)
-#+END_SRC
-
-** web-mode & php-mode
-
-   #+BEGIN_SRC emacs-lisp
-   (use-package web-mode)
-   (use-package php-mode)
-   #+END_SRC
-
-** yaml-mode
-
-   #+BEGIN_SRC emacs-lisp
-   (use-package yaml-mode)
-   #+END_SRC
-
-** markdown-mode
-
-   #+BEGIN_SRC emacs-lisp
-   (use-package markdown-mode)
-   #+END_SRC
-
-** AucTeX
-
-   #+BEGIN_SRC emacs-lisp
-   (use-package auctex
-   :defer t
-   :init
-   ;; https://askubuntu.com/questions/1041919/integration-of-emacs-lualatex-with-evince-zathura-not-working-in-ubuntu-18-04-h
-   (setq TeX-view-program-selection '((output-pdf "Zathura")))
-   (setq TeX-source-correlate-method 'synctex)
-   (setq TeX-source-correlate-start-server t)
-   (setq TeX-auto-save t)
-   (setq TeX-parse-self t)
-   (setq-default TeX-master nil)
-   (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
-   (add-to-list 'load-path "/usr/bin/vendor_perl")
-   )
-   #+END_SRC
-
-** Platform.io
-
-#+BEGIN_SRC emacs-lisp
-  (use-package platformio-mode)
+  (use-package magit)
 #+END_SRC
 
 * Global key bindings
   Open the file under cursor:
   #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-x f") 'find-file-at-point)
+    (global-set-key (kbd "C-x f") 'find-file-at-point)
   #+END_SRC
 
   Replace some commands by its helm variants
   #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "M-x") 'helm-M-x)
-  (global-set-key (kbd "C-x C-f") 'helm-find-files)
-  (global-set-key (kbd "C-x C-b") 'helm-buffers-list)
+    (global-set-key (kbd "M-x") 'helm-M-x)
+    (global-set-key (kbd "C-x C-f") 'helm-find-files)
+    (global-set-key (kbd "C-x C-b") 'helm-buffers-list)
   #+END_SRC
 
   Define global org related bindings
   #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-c a") 'org-agenda)
-  (global-set-key (kbd "C-c j") 'org-journal-new-entry)
-  (global-set-key (kbd "C-c c") 'org-capture)
-  (global-set-key (kbd "C-c l") 'org-store-link)
+    (global-set-key (kbd "C-c a") 'org-agenda)
+    (global-set-key (kbd "C-c j") 'org-journal-new-entry)
+    (global-set-key (kbd "C-c c") 'org-capture)
+    (global-set-key (kbd "C-c l") 'org-store-link)
+    (define-key org-mode-map (kbd "C-c ]") 'org-ref-insert-link-hydra/body) ;; otherwise the org-mode-map overwrites the key with an agenda related binding
+  #+END_SRC
+
+  #+BEGIN_SRC emacs-lisp
+    (global-set-key (kbd "C-M-g") 'magit-status)
   #+END_SRC
