@@ -9,6 +9,7 @@ echo "org"
 # 3rd row: color
 echo "#FFFFFF"
 
-cd ~ && emacsclient -nc --eval '(org-agenda-list)' '(delete-other-windows)' &2>/dev/null
- exit 0
+~/.local/bin/org-agenda
+
+exit 0
 
