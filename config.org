@@ -104,11 +104,11 @@ This is to hide minor modes from mode line. You can use `:diminish foo-mode` the
   '(font . "Hack-12"))
 #+END_SRC
 
-** line numbers on the left
+** Line numbers on the left
    
 Since Emacs 26 there is `display-line-numbers-mode`:
 #+BEGIN_SRC emacs-lisp
-  (global-display-line-numbers-mode)
+  ;; (global-display-line-numbers-mode)
 #+END_SRC
 
 ** A beautiful modeline

@@ -12,3 +12,4 @@ image-dired/
 transient/
 url/
 eshell/
+*.db
