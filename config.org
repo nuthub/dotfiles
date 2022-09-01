@@ -284,21 +284,23 @@ An alternative to /smartparens/ is /paren/.
   (use-package platformio-mode)
 #+END_SRC
 * Minor modes & Common packages
-** undo-tree (C-x u)
+** vundo / undo-tree (C-x u)
 
-   #+BEGIN_SRC emacs-lisp
-   (use-package undo-tree
-     :diminish undo-tree-mode
-     :config
-       (global-undo-tree-mode))
-   #+END_SRC
-
-** Treemacs
-
-Tree file explorer
-
+The package /vundo/ seems to be a more modern implementation than undo-tree.
 #+BEGIN_SRC emacs-lisp
-(use-package treemacs)
+  (use-package vundo
+    :config
+    (setq vundo-glyph-alist vundo-unicode-symbols))
+#+END_SRC
+The global keybinding 'C-x u' is set below.
+
+
+The package /undo-tree/ contains more features than vundo, e.g. timestamps, diffs, etc. I never used those features.
+#+BEGIN_SRC emacs-lisp
+;;  (use-package undo-tree
+;;    :diminish undo-tree-mode
+;;    :config
+;;    (global-undo-tree-mode))
 #+END_SRC
 
 ** Agressive Indent
@@ -397,6 +399,7 @@ Incremental completions and narrowing selections:
     (global-set-key (kbd "M-x") 'helm-M-x)
     (global-set-key (kbd "C-x C-f") 'helm-find-files)
     (global-set-key (kbd "C-x C-b") 'helm-buffers-list)
+    (global-set-key (kbd "C-x u") 'vundo)
   #+END_SRC
 
   Define global org related bindings
