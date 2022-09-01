@@ -193,8 +193,8 @@ An alternative to /smartparens/ is /paren/.
 #+END_SRC
 
 ** org-journal
+
 #+BEGIN_SRC emacs-lisp
-  ;; org-journal
   (use-package org-journal
     :after org
     :config
@@ -210,41 +210,7 @@ An alternative to /smartparens/ is /paren/.
 #+BEGIN_SRC emacs-lisp
   ;; org-ref
   (use-package org-ref
-    :after org
-    :config
-    (setq bibtex-completion-bibliography '("~/Dokumente/Literatur/Literatur.bib")
-          bibtex-completion-library-path '("~/Dokumente/Literatur/bibtex-pdfs/")
-          bibtex-completion-notes-path "~/Dokumente/Literatur/notes/"
-          bibtex-completion-notes-template-multiple-files "* ${author-or-editor}, ${title}, ${journal}, (${year}) :${=type=}: \n\nSee [[cite:&${=key=}]]\n"
-          bibtex-completion-additional-search-fields '(keywords)
-          bibtex-completion-pdf-open-function
-          (lambda (fpath)
-            (call-process "open" nil 0 nil fpath))))
-    ;;          bibtex-completion-display-formats
-    ;;          '((article       . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${journal:40}")
-    ;;            (inbook        . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} Chapter ${chapter:32}")
-    ;;            (incollection  . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
-    ;;            (inproceedings . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
-    ;;            (t             . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*}"))
-    ;;          bibtex-completion-pdf-open-function
-    ;;          (lambda (fpath)
-    ;;            (call-process "open" nil 0 nil fpath))))
-
-      ;;        (setq bibtex-dialect 'biblatex)
-      ;;        (setq org-latex-pdf-process
-      ;;               '("latexmk -shell-escape -bibtex -pdf %f")))
-#+END_SRC
-
-** helm-bibtex
-
-#+BEGIN_SRC emacs-lisp
-  (use-package helm-bibtex
-    :config
-    (setq bibtex-completion-cite-prompt-for-optional-arguments nil)
-    (helm-delete-action-from-source "Insert Citation" helm-source-bibtex)
-    (helm-add-action-to-source "Insert Citation" 
-                               'helm-bibtex-insert-citation 
-                               helm-source-bibtex 0))
+    :after org)
 #+END_SRC
 
 ** org-superstar
@@ -344,17 +310,49 @@ Tree file explorer
 
 ** Projectile
 
-   #+BEGIN_SRC emacs-lisp
-   (use-package projectile)
-   #+END_SRC
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile)
+#+END_SRC
 
 ** helm
 Incremental completions and narrowing selections:
 
 #+BEGIN_SRC emacs-lisp
   (use-package helm
+    :diminish helm-mode
     :config
     (helm-mode))
+#+END_SRC
+
+** helm-bibtex
+#+BEGIN_SRC emacs-lisp
+  (use-package helm-bibtex
+    :config
+    (helm-delete-action-from-source "Insert Citation" helm-source-bibtex)
+    (helm-add-action-to-source "Insert Citation" 'helm-bibtex-insert-citation helm-source-bibtex 0)
+    (setq bibtex-completion-cite-prompt-for-optional-arguments nil)
+    (setq bibtex-completion-bibliography '("~/Dokumente/Literatur/Literatur.bib"))
+    (setq bibtex-completion-library-path '("~/Dokumente/Literatur/bibtex-pdfs/"))
+    (setq bibtex-completion-pdf-field "file")
+    (setq bibtex-completion-notes-path "~/Dokumente/Literatur/notes/")
+    ;;    (setq bibtex-completion-notes-template-multiple-files "* ${author-or-editor}, ${title}, ${journal}, (${year}) :${=type=}: \n\nSee [[cite:&${=key=}]]\n")
+    (setq bibtex-completion-additional-search-fields '(keywords))
+    (setq bibtex-completion-pdf-open-function
+          (lambda (fpath)
+            (call-process "xdg-open" nil 0 nil fpath)))
+
+    ;; doesn't seem to work as intended
+    ;; see https://github.com/tmalsburg/helm-bibtex#refresh-bibliography-when-new-pdfs-and-notes-are-added
+    ;; and https://github.com/tmalsburg/helm-bibtex/issues/369
+    (setq flake-pdf-watch
+          (file-notify-add-watch (car bibtex-completion-library-path)
+                                 '(change)
+                                 (lambda (event) (bibtex-completion-candidates))))
+    (setq flake-notes-watch
+          (file-notify-add-watch bibtex-completion-notes-path
+                                 '(change)
+                                 (lambda (event) (bibtex-completion-candidates))))
+    )
 #+END_SRC
 
 ** which-key
