@@ -411,28 +411,43 @@ Incremental completions and narrowing selections:
 #+END_SRC
 
 * Global key bindings
-  Open the file under cursor:
-  #+BEGIN_SRC emacs-lisp
-    (global-set-key (kbd "C-x f") 'find-file-at-point)
-  #+END_SRC
+ 
+** General
 
-  Replace some commands by its helm variants
-  #+BEGIN_SRC emacs-lisp
-    (global-set-key (kbd "M-x") 'helm-M-x)
-    (global-set-key (kbd "C-x C-f") 'helm-find-files)
-    (global-set-key (kbd "C-x C-b") 'helm-buffers-list)
-    (global-set-key (kbd "C-x u") 'vundo)
-  #+END_SRC
+Open the file under cursor:
 
-  Define global org related bindings
-  #+BEGIN_SRC emacs-lisp
-    (global-set-key (kbd "C-c a") 'org-agenda)
-    (global-set-key (kbd "C-c j") 'org-journal-new-entry)
-    (global-set-key (kbd "C-c c") 'org-capture)
-    (global-set-key (kbd "C-c l") 'org-store-link)
-    (define-key org-mode-map (kbd "C-c ]") 'org-ref-insert-link-hydra/body) ;; otherwise the org-mode-map overwrites the key with an agenda related binding
-  #+END_SRC
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x f") 'find-file-at-point)
+  ;; Switch windows with Shift-<arrow>
+  (windmove-default-keybindings)
+#+END_SRC
+  
+** Helm
 
-  #+BEGIN_SRC emacs-lisp
-    (global-set-key (kbd "C-M-g") 'magit-status)
-  #+END_SRC
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "M-x") 'helm-M-x)
+  (global-set-key (kbd "C-x C-f") 'helm-find-files)
+  (global-set-key (kbd "C-x C-b") 'helm-buffers-list)
+#+END_SRC
+
+** vundo
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x u") 'vundo)
+#+END_SRC
+
+** Org mode
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-c a") 'org-agenda)
+  (global-set-key (kbd "C-c j") 'org-journal-new-entry)
+  (global-set-key (kbd "C-c c") 'org-capture)
+  (global-set-key (kbd "C-c l") 'org-store-link)
+  (define-key org-mode-map (kbd "C-c ]") 'org-ref-insert-link-hydra/body) ;; otherwise the org-mode-map overwrites the key with an agenda related binding
+#+END_SRC
+
+** Magit
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-M-g") 'magit-status)
+#+END_SRC
