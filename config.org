@@ -139,7 +139,6 @@ An alternative to /smartparens/ is /paren/.
 #+BEGIN_SRC emacs-lisp
   (use-package org
     :config
-    (add-to-list 'org-modules 'org-protocol)
     ;;    (add-hook 'org-mode-hook 'turn-on-auto-fill)
     (setq org-directory "~/org")
     (setq org-agenda-files (quote ("~/org/gtd.org" "~/org/tickler.org")))
@@ -171,13 +170,33 @@ An alternative to /smartparens/ is /paren/.
             ("t" "Todo" entry (file "~/org/inbox.org") "* TODO %?\n  %i")
             ))
     (setq org-src-tab-acts-natively t)
-    (setq org-ellipsis " ⤵") 
-    (set-face-underline 'org-ellipsis nil) ;; …, ⤵, ▼, ↴, ⬎, ⤷, ⋱
+    (setq org-ellipsis " ⤵")  ;; …, ⤵, ▼, ↴, ⬎, ⤷, ⋱
+    (set-face-underline 'org-ellipsis nil)
     (setq org-ctrl-k-protect-subtree t)
     (setq org-return-follows-link t)
-    
-  )
+
+    (add-to-list 'org-modules 'org-protocol)
+
+    ;; ox-latex specific configuration
+    (add-to-list 'safe-local-variable-values '(org-latex-title-command . ""))
+    (add-to-list 'safe-local-variable-values '(org-latex-toc-command . ""))
+    (with-eval-after-load 'ox-latex
+      (add-to-list 'org-latex-classes '("scrbook"
+                                        "\\documentclass[11pt]{scrbook}"
+                                        ("\\chapter{%s}" . "\\chapter*{%s}")
+                                        ("\\section{%s}" . "\\section*{%s}")
+                                        ("\\subsection{%s}" . "\\subsection*{%s}")
+                                        ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))))
 #+END_SRC
+
+** org-contrib
+#+BEGIN_src emacs-lisp
+  (use-package org-contrib)
+  (use-package ox-extra
+    :after org-contrib
+    :config
+    (ox-extras-activate '(latex-header-blocks ignore-headlines)))
+#+END_src
 
 ** org-journal
 
