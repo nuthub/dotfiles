@@ -1,6 +1,6 @@
 #+TITLE: Emacs Configuration
 #+STARTUP: overview
-#+TODO: TODO CHECK
+#+TODO: TODO CHECK SKIP
 
 For useful and good packages, see also [[https://github.com/emacs-tw/awesome-emacs#web-feed]].
 
@@ -75,6 +75,7 @@ Holidays are not shown in agenda-hoidays (org-agenda 'h')
   (tool-bar-mode -1) ; switch off tool bar
   (scroll-bar-mode -1) ; switch off scroll bar
   (column-number-mode t) ; show column number next to line number
+  (global-hl-line-mode t) ; highlight the current line
   (setq visible-bell t)
   (setq inhibit-startup-screen t) ;; don't show splash
 #+END_SRC
@@ -117,20 +118,6 @@ Since Emacs 26 there is `display-line-numbers-mode`:
    (use-package powerline
      :config
      (powerline-center-theme))
-   #+END_SRC
-
-** beacon: find cursors
-
-   #+BEGIN_SRC emacs-lisp
-   (use-package beacon
-     :config
-     (progn
-       (setq beacon-blink-when-focused t)
-       (setq beacon-blink-when-buffer-changes t)
-       (setq beacon-blink-when-window-scrolls t)
-       (setq beacon-blink-when-window-changes t)
-       (setq beacon-blink-when-point-moves t)
-       (beacon-mode 1)))
    #+END_SRC
 
 ** Smart paranthesis
