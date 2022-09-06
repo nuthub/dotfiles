@@ -455,5 +455,5 @@ Open the file under cursor:
 ** Magit
 
 #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-M-g") 'magit-status)
+  (global-set-key (kbd "C-c g") 'magit-status)
 #+END_SRC
