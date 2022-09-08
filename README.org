@@ -1,8 +1,8 @@
 #+TITLE: Emacs Configuration
 * My emacs configuration
-  - Should be documented
-  - Should be version controlled
-  - Shoud be used on several machines
+- Should be documented
+- Should be version controlled
+- Shoud be used on several machines
 
 * Installation
 
@@ -12,7 +12,7 @@ emacs
 #+END_SRC
 
 * Systemd unit & alias
-Run emacs as a server:
+Run emacs as a server (this is included in the ArchLinux package already):
 
 #+BEGIN_SRC 
 [Unit]
