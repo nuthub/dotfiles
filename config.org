@@ -2,7 +2,7 @@
 #+STARTUP: overview
 #+TODO: TODO CHECK SKIP
 
-For useful and good packages, see also [[https://github.com/emacs-tw/awesome-emacs#web-feed]].
+For useful and good packages, see also https://github.com/emacs-tw/awesome-emacs.
 
 * Package management
 Package management is done with straight.el now. The bootstrapping of this has been moved to my init.el since this allows to use straight.el to load org mode which is required for the literate configuration you see here. Otherwise emacs would use the built-in version of org which may be too old for the more bleeding edge character of a straight.el maintained emacs installation.
@@ -80,15 +80,15 @@ Holidays are not shown in agenda-hoidays (org-agenda 'h')
   (setq inhibit-startup-screen t) ;; don't show splash
 #+END_SRC
 ** Theme
-*** solarized
-#+BEGIN_SRC emacs-lisp
-;;  (use-package solarized-theme
-;;    :config (load-theme 'solarized-dark t))
+*** SKIP solarized
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package solarized-theme
+    :config (load-theme 'solarized-dark t))
 #+END_SRC
 *** zenburn
 #+BEGIN_SRC emacs-lisp
   (use-package zenburn-theme
-      :config (load-theme 'zenburn t))
+    :config (load-theme 'zenburn t))
 #+END_SRC
 
 ** Diminish
@@ -112,13 +112,19 @@ Since Emacs 26 there is `display-line-numbers-mode`:
   ;; (global-display-line-numbers-mode)
 #+END_SRC
 
+** All-the-icons
+#+begin_src emacs-lisp
+  (use-package all-the-icons
+    :if (display-graphic-p))
+#+end_src
+
 ** A beautiful modeline
 
-   #+BEGIN_SRC emacs-lisp
-   (use-package powerline
-     :config
-     (powerline-center-theme))
-   #+END_SRC
+#+BEGIN_SRC emacs-lisp
+  (use-package powerline
+    :config
+    (powerline-center-theme))
+#+END_SRC
 
 ** Smart paranthesis
 
@@ -193,70 +199,96 @@ An alternative to /smartparens/ is /paren/.
                                         ("\\section{%s}" . "\\section*{%s}")
                                         ("\\subsection{%s}" . "\\subsection*{%s}")
                                         ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))))
-#+END_SRC
+
+                                        #+END_SRC
 
 ** org-contrib
+
+This is needed to allow for not exporting to latex those org headings that are tagged :ignore:.
+
 #+BEGIN_src emacs-lisp
+
   (use-package org-contrib)
   (use-package ox-extra
     :after org-contrib
     :config
     (ox-extras-activate '(latex-header-blocks ignore-headlines)))
+  
 #+END_src
 
 ** org-journal
 
 #+BEGIN_SRC emacs-lisp
+
   (use-package org-journal
-    :after org
-    :config
-    (setq org-journal-dir "~/org/journal/")
-    (setq org-journal-file-type 'weekly)
-    (setq org-journal-file-format "journal-%Y.org")
-    (setq org-journal-date-format "%A, %d %B %Y")
-    (setq org-journal-created-property-timestamp-format "%Y-%m-%d")
-    (setq org-journal-time-format ""))
+      :after org
+      :config
+      (setq org-journal-dir "~/org/journal/")
+      (setq org-journal-file-type 'weekly)
+      (setq org-journal-file-format "journal-%Y.org")
+      (setq org-journal-date-format "%A, %d %B %Y")
+      (setq org-journal-created-property-timestamp-format "%Y-%m-%d")
+      (setq org-journal-time-format ""))
+
 #+END_SRC
 
 ** org-superstar
 
-- Beautiful bullets
-- org-superstar is a descendent of org-bullets
+Beautiful bullets. org-superstar is a descendent of org-bullets.
 
 #+BEGIN_SRC emacs-lisp
+
   (use-package org-superstar
     :after org
     :hook (org-mode . org-superstar-mode))
+  
 #+END_SRC
 
 ** org-roam
+
+Build a second brain with org-roam.
+
 #+BEGIN_SRC emacs-lisp
+
   (use-package org-roam
     :ensure t
     :custom
     (org-roam-directory (file-truename "~/org/roam/"))
+    (org-roam-completion-everywhere t)
     :bind (("C-c n l" . org-roam-buffer-toggle)
            ("C-c n f" . org-roam-node-find)
-           ("C-c n g" . org-roam-graph)
            ("C-c n i" . org-roam-node-insert)
            ("C-c n c" . org-roam-capture)
+           ("C-c n g" . org-roam-graph)
            ;; Dailies
-           ("C-c n j" . org-roam-dailies-capture-today))
+           ("C-c n j" . org-roam-dailies-capture-today)
+           :map org-mode-map
+           ("C-M-i" . completion-at-point)
+           :map org-roam-dailies-map
+           ("Y" . org-roam-dailies-capture-yesterday)
+           ("T" . org-roam-dailies-capture-tomorrow))
+    :bind-keymap
+    ("C-c n d" . org-roam-dailies-map)
     :config
+    (org-roam-db-autosync-mode)
     ;; If you're using a vertical completion framework, you might want a more informative completion interface
     (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
     (org-roam-db-autosync-mode)
     (org-roam-setup)
     ;; If using org-roam-protocol
+    (require 'org-roam-dailies) ;; Ensure the keymap is available
     (require 'org-roam-protocol))
+
 #+END_SRC
 
 ** htmlize
 
-- used by org to export to HTML
+htmlize is used by org to export to HTML.
   
 #+BEGIN_SRC emacs-lisp
+
   (use-package htmlize)
+  
 #+END_SRC
 
 * Other major modes
