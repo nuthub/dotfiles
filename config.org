@@ -342,45 +342,19 @@ htmlize is used by org to export to HTML.
   (use-package platformio-mode)
 #+END_SRC
 * Minor modes & Common packages
-** Completion
-*** Vertico
+** Prescient
 
-VERTical Interactive cOmpletion.
+Frecency based filtering and sorting of completion lists. An alternative to the orderless package. Additionally selectrum-presient needs to be loaded.
 
-#+BEGIN_src emacs-lisp
-  (use-package vertico
-    :ensure t
-    :custom
-    (vertico-cycle t)
-    :init
-    (vertico-mode))
-#+END_src
+#+begin_src emacs-lisp
+  (use-package prescient)
+#+end_src
 
-*** savehist
-
-Saves history in completion lists (shows last selected entry on top)
-
-#+BEGIN_src emacs-lisp
-  (use-package savehist
-    :init
-    (savehist-mode))
-#+END_src
-
-*** marginalia
-
-Enriches selection lists with additional information.
-
-#+BEGIN_src emacs-lisp
-  (use-package marginalia
-    :config
-    (marginalia-mode))
-#+END_src
-
-*** orderless
+** SKIP orderless
 
 Completion style (prefix, fuzzy etc)
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package orderless
     :init
     (setq completion-styles '(orderless basic)
@@ -388,7 +362,48 @@ Completion style (prefix, fuzzy etc)
           completion-category-overrides '((file (styles partial-completion)))))
 
 #+END_SRC
-*** consult
+
+** Selectrum
+
+Selectrum is an alternative to Vertico. It comes with its own filtering and sorting apporoach. But we stick to orderless for the moment.
+
+#+begin_src emacs-lisp
+  (use-package selectrum
+    :config
+    (selectrum-mode +1)
+    (setq selectrum-cycle-movement t))
+
+  (use-package selectrum-prescient
+    :after selectrum prescient
+    :config
+    ;; to make sorting and filtering more intelligent
+    (selectrum-prescient-mode +1)
+
+    ;; to save your command history on disk, so the sorting gets more
+    ;; intelligent over time
+    (prescient-persist-mode +1))  
+#+end_src
+** Marginalia
+
+Enriches selection lists with additional information.
+
+#+BEGIN_src emacs-lisp
+  ;; Enable rich annotations using the Marginalia package
+  (use-package marginalia
+    ;; Either bind `marginalia-cycle' globally or only in the minibuffer
+    :bind (;;("M-A" . marginalia-cycle)
+           :map minibuffer-local-map
+           ("M-A" . marginalia-cycle))
+
+    ;; The :init configuration is always executed (Not lazy!)
+    :init
+
+    ;; Must be in the :init section of use-package such that the mode gets
+    ;; enabled right away. Note that this forces loading the package.
+    (marginalia-mode))
+  #+END_src
+
+** consult
 
 Completion allows you to quickly select an item from a list of candidates.
 
@@ -466,7 +481,7 @@ Completion allows you to quickly select an item from a list of candidates.
   )
 
 #+END_SRC
-*** embark & embark-consult
+** embark & embark-consult
 #+BEGIN_SRC emacs-lisp
   (use-package embark
      :ensure t
@@ -500,26 +515,43 @@ Completion allows you to quickly select an item from a list of candidates.
      (embark-collect-mode . consult-preview-at-point-mode))
   #+END_SRC
 
-*** citar & citar-embark
+** citar & citar-embark
 
 Allows to browse bibtex file(s), insert citations, open files, links and notes. It's a helm-bibtext replacement.
 
 #+BEGIN_SRC emacs-lisp
-    (use-package citar
-      :bind (("C-c b" . citar-insert-citation)
-             :map minibuffer-local-map
-             ("M-b" . citar-insert-preset))
-      :config
-      (setq citar-bibliography '("~/Dokumente/Literatur/Literatur.bib"))
-      (setq citar-library-paths '("~/Dokumente/Literatur/bibtex-pdfs"))
-      (setq citar-notes-paths '("~/Dokumente/Literatur/notes")))
+  (use-package citar
+    :bind (("C-c b" . citar-insert-citation)
+           :map minibuffer-local-map
+           ("M-b" . citar-insert-preset))
+    :config
+    (setq citar-bibliography '("~/Dokumente/Literatur/Literatur.bib"))
+    (setq citar-library-paths '("~/Dokumente/Literatur/bibtex-pdfs"))
+    (setq citar-notes-paths '("~/Dokumente/Literatur/notes")))
 
-    (use-package citar-embark
-      :after citar embark
-      :no-require
-      :config
-      (citar-embark-mode))
+  (use-package citar-embark
+    :after citar embark
+    :no-require
+    :config
+    (citar-embark-mode))
 #+END_SRC
+
+** yasnippets (snippet expansion)
+
+Snippet expansion
+- default key for expansion is <TAB>
+- company does not show snippets for completion-at-point
+
+ #+begin_src emacs-lisp
+
+   (use-package yasnippet
+     :config
+     (yas-global-mode))
+
+   ;; snippets
+   (use-package yasnippet-classic-snippets)
+   
+ #+end_src
 
 ** which-key
 
