@@ -309,6 +309,22 @@ htmlize is used by org to export to HTML.
    )
 #+END_SRC
 
+** Biblio
+
+#+begin_src emacs-lisp
+(use-package biblio)
+#+end_src
+
+** pdf-tools
+
+#+begin_src emacs-lisp
+
+  (use-package pdf-tools
+    :config
+    (pdf-tools-install))
+  
+#+end_src
+
 ** SKIP RefTex
 #+BEGIN_SRC emacs-lisp
 
