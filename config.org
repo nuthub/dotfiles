@@ -143,6 +143,7 @@ An alternative to /smartparens/ is /paren/.
 * Org Mode
 ** org
 #+BEGIN_SRC emacs-lisp
+
   (use-package org
     :config
     ;;    (add-hook 'org-mode-hook 'turn-on-auto-fill)
@@ -170,7 +171,7 @@ An alternative to /smartparens/ is /paren/.
     (setq org-log-done 'time)
     (setq org-log-into-drawer t)
     (setq org-num-skip-unnumbered t)
-    (setq org-agenda-files (quote ("~/org/gtd.org" "~/org/tickler.org")))
+    (setq org-agenda-files (quote ("~/org/gtd.org" "~/org/tickler.org" "~/org/someday.org")))
     (setq org-agenda-window-setup "only-window")
     (setq org-agenda-span 1)
     (setq org-stuck-projects
@@ -190,8 +191,6 @@ An alternative to /smartparens/ is /paren/.
     (add-to-list 'org-modules 'org-protocol)
 
     ;; ox-latex specific configuration
-    (add-to-list 'safe-local-variable-values '(org-latex-title-command . ""))
-    (add-to-list 'safe-local-variable-values '(org-latex-toc-command . ""))
     (with-eval-after-load 'ox-latex
       (add-to-list 'org-latex-classes '("scrbook"
                                         "\\documentclass[11pt]{scrbook}"
