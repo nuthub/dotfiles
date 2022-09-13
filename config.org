@@ -532,41 +532,57 @@ Allows to browse bibtex file(s), insert citations, open files, links and notes. 
   (which-key-mode +1))
 #+END_SRC
 
-** vundo / undo-tree (C-x u)
+** undo-tree
+
+The package /undo-tree/ contains more features than vundo, e.g. timestamps, diffs, etc. I never used those features.
+
+#+BEGIN_SRC emacs-lisp
+   (use-package undo-tree
+     :diminish undo-tree-mode
+     :config
+     (global-undo-tree-mode))
+#+END_SRC
+
+The global keybinding 'C-x u' is set below.
+
+** SKIP vundo
 
 The package /vundo/ seems to be a more modern implementation than undo-tree.
-#+BEGIN_SRC emacs-lisp
+
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package vundo
     :config
     (setq vundo-glyph-alist vundo-unicode-symbols))
 #+END_SRC
+
 The global keybinding 'C-x u' is set below.
 
+** Agressive Indent
 
-The package /undo-tree/ contains more features than vundo, e.g. timestamps, diffs, etc. I never used those features.
 #+BEGIN_SRC emacs-lisp
-;;  (use-package undo-tree
-;;    :diminish undo-tree-mode
-;;    :config
-;;    (global-undo-tree-mode))
+  (use-package aggressive-indent
+    :config (aggressive-indent-global-mode))
 #+END_SRC
 
-** SKIP Agressive Indent
+** Highlight indent guides
+#+begin_src emacs-lisp
+  (use-package highlight-indent-guides
+    :config
+    ;; To enable automatically in most programming modes:
+    (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
+#+end_src
+
+** Projectile
 
 #+BEGIN_SRC emacs-lisp
-  ;; (use-package aggressive-indent
-  ;;   :config (aggressive-indent-global-mode))
-#+END_SRC
 
-** SKIP Projectile
-
-#+BEGIN_SRC emacs-lisp
-  ;; (use-package projectile
-  ;;   :config
-  ;;   (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
-  ;;   ;; Recommended keymap prefix on Windows/Linux
-  ;;   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  ;;   (projectile-mode +1))
+  (use-package projectile
+    :config
+    (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+    ;; Recommended keymap prefix on Windows/Linux
+    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+    (projectile-mode +1))
+  
 #+END_SRC
 
 ** Syntax check and auto completion
@@ -599,10 +615,10 @@ Open the file under cursor:
   (global-set-key (kbd "C-x f") 'find-file-at-point)
 #+END_SRC
   
-** vundo
+** undo
 
 #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-x u") 'vundo)
+  (global-set-key (kbd "C-x u") 'undo-tree-visualize)
 #+END_SRC
 
 ** Org mode
