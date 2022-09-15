@@ -181,6 +181,7 @@ An alternative to /smartparens/ is /paren/.
     (setq org-capture-templates
           '(
             ("t" "Todo" entry (file "~/org/inbox.org") "* TODO %?\n  %i")
+            ("r" "Reading" entry (file "~/org/inbox.org") "* TODO Read: %?\n  %i")
             ))
     (setq org-src-tab-acts-natively t)
     (setq org-ellipsis " ⤵")  ;; …, ⤵, ▼, ↴, ⬎, ⤷, ⋱
