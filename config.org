@@ -358,6 +358,94 @@ htmlize is used by org to export to HTML.
 #+BEGIN_SRC emacs-lisp
   (use-package platformio-mode)
 #+END_SRC
+* Mail Configuration
+
+mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
+
+#+begin_src emacs-lisp
+
+  (use-package mu4e
+      :ensure nil
+      :config
+      (setq mu4e-change-filenames-when-moving t)
+      (setq mu4e-get-mail-command "mbsync -a")
+      (setq mu4e-update-interval(* 10 60))
+      (setq mu4e-maildir "~/Mail")
+      (setq mu4e-view-show-images t)
+      (setq mu4e-view-show-addresses 't)
+      (setq mu4e-compose-format-flowed t)
+      (setq mail-user-agent 'mu4e-user-agent)
+      (require 'smtpmail)
+      (setq message-send-mail-function 'smtpmail-send-it)
+      (setq message-kill-buffer-on-exit t)
+      (setq mu4e-headers-fields
+        '((:human-date . 12)
+          (:flags . 6)
+          (:maildir . 23)
+          (:mailing-list . 10)
+          (:from . 22)
+          (:subject)))
+      (setq mu4e-bookmarks
+            '((:name "Combined inbox" :query "maildir:\"/private/inbox\" OR maildir:\"/work/inbox\"" :key 105)
+              (:name "Unread messages" :query "flag:unread AND NOT flag:trashed" :key 117)
+              (:name "Today's messages" :query "date:today..now" :key 116)
+              (:name "Last 7 days" :query "date:7d..now" :hide-unread t :key 119)
+              (:name "Messages with images" :query "mime:image/*" :key 112)))
+      (setq mu4e-maildir-shortcuts
+            '(("/private/inbox" . ?p)
+              ("/work/inbox" . ?w)
+              ("/private/archives/2022" . ?P)
+              ("/work/archives/2022" . ?W)))
+      (setq mu4e-context-policy 'pick-first)
+      (setq mu4e-contexts
+            (list
+             ;; Work account
+             (make-mu4e-context
+              :name "Private"
+              :match-func
+              (lambda (msg)
+                (when msg
+                  (string-prefix-p "/private" (mu4e-message-field msg :maildir))))
+              :vars '((user-mail-address . "julian@flake.de")
+                      (user-full-name . "Julian Flake")
+                      (mu4e-compose-signature . nil)
+                      (smtpmail-smtp-server . "nuthost.de")
+                      (smtpmail-stream-type . starttls)
+                      (smtpmail-smtp-service . 587)
+                      (mu4e-drafts-folder . "/private/drafts")
+                      (mu4e-sent-folder . "/private/sent")
+                      ;;                    (mu4e-refile-folder  . "/Gmail/[Gmail]/All Mail")
+                      (mu4e-trash-folder . "/private/trash")))
+             (make-mu4e-context
+              :name "Work"
+              :match-func
+              (lambda (msg)
+                (when msg
+                  (string-prefix-p "/work" (mu4e-message-field msg :maildir))))
+              :vars '((user-mail-address . "flake@uni-koblenz.de")
+                      (user-full-name    . "Julian Flake")
+                      (mu4e-compose-signature . "Dipl.-Inf. Julian Flake\nUniversity of Koblenz-Landau, Campus Koblenz\nInstitute for Software Technology\nResearch Group Software Engineering")
+                      (smtpmail-smtp-server . "smtp.uni-koblenz.de")
+                      (smtpmail-stream-type . ssl)
+                      (smtpmail-smtp-service . 465)
+                      (mu4e-drafts-folder  . "/work/drafts")
+                      (mu4e-sent-folder  . "/work/sent")
+  ;;                    (mu4e-refile-folder  . "/Gmail/[Gmail]/All Mail")
+                      (mu4e-trash-folder  . "/work/trash")))))
+      (mu4e t))
+
+#+end_src
+
+Alert
+
+#+begin_src emacs-lisp
+  (use-package mu4e-alert
+    :config
+    (mu4e-alert-set-default-style 'notifications)
+    (mu4e-alert-enable-mode-line-display)
+    (mu4e-alert-enable-notifications))
+#+end_src
+
 * Minor modes & Common packages
 ** Prescient
 
