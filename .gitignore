@@ -13,3 +13,7 @@ transient/
 url/
 eshell/
 *.db
+history
+projectile-bookmarks.eld
+snippets/
+var/
