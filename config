@@ -253,7 +253,7 @@ bar {
 
 # autostart
 exec_always --no-startup-id picom
-exec --no-startup-id ~/.fehbg &
+exec --no-startup-id ~/.local/bin/fehbg &
 exec --no-startup-id msm_notifier # manjaro settings manager notification (new kernels etc)
 exec --no-startup-id pasystray --volume-max=100 --notify=all # pulseaudio
 #exec --no-startup-id pamac-tray # manjaro's package manager
@@ -271,7 +271,7 @@ exec --no-startup-id solaar -w hide
 
 
 # window rules
-assign [class="Thunderbird"] $ws1
+assign [class="thunderbird"] $ws1
 assign [class="Chromium"] $ws2
 assign [class="Thunar"] $ws3
 assign [class="Rocket.Chat"] $ws9
