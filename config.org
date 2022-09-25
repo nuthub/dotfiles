@@ -182,6 +182,8 @@ An alternative to /smartparens/ is /paren/.
           '(
             ("t" "Todo" entry (file "~/org/inbox.org") "* TODO %?\n  %i")
             ("r" "Reading" entry (file "~/org/inbox.org") "* TODO Read: %?\n  %i")
+            ("p" "Protocol" entry (file "~/org/inbox.org") "* TODO %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
+            ("L" "Protocol Link" entry (file "~/org/inbox.org") "* TODO %?\n[[%:link][%:description]]")
             ))
     (setq org-src-tab-acts-natively t)
     (setq org-ellipsis " ⤵")  ;; …, ⤵, ▼, ↴, ⬎, ⤷, ⋱
@@ -200,8 +202,15 @@ An alternative to /smartparens/ is /paren/.
                                         ("\\subsection{%s}" . "\\subsection*{%s}")
                                         ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))))
 
-                                        #+END_SRC
+#+END_SRC
 
+In order to let the chromium plugin not ask every time for permission, create
+the file /etc/chromium/policies/managed/org-protocol.json with the following
+ content: {  "AutoLaunchProtocolsFromOrigins": [{ "allowed_origins": [ "*" ],  "protocol":"org-protocol"}]}
+
+see https://github.com/sprig/org-capture-extension/issues/68
+
+                                        
 ** org-contrib
 
 This is needed to allow for not exporting to latex those org headings that are tagged :ignore:.
@@ -386,20 +395,24 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
           (:from . 22)
           (:subject)))
       (setq mu4e-bookmarks
-            '((:name "Combined inbox" :query "maildir:\"/private/inbox\" OR maildir:\"/work/inbox\"" :key 105)
+            '((:name "Combined inbox" :query "maildir:\"/private/inbox\" OR maildir:\"/work/inbox\" OR maildir:\"/b7/inbox\"" :key 105)
               (:name "Unread messages" :query "flag:unread AND NOT flag:trashed" :key 117)
               (:name "Today's messages" :query "date:today..now" :key 116)
               (:name "Last 7 days" :query "date:7d..now" :hide-unread t :key 119)
               (:name "Messages with images" :query "mime:image/*" :key 112)))
       (setq mu4e-maildir-shortcuts
             '(("/private/inbox" . ?p)
-              ("/work/inbox" . ?w)
               ("/private/archives/2022" . ?P)
-              ("/work/archives/2022" . ?W)))
+              ("/work/inbox" . ?w)
+              ("/work/archives/2022" . ?W)
+              ("/b7/inbox" . ?b)
+              ("/b7/archives/2022" . ?B)))
+      (setq smtpmail-queue-mail nil)  ;; start in direct mode
+      (setq smtpmail-queue-dir "~/Mail/queue/cur")
       (setq mu4e-context-policy 'pick-first)
       (setq mu4e-contexts
             (list
-             ;; Work account
+             ;; private account
              (make-mu4e-context
               :name "Private"
               :match-func
@@ -414,8 +427,9 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                       (smtpmail-smtp-service . 587)
                       (mu4e-drafts-folder . "/private/drafts")
                       (mu4e-sent-folder . "/private/sent")
-                      ;;                    (mu4e-refile-folder  . "/Gmail/[Gmail]/All Mail")
+                      (mu4e-refile-folder  . "/private/archives/2022")
                       (mu4e-trash-folder . "/private/trash")))
+             ;; work account
              (make-mu4e-context
               :name "Work"
               :match-func
@@ -430,8 +444,25 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                       (smtpmail-smtp-service . 465)
                       (mu4e-drafts-folder  . "/work/drafts")
                       (mu4e-sent-folder  . "/work/sent")
-  ;;                    (mu4e-refile-folder  . "/Gmail/[Gmail]/All Mail")
-                      (mu4e-trash-folder  . "/work/trash")))))
+                      (mu4e-refile-folder  . "/work/archives/2022")
+                      (mu4e-trash-folder  . "/work/trash")))
+             ;; b7 account
+             (make-mu4e-context
+              :name "B7"
+              :match-func
+              (lambda (msg)
+                (when msg
+                  (string-prefix-p "/b7" (mu4e-message-field msg :maildir))))
+              :vars '((user-mail-address . "julian.flake@blumenthal7.de")
+                      (user-full-name . "Julian Flake")
+                      (mu4e-compose-signature . nil)
+                      (smtpmail-smtp-server . "smtp.strato.de")
+                      (smtpmail-stream-type . ssl)
+                      (smtpmail-smtp-service . 465)
+                      (mu4e-drafts-folder . "/b7/drafts")
+                      (mu4e-sent-folder . "/b7/sent")
+                      (mu4e-refile-folder  . "/b7/archives/2022")
+                      (mu4e-trash-folder . "/b7/trash")))))
       (mu4e t))
 
 #+end_src
@@ -769,6 +800,17 @@ Open the file under cursor:
 
 ** Magit
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
+
   (global-set-key (kbd "C-c g") 'magit-status)
-#+END_SRC
+
+#+end_src
+** Mu4e
+
+#+begin_src emacs-lisp
+
+  (global-set-key (kbd "C-c m") 'mu4e)
+  
+#+end_src
+
+
