@@ -1,0 +1,146 @@
+# Global configuration section
+#   Values here are used as defaults for any following Channel section that
+#   doesn't specify them.
+Expunge None
+Create Near
+
+IMAPAccount nuthost
+Host nuthost.de
+User julian@flake.de
+PassCmd "grep nuthost.de ~/.authinfo | awk 'FNR == 1 {print $6}'"
+
+MaildirStore private-local
+Path ~/Mail/private/
+Trash Trash
+SubFolders Verbatim
+
+IMAPStore private-remote
+Account nuthost
+
+Channel private-inbox
+Far :private-remote:INBOX
+Near :private-local:inbox
+Patterns *
+Sync All
+
+Channel private-sent
+Far :private-remote:Sent
+Near :private-local:sent
+Sync All
+
+Channel private-drafts
+Far :private-remote:Drafts
+Near :private-local:drafts
+Sync All
+
+Channel private-trash
+Far :private-remote:Trash
+Near :private-local:trash
+Sync All
+
+Channel private-junk
+Far :private-remote:Junk
+Near :private-local:junk
+Sync All
+
+Channel private-archives
+Far :private-remote:Archives
+Near :private-local:archives
+Patterns *
+Sync All
+
+Group private
+Channel private-inbox
+Channel private-sent
+Channel private-trash
+Channel private-drafts
+Channel private-junk
+Channel private-archives
+
+### Uni Koblenz
+
+IMAPAccount work
+Host imap.uni-koblenz.de
+SSLType IMAPS
+User flake
+PassCmd "grep uni-koblenz.de ~/.authinfo | awk 'FNR == 1 {print $6}'"
+
+MaildirStore work-local
+Path ~/Mail/work/
+Trash Trash
+SubFolders Verbatim
+
+IMAPStore work-remote
+Account work
+
+Channel work-inbox
+Far :work-remote:INBOX
+Near :work-local:inbox
+
+Channel work-trash
+Far :work-remote:Trash
+Near :work-local:trash
+
+Channel work-sent
+Far :work-remote:Sent
+Near :work-local:sent
+
+Channel work-drafts
+Far :work-remote:Drafts
+Near :work-local:drafts
+
+Channel work-archives
+Far :work-remote:Archives
+Near :work-local:archives
+Patterns *
+
+Group work
+Channel work-inbox
+Channel work-trash
+Channel work-sent
+Channel work-drafts
+Channel work-archives
+
+### Blumenthal 7
+
+IMAPAccount b7
+Host imap.strato.de
+SSLType IMAPS
+User julian.flake@blumenthal7.de
+PassCmd "grep strato.de ~/.authinfo | awk 'FNR == 1 {print $6}'"
+
+MaildirStore b7-local
+Path ~/Mail/b7/
+Trash Trash
+SubFolders Verbatim
+
+IMAPStore b7-remote
+Account b7
+
+Channel b7-inbox
+Far :b7-remote:INBOX
+Near :b7-local:inbox
+
+Channel b7-trash
+Far :b7-remote:Trash
+Near :b7-local:trash
+
+Channel b7-sent
+Far :b7-remote:Sent
+Near :b7-local:sent
+
+Channel b7-drafts
+Far :b7-remote:Drafts
+Near :b7-local:drafts
+
+Channel b7-archives
+Far :b7-remote:Archives
+Near :b7-local:archives
+Patterns *
+
+Group b7
+Channel b7-inbox
+Channel b7-trash
+Channel b7-sent
+Channel b7-drafts
+Channel b7-archives

@@ -1,0 +1,13 @@
+  /home/flake/.screenlayout:
+  total used in directory 60 available 29.1 GiB
+  drwxrwxr-x   2 flake flake  4096 Oct 12 12:24 .
+  drwx---r-x 109 flake flake 12288 Oct 12 12:22 ..
+  -rwx------   1 flake flake   307 Sep 13 11:19 focus@home.sh
+  -rwx------   1 flake flake   316 Sep  7 13:48 focus@home.sh~
+  -rwx------   1 flake flake   402 Oct 12 12:23 home.sh
+  -rwx------   1 flake flake   387 Sep 13 11:19 home.sh~
+  -rwx------   1 flake flake   307 Sep 13 11:19 notebook-only.sh
+  -rwx------   1 flake flake   316 Sep  7 13:38 notebook-only.sh~
+  -rw-r--r--   1 flake flake   226 Aug 18  2020 README
+  -rwx------   1 flake flake   263 Sep 13 11:19 university.sh
+  -rwx------   1 flake flake   266 Sep  7 13:39 university.sh~

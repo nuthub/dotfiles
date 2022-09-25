@@ -1,0 +1,7 @@
+alias ls="ls --color=auto"
+alias ll="ls -l"
+alias op="xdg-open"
+alias open="xdg-open"
+alias rm="trash"
+alias ec="emacsclient"
+

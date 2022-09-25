@@ -1,0 +1,5 @@
+# crtc 1 failed after reconnecting to docking station
+
+workaround: Split the .screenlayout scripts into separate xrandr calls:
+
+https://www.reddit.com/r/archlinux/comments/72cfwh/xrandr_configure_crtc_1_failed_when_connecting/
