@@ -7,9 +7,9 @@ STATE=$(acpi -b | grep -v unavailable | awk '{ print $3 }')
 # Some symbols:      
 
 SYMBOL=" "
-[ ${BAT%?} -le 75 ] && $SYMBOL = ""
-[ ${BAT%?} -le 25 ] && $SYMBOL = ""
-[ ${BAT%?} -le 10 ] && $SYMBOL = ""
+[ ${BAT%?} -le 75 ] && SYMBOL=""
+[ ${BAT%?} -le 25 ] && SYMBOL=""
+[ ${BAT%?} -le 10 ] && SYMBOL=""
 
 [ ${STATE} == "Full," ] || [ ${STATE} == "Charging," ] && SYMBOL+=" "
 [ ${STATE} == "Discharging," ] && SYMBOL="  "
