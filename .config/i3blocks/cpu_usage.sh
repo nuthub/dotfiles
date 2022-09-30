@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 idle=$(mpstat 1 1 | tail -n1 | awk '{ print $NF }')
 usage=$(echo "100-$idle" | bc)

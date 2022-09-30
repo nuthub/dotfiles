@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 FREE=$(awk '/MemFree/ { print $2 }'  /proc/meminfo)
 GBFREE=$(awk '/MemFree/ { printf "%.2f\n", $2/1024/1024 }' /proc/meminfo)

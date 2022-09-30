@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Retrieve doorstatus by some means (e.g. MQTT or spaceapi)
 STATUS=$(~/.local/bin/doorstatus.sh)

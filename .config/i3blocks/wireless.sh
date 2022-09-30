@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 ESSID=$(iwgetid -r)
 if [ "x$ESSID" == "x" ] ; then ESSID="n/a"; fi

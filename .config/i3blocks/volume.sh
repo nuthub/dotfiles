@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 VOL=$(amixer get Master | grep -m1 "[][]" | awk '{ print $5 }' | sed 's/\[//g' | sed 's/\]//')
 MUTE=$(amixer get Master | awk '{ print $6 }' | grep -m1 "[][]"  | sed 's/\[//g' | sed 's/\]//')

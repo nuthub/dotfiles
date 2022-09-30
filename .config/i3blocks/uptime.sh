@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 UPTIME=$(uptime -p)
 UPTIME=$(echo $UPTIME | sed 's/ week[s]\?,/w /')

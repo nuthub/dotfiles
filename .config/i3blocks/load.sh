@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 LOAD=$(cat /proc/loadavg | awk '{print $1" "$2" "$2}')
 LOAD1=$(cat /proc/loadavg | awk '{print $1}' | sed 's/\.//')

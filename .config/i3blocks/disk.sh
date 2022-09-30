@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 DF=$(df -h / | grep "^/dev" | awk '{ print $4 }' | sed 's@\([0-9]\)G@\1@g')
 

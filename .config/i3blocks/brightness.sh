@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 BRI=$(xbacklight | sed 's/\./ /' | awk '{print $1}')"%"
 
