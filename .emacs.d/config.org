@@ -198,6 +198,7 @@ An alternative to /smartparens/ is /paren/.
     (setq org-return-follows-link t)
 
     (add-to-list 'org-modules 'org-protocol)
+    (add-to-list 'org-modules 'org-habits)
 
     ;; ox-latex specific configuration
     (with-eval-after-load 'ox-latex
@@ -206,8 +207,7 @@ An alternative to /smartparens/ is /paren/.
                                         ("\\chapter{%s}" . "\\chapter*{%s}")
                                         ("\\section{%s}" . "\\section*{%s}")
                                         ("\\subsection{%s}" . "\\subsection*{%s}")
-                                        ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
-    (require 'org-habit))
+                                        ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))))
 
 #+END_SRC
 
