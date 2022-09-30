@@ -56,14 +56,6 @@ interval=10
 command=~/.config/i3blocks/updates.sh
 interval=300
 
-#[capture]
-#full_text=capture
-#command=~/.local/bin/capture.sh
-
-[gtd]
-full_text=org
-command=~/.config/i3blocks/org.sh
-
 [time]
 command=date +"%d.%m.%Y %H:%M"
 interval=5
