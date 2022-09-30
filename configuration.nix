@@ -79,6 +79,8 @@
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
+#  services.emacs.enable = true;
+
   # Enable sound.
   sound.enable = true;
   hardware.pulseaudio.enable = true;
@@ -96,8 +98,9 @@
   users.extraGroups.vboxusers.members = [ "flake" ];
 
   # links /libexec from derivations to /run/current-system/sw
-  # environment.pathsToLinks = [ "/libexec" ];
+  #environment.pathsToLinks = [ "/libexec" ];
 
+  environment.localBinInPath = true;
 
 
 
@@ -173,7 +176,8 @@
 	  emacs
 	  ffmpeg
 	  firefox
-	  gcc # needed by mu4e
+#	  gcc # needed by mu4e
+#	  llvm # needed by mu4e
 	  gimp
 	  gitFull
 	  gnome.cheese
@@ -186,7 +190,6 @@
 	  isync # needed by mu4e
 	  #	libreoffice
 	  killall
-	  llvm # needed to build mu4e
 	  mattermost-desktop
 	  maven
 	  meson # needed by mu4e
