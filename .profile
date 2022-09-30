@@ -28,10 +28,3 @@ fi
 if [ -d "$HOME/Applications" ] ; then
     PATH="$HOME/Applications:$PATH"
 fi
-
-# set PATH so it includes user's private ruby bin folder if it exists
-if [ -d "$HOME/.local/share/gem/ruby/3.0.0/bin" ] ; then
-    PATH="$HOME/.local/share/gem/ruby/3.0.0/bin:$PATH"
-fi
-
-
