@@ -1,0 +1,7 @@
+#!/bin/sh
+/usr/bin/i3lock \
+    --nofork \
+    --show-failed-attempts \
+    --ignore-empty-password \
+    --tiling \
+    -i ~/.lockscreen.png
