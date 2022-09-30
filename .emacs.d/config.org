@@ -180,10 +180,16 @@ An alternative to /smartparens/ is /paren/.
             nil ""))
     (setq org-capture-templates
           '(
-            ("t" "Todo" entry (file "~/org/inbox.org") "* TODO %?\n  %i")
-            ("r" "Reading" entry (file "~/org/inbox.org") "* TODO Read: %?\n  %i")
-            ("p" "Protocol" entry (file "~/org/inbox.org") "* TODO %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
-            ("L" "Protocol Link" entry (file "~/org/inbox.org") "* TODO %?\n[[%:link][%:description]]")
+            ("t" "Todo" entry (file "~/org/inbox.org")
+             "* TODO %?\n  %i")
+            ("r" "Reading" entry (file "~/org/inbox.org")
+             "* TODO Read: %?\n  %i")
+            ("m" "Process mail" entry (file "~/org/inbox.org")
+             "* TODO %:fromname: %a\nSCHEDULED: %t")
+            ("p" "Protocol" entry (file "~/org/inbox.org")
+             "* TODO %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
+            ("L" "Protocol Link" entry (file "~/org/inbox.org")
+             "* TODO %?\n[[%:link][%:description]]")
             ))
     (setq org-src-tab-acts-natively t)
     (setq org-ellipsis " ⤵")  ;; …, ⤵, ▼, ↴, ⬎, ⤷, ⋱
@@ -200,7 +206,8 @@ An alternative to /smartparens/ is /paren/.
                                         ("\\chapter{%s}" . "\\chapter*{%s}")
                                         ("\\section{%s}" . "\\section*{%s}")
                                         ("\\subsection{%s}" . "\\subsection*{%s}")
-                                        ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))))
+                                        ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
+    (require 'org-habit))
 
 #+END_SRC
 
@@ -209,7 +216,6 @@ the file /etc/chromium/policies/managed/org-protocol.json with the following
  content: {  "AutoLaunchProtocolsFromOrigins": [{ "allowed_origins": [ "*" ],  "protocol":"org-protocol"}]}
 
 see https://github.com/sprig/org-capture-extension/issues/68
-
                                         
 ** org-contrib
 
@@ -259,36 +265,42 @@ Build a second brain with org-roam.
 
 #+BEGIN_SRC emacs-lisp
 
-  (use-package org-roam
-    :ensure t
-    :custom
-    (org-roam-directory (file-truename "~/org/roam/"))
-    (org-roam-completion-everywhere t)
-    :bind (("C-c n l" . org-roam-buffer-toggle)
-           ("C-c n f" . org-roam-node-find)
-           ("C-c n i" . org-roam-node-insert)
-           ("C-c n c" . org-roam-capture)
-           ("C-c n g" . org-roam-graph)
-           ;; Dailies
-           ("C-c n j" . org-roam-dailies-capture-today)
-           :map org-mode-map
-           ("C-M-i" . completion-at-point)
-           :map org-roam-dailies-map
-           ("Y" . org-roam-dailies-capture-yesterday)
-           ("T" . org-roam-dailies-capture-tomorrow))
-    :bind-keymap
-    ("C-c n d" . org-roam-dailies-map)
-    :config
-    (org-roam-db-autosync-mode)
-    ;; If you're using a vertical completion framework, you might want a more informative completion interface
-    (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-    (org-roam-db-autosync-mode)
-    (org-roam-setup)
-    ;; If using org-roam-protocol
-    (require 'org-roam-dailies) ;; Ensure the keymap is available
-    (require 'org-roam-protocol))
+    (use-package org-roam
+      :ensure t
+      :custom
+      (org-roam-directory (file-truename "~/org/roam/"))
+      (org-roam-completion-everywhere t)
+      :bind (("C-c n l" . org-roam-buffer-toggle)
+             ("C-c n f" . org-roam-node-find)
+             ("C-c n i" . org-roam-node-insert)
+             ("C-c n c" . org-roam-capture)
+             ("C-c n g" . org-roam-graph)
+             ;; Dailies
+             ("C-c n j" . org-roam-dailies-capture-today)
+             :map org-mode-map
+             ("C-M-i" . completion-at-point)
+             :map org-roam-dailies-map
+             ("Y" . org-roam-dailies-capture-yesterday)
+             ("T" . org-roam-dailies-capture-tomorrow))
+      :bind-keymap
+      ("C-c n d" . org-roam-dailies-map)
+      :config
+      (org-roam-db-autosync-mode)
+      ;; If you're using a vertical completion framework, you might want a more informative completion interface
+      (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+      (org-roam-db-autosync-mode)
+      (org-roam-setup)
+      ;; If using org-roam-protocol
+      (require 'org-roam-dailies) ;; Ensure the keymap is available
+      (require 'org-roam-protocol))
 
 #+END_SRC
+
+Visualize the org roam graph in browser:
+
+#+begin_src emacs-lisp
+  (use-package org-roam-ui)
+#+end_src
 
 ** htmlize
 
@@ -378,11 +390,13 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
       :config
       (setq mu4e-change-filenames-when-moving t)
       (setq mu4e-get-mail-command "mbsync -a")
-      (setq mu4e-update-interval(* 10 60))
+      (setq mu4e-update-interval(* 5 60))
       (setq mu4e-maildir "~/Mail")
       (setq mu4e-view-show-images t)
       (setq mu4e-view-show-addresses 't)
       (setq mu4e-compose-format-flowed t)
+      ;;      (setq mu4e-compose-cite-function 'message-cite-original-without-signature)
+      (setq mu4e-compose-cite-function 'message-cite-original)
       (setq mail-user-agent 'mu4e-user-agent)
       (require 'smtpmail)
       (setq message-send-mail-function 'smtpmail-send-it)
@@ -796,6 +810,7 @@ Open the file under cursor:
   (global-set-key (kbd "C-c j") 'org-journal-new-entry)
   (global-set-key (kbd "C-c c") 'org-capture)
   (global-set-key (kbd "C-c l") 'org-store-link)
+  (global-set-key (kbd "C-c n u") 'org-roam-ui-open)
 #+END_SRC
 
 ** Magit

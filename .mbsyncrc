@@ -21,41 +21,35 @@ Channel private-inbox
 Far :private-remote:INBOX
 Near :private-local:inbox
 Patterns *
-Sync All
 
 Channel private-sent
 Far :private-remote:Sent
 Near :private-local:sent
-Sync All
 
 Channel private-drafts
 Far :private-remote:Drafts
 Near :private-local:drafts
-Sync All
 
 Channel private-trash
 Far :private-remote:Trash
 Near :private-local:trash
-Sync All
 
 Channel private-junk
 Far :private-remote:Junk
 Near :private-local:junk
-Sync All
 
 Channel private-archives
 Far :private-remote:Archives
 Near :private-local:archives
 Patterns *
-Sync All
 
 Group private
 Channel private-inbox
 Channel private-sent
-Channel private-trash
 Channel private-drafts
-Channel private-junk
 Channel private-archives
+Channel private-junk
+Channel private-trash
 
 ### Uni Koblenz
 
@@ -89,6 +83,10 @@ Channel work-drafts
 Far :work-remote:Drafts
 Near :work-local:drafts
 
+Channel work-junk
+Far :work-remote:Junk
+Near :work-local:junk
+
 Channel work-archives
 Far :work-remote:Archives
 Near :work-local:archives
@@ -96,10 +94,11 @@ Patterns *
 
 Group work
 Channel work-inbox
-Channel work-trash
 Channel work-sent
 Channel work-drafts
 Channel work-archives
+Channel work-junk
+Channel work-trash
 
 ### Blumenthal 7
 
@@ -140,7 +139,8 @@ Patterns *
 
 Group b7
 Channel b7-inbox
-Channel b7-trash
 Channel b7-sent
 Channel b7-drafts
 Channel b7-archives
+Channel b7-junk
+Channel b7-trash
