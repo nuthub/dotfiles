@@ -15,5 +15,5 @@
 [init]
 	defaultBranch = main
 [core]
-	editor = /usr/bin/emacsclient -c -a=
+	editor = emacsclient -c -a=
 	excludesFile = ~/.gitignore

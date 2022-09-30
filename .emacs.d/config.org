@@ -383,101 +383,111 @@ htmlize is used by org to export to HTML.
 
 mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
 
+1. run mbsync -a
+2. initialize mu
+   #+begin_src bash
+     mu init \
+        --my-address=foo@example.com \
+        --my-address=bar@example.com \
+        -m ~/Mail
+   #+end_src
+
 #+begin_src emacs-lisp
 
   (use-package mu4e
-      :ensure nil
-      :config
-      (setq mu4e-change-filenames-when-moving t)
-      (setq mu4e-get-mail-command "mbsync -a")
-      (setq mu4e-update-interval(* 5 60))
-      (setq mu4e-maildir "~/Mail")
-      (setq mu4e-view-show-images t)
-      (setq mu4e-view-show-addresses 't)
-      (setq mu4e-compose-format-flowed t)
+    :ensure nil
+    :straight nil ;; use the system installed version
+    :config
+    (setq mu4e-change-filenames-when-moving t)
+    (setq mu4e-get-mail-command "mbsync -a")
+    (setq mu4e-update-interval(* 5 60))
+    (setq mu4e-maildir "~/Mail")
+    (setq mu4e-view-show-images t)
+    (setq mu4e-view-show-addresses 't)
+    (setq mu4e-compose-format-flowed t)
       ;;      (setq mu4e-compose-cite-function 'message-cite-original-without-signature)
       (setq mu4e-compose-cite-function 'message-cite-original)
-      (setq mail-user-agent 'mu4e-user-agent)
-      (require 'smtpmail)
-      (setq message-send-mail-function 'smtpmail-send-it)
-      (setq message-kill-buffer-on-exit t)
-      (setq mu4e-headers-fields
-        '((:human-date . 12)
-          (:flags . 6)
-          (:maildir . 23)
-          (:mailing-list . 10)
-          (:from . 22)
-          (:subject)))
-      (setq mu4e-bookmarks
-            '((:name "Combined inbox" :query "maildir:\"/private/inbox\" OR maildir:\"/work/inbox\" OR maildir:\"/b7/inbox\"" :key 105)
-              (:name "Unread messages" :query "flag:unread AND NOT flag:trashed" :key 117)
-              (:name "Today's messages" :query "date:today..now" :key 116)
-              (:name "Last 7 days" :query "date:7d..now" :hide-unread t :key 119)
-              (:name "Messages with images" :query "mime:image/*" :key 112)))
-      (setq mu4e-maildir-shortcuts
-            '(("/private/inbox" . ?p)
-              ("/private/archives/2022" . ?P)
-              ("/work/inbox" . ?w)
-              ("/work/archives/2022" . ?W)
-              ("/b7/inbox" . ?b)
-              ("/b7/archives/2022" . ?B)))
-      (setq smtpmail-queue-mail nil)  ;; start in direct mode
-      (setq smtpmail-queue-dir "~/Mail/queue/cur")
-      (setq mu4e-context-policy 'pick-first)
-      (setq mu4e-contexts
-            (list
-             ;; private account
-             (make-mu4e-context
-              :name "Private"
-              :match-func
-              (lambda (msg)
-                (when msg
-                  (string-prefix-p "/private" (mu4e-message-field msg :maildir))))
-              :vars '((user-mail-address . "julian@flake.de")
-                      (user-full-name . "Julian Flake")
-                      (mu4e-compose-signature . nil)
-                      (smtpmail-smtp-server . "nuthost.de")
-                      (smtpmail-stream-type . starttls)
-                      (smtpmail-smtp-service . 587)
-                      (mu4e-drafts-folder . "/private/drafts")
-                      (mu4e-sent-folder . "/private/sent")
-                      (mu4e-refile-folder  . "/private/archives/2022")
-                      (mu4e-trash-folder . "/private/trash")))
-             ;; work account
-             (make-mu4e-context
-              :name "Work"
-              :match-func
-              (lambda (msg)
-                (when msg
-                  (string-prefix-p "/work" (mu4e-message-field msg :maildir))))
-              :vars '((user-mail-address . "flake@uni-koblenz.de")
-                      (user-full-name    . "Julian Flake")
-                      (mu4e-compose-signature . "Dipl.-Inf. Julian Flake\nUniversity of Koblenz-Landau, Campus Koblenz\nInstitute for Software Technology\nResearch Group Software Engineering")
-                      (smtpmail-smtp-server . "smtp.uni-koblenz.de")
-                      (smtpmail-stream-type . ssl)
-                      (smtpmail-smtp-service . 465)
-                      (mu4e-drafts-folder  . "/work/drafts")
-                      (mu4e-sent-folder  . "/work/sent")
-                      (mu4e-refile-folder  . "/work/archives/2022")
-                      (mu4e-trash-folder  . "/work/trash")))
-             ;; b7 account
-             (make-mu4e-context
-              :name "B7"
-              :match-func
-              (lambda (msg)
-                (when msg
-                  (string-prefix-p "/b7" (mu4e-message-field msg :maildir))))
-              :vars '((user-mail-address . "julian.flake@blumenthal7.de")
-                      (user-full-name . "Julian Flake")
-                      (mu4e-compose-signature . nil)
-                      (smtpmail-smtp-server . "smtp.strato.de")
-                      (smtpmail-stream-type . ssl)
-                      (smtpmail-smtp-service . 465)
-                      (mu4e-drafts-folder . "/b7/drafts")
-                      (mu4e-sent-folder . "/b7/sent")
-                      (mu4e-refile-folder  . "/b7/archives/2022")
-                      (mu4e-trash-folder . "/b7/trash")))))
-      (mu4e t))
+    (setq mail-user-agent 'mu4e-user-agent)
+    (require 'smtpmail)
+    (setq message-send-mail-function 'smtpmail-send-it)
+    (setq message-kill-buffer-on-exit t)
+    (setq mu4e-headers-fields
+          '((:human-date . 12)
+            (:flags . 6)
+            (:maildir . 23)
+            (:mailing-list . 10)
+            (:from . 22)
+            (:subject)))
+    (setq mu4e-bookmarks
+          '((:name "Combined inbox" :query "maildir:\"/private/inbox\" OR maildir:\"/work/inbox\" OR maildir:\"/b7/inbox\"" :key 105)
+            (:name "Unread messages" :query "flag:unread AND NOT flag:trashed" :key 117)
+            (:name "Today's messages" :query "date:today..now" :key 116)
+            (:name "Last 7 days" :query "date:7d..now" :hide-unread t :key 119)
+            (:name "Messages with images" :query "mime:image/*" :key 112)))
+    (setq mu4e-maildir-shortcuts
+          '(("/private/inbox" . ?p)
+            ("/private/archives/2022" . ?P)
+            ("/work/inbox" . ?w)
+            ("/work/archives/2022" . ?W)
+            ("/b7/inbox" . ?b)
+            ("/b7/archives/2022" . ?B)))
+    (setq smtpmail-queue-mail nil)  ;; start in direct mode
+    (setq smtpmail-queue-dir "~/Mail/queue/cur")
+    (setq mu4e-context-policy 'pick-first)
+    (setq mu4e-contexts
+          (list
+           ;; private account
+           (make-mu4e-context
+            :name "Private"
+            :match-func
+            (lambda (msg)
+              (when msg
+                (string-prefix-p "/private" (mu4e-message-field msg :maildir))))
+            :vars '((user-mail-address . "julian@flake.de")
+                    (user-full-name . "Julian Flake")
+                    (mu4e-compose-signature . nil)
+                    (smtpmail-smtp-server . "nuthost.de")
+                    (smtpmail-stream-type . starttls)
+                    (smtpmail-smtp-service . 587)
+                    (mu4e-drafts-folder . "/private/drafts")
+                    (mu4e-sent-folder . "/private/sent")
+                    (mu4e-refile-folder  . "/private/archives/2022")
+                    (mu4e-trash-folder . "/private/trash")))
+           ;; work account
+           (make-mu4e-context
+            :name "Work"
+            :match-func
+            (lambda (msg)
+              (when msg
+                (string-prefix-p "/work" (mu4e-message-field msg :maildir))))
+            :vars '((user-mail-address . "flake@uni-koblenz.de")
+                    (user-full-name    . "Julian Flake")
+                    (mu4e-compose-signature . "Dipl.-Inf. Julian Flake\nUniversity of Koblenz-Landau, Campus Koblenz\nInstitute for Software Technology\nResearch Group Software Engineering")
+                    (smtpmail-smtp-server . "smtp.uni-koblenz.de")
+                    (smtpmail-stream-type . ssl)
+                    (smtpmail-smtp-service . 465)
+                    (mu4e-drafts-folder  . "/work/drafts")
+                    (mu4e-sent-folder  . "/work/sent")
+                    (mu4e-refile-folder  . "/work/archives/2022")
+                    (mu4e-trash-folder  . "/work/trash")))
+           ;; b7 account
+           (make-mu4e-context
+            :name "B7"
+            :match-func
+            (lambda (msg)
+              (when msg
+                (string-prefix-p "/b7" (mu4e-message-field msg :maildir))))
+            :vars '((user-mail-address . "julian.flake@blumenthal7.de")
+                    (user-full-name . "Julian Flake")
+                    (mu4e-compose-signature . nil)
+                    (smtpmail-smtp-server . "smtp.strato.de")
+                    (smtpmail-stream-type . ssl)
+                    (smtpmail-smtp-service . 465)
+                    (mu4e-drafts-folder . "/b7/drafts")
+                    (mu4e-sent-folder . "/b7/sent")
+                    (mu4e-refile-folder  . "/b7/archives/2022")
+                    (mu4e-trash-folder . "/b7/trash")))))
+    (mu4e t))
 
 #+end_src
 

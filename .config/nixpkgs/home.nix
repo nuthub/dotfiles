@@ -20,6 +20,8 @@
   programs.home-manager.enable = true;
 
   home.packages = with pkgs; [
+    emacs
+    mu
     zsh
     oh-my-zsh
   ];
@@ -36,5 +38,8 @@
     	theme = "robbyrussell";
     };
   };
-  
+#  programs.emacs = {
+#    enable = true;
+#  };
+#  programs.mu.enable = true;
 }
