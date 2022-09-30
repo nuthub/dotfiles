@@ -1,5 +1,5 @@
 #!/bin/sh
-/usr/bin/i3lock \
+i3lock \
     --nofork \
     --show-failed-attempts \
     --ignore-empty-password \
