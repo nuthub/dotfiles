@@ -1,0 +1,3 @@
+#!/bin/sh
+cd ~
+emacsclient -nc --eval '(org-agenda-list)' '(delete-other-windows)'

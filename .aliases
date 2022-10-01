@@ -3,5 +3,5 @@ alias ll="ls -l"
 alias op="xdg-open"
 alias open="xdg-open"
 alias rm="trash"
-alias ec="emacsclient"
+alias ec="emacsclient -nc"
 

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-BRI=$(xbacklight | sed 's/\./ /' | awk '{print $1}')"%"
+BRI=$(xbacklight -get | sed 's/\./ /' | awk '{print $1}')"%"
 
 # Full (1st row) and short texts (2nd row)
 echo " $BRI"
