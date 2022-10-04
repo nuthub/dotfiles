@@ -23,7 +23,7 @@ set $refresh_brightness $refresh_i3status & exec pkill -SIGRTMIN+11 i3blocks
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
 #font pango:DejaVu Sans Mono 10
-font pango:Hack 9
+font pango:Hack 10
 # The combination of xss-lock, nm-applet and pactl is a popular choice, so
 # they are included here as an example. Modify as you see fit.
 
@@ -206,13 +206,14 @@ bindsym $mod+Ctrl+Up resize shrink height 10 px or 10 ppt
 bindsym $mod+Ctrl+Right resize grow width 10 px or 10 ppt
 
 
-set $mode_system System: (l) lock, (e) logout, (s) suspend, (c) edit config, (Shift+r) reboot, (Shift+s) shutdown
+set $mode_system System: (l) lock, (e) logout, (s) suspend, (c) i3 config, (n) nixos config, (Shift+r) reboot, (Shift+s) shutdown
 mode "$mode_system" {
     bindsym l exec --no-startup-id lockscreen, mode "default"
     bindsym e exec --no-startup-id i3-msg exit, mode "default"
     bindsym s exec --no-startup-id systemctl suspend, mode "default"
-#    bindsym h exec --no-startup-id systemctl hibernate, mode "default"
     bindsym c exec --no-startup-id emacsclient -nc ~/.config/i3/config, mode "default"
+#    bindsym n exec --no-startup-id nixos-rebuild edit, mode "default"
+    bindsym n exec --no-startup-id emacsclient -nc ~/etc-nixos/configuration.nix, mode "default"
     bindsym Shift+r exec --no-startup-id systemctl reboot, mode "default"
     bindsym Shift+s exec --no-startup-id systemctl poweroff, mode "default"
 

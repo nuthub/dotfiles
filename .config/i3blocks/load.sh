@@ -1,12 +1,13 @@
 #!/bin/sh
 
-LOAD=$(cat /proc/loadavg | awk '{print $1" "$2" "$2}')
-LOAD1=$(cat /proc/loadavg | awk '{print $1}' | sed 's/\.//')
+load=$(uptime |sed 's/,//g' |awk '{print $8" "$9" "$10}')
 
 # 1st row: Full text
-echo " $LOAD"
+echo " $load"
 # 2nd row: Short text
-echo " $LOAD"
+echo " $load"
 # 3rd row: color
-[ ${LOAD1} -ge 100 ] && echo "#FF8000"
-
+comparison=$(echo $load | awk '{print $1}')" > 1"
+if [ $(echo "${comparison}" | bc -l) -eq 1 ]; then
+    echo "#FF8000"
+fi

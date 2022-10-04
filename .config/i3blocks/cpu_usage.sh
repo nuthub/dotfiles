@@ -4,14 +4,15 @@ idle=$(mpstat 1 1 | tail -n1 | awk '{ print $NF }')
 usage=$(echo "100-$idle" | bc)
 
 # 1st row: full text
-echo " $usage %"
+echo " $usage %"
 
 # 2nd row: short text
-echo " $usage %"
+echo " $usage %"
 
 # 3rd row: color
-usageInt=$(echo $usage | sed 's/\./ /' | awk '{ print $1 }')
-[ ${usageInt} -ge 15 ] && echo "#FF8000"
+if [ $(echo "${usage} > 15" | bc -l) -eq 1 ]; then
+    echo "#FF8000"
+fi
 
 exit 0
 
