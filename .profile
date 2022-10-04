@@ -3,11 +3,12 @@ export ALTERNATE_EDITOR=""
 export EDITOR=emacsclient
 #export VISUAL=~/.local/bin/em # $VISUAL opens in GUI mode
 export VISUAL=emacsclient
-export TERMINAL=/usr/bin/urxvt
-export BROWSER=/usr/bin/chromium
-export VIDEOPLAYER=/usr/bin/mpv
-export IMAGEVIEWER=/usr/bin/sxiv
-export PDFVIEWER=/usr/bin/zathura
+#export TERMINAL=/usr/bin/urxvt
+export TERMINAL=alacritty
+export BROWSER=chromium
+export VIDEOPLAYER=mpv
+export IMAGEVIEWER=sxiv
+export PDFVIEWER=zathura
 export QT_QPA_PLATFORMTHEME="qt5ct"
 
 #export QT_AUTO_SCREEN_SCALE_FACTOR=0
