@@ -425,6 +425,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
     (setq mu4e-bookmarks
           '((:name "Combined inbox" :query "maildir:\"/private/inbox\" OR maildir:\"/work/inbox\" OR maildir:\"/b7/inbox\"" :key 105)
             (:name "Unread messages" :query "flag:unread AND NOT flag:trashed" :key 117)
+            (:name "Drafts" :query "maildir:/private/drafts OR maildir:/work/drafts OR maildir:/b7/drafts" :key 100)
             (:name "Today's messages" :query "date:today..now" :key 116)
             (:name "Last 7 days" :query "date:7d..now" :hide-unread t :key 119)
             (:name "Messages with images" :query "mime:image/*" :key 112)))
