@@ -261,6 +261,7 @@ exec --no-startup-id pasystray --volume-max=100 --notify=all # pulseaudio
 exec --no-startup-id blueman-applet
 exec --no-startup-id udiskie -t # -s if applet should only be shown with actions available
 exec --no-startup-id nextcloud
+exec --no-startup-id gnome-keyring-daemon
 exec --no-startup-id birdtray
 exec --no-startup-id thunderbird
 exec --no-startup-id chromium
