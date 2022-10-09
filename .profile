@@ -1,19 +1,12 @@
 export ALTERNATE_EDITOR=""
-#export EDITOR=~/.local/bin/em # $EDITOR opens in terminal
 export EDITOR=emacsclient
-#export VISUAL=~/.local/bin/em # $VISUAL opens in GUI mode
 export VISUAL=emacsclient
-#export TERMINAL=/usr/bin/urxvt
 export TERMINAL=alacritty
-export BROWSER=chromium
+export BROWSER=firefox
 export VIDEOPLAYER=mpv
 export IMAGEVIEWER=sxiv
 export PDFVIEWER=zathura
 export QT_QPA_PLATFORMTHEME="qt5ct"
-
-#export QT_AUTO_SCREEN_SCALE_FACTOR=0
-#export XDG_CURRENT_DESKTOP=XFCE
-#export XDG_CONFIG_DIRS=/etc/xdg
 
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
