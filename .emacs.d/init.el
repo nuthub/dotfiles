@@ -4,6 +4,8 @@
 (unless noninteractive
   (message "Loading %s..." load-file-name))
 
+
+;; Use straight.el instead of package.el
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -17,13 +19,16 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+;; load use-package.el
 (straight-use-package 'use-package)
+;; and use straight.el's version of use-package by default
 (setq straight-use-package-by-default t)
 
 ;; Load org-mode init file
 (straight-use-package 'org)
-(org-babel-load-file
- (expand-file-name "config.org" user-emacs-directory))
+(org-babel-load-file (expand-file-name "config.org" user-emacs-directory))
+(org-babel-load-file (expand-file-name "desktop.org" user-emacs-directory))
+
 
 (provide 'init)
 ;;; init.el ends here
