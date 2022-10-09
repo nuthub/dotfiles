@@ -1,2 +1,2 @@
 #!/bin/sh
-feh --no-fehbg --bg-center ~/.wallpaper.jpg
+feh --no-fehbg --bg-center ~/.background-image 
