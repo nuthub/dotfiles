@@ -26,14 +26,16 @@
     ];
 
   ## Boot loader
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  # this was used in VirtualBox VM:
-  ## Use the GRUB 2 boot loader.
-  # boot.loader.grub.enable = true;
-  # boot.loader.grub.version = 2;
-  # boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
+  # Use the grub boot loader in efi mode
+  boot.loader.grub.enable = true;
+  boot.loader.grub.version = 2;
+  boot.loader.grub.efiSupport = true;
+  boot.loader.grub.device = "nodev"; # "nodev" for EFI mode, "/dev/XYZ" for MBR mode
+  boot.loader.grub.theme = pkgs.nixos-grub2-theme;
+  boot.loader.grub.gfxmodeEfi = "1024x768";
+  boot.loader.grub.gfxpayloadEfi = "1024x768";
+
   
   networking.hostName = "nutbook"; # Define your hostname.
   networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
@@ -55,8 +57,8 @@
   # i18n.defaultLocale = "en_US.UTF-8";
   console = {
 	  font = "Lat2-Terminus16";
-	  keyMap = "de-latin1";
-	  # useXkbConfig = true; # use xkbOptions in tty.
+#	  keyMap = "de-latin1";
+	  useXkbConfig = true; # use xkbOptions in tty.
   };
   
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -149,30 +151,30 @@
   environment.localBinInPath = true;
 
 
-
   nix = {
     package = pkgs.nixFlakes;
 	  extraOptions = ''
-      experimental-features = nix-command flakes
+                    experimental-features = nix-command flakes
   	'';
   };
 
   nixpkgs.config.allowUnfree = true;
   
   environment.systemPackages = with pkgs; [
-	  acpi # for i3blocks
 	  alacritty # a terminal emulator
 	  aqbanking
     arandr
 	  AusweisApp2
+    autorandr
 	  baobab # graphical du
 	  bash
     bat
 	  bc
-	  biber # latex
 	  birdtray
 	  bitwarden
-	  borgbackup
+    borgbackup
+    brightnessctl
+    chromium
 	  curl
 	  dia
 	  discord
