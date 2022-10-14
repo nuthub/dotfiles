@@ -17,42 +17,66 @@ Partly taken or adopted from daviwil (emacs-from-scratch) screencasts.
     (exwm-workspace-rename-buffer exwm-class-name))
 
   (defun jf/exwm-init-hook ()
-      (message "run jf/exwm-init-hook...")
-      ;; jump to 1 as default
-      (exwm-workspace-switch-create 1)
-      ;;(display-time-mode 1)
-      ;; start some tray and background applications
-      ;; started by xsession:
-      ;; (jf/run-in-background "xss-lock --transfer-sleep-lock -- lockscreen")
-      ;; (jf/run-in-background "fehbg")
-      (jf/run-in-background "nm-applet")
-      (jf/run-in-background "gnome-keyring-daemon")
-      (jf/run-in-background "nextcloud --background")
-      (jf/run-in-background "pasystray")
-      (jf/run-in-background "blueman-applet")
-      (jf/run-in-background "udiskie -t")
-      (jf/run-in-background "solaar -w hide")
+    (message "run jf/exwm-init-hook...")
+    ;; jump to 1 as default
+    (exwm-workspace-switch-create 1)
+    ;;(display-time-mode 1)
+    ;; start some tray and background applications
+    ;; started by xsession:
+    ;; (jf/run-in-background "xss-lock --transfer-sleep-lock -- lockscreen")
+    ;; (jf/run-in-background "fehbg")
+    (jf/run-in-background "nm-applet")
+    (jf/run-in-background "gnome-keyring-daemon")
+    (jf/run-in-background "nextcloud --background")
+    (jf/run-in-background "pasystray")
+    (jf/run-in-background "blueman-applet")
+    (jf/run-in-background "udiskie -t")
+    (jf/run-in-background "solaar -w hide")
 
-      ;; Start the Polybar panel
-      (jf/start-panel)
-      (org-agenda-list)
-      (message "jf/exwm-init-hook finished..."))
+    ;; Start the Polybar panel
+    (jf/start-panel)
+    ;; init tab bar
+    (jf/init-tabs)
+    (org-agenda-list)
+    (message "jf/exwm-init-hook finished..."))
 
-    ;; call autorandr and log then current config to *Messages*
-    (defun jf/update-displays () (interactive)
-      (jf/run-in-background "autorandr --change --force")
-      (message "Display config: %s"
-               (string-trim (shell-command-to-string "autorandr --current"))))
+  ;; call autorandr and log then current config to *Messages*
+  (defun jf/update-displays () (interactive)
+         (jf/run-in-background "autorandr --change --force")
+         (message "Display config: %s"
+                  (string-trim (shell-command-to-string "autorandr --current"))))
 
+
+  (defun jf/init-tabs () (interactive)
+         (tab-close-other)
+         (tab-rename "1·org")
+         (tab-new)
+         (tab-rename "2·mail")
+         (tab-new)
+         (tab-rename "3·cal")
+         (tab-new)
+         (tab-rename "4·web")
+         (tab-new)
+         (tab-rename "5")
+         (tab-new)
+         (tab-rename "6")
+         (tab-new)
+         (tab-rename "7")
+         (tab-new)
+         (tab-rename "8")
+         (tab-new)
+         (tab-rename "9·chat"))
 #+end_src
+
 * EXWM itself
+
 #+begin_src emacs-lisp
 
 
   (use-package exwm
     :config
     ;; Set the default number of workspaces
-    (setq exwm-workspace-number 10)
+    (setq exwm-workspace-number 3)
 
     ;; exwm init hook
     (add-hook 'exwm-init-hook #'jf/exwm-init-hook)
@@ -61,12 +85,10 @@ Partly taken or adopted from daviwil (emacs-from-scratch) screencasts.
     (add-hook 'exwm-update-class-hook #'jf/exwm-update-class)
 
     (require 'exwm-randr)
-    (setq exwm-randr-workspace-output-plist '(1 "DP-2-3" 8 "DP-2-2" 9 "eDP-1"))
+    (setq exwm-randr-workspace-output-plist '(1 "DP-2-3" 2 "DP-2-2" 3 "eDP-1"))
     (add-hook 'exwm-randr-screen-change-hook #'jf/update-displays)
     (jf/update-displays)
-    (message "run exwm-randr-enable...")
     (exwm-randr-enable)
-    (message "exwm-randr-enable finished...")
 
     (setq exwm-workspace-warp-cursor nil)
     (setq mouse-autoselect-window nil)
@@ -107,23 +129,37 @@ Partly taken or adopted from daviwil (emacs-from-scratch) screencasts.
             ([s-up] . windmove-up)
             ([s-down] . windmove-down)
 
+            ([s-tab] . tab-next)
+            ([s-iso-lefttab] . tab-previous)
             ;; Launch applications via shell command
             ([?\s-d] . (lambda (command)
                          (interactive (list (read-shell-command "$ ")))
                          (start-process-shell-command command nil command)))
 
-            ;; Switch workspace
+            ;; switch tabs
+            ([?\s-1] . (lambda() (interactive) (tab-select 1)))
+            ([?\s-2] . (lambda() (interactive) (tab-select 2)))
+            ([?\s-3] . (lambda() (interactive) (tab-select 3)))
+            ([?\s-4] . (lambda() (interactive) (tab-select 4)))
+            ([?\s-5] . (lambda() (interactive) (tab-select 5)))
+            ([?\s-6] . (lambda() (interactive) (tab-select 6)))
+            ([?\s-7] . (lambda() (interactive) (tab-select 7)))
+            ([?\s-8] . (lambda() (interactive) (tab-select 8)))
+            ([?\s-9] . (lambda() (interactive) (tab-select 9)))
+
+            ;; Switch workspaces
             ([?\s-w] . exwm-workspace-switch)
-            ;; 's-N': Switch to certain workspace with Super (Win) plus a number key (0 - 9)
+
+            ;; 's-<fN>': Switch to certain workspace with Super (Win) plus a F key (F1 - F9)
             ,@(mapcar (lambda (i)
-                        `(,(kbd (format "s-%d" i)) .
+                        `(,(kbd (format "s-<f%d>" i)) .
                           (lambda ()
                             (interactive)
                             (exwm-workspace-switch-create ,i))))
-                            (number-sequence 0 9))))
-    (message "run exwm-enable...")
-    (exwm-enable)
-    (message "exwm-enable finished..."))
+                      (number-sequence 1 9))))
+
+
+    (exwm-enable))
 #+end_src
 
 * Media keys
@@ -171,4 +207,5 @@ from EFS
   (add-hook 'exwm-workspace-switch-hook #'jf/send-polybar-exwm-workspace)
 
 #+end_src
+
 

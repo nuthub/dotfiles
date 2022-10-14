@@ -5,6 +5,7 @@ bookmarks
 .last-package-update-day
 .org-id-locations
 config.el
+desktop.el
 straight/
 network-security.data
 elpa/
