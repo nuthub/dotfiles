@@ -524,19 +524,6 @@ Frecency based filtering and sorting of completion lists. An alternative to the 
   (use-package prescient)
 #+end_src
 
-** SKIP orderless
-
-Completion style (prefix, fuzzy etc)
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package orderless
-    :init
-    (setq completion-styles '(orderless basic)
-          completion-category-defaults nil
-          completion-category-overrides '((file (styles partial-completion)))))
-
-#+END_SRC
-
 ** Selectrum
 
 Selectrum is an alternative to Vertico. It comes with its own filtering and sorting apporoach. But we stick to orderless for the moment.
@@ -723,7 +710,7 @@ Snippet expansion
      (yas-global-mode))
 
    ;; snippets
-   (use-package yasnippet-classic-snippets)
+   (use-package yasnippet-snippets)
    
  #+end_src
 
@@ -733,9 +720,10 @@ Snippet expansion
 
 #+BEGIN_SRC emacs-lisp
 (use-package which-key
+  :init (which-key-mode)
   :diminish which-key-mode
   :config
-  (which-key-mode +1))
+  (setq which-key-idle-delay 1))
 #+END_SRC
 
 ** undo-tree
