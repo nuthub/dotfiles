@@ -67,42 +67,60 @@
     uid = 1000; # currently 1001 sadly
 	  isNormalUser = true;
 	  shell = pkgs.zsh;
-	  extraGroups = [ "wheel" # Enable ‘sudo’ for the user.
-                    "networkmanager"
-                    "vboxusers"
-                    "disk" # to allow mounting/unmounting
-                    "wireshark"
-                    "video" # to allow to use xbacklight
-                  ]; 
+	  extraGroups = [
+      "wheel" # Enable ‘sudo’ for the user.
+      "networkmanager"
+      "vboxusers"
+      "disk" # to allow mounting/unmounting
+      "wireshark"
+      "video" # to allow to use xbacklight
+    ]; 
   };
 
   # Enable the X11 windowing system.
   services.xserver = {
 	  enable = true;
+    resolutions = [{
+      x = 1920;
+      y = 1080;
+    }];
 
 	  desktopManager = {
 	    xterm.enable = false;
 	  };
-	  displayManager = {
-	    defaultSession = "none+i3";
+    
+    displayManager = {
+      defaultSession = "none+emacs";
+      session = [ {
+        manage = "window";
+        name = "emacs";
+        start = ''
+          dbus-launch --exit-with-session emacs -mm --debug-init
+          waitPID=$!
+        '';
+      } ];
+    };
+      
+	  windowManager = {
+      i3 = {
+	      enable = true;
+	      extraPackages = with pkgs; [
+	        acpi # for i3blocks
+		      i3status
+		      i3blocks
+		      i3lock
+          xss-lock
+		      lxappearance # gui to configure gtk appearance
+	        rofi
+	        sysstat # for i3blocks
+	      ];
+      };
 	  };
-	  windowManager.i3 = {
-	    enable = true;
-	    extraPackages = with pkgs; [
-		    i3status
-		    i3blocks
-		    i3lock
-        xss-lock
-		    lxappearance # gui to configure gtk appearance
-	    ];
-	  };
+    
 	  
 	  # Configure keymap in X11
 	  layout = "de";
-	  # xkbOptions = {
-	  #   "eurosign:e";
-	  #   "caps:escape" # map caps to escape.
-	  # };
+	  xkbOptions = "caps:swapcaps"; # map caps to escape.
   };
 
   # go to sleep when lid is closed, even in docking station
@@ -135,6 +153,9 @@
   # Enable touchpad support (enabled default in most desktopManager).
   services.xserver.libinput.enable = true;
 
+  # Compositor
+  services.picom.enable = true;
+  
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
@@ -143,7 +164,7 @@
 	  permitRootLogin = "yes";
   };
 
-  services.emacs.enable = true;
+#  services.emacs.enable = true;
 
   # links /libexec from derivations to /run/current-system/sw
   environment.pathsToLink = [ "/libexec" ];
@@ -188,12 +209,16 @@
     feh
 	  ffmpeg
 	  firefox
+    gcc # needed by emacs to compile emacssql
 	  gimp
 	  gitFull
 	  gnome.cheese
+    gnome.gnome-keyring
+    gnome.seahorse
 	  gnucash
 	  google-chrome
 	  gradle
+    grub
 	  imagemagick
 	  inkscape
 	  isync # needed by mu4e / contains mbsync
@@ -206,6 +231,7 @@
 	  mosquitto
 	  mpv
 	  mu # needed by (contains) mu4e
+    networkmanagerapplet
 	  nextcloud-client
     neofetch # basic system information
     nixos-option
@@ -219,14 +245,16 @@
     pass
 	  pasystray
 	  pavucontrol
+    pcmanfm
 	  pdftk
 	  pdfpc
     pinentry-qt
 	  platformio
+    polybarFull
 	  powertop
+    qutebrowser
 	  ripgrep
 	  rocketchat-desktop
-	  rofi
 	  rsync
 	  rxvt-unicode
 	  shutter
@@ -240,10 +268,8 @@
 	  subversion
 	  sweethome3d.application
 	  sxiv
-	  sysstat # for i3blocks
 	  tdesktop # Telegram
 	  teams
-	  transmission # bittorrent client
 	  trash-cli
 	  tree
 	  unp
@@ -251,9 +277,11 @@
 	  usbutils # contains lsusb
 	  vnstat # traffic statistics service
 	  wireguard-tools
+    xfce.ristretto
 	  xfce.thunar
 	  xfce.thunar-volman
 	  xfce.thunar-archive-plugin
+    xfce.tumbler
 	  xournalpp
 	  xsane
 	  youtube-dl
@@ -264,6 +292,8 @@
 	  udisks2
 	  vim
 	  wget
+    xorg.xinit
+    xorg.xmessage
 	  zathura
 	  zoom-us
   ];
@@ -271,8 +301,10 @@
 
   # fonts
   fonts.fonts = with pkgs; [
+    cantarell-fonts
 	  hack-font
 	  font-awesome
+    fira-code
 	  #	nerdfonts # very large
 	  noto-fonts
 	  noto-fonts-cjk
@@ -289,7 +321,7 @@
   programs.htop.enable = true;
   programs.iftop.enable = true;
   programs.mtr.enable = true;
-  programs.nm-applet.enable = true;
+#  programs.nm-applet.enable = true;
   programs.traceroute.enable = true;
   programs.wireshark.enable = true;
 
