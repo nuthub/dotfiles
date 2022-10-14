@@ -2,8 +2,6 @@
 #+STARTUP: overview
 #+TODO: TODO CHECK SKIP
 
-For useful and good packages, see also https://github.com/emacs-tw/awesome-emacs.
-
 * Package management
 Package management is done with straight.el now. The bootstrapping of this has been moved to my init.el since this allows to use straight.el to load org mode which is required for the literate configuration you see here. Otherwise emacs would use the built-in version of org which may be too old for the more bleeding edge character of a straight.el maintained emacs installation.
 straight.el offers the 'use-package' command (see also init.el).
@@ -19,7 +17,8 @@ straight.el offers the 'use-package' command (see also init.el).
 
 ** My default browser is chromium:
   #+BEGIN_SRC emacs-lisp
-  (setq browse-url-browser-function 'browse-url-chromium)
+    ;; (setq browse-url-browser-function 'browse-url-chromium)
+    ;; (setq browse-url-browser-function 'browse-url-default-browser) ;; not necessary, it's the default
   #+END_SRC
 
 ** TODO Some localizations for the calendar
@@ -80,11 +79,6 @@ Holidays are not shown in agenda-hoidays (org-agenda 'h')
   (setq inhibit-startup-screen t) ;; don't show splash
 #+END_SRC
 ** Theme
-*** SKIP solarized
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package solarized-theme
-    :config (load-theme 'solarized-dark t))
-#+END_SRC
 *** zenburn
 #+BEGIN_SRC emacs-lisp
   (use-package zenburn-theme
@@ -100,19 +94,31 @@ This is to hide minor modes from mode line. You can use `:diminish foo-mode` the
 #+END_SRC
    
 ** Font
+
 #+BEGIN_SRC emacs-lisp
-(add-to-list 'default-frame-alist
-  '(font . "Hack-12"))
+  (add-to-list 'default-frame-alist '(font . "Hack-12"))
 #+END_SRC
 
 ** Line numbers on the left
    
-Since Emacs 26 there is `display-line-numbers-mode`:
+Since Emacs 26 there is a builtin `display-line-numbers-mode`.
+
 #+BEGIN_SRC emacs-lisp
-  ;; (global-display-line-numbers-mode)
+  (global-display-line-numbers-mode t)
+  ;; Disable line numbers for some modes
+  (dolist (mode '(org-mode-hook
+                  term-mode-hook
+                  shell-mode-hook
+                  treemacs-mode-hook
+                  eshell-mode-hook
+                  pdf-view-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 0))))
 #+END_SRC
 
 ** All-the-icons
+
+You must run 'M-x all-the-icons-install-fonts' to actually download the icons to '~/.local/share/fonts/'.
+
 #+begin_src emacs-lisp
   (use-package all-the-icons
     :if (display-graphic-p))
