@@ -67,6 +67,22 @@ Holidays are not shown in agenda-hoidays (org-agenda 'h')
           ;; (holiday-float 11 3 1 "Buss- und Bettag" 16)
           (holiday-float 11 0 1 "Totensonntag" 20)))
   #+END_SRC
+* Start a Server
+
+#+begin_src emacs-lisp
+  (load "server")
+  (unless (server-running-p) (server-start))
+#+end_src
+
+* Some Functions
+
+#+begin_src emacs-lisp
+
+  (defun jf/start-zsh () (interactive)
+    (ansi-term "zsh"))
+
+#+end_src
+
 * Look & Feel
 ** General appearance
 #+BEGIN_SRC emacs-lisp
@@ -149,370 +165,52 @@ An alternative to /smartparens/ is /paren/.
       (show-paren-mode t)))
 #+END_SRC
 
-* Org Mode
-** org
+* Global key bindings
+
+** General
+
+Open the file under cursor:
+
 #+BEGIN_SRC emacs-lisp
-
-  (use-package org
-    :config
-    ;;    (add-hook 'org-mode-hook 'turn-on-auto-fill)
-    (setq org-directory "~/org")
-    (setq org-refile-targets (quote (("~/org/gtd.org" :maxlevel . 4)
-                                    ("~/org/someday.org" :maxlevel . 1)
-                                    ("~/org/tickler.org" :maxlevel . 1))))
-    (setq org-refile-use-outline-path 'file)
-    (setq org-outline-path-complete-in-steps nil)
-    (setq org-refile-allow-creating-parent-nodes 'confirm)
-    (setq org-default-notes-file (concat org-directory "/inbox.org"))
-    (setq org-archive-location (concat org-directory "/archive/archive-" (format-time-string "%Y" (current-time)) ".org::datetree/"))
-    (setq org-export-backends (quote (ascii beamer html icalendar latex md odt)))
-    (setq org-tag-alist '(("@home" . ?h)
-                          ("@work" . ?w)
-                          ("@phone" . ?p)
-                          ("@boat" . ?b)
-                          ("@org" . ?o)
-                          ("@city" . ?c)
-                          ("@ToRead" . ?r)))
-    (setq org-todo-keywords '((sequence "TODO(t)" "FREQ(f)" "PROJ(p)" "WAIT(w@/!)" "|" "DONE(d!)" "CNCL(c@/!)")))
-    (setq org-todo-repeat-to-state t)
-    (setq org-startup-indented t)
-    (setq org-startup-truncated nil)
-    (setq org-log-done 'time)
-    (setq org-log-into-drawer t)
-    (setq org-num-skip-unnumbered t)
-    (setq org-agenda-files (quote ("~/org/gtd.org" "~/org/tickler.org" "~/org/someday.org")))
-    (setq org-agenda-window-setup "only-window")
-    (setq org-agenda-span 1)
-    (setq org-stuck-projects
-          '("+LEVEL=2/-DONE-CNCL-FREQ"
-            ("TODO" "NEXT" "WAIT" "PROJ")
-            nil ""))
-    (setq org-capture-templates
-          '(
-            ("t" "Todo" entry (file "~/org/inbox.org")
-             "* TODO %?\n  %i")
-            ("r" "Reading" entry (file "~/org/inbox.org")
-             "* TODO Read: %?\n  %i")
-            ("m" "Process mail" entry (file "~/org/inbox.org")
-             "* TODO %:fromname: %a\nSCHEDULED: %t")
-            ("p" "Protocol" entry (file "~/org/inbox.org")
-             "* TODO %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
-            ("L" "Protocol Link" entry (file "~/org/inbox.org")
-             "* TODO %?\n[[%:link][%:description]]")
-            ))
-    (setq org-src-tab-acts-natively t)
-    (setq org-ellipsis " ⤵")  ;; …, ⤵, ▼, ↴, ⬎, ⤷, ⋱
-    (set-face-underline 'org-ellipsis nil)
-    (setq org-ctrl-k-protect-subtree t)
-    (setq org-return-follows-link t)
-
-    (add-to-list 'org-modules 'org-protocol)
-    (add-to-list 'org-modules 'org-habits)
-
-    ;; ox-latex specific configuration
-    (with-eval-after-load 'ox-latex
-      (add-to-list 'org-latex-classes '("scrbook"
-                                        "\\documentclass[11pt]{scrbook}"
-                                        ("\\chapter{%s}" . "\\chapter*{%s}")
-                                        ("\\section{%s}" . "\\section*{%s}")
-                                        ("\\subsection{%s}" . "\\subsection*{%s}")
-                                        ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))))
-
+  (global-set-key (kbd "C-x f") 'find-file-at-point)
 #+END_SRC
-
-In order to let the chromium plugin not ask every time for permission, create
-the file /etc/chromium/policies/managed/org-protocol.json with the following
- content: {  "AutoLaunchProtocolsFromOrigins": [{ "allowed_origins": [ "*" ],  "protocol":"org-protocol"}]}
-
-see https://github.com/sprig/org-capture-extension/issues/68
-                                        
-** org-contrib
-
-This is needed to allow for not exporting to latex those org headings that are tagged :ignore:.
-
-#+BEGIN_src emacs-lisp
-
-  (use-package org-contrib)
-  (use-package ox-extra
-    :after org-contrib
-    :config
-    (ox-extras-activate '(latex-header-blocks ignore-headlines)))
   
-#+END_src
-
-** org-journal
-
+** shell
 #+BEGIN_SRC emacs-lisp
-
-  (use-package org-journal
-      :after org
-      :config
-      (setq org-journal-dir "~/org/journal/")
-      (setq org-journal-file-type 'weekly)
-      (setq org-journal-file-format "journal-%Y.org")
-      (setq org-journal-date-format "%A, %d %B %Y")
-      (setq org-journal-created-property-timestamp-format "%Y-%m-%d")
-      (setq org-journal-time-format ""))
-
+  (defun jf/start-zsh () (interactive)
+    (ansi-term "/run/current-system/sw/bin/zsh"))
+  (global-set-key (kbd "s-s") 'jf/start-zsh)
 #+END_SRC
 
-** org-superstar
-
-Beautiful bullets. org-superstar is a descendent of org-bullets.
+** undo
 
 #+BEGIN_SRC emacs-lisp
-
-  (use-package org-superstar
-    :after org
-    :hook (org-mode . org-superstar-mode))
-  
+  (global-set-key (kbd "C-x u") 'undo-tree-visualize)
 #+END_SRC
 
-** org-roam
-
-Build a second brain with org-roam.
+** Org mode
 
 #+BEGIN_SRC emacs-lisp
-
-    (use-package org-roam
-      :ensure t
-      :custom
-      (org-roam-directory (file-truename "~/org/roam/"))
-      (org-roam-completion-everywhere t)
-      :bind (("C-c n l" . org-roam-buffer-toggle)
-             ("C-c n f" . org-roam-node-find)
-             ("C-c n i" . org-roam-node-insert)
-             ("C-c n c" . org-roam-capture)
-             ("C-c n g" . org-roam-graph)
-             ;; Dailies
-             ("C-c n j" . org-roam-dailies-capture-today)
-             :map org-mode-map
-             ("C-M-i" . completion-at-point)
-             :map org-roam-dailies-map
-             ("Y" . org-roam-dailies-capture-yesterday)
-             ("T" . org-roam-dailies-capture-tomorrow))
-      :bind-keymap
-      ("C-c n d" . org-roam-dailies-map)
-      :config
-      (org-roam-db-autosync-mode)
-      ;; If you're using a vertical completion framework, you might want a more informative completion interface
-      (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-      (org-roam-db-autosync-mode)
-      (org-roam-setup)
-      ;; If using org-roam-protocol
-      (require 'org-roam-dailies) ;; Ensure the keymap is available
-      (require 'org-roam-protocol))
-
+  (global-set-key (kbd "C-c a") 'org-agenda)
+  (global-set-key (kbd "C-c j") 'org-journal-new-entry)
+  (global-set-key (kbd "C-c c") 'org-capture)
+  (global-set-key (kbd "C-c l") 'org-store-link)
+  (global-set-key (kbd "C-c n u") 'org-roam-ui-open)
 #+END_SRC
 
-Visualize the org roam graph in browser:
-
-#+begin_src emacs-lisp
-  (use-package org-roam-ui)
-#+end_src
-
-** htmlize
-
-htmlize is used by org to export to HTML.
-  
-#+BEGIN_SRC emacs-lisp
-
-  (use-package htmlize)
-  
-#+END_SRC
-
-* Other major modes
-** AucTeX
-
-#+BEGIN_SRC emacs-lisp
-   (use-package auctex
-   :defer t
-   :init
-   (setq TeX-auto-save t)
-   (setq TeX-parse-self t)
-   (setq-default TeX-master nil)
-   ;; https://askubuntu.com/questions/1041919/integration-of-emacs-lualatex-with-evince-zathura-not-working-in-ubuntu-18-04-h
-   (setq TeX-source-correlate-method 'synctex)
-   (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
-   (setq TeX-source-correlate-start-server t)
-   (setq TeX-view-program-selection '((output-pdf "Zathura")))
-   (add-to-list 'load-path "/usr/bin/vendor_perl")
-   )
-#+END_SRC
-
-** Biblio
-
-#+begin_src emacs-lisp
-(use-package biblio)
-#+end_src
-
-** pdf-tools
+** Magit
 
 #+begin_src emacs-lisp
 
-  (use-package pdf-tools
-    :config
-    (pdf-tools-install))
-  
-#+end_src
-
-** SKIP RefTex
-#+BEGIN_SRC emacs-lisp
-
-  ;; (use-package reftex
-  ;;   :init
-  ;;   (setq reftex-default-bibliography '("~/Dokumente/Literatur/Literatur.bib")))
-#+END_SRC
-
-** web-mode & php-mode
-
-   #+BEGIN_SRC emacs-lisp
-   (use-package web-mode)
-   (use-package php-mode)
-   #+END_SRC
-
-** yaml-mode
-
-   #+BEGIN_SRC emacs-lisp
-   (use-package yaml-mode)
-   #+END_SRC
-
-** markdown-mode
-
-   #+BEGIN_SRC emacs-lisp
-   (use-package markdown-mode)
-   #+END_SRC
-
-** Platform.io
-
-#+BEGIN_SRC emacs-lisp
-  (use-package platformio-mode)
-#+END_SRC
-** nix-mode
-#+BEGIN_SRC emacs-lisp
-  (use-package nix-mode)
-#+END_SRC
-
-* Mail Configuration
-
-mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
-
-1. run mbsync -a
-2. initialize mu
-   #+begin_src bash
-     mu init \
-        --my-address=foo@example.com \
-        --my-address=bar@example.com \
-        -m ~/Mail
-   #+end_src
-
-#+begin_src emacs-lisp
-
-  (use-package mu4e
-    :ensure nil
-    :straight nil ;; use the system installed version
-    :config
-    (setq mu4e-change-filenames-when-moving t)
-    (setq mu4e-get-mail-command "mbsync -a")
-    (setq mu4e-update-interval(* 5 60))
-    (setq mu4e-maildir "~/Mail")
-    (setq mu4e-view-show-images t)
-    (setq mu4e-view-show-addresses 't)
-    (setq mu4e-compose-format-flowed t)
-    (setq mu4e-compose-cite-function 'message-cite-original) ;; alternative: 'message-cite-original-without-signature
-    (setq mail-user-agent 'mu4e-user-agent)
-    (require 'smtpmail)
-    (setq message-send-mail-function 'smtpmail-send-it)
-    (setq message-kill-buffer-on-exit t)
-    (setq mu4e-headers-fields
-          '((:human-date . 12)
-            (:flags . 6)
-            (:maildir . 23)
-            (:mailing-list . 10)
-            (:from . 22)
-            (:subject)))
-    (setq mu4e-bookmarks
-          '((:name "Combined inbox" :query "maildir:\"/private/inbox\" OR maildir:\"/work/inbox\" OR maildir:\"/b7/inbox\"" :key 105)
-            (:name "Unread messages" :query "flag:unread AND NOT flag:trashed" :key 117)
-            (:name "Drafts" :query "maildir:/private/drafts OR maildir:/work/drafts OR maildir:/b7/drafts" :key 100)
-            (:name "Today's messages" :query "date:today..now" :key 116)
-            (:name "Last 7 days" :query "date:7d..now" :hide-unread t :key 119)
-            (:name "Messages with images" :query "mime:image/*" :key 112)))
-    (setq mu4e-maildir-shortcuts
-          '(("/private/inbox" . ?p)
-            ("/private/archives/2022" . ?P)
-            ("/work/inbox" . ?w)
-            ("/work/archives/2022" . ?W)
-            ("/b7/inbox" . ?b)
-            ("/b7/archives/2022" . ?B)))
-    (setq smtpmail-queue-mail nil)  ;; start in direct mode
-    (setq smtpmail-queue-dir "~/Mail/queue/cur")
-    (setq mu4e-context-policy 'pick-first)
-    (setq mu4e-contexts
-          (list
-           ;; private account
-           (make-mu4e-context
-            :name "Private"
-            :match-func
-            (lambda (msg)
-              (when msg
-                (string-prefix-p "/private" (mu4e-message-field msg :maildir))))
-            :vars '((user-mail-address . "julian@flake.de")
-                    (user-full-name . "Julian Flake")
-                    (mu4e-compose-signature . nil)
-                    (smtpmail-smtp-server . "nuthost.de")
-                    (smtpmail-stream-type . starttls)
-                    (smtpmail-smtp-service . 587)
-                    (mu4e-drafts-folder . "/private/drafts")
-                    (mu4e-sent-folder . "/private/sent")
-                    (mu4e-refile-folder  . "/private/archives/2022")
-                    (mu4e-trash-folder . "/private/trash")))
-           ;; work account
-           (make-mu4e-context
-            :name "Work"
-            :match-func
-            (lambda (msg)
-              (when msg
-                (string-prefix-p "/work" (mu4e-message-field msg :maildir))))
-            :vars '((user-mail-address . "flake@uni-koblenz.de")
-                    (user-full-name    . "Julian Flake")
-                    (mu4e-compose-signature . "Dipl.-Inf. Julian Flake\nUniversity of Koblenz-Landau, Campus Koblenz\nInstitute for Software Technology\nResearch Group Software Engineering")
-                    (smtpmail-smtp-server . "smtp.uni-koblenz.de")
-                    (smtpmail-stream-type . ssl)
-                    (smtpmail-smtp-service . 465)
-                    (mu4e-drafts-folder  . "/work/drafts")
-                    (mu4e-sent-folder  . "/work/sent")
-                    (mu4e-refile-folder  . "/work/archives/2022")
-                    (mu4e-trash-folder  . "/work/trash")))
-           ;; b7 account
-           (make-mu4e-context
-            :name "B7"
-            :match-func
-            (lambda (msg)
-              (when msg
-                (string-prefix-p "/b7" (mu4e-message-field msg :maildir))))
-            :vars '((user-mail-address . "julian.flake@blumenthal7.de")
-                    (user-full-name . "Julian Flake")
-                    (mu4e-compose-signature . nil)
-                    (smtpmail-smtp-server . "smtp.strato.de")
-                    (smtpmail-stream-type . ssl)
-                    (smtpmail-smtp-service . 465)
-                    (mu4e-drafts-folder . "/b7/drafts")
-                    (mu4e-sent-folder . "/b7/sent")
-                    (mu4e-refile-folder  . "/b7/archives/2022")
-                    (mu4e-trash-folder . "/b7/trash")))))
-    (mu4e t))
+  (global-set-key (kbd "C-c g") 'magit-status)
 
 #+end_src
-
-Alert
+** Mu4e
 
 #+begin_src emacs-lisp
-  (use-package mu4e-alert
-    :config
-    (mu4e-alert-set-default-style 'notifications)
-    (mu4e-alert-enable-mode-line-display)
-    (mu4e-alert-enable-notifications))
+
+  (global-set-key (kbd "C-c m") 'mu4e)
+  
 #+end_src
 
 * Minor modes & Common packages
@@ -739,21 +437,11 @@ The package /undo-tree/ contains more features than vundo, e.g. timestamps, diff
 
 The global keybinding 'C-x u' is set below.
 
-** SKIP vundo
+** CHECK Agressive Indent
 
-The package /vundo/ seems to be a more modern implementation than undo-tree.
+https://github.com/Malabarba/aggressive-indent-mode/issues/158
 
 #+BEGIN_SRC emacs-lisp :tangle no
-  (use-package vundo
-    :config
-    (setq vundo-glyph-alist vundo-unicode-symbols))
-#+END_SRC
-
-The global keybinding 'C-x u' is set below.
-
-** Agressive Indent
-
-#+BEGIN_SRC emacs-lisp
   (use-package aggressive-indent
     :config (aggressive-indent-global-mode))
 #+END_SRC
@@ -799,45 +487,386 @@ The global keybinding 'C-x u' is set below.
   (use-package magit)
 #+END_SRC
 
-* Global key bindings
- 
-** General
+* Major modes
+** web-mode & php-mode
 
-Open the file under cursor:
+   #+BEGIN_SRC emacs-lisp
+   (use-package web-mode)
+   (use-package php-mode)
+   #+END_SRC
+
+** markdown-mode
+
+   #+BEGIN_SRC emacs-lisp
+   (use-package markdown-mode)
+   #+END_SRC
+
+** yaml-mode
+
+   #+BEGIN_SRC emacs-lisp
+   (use-package yaml-mode)
+   #+END_SRC
+
+** nix-mode
+#+BEGIN_SRC emacs-lisp
+  (use-package nix-mode)
+#+END_SRC
+
+** Platform.io
 
 #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-x f") 'find-file-at-point)
+  (use-package platformio-mode)
 #+END_SRC
+** AucTeX
+
+#+BEGIN_SRC emacs-lisp
+  (use-package auctex
+  :defer t
+  :init
+  (setq TeX-auto-save t)
+  (setq TeX-parse-self t)
+  (setq-default TeX-master nil)
+  (setq TeX-view-program-selection '((output-pdf "PDF Tools")))
+  (setq TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view)))
+  (setq TeX-source-correlate-start-server t))
+  ;; ZATHURA:
+  ;; https://askubuntu.com/questions/1041919/integration-of-emacs-lualatex-with-evince-zathura-not-working-in-ubuntu-18-04-h
+  ;;  (setq TeX-source-correlate-method 'synctex)
+  ;;  (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
+  ;;  (setq TeX-source-correlate-start-server t)
+  ;;  (setq TeX-view-program-selection '((output-pdf "Zathura")))
+  ;;  (add-to-list 'load-path "/usr/bin/vendor_perl"))
+  ;; PDF-Tools:
+
+#+END_SRC
+
+** Biblio
+
+#+begin_src emacs-lisp
+(use-package biblio)
+#+end_src
+
+** Org Mode
+*** org
+#+BEGIN_SRC emacs-lisp
+
+    (use-package org
+      :config
+      ;;    (add-hook 'org-mode-hook 'turn-on-auto-fill)
+      (setq org-directory "~/org")
+      (setq org-refile-targets (quote (("~/org/gtd.org" :maxlevel . 4)
+                                      ("~/org/someday.org" :maxlevel . 1)
+                                      ("~/org/tickler.org" :maxlevel . 1))))
+      (setq org-refile-use-outline-path 'file)
+      (setq org-outline-path-complete-in-steps nil)
+      (setq org-refile-allow-creating-parent-nodes 'confirm)
+      (setq org-default-notes-file (concat org-directory "/inbox.org"))
+      (setq org-archive-location (concat org-directory "/archive/archive-" (format-time-string "%Y" (current-time)) ".org::datetree/"))
+      (setq org-export-backends (quote (ascii beamer html icalendar latex md odt)))
+      (setq org-tag-alist '(("@home" . ?h)
+                            ("@work" . ?w)
+                            ("@phone" . ?p)
+                            ("@boat" . ?b)
+                            ("@org" . ?o)
+                            ("@city" . ?c)
+                            ("@ToRead" . ?r)))
+      (setq org-todo-keywords '((sequence "TODO(t)" "FREQ(f)" "PROJ(p)" "WAIT(w@/!)" "|" "DONE(d!)" "CNCL(c@/!)")))
+      (setq org-todo-repeat-to-state t)
+      (setq org-startup-indented t)
+      (setq org-startup-truncated nil)
+      (setq org-log-done 'time)
+      (setq org-log-into-drawer t)
+      (setq org-num-skip-unnumbered t)
+      (setq org-agenda-files (quote ("~/org/gtd.org" "~/org/tickler.org" "~/org/someday.org")))
+      (setq org-agenda-window-setup "only-window")
+      (setq org-agenda-span 1)
+      (setq org-stuck-projects
+            '("+LEVEL=2/-DONE-CNCL-FREQ"
+              ("TODO" "NEXT" "WAIT" "PROJ")
+              nil ""))
+      (setq org-capture-templates
+            '(
+              ("t" "Todo" entry (file "~/org/inbox.org")
+               "* TODO %?\n  %i")
+              ("r" "Reading" entry (file "~/org/inbox.org")
+               "* TODO Read: %?\n  %i")
+              ("m" "Process mail" entry (file "~/org/inbox.org")
+               "* TODO %?\nSCHEDULED: %t\nMail: %:fromname: %a")
+              ("p" "Protocol" entry (file "~/org/inbox.org")
+               "* TODO %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
+              ("L" "Protocol Link" entry (file "~/org/inbox.org")
+               "* TODO %?\n[[%:link][%:description]]")
+              ))
+      (setq org-src-tab-acts-natively t)
+      (setq org-ellipsis " ⤵")  ;; …, ⤵, ▼, ↴, ⬎, ⤷, ⋱
+      (set-face-underline 'org-ellipsis nil)
+      (setq org-ctrl-k-protect-subtree t)
+      (setq org-return-follows-link t)
+
+      (add-to-list 'org-modules 'org-protocol)
+
+      ;; ox-latex specific configuration
+      (with-eval-after-load 'ox-latex
+        (add-to-list 'org-latex-classes '("scrbook"
+                                          "\\documentclass[11pt]{scrbook}"
+                                          ("\\chapter{%s}" . "\\chapter*{%s}")
+                                          ("\\section{%s}" . "\\section*{%s}")
+                                          ("\\subsection{%s}" . "\\subsection*{%s}")
+                                          ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))))
+
+#+END_SRC
+
+In order to let the chromium plugin not ask every time for permission, create
+the file /etc/chromium/policies/managed/org-protocol.json with the following
+ content: {  "AutoLaunchProtocolsFromOrigins": [{ "allowed_origins": [ "*" ],  "protocol":"org-protocol"}]}
+
+see https://github.com/sprig/org-capture-extension/issues/68
+                                        
+*** org-contrib
+
+This is needed to allow for not exporting to latex those org headings that are tagged :ignore:.
+
+#+BEGIN_src emacs-lisp
+
+  (use-package org-contrib)
+  (use-package ox-extra
+    :after org-contrib
+    :config
+    (ox-extras-activate '(latex-header-blocks ignore-headlines)))
   
-** undo
+#+END_src
+
+*** org-journal
 
 #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-x u") 'undo-tree-visualize)
+
+  (use-package org-journal
+      :after org
+      :config
+      (setq org-journal-dir "~/org/journal/")
+      (setq org-journal-file-type 'weekly)
+      (setq org-journal-file-format "journal-%Y.org")
+      (setq org-journal-date-format "%A, %d %B %Y")
+      (setq org-journal-created-property-timestamp-format "%Y-%m-%d")
+      (setq org-journal-time-format ""))
+
 #+END_SRC
 
-** Org mode
+*** org-superstar
+
+Beautiful bullets. org-superstar is a descendent of org-bullets.
 
 #+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-c a") 'org-agenda)
-  (global-set-key (kbd "C-c j") 'org-journal-new-entry)
-  (global-set-key (kbd "C-c c") 'org-capture)
-  (global-set-key (kbd "C-c l") 'org-store-link)
-  (global-set-key (kbd "C-c n u") 'org-roam-ui-open)
+
+  (use-package org-superstar
+    :after org
+    :hook (org-mode . org-superstar-mode))
+  
 #+END_SRC
 
-** Magit
+*** org-roam
+
+Build a second brain with org-roam.
+
+#+BEGIN_SRC emacs-lisp
+
+    (use-package org-roam
+      :ensure t
+      :custom
+      (org-roam-directory (file-truename "~/org/roam/"))
+      (org-roam-completion-everywhere t)
+      :bind (("C-c n l" . org-roam-buffer-toggle)
+             ("C-c n f" . org-roam-node-find)
+             ("C-c n i" . org-roam-node-insert)
+             ("C-c n c" . org-roam-capture)
+             ("C-c n g" . org-roam-graph)
+             ;; Dailies
+             ("C-c n j" . org-roam-dailies-capture-today)
+             :map org-mode-map
+             ("C-M-i" . completion-at-point)
+             :map org-roam-dailies-map
+             ("Y" . org-roam-dailies-capture-yesterday)
+             ("T" . org-roam-dailies-capture-tomorrow))
+      :bind-keymap
+      ("C-c n d" . org-roam-dailies-map)
+      :config
+      (org-roam-db-autosync-mode)
+      ;; If you're using a vertical completion framework, you might want a more informative completion interface
+      (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+      (org-roam-db-autosync-mode)
+      (org-roam-setup)
+      ;; If using org-roam-protocol
+      (require 'org-roam-dailies) ;; Ensure the keymap is available
+      (require 'org-roam-protocol))
+
+#+END_SRC
+
+Visualize the org roam graph in browser:
+
+#+begin_src emacs-lisp
+  (use-package org-roam-ui)
+#+end_src
+
+*** htmlize
+
+htmlize is used by org to export to HTML.
+  
+#+BEGIN_SRC emacs-lisp
+
+  (use-package htmlize)
+  
+#+END_SRC
+
+** pdf-tools
 
 #+begin_src emacs-lisp
 
-  (global-set-key (kbd "C-c g") 'magit-status)
+  (use-package pdf-tools
+    :config
+    (pdf-tools-install))
 
 #+end_src
-** Mu4e
+
+* Mail Configuration
+
+mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
+
+1. run mbsync -a
+2. initialize mu
+   #+begin_src bash
+     mu init \
+        --my-address=foo@example.com \
+        --my-address=bar@example.com \
+        -m ~/Mail
+   #+end_src
 
 #+begin_src emacs-lisp
 
-  (global-set-key (kbd "C-c m") 'mu4e)
-  
+  (use-package mu4e
+      :ensure nil
+      :straight nil ;; use the system installed version
+      :config
+      (setq mu4e-change-filenames-when-moving t)
+      (setq mu4e-get-mail-command "mbsync -a")
+      (setq mu4e-update-interval(* 5 60))
+      (setq mu4e-maildir "~/Mail")
+      (setq mu4e-confirm-quit t)
+      (setq mu4e-view-show-images t)
+      (setq mu4e-view-show-addresses 't)
+      (setq mu4e-compose-format-flowed t)
+      (setq mu4e-compose-cite-function 'message-cite-original) ;; alternative: 'message-cite-original-without-signature
+      (add-hook 'mu4e-compose-mode-hook (defun disable-undo-tree-mode-in-mu4e-compose() "Disable undo tree mode" (undo-tree-mode -1)))
+      (setq mail-user-agent 'mu4e-user-agent)
+      (require 'smtpmail)
+      (setq message-send-mail-function 'smtpmail-send-it)
+      (setq message-kill-buffer-on-exit t)
+      (setq mu4e-headers-fields
+            '((:human-date . 12)
+              (:flags . 6)
+              (:maildir . 23)
+              (:mailing-list . 10)
+              (:from . 22)
+              (:subject)))
+      (setq mu4e-bookmarks
+            '((:name "Combined inbox" :query "maildir:\"/private/inbox\" OR maildir:\"/work/inbox\" OR maildir:\"/b7/inbox\"" :key 105)
+              (:name "Unread messages" :query "flag:unread AND NOT flag:trashed" :key 117)
+              (:name "Drafts" :query "maildir:/private/drafts OR maildir:/work/drafts OR maildir:/b7/drafts" :key 100)
+              (:name "Today's messages" :query "date:today..now" :key 116)
+              (:name "Last 7 days" :query "date:7d..now" :hide-unread t :key 119)
+              (:name "Messages with images" :query "mime:image/*" :key 112)))
+      (setq mu4e-maildir-shortcuts
+            '(("/private/inbox" . ?p)
+              ("/private/archives/2022" . ?P)
+              ("/work/inbox" . ?w)
+              ("/work/archives/2022" . ?W)
+              ("/b7/inbox" . ?b)
+              ("/b7/archives/2022" . ?B)))
+      (setq smtpmail-queue-mail nil)  ;; start in direct mode
+      (setq smtpmail-queue-dir "~/Mail/queue/cur")
+      (setq mu4e-context-policy 'pick-first)
+      (setq mu4e-contexts
+            (list
+             ;; private account
+             (make-mu4e-context
+              :name "Private"
+              :match-func
+              (lambda (msg)
+                (when msg
+                  (string-prefix-p "/private" (mu4e-message-field msg :maildir))))
+              :vars '((user-mail-address . "julian@flake.de")
+                      (user-full-name . "Julian Flake")
+                      (mu4e-compose-signature . nil)
+                      (smtpmail-smtp-server . "nuthost.de")
+                      (smtpmail-stream-type . starttls)
+                      (smtpmail-smtp-service . 587)
+                      (mu4e-drafts-folder . "/private/drafts")
+                      (mu4e-sent-folder . "/private/sent")
+                      (mu4e-refile-folder  . "/private/archives/2022")
+                      (mu4e-trash-folder . "/private/trash")))
+             ;; work account
+             (make-mu4e-context
+              :name "Work"
+              :match-func
+              (lambda (msg)
+                (when msg
+                  (string-prefix-p "/work" (mu4e-message-field msg :maildir))))
+              :vars '((user-mail-address . "flake@uni-koblenz.de")
+                      (user-full-name    . "Julian Flake")
+                      (mu4e-compose-signature . "Dipl.-Inf. Julian Flake\nUniversity of Koblenz-Landau, Campus Koblenz\nInstitute for Software Technology\nResearch Group Software Engineering")
+                      (smtpmail-smtp-server . "smtp.uni-koblenz.de")
+                      (smtpmail-stream-type . ssl)
+                      (smtpmail-smtp-service . 465)
+                      (mu4e-drafts-folder  . "/work/drafts")
+                      (mu4e-sent-folder  . "/work/sent")
+                      (mu4e-refile-folder  . "/work/archives/2022")
+                      (mu4e-trash-folder  . "/work/trash")))
+             ;; b7 account
+             (make-mu4e-context
+              :name "B7"
+              :match-func
+              (lambda (msg)
+                (when msg
+                  (string-prefix-p "/b7" (mu4e-message-field msg :maildir))))
+              :vars '((user-mail-address . "julian.flake@blumenthal7.de")
+                      (user-full-name . "Julian Flake")
+                      (mu4e-compose-signature . nil)
+                      (smtpmail-smtp-server . "smtp.strato.de")
+                      (smtpmail-stream-type . ssl)
+                      (smtpmail-smtp-service . 465)
+                      (mu4e-drafts-folder . "/b7/drafts")
+                      (mu4e-sent-folder . "/b7/sent")
+                      (mu4e-refile-folder  . "/b7/archives/2022")
+                      (mu4e-trash-folder . "/b7/trash")))))
+
+      ;; let me confirm/decline to send an email with empty subject
+      (add-hook 'message-send-hook
+                (lambda() (interactive)
+                  (or (message-field-value "Subject")
+                      (yes-or-no-p "Really send without Subject? ")
+                      (keyboard-quit))))
+
+      ;; add meta information to replies and forwards
+      ;; problem: we don't have variables substituted by original Subject: (e.g. %s) and To: (e.g. %t)
+      ;; (defun citation-line-function ()
+      ;;   (setq message-citation-line-format
+      ;;         (if (eq mu4e-compose-type 'reply)
+      ;;             "On %a %d %b %Y %T %z (%Z), %f wrote:\n"
+      ;;           (if (eq mu4e-compose-type 'forward)
+      ;;               "----- Forwarded message -----\nSubject: %s\nFrom: %f\nTo: %t\nDate: %a %d %b %Y %T %z (%Z)\n\n"))))
+      ;; (add-hook 'mu4e-compose-pre-hook 'citation-line-function)
+      ;; this at least adds the date of cited mail:
+      (setq message-citation-line-function 'message-insert-formatted-citation-line)
+      (mu4e t))
+
 #+end_src
 
+Alert
+
+#+begin_src emacs-lisp
+  (use-package mu4e-alert
+    :config
+    (mu4e-alert-set-default-style 'notifications)
+    (mu4e-alert-enable-mode-line-display)
+    (mu4e-alert-enable-notifications))
+#+end_src
 
