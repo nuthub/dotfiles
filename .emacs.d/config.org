@@ -123,6 +123,7 @@ Since Emacs 26 there is a builtin `display-line-numbers-mode`.
   (global-display-line-numbers-mode t)
   ;; Disable line numbers for some modes
   (dolist (mode '(org-mode-hook
+                  vterm-mode-hook
                   term-mode-hook
                   shell-mode-hook
                   treemacs-mode-hook
@@ -164,54 +165,6 @@ An alternative to /smartparens/ is /paren/.
       (smartparens-global-mode t)
       (show-paren-mode t)))
 #+END_SRC
-
-* Global key bindings
-
-** General
-
-Open the file under cursor:
-
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-x f") 'find-file-at-point)
-#+END_SRC
-  
-** shell
-#+BEGIN_SRC emacs-lisp
-  (defun jf/start-zsh () (interactive)
-    (ansi-term "/run/current-system/sw/bin/zsh"))
-  (global-set-key (kbd "s-s") 'jf/start-zsh)
-#+END_SRC
-
-** undo
-
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-x u") 'undo-tree-visualize)
-#+END_SRC
-
-** Org mode
-
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-c a") 'org-agenda)
-  (global-set-key (kbd "C-c j") 'org-journal-new-entry)
-  (global-set-key (kbd "C-c c") 'org-capture)
-  (global-set-key (kbd "C-c l") 'org-store-link)
-  (global-set-key (kbd "C-c n u") 'org-roam-ui-open)
-#+END_SRC
-
-** Magit
-
-#+begin_src emacs-lisp
-
-  (global-set-key (kbd "C-c g") 'magit-status)
-
-#+end_src
-** Mu4e
-
-#+begin_src emacs-lisp
-
-  (global-set-key (kbd "C-c m") 'mu4e)
-  
-#+end_src
 
 * Minor modes & Common packages
 ** Prescient
@@ -743,6 +696,56 @@ htmlize is used by org to export to HTML.
   ;; undo-tree-mode files: .file.ext.~undo-tree~
   (setq undo-tree-history-directory-alist `(("." . ,(expand-file-name "tmp/undo-tree/" user-emacs-directory))))
 
+#+end_src
+
+* Global key bindings
+
+** General
+
+Open the file under cursor:
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x f") 'find-file-at-point)
+#+END_SRC
+  
+** shell
+#+BEGIN_SRC emacs-lisp
+
+  (defun jf/start-zsh () (interactive)
+    (vterm "/run/current-system/sw/bin/zsh"))
+  (global-set-key (kbd "s-s") 'jf/start-zsh)
+  
+#+END_SRC
+
+** undo
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x u") 'undo-tree-visualize)
+#+END_SRC
+
+** Org mode
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-c a") 'org-agenda)
+  (global-set-key (kbd "C-c j") 'org-journal-new-entry)
+  (global-set-key (kbd "C-c c") 'org-capture)
+  (global-set-key (kbd "C-c l") 'org-store-link)
+  (global-set-key (kbd "C-c n u") 'org-roam-ui-open)
+#+END_SRC
+
+** Magit
+
+#+begin_src emacs-lisp
+
+  (global-set-key (kbd "C-c g") 'magit-status)
+
+#+end_src
+** Mu4e
+
+#+begin_src emacs-lisp
+
+  (global-set-key (kbd "C-c m") 'mu4e)
+  
 #+end_src
 
 * Mail Configuration
