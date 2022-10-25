@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 basename=`basename "$1" .pdf`
 echo "${basename}.pdf"
