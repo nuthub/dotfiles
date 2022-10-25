@@ -910,9 +910,9 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
               (:from . 22)
               (:subject)))
       (setq mu4e-bookmarks
-            '((:name "Combined inbox" :query "maildir:\"/private/inbox\" OR maildir:\"/work/inbox\" OR maildir:\"/b7/inbox\"" :key 105)
+            '((:name "Combined inbox" :query "maildir:/private/inbox OR maildir:/work/inbox OR maildir:/b7/inbox OR maildir:/tudo/inbox OR maildir:/tudo/fsinfo" :key 105)
               (:name "Unread messages" :query "flag:unread AND NOT flag:trashed" :key 117)
-              (:name "Drafts" :query "maildir:/private/drafts OR maildir:/work/drafts OR maildir:/b7/drafts" :key 100)
+              (:name "Drafts" :query "maildir:/private/drafts OR maildir:/work/drafts OR maildir:/b7/drafts OR maildir:/tudo/drafts" :key 100)
               (:name "Today's messages" :query "date:today..now" :key 116)
               (:name "Last 7 days" :query "date:7d..now" :hide-unread t :key 119)
               (:name "Messages with images" :query "mime:image/*" :key 112)))
@@ -922,7 +922,9 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
               ("/work/inbox" . ?w)
               ("/work/archives/2022" . ?W)
               ("/b7/inbox" . ?b)
-              ("/b7/archives/2022" . ?B)))
+              ("/b7/archives/2022" . ?B)
+              ("/tudo/inbox" . ?d)
+              ("/tudo/archives/2022" . ?D)))
       (setq smtpmail-queue-mail nil)  ;; start in direct mode
       (setq smtpmail-queue-dir "~/Mail/queue/cur")
       (setq mu4e-context-policy 'pick-first)
@@ -962,6 +964,23 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                       (mu4e-sent-folder  . "/work/sent")
                       (mu4e-refile-folder  . "/work/archives/2022")
                       (mu4e-trash-folder  . "/work/trash")))
+             ;; TUDo account
+             (make-mu4e-context
+              :name "TUDo"
+              :match-func
+              (lambda (msg)
+                (when msg
+                  (string-prefix-p "/tudo" (mu4e-message-field msg :maildir))))
+              :vars '((user-mail-address . "julian.flake@tu-dortmund.de")
+                      (user-full-name . "Julian Flake")
+                      (mu4e-compose-signature . nil)
+                      (smtpmail-smtp-server . "unimail.tu-dortmund.de")
+                      (smtpmail-stream-type . starttls)
+                      (smtpmail-smtp-service . 587)
+                      (mu4e-drafts-folder . "/tudo/drafts")
+                      (mu4e-sent-folder . "/tudo/sent")
+                      (mu4e-refile-folder  . "/tudo/archives/2022")
+                      (mu4e-trash-folder . "/tudo/trash")))
              ;; b7 account
              (make-mu4e-context
               :name "B7"

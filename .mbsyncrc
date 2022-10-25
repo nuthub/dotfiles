@@ -4,6 +4,8 @@
 Expunge None
 Create Near
 
+# private Mail
+
 IMAPAccount nuthost
 Host nuthost.de
 User julian@flake.de
@@ -100,6 +102,7 @@ Channel work-archives
 Channel work-junk
 Channel work-trash
 
+
 ### Blumenthal 7
 
 IMAPAccount b7
@@ -144,3 +147,57 @@ Channel b7-drafts
 Channel b7-archives
 Channel b7-junk
 Channel b7-trash
+
+### TU Dortmund
+
+IMAPAccount tudo
+Host unimail.tu-dortmund.de
+SSLType IMAPS
+User smjuflak
+PassCmd "grep tu-dortmund.de ~/.authinfo | awk 'FNR == 1 {print $6}'"
+
+MaildirStore tudo-local
+Path ~/Mail/tudo/
+Trash Trash
+SubFolders Verbatim
+
+IMAPStore tudo-remote
+Account tudo
+
+Channel tudo-inbox
+Far :tudo-remote:INBOX
+Near :tudo-local:inbox
+
+Channel tudo-trash
+Far :tudo-remote:Trash
+Near :tudo-local:trash
+
+Channel tudo-sent
+Far :tudo-remote:Sent
+Near :tudo-local:sent
+
+Channel tudo-drafts
+Far :tudo-remote:Drafts
+Near :tudo-local:drafts
+
+Channel tudo-archives
+Far :tudo-remote:Archives
+Near :tudo-local:archives
+Patterns *
+
+Channel tudo-fsinfo
+Far :tudo-remote:FSinfo
+Near :tudo-local:fsinfo
+
+Channel tudo-spam
+Far :tudo-remote:Spam
+Near :tudo-local:spam
+
+Group tudo
+Channel tudo-inbox
+Channel tudo-sent
+Channel tudo-drafts
+Channel tudo-fsinfo
+Channel tudo-archives
+Channel tudo-spam
+Channel tudo-trash
