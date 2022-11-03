@@ -90,7 +90,7 @@
 	  };
     
     displayManager = {
-      defaultSession = "none+emacs";
+      defaultSession = "none+i3";
       session = [ {
         manage = "window";
         name = "emacs";
@@ -100,20 +100,26 @@
         '';
       } ];
     };
-      
+    
 	  windowManager = {
       i3 = {
 	      enable = true;
-	      extraPackages = with pkgs; [
-	        acpi # for i3blocks
-		      i3status
-		      i3blocks
-		      i3lock
-          xss-lock
-		      lxappearance # gui to configure gtk appearance
-	        rofi
-	        sysstat # for i3blocks
-	      ];
+	      extraPackages = with pkgs;
+          let
+            polybar = pkgs.polybar.override {
+              i3Support = true;
+            };
+          in
+            [
+	            acpi # for i3blocks
+		          i3status
+		          i3blocks
+		          i3lock
+              xss-lock
+		          lxappearance # gui to configure gtk appearance
+	            rofi
+	            sysstat # for i3blocks
+	          ];
       };
 	  };
     
