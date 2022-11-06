@@ -85,7 +85,9 @@ Holidays are not shown in agenda-hoidays (org-agenda 'h')
 
 * Look & Feel
 ** General appearance
+
 #+BEGIN_SRC emacs-lisp
+
   (menu-bar-mode -1) ; switch off menu bar
   (tool-bar-mode -1) ; switch off tool bar
   (scroll-bar-mode -1) ; switch off scroll bar
@@ -93,7 +95,9 @@ Holidays are not shown in agenda-hoidays (org-agenda 'h')
   (global-hl-line-mode t) ; highlight the current line
   (setq visible-bell t)
   (setq inhibit-startup-screen t) ;; don't show splash
+
 #+END_SRC
+
 ** Theme
 *** zenburn
 #+BEGIN_SRC emacs-lisp
@@ -600,17 +604,17 @@ The global keybinding 'C-x u' is set below.
   (setq TeX-auto-save t)
   (setq TeX-parse-self t)
   (setq-default TeX-master nil)
+  ;; synctex
+  (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
+  (setq TeX-source-correlate-method 'synctex)
+  (setq TeX-source-correlate-start-server t))
+  ;; pdf tools
   (setq TeX-view-program-selection '((output-pdf "PDF Tools")))
   (setq TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view)))
-  (setq TeX-source-correlate-start-server t))
   ;; ZATHURA:
   ;; https://askubuntu.com/questions/1041919/integration-of-emacs-lualatex-with-evince-zathura-not-working-in-ubuntu-18-04-h
-  ;;  (setq TeX-source-correlate-method 'synctex)
-  ;;  (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
-  ;;  (setq TeX-source-correlate-start-server t)
   ;;  (setq TeX-view-program-selection '((output-pdf "Zathura")))
   ;;  (add-to-list 'load-path "/usr/bin/vendor_perl"))
-  ;; PDF-Tools:
 
 #+END_SRC
 
@@ -796,10 +800,24 @@ htmlize is used by org to export to HTML.
 #+begin_src emacs-lisp
 
   (use-package pdf-tools
+    :straight nil
     :config
     (pdf-tools-install))
 
 #+end_src
+
+** org-noter
+
+Used to a sync notes in an org file with documents like PDF.
+Just press 'i' in PDFView, DOCView and so on
+
+#+BEGIN_SRC emacs-lisp
+  
+  (use-package org-noter
+    :config
+    (setq org-noter-notes-search-path '("~/org")))
+
+#+END_SRC
 
 * Keep folders clean
 
