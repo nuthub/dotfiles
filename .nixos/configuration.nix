@@ -186,7 +186,7 @@
   };
 
   nixpkgs.config.allowUnfree = true;
-  
+
   environment.systemPackages = with pkgs; [
 	  alacritty # a terminal emulator
 	  aqbanking
@@ -211,7 +211,15 @@
 	  drawio
     dunst
     eclipses.eclipse-java
-	  emacs
+    eclipses.eclipse-modeling
+    ((emacsPackagesFor emacs).emacsWithPackages (
+      epkgs: [
+        epkgs.exwm
+        epkgs.emacsql
+        epkgs.emacsql-sqlite
+        epkgs.vterm
+        epkgs.pdf-tools
+      ]))
     feh
 	  ffmpeg
 	  firefox
@@ -345,7 +353,7 @@
     };
   };
 
-  
+
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   programs.gnupg.agent = {

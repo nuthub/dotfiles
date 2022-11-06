@@ -167,6 +167,7 @@ Account tudo
 Channel tudo-inbox
 Far :tudo-remote:INBOX
 Near :tudo-local:inbox
+#Patterns *
 
 Channel tudo-trash
 Far :tudo-remote:Trash
