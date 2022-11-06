@@ -285,9 +285,9 @@ assign [class="Mattermost"] $ws9
  # for_window [class="Spotify"] move --no-auto-back-and-forth to workspace $ws9
 
 # Set some windows to float by default
-for_window [class="Shutter"] floating enable
+for_window [class=".shutter-wrapped"] floating enable
 #for_window [title="org-capture"] floating enable
-for_window [class="Arandr"] floating enable
+for_window [class=".arandr-wrapped"] floating enable
 for_window [class="SimpleScreenRecorder"] floating enable
 # MazeGameClient
 for_window [title="MGC"] floating enable
