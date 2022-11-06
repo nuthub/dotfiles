@@ -95,7 +95,7 @@
         manage = "window";
         name = "emacs";
         start = ''
-          dbus-launch --exit-with-session emacs -mm --debug-init
+          dbus-launch --exit-with-session emacs -mm --debug-init --eval '(org-babel-load-file (expand-file-name "desktop.org" user-emacs-directory))'
           waitPID=$!
         '';
       } ];
@@ -170,7 +170,7 @@
 	  permitRootLogin = "yes";
   };
 
-#  services.emacs.enable = true;
+  #   services.emacs.enable = true;
 
   # links /libexec from derivations to /run/current-system/sw
   environment.pathsToLink = [ "/libexec" ];

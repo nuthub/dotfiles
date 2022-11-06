@@ -48,6 +48,7 @@ Partly taken or adopted from daviwil (emacs-from-scratch) screencasts.
 
 
   (defun jf/init-tabs () (interactive)
+         (setq tab-bar-close-button nil)
          (tab-close-other)
          (tab-rename "1·org")
          (tab-new)
@@ -57,13 +58,13 @@ Partly taken or adopted from daviwil (emacs-from-scratch) screencasts.
          (tab-new)
          (tab-rename "4·web")
          (tab-new)
-         (tab-rename "5")
+         (tab-rename "5· ")
          (tab-new)
-         (tab-rename "6")
+         (tab-rename "6· ")
          (tab-new)
-         (tab-rename "7")
+         (tab-rename "7· ")
          (tab-new)
-         (tab-rename "8")
+         (tab-rename "8· ")
          (tab-new)
          (tab-rename "9·chat"))
 #+end_src
