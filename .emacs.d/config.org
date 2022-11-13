@@ -74,15 +74,6 @@ Holidays are not shown in agenda-hoidays (org-agenda 'h')
   (unless (server-running-p) (server-start))
 #+end_src
 
-* Some Functions
-
-#+begin_src emacs-lisp
-
-  (defun jf/start-zsh () (interactive)
-    (ansi-term "zsh"))
-
-#+end_src
-
 * Look & Feel
 ** General appearance
 
@@ -171,34 +162,47 @@ An alternative to /smartparens/ is /paren/.
 #+END_SRC
 
 * Minor modes & Common packages
-** Prescient
+** Vertico Completion framework
 
-Frecency based filtering and sorting of completion lists. An alternative to the orderless package. Additionally selectrum-presient needs to be loaded.
+Vertico is the successor of selectrum
 
-#+begin_src emacs-lisp
-  (use-package prescient)
-#+end_src
+#+BEGIN_SRC emacs-lisp
 
-** Selectrum
+  (use-package vertico
+    :init
+    (vertico-mode)
+    ;; Different scroll margin
+    ;;(setq vertico-scroll-margin 0)
+    ;; Show more candidates
+    (setq vertico-count 15)
+    ;; Grow and shrink the Vertico minibuffer
+    ;; (setq vertico-resize t)
+    ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
+    (setq vertico-cycle t)
+    )
 
-Selectrum is an alternative to Vertico. It comes with its own filtering and sorting apporoach. But we stick to orderless for the moment.
+  ;; Persist history over Emacs restarts. Vertico sorts by history position.
+  (use-package savehist
+    :init
+    (savehist-mode))
 
-#+begin_src emacs-lisp
-  (use-package selectrum
-    :config
-    (selectrum-mode +1)
-    (setq selectrum-cycle-movement t))
+#+END_SRC
 
-  (use-package selectrum-prescient
-    :after selectrum prescient
-    :config
-    ;; to make sorting and filtering more intelligent
-    (selectrum-prescient-mode +1)
+** Orderless
 
-    ;; to save your command history on disk, so the sorting gets more
-    ;; intelligent over time
-    (prescient-persist-mode +1))  
-#+end_src
+#+BEGIN_SRC emacs-lisp
+
+  (use-package orderless
+    :init
+    ;; Configure a custom style dispatcher (see the Consult wiki)
+    ;; (setq orderless-style-dispatchers '(+orderless-dispatch)
+    ;;       orderless-component-separator #'orderless-escapable-split-on-space)
+    (setq completion-styles '(orderless basic)
+          completion-category-defaults nil
+          completion-category-overrides '((file (styles partial-completion)))))
+  
+#+END_SRC
+
 ** Marginalia
 
 Enriches selection lists with additional information.
@@ -500,9 +504,9 @@ The global keybinding 'C-x u' is set below.
   ;;   :after (treemacs evil)
   ;;   :ensure t)
 
-  (use-package treemacs-projectile
-    :after (treemacs projectile)
-    :ensure t)
+  ;; (use-package treemacs-projectile
+  ;;   :after (treemacs projectile)
+  ;;   :ensure t)
 
   (use-package treemacs-icons-dired
     :hook (dired-mode . treemacs-icons-dired-enable-once)
@@ -532,9 +536,9 @@ The global keybinding 'C-x u' is set below.
     (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
 #+end_src
 
-** Projectile
+** SKIP Projectile
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 
   (use-package projectile
     :config
@@ -628,69 +632,70 @@ The global keybinding 'C-x u' is set below.
 *** org
 #+BEGIN_SRC emacs-lisp
 
-    (use-package org
-      :config
-      ;;    (add-hook 'org-mode-hook 'turn-on-auto-fill)
-      (setq org-directory "~/org")
-      (setq org-refile-targets (quote (("~/org/gtd.org" :maxlevel . 4)
-                                      ("~/org/someday.org" :maxlevel . 1)
-                                      ("~/org/tickler.org" :maxlevel . 1))))
-      (setq org-refile-use-outline-path 'file)
-      (setq org-outline-path-complete-in-steps nil)
-      (setq org-refile-allow-creating-parent-nodes 'confirm)
-      (setq org-default-notes-file (concat org-directory "/inbox.org"))
-      (setq org-archive-location (concat org-directory "/archive/archive-" (format-time-string "%Y" (current-time)) ".org::datetree/"))
-      (setq org-export-backends (quote (ascii beamer html icalendar latex md odt)))
-      (setq org-tag-alist '(("@home" . ?h)
-                            ("@work" . ?w)
-                            ("@phone" . ?p)
-                            ("@boat" . ?b)
-                            ("@org" . ?o)
-                            ("@city" . ?c)
-                            ("@ToRead" . ?r)))
-      (setq org-todo-keywords '((sequence "TODO(t)" "FREQ(f)" "PROJ(p)" "WAIT(w@/!)" "|" "DONE(d!)" "CNCL(c@/!)")))
-      (setq org-todo-repeat-to-state t)
-      (setq org-startup-indented t)
-      (setq org-startup-truncated nil)
-      (setq org-log-done 'time)
-      (setq org-log-into-drawer t)
-      (setq org-num-skip-unnumbered t)
-      (setq org-agenda-files (quote ("~/org/gtd.org" "~/org/tickler.org" "~/org/someday.org")))
-      (setq org-agenda-window-setup "only-window")
-      (setq org-agenda-span 1)
-      (setq org-stuck-projects
-            '("+LEVEL=2/-DONE-CNCL-FREQ"
-              ("TODO" "NEXT" "WAIT" "PROJ")
-              nil ""))
-      (setq org-capture-templates
-            '(
-              ("t" "Todo" entry (file "~/org/inbox.org")
-               "* TODO %?\n  %i")
-              ("r" "Reading" entry (file "~/org/inbox.org")
-               "* TODO Read: %?\n  %i")
-              ("m" "Process mail" entry (file "~/org/inbox.org")
-               "* TODO %?\nSCHEDULED: %t\nMail: %:fromname: %a")
-              ("p" "Protocol" entry (file "~/org/inbox.org")
-               "* TODO %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
-              ("L" "Protocol Link" entry (file "~/org/inbox.org")
-               "* TODO %?\n[[%:link][%:description]]")
-              ))
-      (setq org-src-tab-acts-natively t)
-      (setq org-ellipsis " ⤵")  ;; …, ⤵, ▼, ↴, ⬎, ⤷, ⋱
-      (set-face-underline 'org-ellipsis nil)
-      (setq org-ctrl-k-protect-subtree t)
-      (setq org-return-follows-link t)
+  (use-package org
+    :config
+    ;;    (add-hook 'org-mode-hook 'turn-on-auto-fill)
+    (add-hook 'org-mode-hook 'visual-line-mode)
+    (setq org-directory "~/org")
+    (setq org-refile-targets (quote (("~/org/gtd.org" :maxlevel . 4)
+                                    ("~/org/someday.org" :maxlevel . 1)
+                                    ("~/org/tickler.org" :maxlevel . 1))))
+    (setq org-refile-use-outline-path 'file)
+    (setq org-outline-path-complete-in-steps nil)
+    (setq org-refile-allow-creating-parent-nodes 'confirm)
+    (setq org-default-notes-file (concat org-directory "/inbox.org"))
+    (setq org-archive-location (concat org-directory "/archive/archive-" (format-time-string "%Y" (current-time)) ".org::datetree/"))
+    (setq org-export-backends (quote (ascii beamer html icalendar latex md odt)))
+    (setq org-tag-alist '(("@home" . ?h)
+                          ("@work" . ?w)
+                          ("@phone" . ?p)
+                          ("@boat" . ?b)
+                          ("@org" . ?o)
+                          ("@city" . ?c)
+                          ("@ToRead" . ?r)))
+    (setq org-todo-keywords '((sequence "TODO(t)" "FREQ(f)" "PROJ(p)" "WAIT(w@/!)" "|" "DONE(d!)" "CNCL(c@/!)")))
+    (setq org-todo-repeat-to-state t)
+    (setq org-startup-indented t)
+    (setq org-startup-truncated nil)
+    (setq org-log-done 'time)
+    (setq org-log-into-drawer t)
+    (setq org-num-skip-unnumbered t)
+    (setq org-agenda-files (quote ("~/org/gtd.org" "~/org/tickler.org" "~/org/someday.org" "~/org/inbox.org")))
+    (setq org-agenda-window-setup "only-window")
+    (setq org-agenda-span 1)
+    (setq org-stuck-projects
+          '("+LEVEL=2/-DONE-CNCL-FREQ"
+            ("TODO" "NEXT" "WAIT" "PROJ")
+            nil ""))
+    (setq org-capture-templates
+          '(
+            ("t" "Todo" entry (file "~/org/inbox.org")
+             "* TODO %?\n  %i")
+            ("r" "Reading" entry (file "~/org/inbox.org")
+             "* TODO Read: %?\n  %i")
+            ("m" "Process mail" entry (file "~/org/inbox.org")
+             "* TODO %?\nSCHEDULED: %t\nMail: %:fromname: %a")
+            ("p" "Protocol" entry (file "~/org/inbox.org")
+             "* TODO %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
+            ("L" "Protocol Link" entry (file "~/org/inbox.org")
+             "* TODO %?\n[[%:link][%:description]]")
+            ))
+    (setq org-src-tab-acts-natively t)
+    (setq org-ellipsis " ")  ;; …, ⤵, ▼, ↴, ⬎, ⤷, ⋱
+    (set-face-underline 'org-ellipsis nil)
+    (setq org-ctrl-k-protect-subtree t)
+    (setq org-return-follows-link t)
 
-      (add-to-list 'org-modules 'org-protocol)
+    (add-to-list 'org-modules 'org-protocol)
 
-      ;; ox-latex specific configuration
-      (with-eval-after-load 'ox-latex
-        (add-to-list 'org-latex-classes '("scrbook"
-                                          "\\documentclass[11pt]{scrbook}"
-                                          ("\\chapter{%s}" . "\\chapter*{%s}")
-                                          ("\\section{%s}" . "\\section*{%s}")
-                                          ("\\subsection{%s}" . "\\subsection*{%s}")
-                                          ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))))
+    ;; ox-latex specific configuration
+    (with-eval-after-load 'ox-latex
+      (add-to-list 'org-latex-classes '("scrbook"
+                                        "\\documentclass[11pt]{scrbook}"
+                                        ("\\chapter{%s}" . "\\chapter*{%s}")
+                                        ("\\section{%s}" . "\\section*{%s}")
+                                        ("\\subsection{%s}" . "\\subsection*{%s}")
+                                        ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))))
 
 #+END_SRC
 
@@ -802,6 +807,7 @@ htmlize is used by org to export to HTML.
   (use-package pdf-tools
     :straight nil
     :config
+    (require 'pdf-occur) ;; if I don't require pdf-occur before pdf-tools-install, I get a warning at startup
     (pdf-tools-install))
 
 #+end_src
@@ -847,16 +853,7 @@ Open the file under cursor:
   (global-set-key (kbd "C-x f") 'find-file-at-point)
 #+END_SRC
   
-** shell
-#+BEGIN_SRC emacs-lisp
-
-  (defun jf/start-zsh () (interactive)
-    (vterm "/run/current-system/sw/bin/zsh"))
-  (global-set-key (kbd "s-s") 'jf/start-zsh)
-  
-#+END_SRC
-
-** undo
+** undo-tree
 
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-x u") 'undo-tree-visualize)
@@ -865,11 +862,15 @@ Open the file under cursor:
 ** Org mode
 
 #+BEGIN_SRC emacs-lisp
+  
   (global-set-key (kbd "C-c a") 'org-agenda)
   (global-set-key (kbd "C-c j") 'org-journal-new-entry)
   (global-set-key (kbd "C-c c") 'org-capture)
   (global-set-key (kbd "C-c l") 'org-store-link)
+  (global-set-key (kbd "C-c o") 'org-switchb)
   (global-set-key (kbd "C-c n u") 'org-roam-ui-open)
+;;  (global-set-key (kbd "C-c :") 'org-time-stamp-inactive) 
+
 #+END_SRC
 
 ** Magit
@@ -902,151 +903,149 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
 
 #+begin_src emacs-lisp
 
-      (use-package mu4e
-          :ensure nil
-          :straight nil ;; use the system installed version
-          :config
-          (setq mu4e-change-filenames-when-moving t)
-          (setq mu4e-get-mail-command "mbsync -a")
-          (setq mu4e-update-interval(* 5 60))
-          (setq mu4e-maildir "~/Mail")
-          (setq mu4e-confirm-quit t)
-          (setq mu4e-view-show-images t)
-          (setq mu4e-view-show-addresses 't)
-          (setq mu4e-compose-format-flowed t)
-          (setq mu4e-compose-cite-function 'message-cite-original) ;; alternative: 'message-cite-original-without-signature
-          (add-hook 'mu4e-compose-mode-hook (defun disable-undo-tree-mode-in-mu4e-compose() "Disable undo tree mode" (undo-tree-mode -1)))
-          (setq mail-user-agent 'mu4e-user-agent)
-          (require 'smtpmail)
-          (setq message-send-mail-function 'smtpmail-send-it)
-          (setq message-kill-buffer-on-exit t)
-          (setq mu4e-headers-fields
-                '((:human-date . 12)
-                  (:flags . 6)
-                  (:maildir . 23)
-                  (:mailing-list . 10)
-                  (:from . 22)
-                  (:subject)))
-          (setq mu4e-bookmarks
-                '((:name "Combined inbox" :query "maildir:/private/inbox OR maildir:/work/inbox OR maildir:/b7/inbox OR maildir:/tudo/inbox" :key 105)
-                  (:name "Unread messages" :query "flag:unread AND NOT flag:trashed" :key 117)
-                  (:name "Drafts" :query "maildir:/private/drafts OR maildir:/work/drafts OR maildir:/b7/drafts OR maildir:/tudo/drafts" :key 100)
-                  (:name "Today's messages" :query "date:today..now" :key 116)
-                  (:name "Last 7 days" :query "date:7d..now" :hide-unread t :key 119)
-                  (:name "Messages with images" :query "mime:image/*" :key 112)))
-          (setq mu4e-maildir-shortcuts
-                '(("/private/inbox" . ?p)
-                  ("/private/archives/2022" . ?P)
-                  ("/work/inbox" . ?w)
-                  ("/work/archives/2022" . ?W)
-                  ("/b7/inbox" . ?b)
-                  ("/b7/archives/2022" . ?B)
-                  ("/tudo/inbox" . ?d)
-                  ("/tudo/archives/2022" . ?D)
-                  ("/tudo/fsinfo" . ?f)))
-          (setq smtpmail-queue-mail nil)  ;; start in direct mode
-          (setq smtpmail-queue-dir "~/Mail/queue/cur")
-          (setq mu4e-context-policy 'pick-first)
-          (setq mu4e-contexts
-                (list
-                 ;; private account
-                 (make-mu4e-context
-                  :name "Private"
-                  :match-func
-                  (lambda (msg)
-                    (when msg
-                      (string-prefix-p "/private" (mu4e-message-field msg :maildir))))
-                  :vars '((user-mail-address . "julian@flake.de")
-                          (user-full-name . "Julian Flake")
-                          (mu4e-compose-signature . nil)
-                          (smtpmail-smtp-server . "nuthost.de")
-                          (smtpmail-stream-type . starttls)
-                          (smtpmail-smtp-service . 587)
-                          (mu4e-drafts-folder . "/private/drafts")
-                          (mu4e-sent-folder . "/private/sent")
-                          (mu4e-refile-folder  . "/private/archives/2022")
-                          (mu4e-trash-folder . "/private/trash")))
-                 ;; work account
-                 (make-mu4e-context
-                  :name "Work"
-                  :match-func
-                  (lambda (msg)
-                    (when msg
-                      (string-prefix-p "/work" (mu4e-message-field msg :maildir))))
-                  :vars '((user-mail-address . "flake@uni-koblenz.de")
-                          (user-full-name    . "Julian Flake")
-                          (mu4e-compose-signature . "Dipl.-Inf. Julian Flake\nUniversity of Koblenz-Landau, Campus Koblenz\nInstitute for Software Technology\nResearch Group Software Engineering")
-                          (smtpmail-smtp-server . "smtp.uni-koblenz.de")
-                          (smtpmail-stream-type . ssl)
-                          (smtpmail-smtp-service . 465)
-                          (mu4e-drafts-folder  . "/work/drafts")
-                          (mu4e-sent-folder  . "/work/sent")
-                          (mu4e-refile-folder  . "/work/archives/2022")
-                          (mu4e-trash-folder  . "/work/trash")))
-                 ;; TUDo account
-                 (make-mu4e-context
-                  :name "TUDo"
-                  :match-func
-                  (lambda (msg)
-                    (when msg
-                      (string-prefix-p "/tudo" (mu4e-message-field msg :maildir))))
-                  :vars '((user-mail-address . "julian.flake@tu-dortmund.de")
-                          (user-full-name . "Julian Flake")
-                          (mu4e-compose-signature . nil)
-                          (smtpmail-smtp-server . "unimail.tu-dortmund.de")
-                          (smtpmail-stream-type . starttls)
-                          (smtpmail-smtp-service . 587)
-                          (mu4e-drafts-folder . "/tudo/drafts")
-                          (mu4e-sent-folder . "/tudo/sent")
-                          (mu4e-refile-folder  . "/tudo/archives/2022")
-                          (mu4e-trash-folder . "/tudo/trash")))
-                 ;; b7 account
-                 (make-mu4e-context
-                  :name "B7"
-                  :match-func
-                  (lambda (msg)
-                    (when msg
-                      (string-prefix-p "/b7" (mu4e-message-field msg :maildir))))
-                  :vars '((user-mail-address . "julian.flake@blumenthal7.de")
-                          (user-full-name . "Julian Flake")
-                          (mu4e-compose-signature . nil)
-                          (smtpmail-smtp-server . "smtp.strato.de")
-                          (smtpmail-stream-type . ssl)
-                          (smtpmail-smtp-service . 465)
-                          (mu4e-drafts-folder . "/b7/drafts")
-                          (mu4e-sent-folder . "/b7/sent")
-                          (mu4e-refile-folder  . "/b7/archives/2022")
-                          (mu4e-trash-folder . "/b7/trash")))))
+  (when (string= (system-name) "nutbook")
+    (use-package mu4e
+      :ensure nil
+      :straight nil ;; use the system installed version
+      :config
+      (setq mu4e-change-filenames-when-moving t)
+      (setq mu4e-get-mail-command "mbsync -a")
+      (setq mu4e-update-interval(* 5 60))
+      (setq mu4e-maildir "~/Mail")
+      (setq mu4e-confirm-quit t)
+      (setq mu4e-view-show-images t)
+      (setq mu4e-view-show-addresses 't)
+      (setq mu4e-compose-format-flowed t)
+      (setq mu4e-compose-cite-function 'message-cite-original) ;; alternative: 'message-cite-original-without-signature
+      (add-hook 'mu4e-compose-mode-hook (defun disable-undo-tree-mode-in-mu4e-compose() "Disable undo tree mode" (undo-tree-mode -1)))
+      (setq mail-user-agent 'mu4e-user-agent)
+      (require 'smtpmail)
+      (setq message-send-mail-function 'smtpmail-send-it)
+      (setq message-kill-buffer-on-exit t)
+      (setq mu4e-headers-fields
+            '((:human-date . 12)
+              (:flags . 6)
+              (:maildir . 23)
+              (:mailing-list . 10)
+              (:from . 22)
+              (:subject)))
+      (setq mu4e-bookmarks
+            '((:name "Combined inbox" :query "maildir:/private/inbox OR maildir:/work/inbox OR maildir:/b7/inbox OR maildir:/tudo/inbox" :key 105)
+              (:name "Unread messages" :query "flag:unread AND NOT flag:trashed" :key 117)
+              (:name "Drafts" :query "maildir:/private/drafts OR maildir:/work/drafts OR maildir:/b7/drafts OR maildir:/tudo/drafts" :key 100)
+              (:name "Today's messages" :query "date:today..now" :key 116)
+              (:name "Last 7 days" :query "date:7d..now" :hide-unread t :key 119)
+              (:name "Messages with images" :query "mime:image/*" :key 112)))
+      (setq mu4e-maildir-shortcuts
+            '(("/private/inbox" . ?p)
+              ("/private/archives/2022" . ?P)
+              ("/work/inbox" . ?w)
+              ("/work/archives/2022" . ?W)
+              ("/b7/inbox" . ?b)
+              ("/b7/archives/2022" . ?B)
+              ("/tudo/inbox" . ?d)
+              ("/tudo/archives/2022" . ?D)
+              ("/tudo/fsinfo" . ?f)))
+      (setq smtpmail-queue-mail nil)  ;; start in direct mode
+      (setq smtpmail-queue-dir "~/Mail/queue/cur")
+      (setq mu4e-context-policy 'pick-first)
+      (setq mu4e-contexts
+            (list
+             ;; private account
+             (make-mu4e-context
+              :name "Private"
+              :match-func
+              (lambda (msg)
+                (when msg
+                  (string-prefix-p "/private" (mu4e-message-field msg :maildir))))
+              :vars '((user-mail-address . "julian@flake.de")
+                      (user-full-name . "Julian Flake")
+                      (mu4e-compose-signature . nil)
+                      (smtpmail-smtp-server . "nuthost.de")
+                      (smtpmail-stream-type . starttls)
+                      (smtpmail-smtp-service . 587)
+                      (mu4e-drafts-folder . "/private/drafts")
+                      (mu4e-sent-folder . "/private/sent")
+                      (mu4e-refile-folder  . "/private/archives/2022")
+                      (mu4e-trash-folder . "/private/trash")))
+             ;; work account
+             (make-mu4e-context
+              :name "Work"
+              :match-func
+              (lambda (msg)
+                (when msg
+                  (string-prefix-p "/work" (mu4e-message-field msg :maildir))))
+              :vars '((user-mail-address . "flake@uni-koblenz.de")
+                      (user-full-name    . "Julian Flake")
+                      (mu4e-compose-signature . "Dipl.-Inf. Julian Flake\nUniversity of Koblenz-Landau, Campus Koblenz\nInstitute for Software Technology\nResearch Group Software Engineering")
+                      (smtpmail-smtp-server . "smtp.uni-koblenz.de")
+                      (smtpmail-stream-type . ssl)
+                      (smtpmail-smtp-service . 465)
+                      (mu4e-drafts-folder  . "/work/drafts")
+                      (mu4e-sent-folder  . "/work/sent")
+                      (mu4e-refile-folder  . "/work/archives/2022")
+                      (mu4e-trash-folder  . "/work/trash")))
+             ;; TUDo account
+             (make-mu4e-context
+              :name "TUDo"
+              :match-func
+              (lambda (msg)
+                (when msg
+                  (string-prefix-p "/tudo" (mu4e-message-field msg :maildir))))
+              :vars '((user-mail-address . "julian.flake@tu-dortmund.de")
+                      (user-full-name . "Julian Flake")
+                      (mu4e-compose-signature . nil)
+                      (smtpmail-smtp-server . "unimail.tu-dortmund.de")
+                      (smtpmail-stream-type . starttls)
+                      (smtpmail-smtp-service . 587)
+                      (mu4e-drafts-folder . "/tudo/drafts")
+                      (mu4e-sent-folder . "/tudo/sent")
+                      (mu4e-refile-folder  . "/tudo/archives/2022")
+                      (mu4e-trash-folder . "/tudo/trash")))
+             ;; b7 account
+             (make-mu4e-context
+              :name "B7"
+              :match-func
+              (lambda (msg)
+                (when msg
+                  (string-prefix-p "/b7" (mu4e-message-field msg :maildir))))
+              :vars '((user-mail-address . "julian.flake@blumenthal7.de")
+                      (user-full-name . "Julian Flake")
+                      (mu4e-compose-signature . nil)
+                      (smtpmail-smtp-server . "smtp.strato.de")
+                      (smtpmail-stream-type . ssl)
+                      (smtpmail-smtp-service . 465)
+                      (mu4e-drafts-folder . "/b7/drafts")
+                      (mu4e-sent-folder . "/b7/sent")
+                      (mu4e-refile-folder  . "/b7/archives/2022")
+                      (mu4e-trash-folder . "/b7/trash")))))
 
-          ;; let me confirm/decline to send an email with empty subject
-          (add-hook 'message-send-hook
-                    (lambda() (interactive)
-                      (or (message-field-value "Subject")
-                          (yes-or-no-p "Really send without Subject? ")
-                          (keyboard-quit))))
+      ;; let me confirm/decline to send an email with empty subject
+      (add-hook 'message-send-hook
+                (lambda() (interactive)
+                  (or (message-field-value "Subject")
+                      (yes-or-no-p "Really send without Subject? ")
+                      (keyboard-quit))))
 
-          ;; add meta information to replies and forwards
-          ;; problem: we don't have variables substituted by original Subject: (e.g. %s) and To: (e.g. %t)
-          ;; (defun citation-line-function ()
-          ;;   (setq message-citation-line-format
-          ;;         (if (eq mu4e-compose-type 'reply)
-          ;;             "On %a %d %b %Y %T %z (%Z), %f wrote:\n"
-          ;;           (if (eq mu4e-compose-type 'forward)
-          ;;               "----- Forwarded message -----\nSubject: %s\nFrom: %f\nTo: %t\nDate: %a %d %b %Y %T %z (%Z)\n\n"))))
-          ;; (add-hook 'mu4e-compose-pre-hook 'citation-line-function)
-          ;; this at least adds the date of cited mail:
-          (setq message-citation-line-function 'message-insert-formatted-citation-line)
-          (mu4e t))
+      ;; add meta information to replies and forwards
+      ;; problem: we don't have variables substituted by original Subject: (e.g. %s) and To: (e.g. %t)
+      ;; (defun citation-line-function ()
+      ;;   (setq message-citation-line-format
+      ;;         (if (eq mu4e-compose-type 'reply)
+      ;;             "On %a %d %b %Y %T %z (%Z), %f wrote:\n"
+      ;;           (if (eq mu4e-compose-type 'forward)
+      ;;               "----- Forwarded message -----\nSubject: %s\nFrom: %f\nTo: %t\nDate: %a %d %b %Y %T %z (%Z)\n\n"))))
+      ;; (add-hook 'mu4e-compose-pre-hook 'citation-line-function)
+      ;; this at least adds the date of cited mail:
+      (setq message-citation-line-function 'message-insert-formatted-citation-line)
+      (mu4e t))
+    ;; Alert
+    (use-package mu4e-alert
+      :config
+      (mu4e-alert-set-default-style 'notifications)
+      (mu4e-alert-enable-mode-line-display)
+      (mu4e-alert-enable-notifications)))
 
 #+end_src
 
-Alert
-
-#+begin_src emacs-lisp
-  (use-package mu4e-alert
-    :config
-    (mu4e-alert-set-default-style 'notifications)
-    (mu4e-alert-enable-mode-line-display)
-    (mu4e-alert-enable-notifications))
-#+end_src
 
