@@ -48,19 +48,19 @@
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
+  #networking.firewall.allowedTCPPorts = [ ];
+  #networking.firewall.allowedUDPPorts = [ 51820 ];
   # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
+  networking.firewall.enable = false;
+  
   # Select internationalisation properties.
   # i18n.defaultLocale = "en_US.UTF-8";
   console = {
 	  font = "Lat2-Terminus16";
-#	  keyMap = "de-latin1";
+    #	  keyMap = "de-latin1";
 	  useXkbConfig = true; # use xkbOptions in tty.
   };
-  
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.flake = {
 	  initialPassword = "flake";
@@ -71,6 +71,7 @@
       "wheel" # Enable ‘sudo’ for the user.
       "networkmanager"
       "vboxusers"
+      "docker"
       "disk" # to allow mounting/unmounting
       "wireshark"
       "video" # to allow to use xbacklight
@@ -151,18 +152,24 @@
   # backlight control
   hardware.acpilight.enable = true;
   programs.light.enable = true; # alternative to xbacklight
-  
+
   # bluetooth support
   hardware.bluetooth.enable = true;
   services.blueman.enable = true;
 
+  # List services that you want to enable:
+  services.samba.package = pkgs.sambaFull;
+  
   # Enable touchpad support (enabled default in most desktopManager).
   services.xserver.libinput.enable = true;
 
   # Compositor
   services.picom.enable = true;
-  
-  # List services that you want to enable:
+
+  # flatpak
+  services.flatpak.enable = true;
+  xdg.portal.enable = true; # flatpak needs this
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
   # Enable the OpenSSH daemon.
   services.openssh = {
@@ -191,12 +198,16 @@
 	  alacritty # a terminal emulator
 	  aqbanking
     arandr
+    aspell
+    aspellDicts.de
+    aspellDicts.en
 	  AusweisApp2
     autorandr
 	  baobab # graphical du
 	  bash
     bat
 	  bc
+    bind # dig and other tools
 	  birdtray
 	  bitwarden
     borgbackup
@@ -206,13 +217,13 @@
 	  dia
 	  discord
 	  dmenu
-	  docker
+    #	  docker
 	  docker-compose
 	  drawio
     dunst
     eclipses.eclipse-java
     eclipses.eclipse-modeling
-    ((emacsPackagesFor emacs).emacsWithPackages (
+    ((emacsPackagesFor emacsNativeComp).emacsWithPackages (
       epkgs: [
         epkgs.exwm
         epkgs.emacsql
@@ -222,6 +233,7 @@
       ]))
     feh
 	  ffmpeg
+    file
 	  firefox
     gcc # needed by emacs to compile emacssql
 	  gimp
@@ -233,11 +245,14 @@
 	  google-chrome
 	  gradle
     grub
+    gtklp # lp interface
 	  imagemagick
 	  inkscape
+    inetutils # telnet, traceroute, ping6 and more
 	  isync # needed by mu4e / contains mbsync
-    jabref
-    jetbrains.idea-ultimate
+    jabref 
+    jetbrains.idea-ultimate # via flatpak
+    libnotify # to send desktop notifications
 	  libreoffice
 	  killall
 	  mattermost-desktop
@@ -250,6 +265,7 @@
     neofetch # basic system information
     nixos-option
 	  nmap
+    nodejs
 	  ntp
 	  obs-studio
 	  octave
@@ -266,6 +282,7 @@
 	  platformio
     polybarFull
 	  powertop
+    python3 # treemacs-git wants this
     qutebrowser
 	  ripgrep
 	  rocketchat-desktop
@@ -306,7 +323,9 @@
 	  udisks2
 	  vim
 	  wget
+    xorg.xev
     xorg.xinit
+    xorg.xkill
     xorg.xmessage
 	  zathura
 	  zoom-us
@@ -335,7 +354,7 @@
   programs.htop.enable = true;
   programs.iftop.enable = true;
   programs.mtr.enable = true;
-#  programs.nm-applet.enable = true;
+  #  programs.nm-applet.enable = true;
   programs.traceroute.enable = true;
   programs.wireshark.enable = true;
 
@@ -365,5 +384,7 @@
   # make this machine a virtualbox host
   virtualisation.virtualbox.host.enable = true;
   virtualisation.virtualbox.host.enableExtensionPack = true;
+
+  virtualisation.docker.enable = true;
 
 }
