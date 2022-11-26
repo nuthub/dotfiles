@@ -825,6 +825,7 @@ Open the file under cursor:
 
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-x f") 'find-file-at-point)
+  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 #+END_SRC
   
 ** undo-tree
