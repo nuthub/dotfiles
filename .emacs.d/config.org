@@ -531,33 +531,24 @@ The global keybinding 'C-x u' is set below.
 ** Highlight indent guides
 #+begin_src emacs-lisp
   (use-package highlight-indent-guides
+    :defer 0
     :config
+    (setq highlight-indent-guides-method 'character)
     ;; To enable automatically in most programming modes:
     (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
 #+end_src
-
-** SKIP Projectile
-
-#+BEGIN_SRC emacs-lisp :tangle no
-
-  (use-package projectile
-    :config
-    (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
-    ;; Recommended keymap prefix on Windows/Linux
-    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-    (projectile-mode +1))
-  
-#+END_SRC
 
 ** Syntax check and auto completion
 
 #+BEGIN_SRC emacs-lisp
   (use-package company
+    :defer 0
     :diminish company-mode
     :config
     (add-hook 'after-init-hook #'global-company-mode))
 
   (use-package flycheck
+    :defer 0
     :diminish flycheck-mode
     :config
     (add-hook 'after-init-hook #'global-flycheck-mode))
@@ -566,55 +557,77 @@ The global keybinding 'C-x u' is set below.
 ** Git support
 
 #+BEGIN_SRC emacs-lisp
-  (use-package magit)
+  (use-package magit
+    :defer 0)
+#+END_SRC
+
+** Projectile
+
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile
+    :config
+    (projectile-mode +1))
 #+END_SRC
 
 * Major modes
 ** web-mode & php-mode
 
    #+BEGIN_SRC emacs-lisp
-   (use-package web-mode)
-   (use-package php-mode)
+
+     (use-package web-mode :defer 0)
+     (use-package php-mode :defer 0)
+     
    #+END_SRC
 
 ** markdown-mode
 
    #+BEGIN_SRC emacs-lisp
-   (use-package markdown-mode)
+
+     (use-package markdown-mode :defer 0)
+
    #+END_SRC
 
 ** yaml-mode
 
    #+BEGIN_SRC emacs-lisp
-   (use-package yaml-mode)
+
+     (use-package yaml-mode :defer 0)
+
    #+END_SRC
 
 ** nix-mode
 #+BEGIN_SRC emacs-lisp
-  (use-package nix-mode)
+
+  (use-package nix-mode :defer 0)
+  
 #+END_SRC
 
 ** Platform.io
 
 #+BEGIN_SRC emacs-lisp
-  (use-package platformio-mode)
+
+  (use-package platformio-mode :defer 0)
+  
 #+END_SRC
+
 ** AucTeX
 
 #+BEGIN_SRC emacs-lisp
-  (use-package auctex
-  :defer t
-  :init
-  (setq TeX-auto-save t)
-  (setq TeX-parse-self t)
-  (setq-default TeX-master nil)
-  ;; synctex
-  (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
-  (setq TeX-source-correlate-method 'synctex)
-  (setq TeX-source-correlate-start-server t))
-  ;; pdf tools
-  (setq TeX-view-program-selection '((output-pdf "PDF Tools")))
-  (setq TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view)))
+
+  (use-package tex
+    :defer 0
+    :straight auctex
+    :config
+    (setq TeX-auto-save t)
+    (setq TeX-parse-self t)
+    (setq-default TeX-master nil)
+    ;; synctex
+    (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
+    (setq TeX-source-correlate-method 'synctex)
+    (setq TeX-source-correlate-start-server t)
+    ;; pdf tools
+    (setq TeX-view-program-selection '((output-pdf "PDF Tools")))
+    (setq TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view))))
   ;; ZATHURA:
   ;; https://askubuntu.com/questions/1041919/integration-of-emacs-lualatex-with-evince-zathura-not-working-in-ubuntu-18-04-h
   ;;  (setq TeX-view-program-selection '((output-pdf "Zathura")))
@@ -880,6 +893,12 @@ Open the file under cursor:
   (global-set-key (kbd "C-c g") 'magit-status)
 
 #+end_src
+
+** Projectile
+#+BEGIN_SRC emacs-lisp
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+#+END_SRC
+
 ** Mu4e
 
 #+begin_src emacs-lisp
