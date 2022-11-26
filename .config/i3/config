@@ -12,7 +12,7 @@
 set $mod Mod4
 
 # useful for lower latency
-set $refresh_i3status killall -SIGUSR1 i3status
+#set $refresh_i3status killall -SIGUSR1 i3status
 set $refresh_volume $refresh_i3status & exec pkill -SIGRTMIN+10 i3blocks
 set $refresh_brightness $refresh_i3status & exec pkill -SIGRTMIN+11 i3blocks
 
@@ -124,7 +124,7 @@ bindsym $mod+a focus parent
 set $ws0 "0:org"
 set $ws1 "1:cal"
 set $ws2 "2:web"
-set $ws3 "3:file"
+set $ws3 "3"
 set $ws4 "4"
 set $ws5 "5"
 set $ws6 "6"
@@ -255,22 +255,26 @@ bar {
 }
 
 # autostart
-exec --no-startup-id autorandr --change --force
+# exec_always --no-startup-id "pgrep --exact xev || xev -root -event randr | grep --line-buffered ScreenChangeNotify | while read change; do autorandr --change --force; notify-send \"Display profile: `autorandr --current`\" ; sleep 3; done"
+exec_always --no-startup-id "pgrep --exact xev || xev -root -event randr | grep --line-buffered ScreenChangeNotify | while read change; do notify-send \"change\"; done"
+#exec --no-startup-id autorandr --change --force
 exec_always --no-startup-id picom
 exec --no-startup-id ~/.local/bin/fehbg &
-exec --no-startup-id msm_notifier # manjaro settings manager notification (new kernels etc)
+
 exec --no-startup-id pasystray --volume-max=100 --notify=all # pulseaudio
 #exec --no-startup-id pamac-tray # manjaro's package manager
 exec --no-startup-id blueman-applet
 exec --no-startup-id udiskie -t # -s if applet should only be shown with actions available
-exec --no-startup-id nextcloud
+exec --no-startup-id nextcloud --background
 exec --no-startup-id gnome-keyring-daemon
 #exec --no-startup-id birdtray
 exec --no-startup-id thunderbird
+exec --no-startup-id emacsclient -nc
 exec --no-startup-id firefox
-exec --no-startup-id pcmanfm
+#exec --no-startup-id pcmanfm
 exec --no-startup-id rocketchat-desktop
 exec --no-startup-id solaar -w hide
+
 
 
 # window rules
@@ -285,6 +289,7 @@ assign [class="Mattermost"] $ws9
  # for_window [class="Spotify"] move --no-auto-back-and-forth to workspace $ws9
 
 # Set some windows to float by default
+for_window [class="Gtklp"] floating enable
 for_window [class=".shutter-wrapped"] floating enable
 #for_window [title="org-capture"] floating enable
 for_window [class=".arandr-wrapped"] floating enable
@@ -304,9 +309,6 @@ bindsym $mod+Shift+o move workspace to output left
 bindsym Control+mod1+Delete exec lockscreen
 #bindsym Super_L exec lockscreen
 
-# start capture.sh
-#bindsym $mod+i exec ~/.local/bin/capture.sh
-
 # by default send all workspaces on primary output
 workspace $ws0 output primary
 workspace $ws1 output primary
@@ -320,8 +322,9 @@ workspace $ws8 output primary
 workspace $ws9 output primary
 
 # avoid title bars
-default_border normal
-# default_floating_border normal
+default_border pixel 3
+hide_edge_borders smart
+default_floating_border pixel 3
 
 # do not move mouse on window movement (which would change the focused window otherwise)
 mouse_warping none
@@ -330,3 +333,4 @@ mouse_warping none
 bindsym Print exec shutter
 bindsym Menu exec i3-sensible-terminal
 bindsym XF86Calculator exec em
+
