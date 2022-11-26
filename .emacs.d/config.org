@@ -2,6 +2,25 @@
 #+STARTUP: overview
 #+TODO: TODO CHECK SKIP
 
+
+* Startup Time
+
+#+BEGIN_SRC emacs-lisp
+
+  ;; The default is 800 kilobytes.  Measured in bytes.
+  (setq gc-cons-threshold (* 50 1000 1000))
+
+  (defun efs/display-startup-time ()
+    (message "Emacs loaded in %s with %d garbage collections."
+             (format "%.2f seconds"
+                     (float-time
+                       (time-subtract after-init-time before-init-time)))
+             gcs-done))
+
+  (add-hook 'emacs-startup-hook #'efs/display-startup-time)
+  
+#+END_SRC
+
 * Package management
 Package management is done with straight.el now. The bootstrapping of this has been moved to my init.el since this allows to use straight.el to load org mode which is required for the literate configuration you see here. Otherwise emacs would use the built-in version of org which may be too old for the more bleeding edge character of a straight.el maintained emacs installation.
 straight.el offers the 'use-package' command (see also init.el).
@@ -132,19 +151,19 @@ Since Emacs 26 there is a builtin `display-line-numbers-mode`.
 You must run 'M-x all-the-icons-install-fonts' to actually download the icons to '~/.local/share/fonts/'.
 
 #+begin_src emacs-lisp
-  (use-package all-the-icons
-    :if (display-graphic-p))
+
+  (use-package all-the-icons)
+  
 #+end_src
 
 ** A beautiful modeline
 
 #+BEGIN_SRC emacs-lisp
 
-  (use-package all-the-icons)
-
   (use-package doom-modeline
     :init (doom-modeline-mode 1)
-    :custom ((doom-modeline-height 15)))
+    :custom ((doom-modeline-height 18)))
+  
 #+END_SRC
 
 ** Smart paranthesis
@@ -152,6 +171,7 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
 An alternative to /smartparens/ is /paren/.
 
 #+BEGIN_SRC emacs-lisp
+
   (use-package smartparens
     :diminish smartparens-mode
     :config
@@ -159,6 +179,7 @@ An alternative to /smartparens/ is /paren/.
       (require 'smartparens-config)
       (smartparens-global-mode t)
       (show-paren-mode t)))
+
 #+END_SRC
 
 * Minor modes & Common packages
@@ -169,7 +190,7 @@ Vertico is the successor of selectrum
 #+BEGIN_SRC emacs-lisp
 
   (use-package vertico
-    :init
+    :config
     (vertico-mode)
     ;; Different scroll margin
     ;;(setq vertico-scroll-margin 0)
@@ -178,8 +199,7 @@ Vertico is the successor of selectrum
     ;; Grow and shrink the Vertico minibuffer
     ;; (setq vertico-resize t)
     ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
-    (setq vertico-cycle t)
-    )
+    (setq vertico-cycle t))
 
   ;; Persist history over Emacs restarts. Vertico sorts by history position.
   (use-package savehist
@@ -200,7 +220,7 @@ Vertico is the successor of selectrum
     (setq completion-styles '(orderless basic)
           completion-category-defaults nil
           completion-category-overrides '((file (styles partial-completion)))))
-  
+
 #+END_SRC
 
 ** Marginalia
@@ -210,6 +230,7 @@ Enriches selection lists with additional information.
 #+BEGIN_src emacs-lisp
   ;; Enable rich annotations using the Marginalia package
   (use-package marginalia
+    :defer 0
     ;; Either bind `marginalia-cycle' globally or only in the minibuffer
     :bind (;;("M-A" . marginalia-cycle)
            :map minibuffer-local-map
@@ -223,7 +244,7 @@ Enriches selection lists with additional information.
     (marginalia-mode))
   #+END_src
 
-** consult
+** Consult
 
 Completion allows you to quickly select an item from a list of candidates.
 
@@ -305,7 +326,7 @@ Completion allows you to quickly select an item from a list of candidates.
 #+BEGIN_SRC emacs-lisp
   (use-package embark
      :ensure t
-
+     :defer 0
      :bind
      (("C-." . embark-act)         ;; pick some comfortable binding
       ("C-;" . embark-dwim)        ;; good alternative: M-.
@@ -341,6 +362,7 @@ Allows to browse bibtex file(s), insert citations, open files, links and notes. 
 
 #+BEGIN_SRC emacs-lisp
   (use-package citar
+    :defer 0
     :bind (("C-c b" . citar-insert-citation)
            :map minibuffer-local-map
            ("M-b" . citar-insert-preset))
@@ -365,12 +387,14 @@ Snippet expansion
  #+begin_src emacs-lisp
 
    (use-package yasnippet
+     :defer 0
      :config
      (yas-global-mode))
 
    ;; snippets
-   (use-package yasnippet-snippets)
-   
+   (use-package yasnippet-snippets
+     :defer 0)
+
  #+end_src
 
 ** which-key
@@ -378,11 +402,14 @@ Snippet expansion
  This helps to figure out the next keystrokes
 
 #+BEGIN_SRC emacs-lisp
-(use-package which-key
-  :init (which-key-mode)
-  :diminish which-key-mode
-  :config
-  (setq which-key-idle-delay 1))
+
+  (use-package which-key
+    :defer 0
+    :diminish which-key-mode
+    :config
+    (which-key-mode)
+    (setq which-key-idle-delay 1))
+
 #+END_SRC
 
 ** undo-tree
@@ -390,10 +417,13 @@ Snippet expansion
 The package /undo-tree/ contains more features than vundo, e.g. timestamps, diffs, etc. I never used those features.
 
 #+BEGIN_SRC emacs-lisp
-   (use-package undo-tree
-     :diminish undo-tree-mode
-     :config
-     (global-undo-tree-mode))
+
+  (use-package undo-tree
+    :defer 0
+    :diminish undo-tree-mode
+    :config
+    (global-undo-tree-mode))
+
 #+END_SRC
 
 The global keybinding 'C-x u' is set below.
@@ -403,6 +433,7 @@ The global keybinding 'C-x u' is set below.
 #+BEGIN_SRC emacs-lisp
 
   (use-package aggressive-indent
+    :defer 0
     :config (aggressive-indent-global-mode))
   
 #+END_SRC
@@ -515,11 +546,6 @@ The global keybinding 'C-x u' is set below.
   (use-package treemacs-magit
     :after (treemacs magit)
     :ensure t)
-
-  ;; (use-package treemacs-persp ;;treemacs-perspective if you use perspective.el vs. persp-mode
-  ;;   :after (treemacs persp-mode) ;;or perspective vs. persp-mode
-  ;;   :ensure t
-  ;;   :config (treemacs-set-scope-type 'Perspectives))
 
   (use-package treemacs-tab-bar ;;treemacs-tab-bar if you use tab-bar-mode
     :after (treemacs)
@@ -638,77 +664,103 @@ The global keybinding 'C-x u' is set below.
 ** Biblio
 
 #+begin_src emacs-lisp
-(use-package biblio)
+
+  (use-package biblio :defer 0)
+  
+#+end_src
+
+** pdf-tools
+
+#+begin_src emacs-lisp
+
+  (use-package pdf-tools
+    :straight nil
+    :config
+    (require 'pdf-occur) ;; if I don't require pdf-occur before pdf-tools-install, I get a warning at startup
+    (pdf-tools-install))
+
 #+end_src
 
 ** Org Mode
 *** org
+
 #+BEGIN_SRC emacs-lisp
 
-  (use-package org
-    :config
-    ;;    (add-hook 'org-mode-hook 'turn-on-auto-fill)
-    (add-hook 'org-mode-hook 'visual-line-mode)
-    (setq org-directory "~/org")
-    (setq org-refile-targets (quote (("~/org/gtd.org" :maxlevel . 4)
-                                    ("~/org/someday.org" :maxlevel . 1)
-                                    ("~/org/tickler.org" :maxlevel . 1))))
-    (setq org-refile-use-outline-path 'file)
-    (setq org-outline-path-complete-in-steps nil)
-    (setq org-refile-allow-creating-parent-nodes 'confirm)
-    (setq org-default-notes-file (concat org-directory "/inbox.org"))
-    (setq org-archive-location (concat org-directory "/archive/archive-" (format-time-string "%Y" (current-time)) ".org::datetree/"))
-    (setq org-export-backends (quote (ascii beamer html icalendar latex md odt)))
-    (setq org-tag-alist '(("@home" . ?h)
-                          ("@work" . ?w)
-                          ("@phone" . ?p)
-                          ("@boat" . ?b)
-                          ("@org" . ?o)
-                          ("@city" . ?c)
-                          ("@ToRead" . ?r)))
-    (setq org-todo-keywords '((sequence "TODO(t)" "FREQ(f)" "PROJ(p)" "WAIT(w@/!)" "|" "DONE(d!)" "CNCL(c@/!)")))
-    (setq org-todo-repeat-to-state t)
-    (setq org-startup-indented t)
-    (setq org-startup-truncated nil)
-    (setq org-log-done 'time)
-    (setq org-log-into-drawer t)
-    (setq org-num-skip-unnumbered t)
-    (setq org-agenda-files (quote ("~/org/gtd.org" "~/org/tickler.org" "~/org/someday.org" "~/org/inbox.org")))
-    (setq org-agenda-window-setup "only-window")
-    (setq org-agenda-span 1)
-    (setq org-stuck-projects
-          '("+LEVEL=2/-DONE-CNCL-FREQ"
-            ("TODO" "NEXT" "WAIT" "PROJ")
-            nil ""))
-    (setq org-capture-templates
-          '(
-            ("t" "Todo" entry (file "~/org/inbox.org")
-             "* TODO %?\n  %i")
-            ("r" "Reading" entry (file "~/org/inbox.org")
-             "* TODO Read: %?\n  %i")
-            ("m" "Process mail" entry (file "~/org/inbox.org")
-             "* TODO %?\nSCHEDULED: %t\nMail: %:fromname: %a")
-            ("p" "Protocol" entry (file "~/org/inbox.org")
-             "* TODO %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
-            ("L" "Protocol Link" entry (file "~/org/inbox.org")
-             "* TODO %?\n[[%:link][%:description]]")
-            ))
-    (setq org-src-tab-acts-natively t)
-    (setq org-ellipsis " ")  ;; …, ⤵, ▼, ↴, ⬎, ⤷, ⋱
-    (set-face-underline 'org-ellipsis nil)
-    (setq org-ctrl-k-protect-subtree t)
-    (setq org-return-follows-link t)
+    (use-package org
+      :defer 0
+      :config
+      ;;    (add-hook 'org-mode-hook 'turn-on-auto-fill)
+      (add-hook 'org-mode-hook 'visual-line-mode)
+      (setq org-directory "~/org")
+      (setq org-refile-targets (quote (("~/org/gtd.org" :maxlevel . 4)
+                                      ("~/org/someday.org" :maxlevel . 1)
+                                      ("~/org/tickler.org" :maxlevel . 1))))
+      (setq org-refile-use-outline-path 'file)
+      (setq org-outline-path-complete-in-steps nil)
+      (setq org-refile-allow-creating-parent-nodes 'confirm)
+      (setq org-default-notes-file (concat org-directory "/inbox.org"))
+      (setq org-archive-location (concat org-directory "/archive/archive-" (format-time-string "%Y" (current-time)) ".org::datetree/"))
+      (setq org-export-backends (quote (ascii beamer html icalendar latex md odt)))
+      (setq org-tag-alist '(("@home" . ?h)
+                            ("@work" . ?w)
+                            ("@phone" . ?p)
+                            ("@boat" . ?b)
+                            ("@org" . ?o)
+                            ("@city" . ?c)
+                            ("@ToRead" . ?r)))
+      (setq org-todo-keywords '((sequence "TODO(t)" "FREQ(f)" "PROJ(p)" "WAIT(w@/!)" "|" "DONE(d!)" "CNCL(c@/!)")))
+      (setq org-todo-repeat-to-state t)
+      (setq org-startup-indented t)
+      (setq org-startup-truncated nil)
+      (setq org-log-done 'time)
+      (setq org-log-into-drawer t)
+      (setq org-num-skip-unnumbered t)
+      (setq org-agenda-files (quote ("~/org/gtd.org" "~/org/tickler.org" "~/org/someday.org" "~/org/inbox.org")))
+      (setq org-agenda-window-setup "only-window")
+      (setq org-agenda-span 1)
+      (setq org-stuck-projects
+            '("+LEVEL=2/-DONE-CNCL-FREQ"
+              ("TODO" "NEXT" "WAIT" "PROJ")
+              nil ""))
+      (setq org-capture-templates
+            '(
+              ("t" "Todo" entry (file "~/org/inbox.org")
+               "* TODO %?\n  %i")
+              ("r" "Reading" entry (file "~/org/inbox.org")
+               "* TODO Read: %?\n  %i")
+              ("m" "Process mail" entry (file "~/org/inbox.org")
+               "* TODO %?\nSCHEDULED: %t\nMail: %:fromname: %a")
+              ("p" "Protocol" entry (file "~/org/inbox.org")
+               "* TODO %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
+              ("L" "Protocol Link" entry (file "~/org/inbox.org")
+               "* TODO %?\n[[%:link][%:description]]")
+              ))
+      (setq org-src-tab-acts-natively t)
+      (setq org-ellipsis " ")  ;; …, ⤵, ▼, ↴, ⬎, ⤷, ⋱
+      (set-face-underline 'org-ellipsis nil)
+      (setq org-ctrl-k-protect-subtree t)
+      (setq org-return-follows-link t)
 
-    (add-to-list 'org-modules 'org-protocol)
+      (add-to-list 'org-modules 'org-protocol)
 
-    ;; ox-latex specific configuration
-    (with-eval-after-load 'ox-latex
-      (add-to-list 'org-latex-classes '("scrbook"
-                                        "\\documentclass[11pt]{scrbook}"
-                                        ("\\chapter{%s}" . "\\chapter*{%s}")
-                                        ("\\section{%s}" . "\\section*{%s}")
-                                        ("\\subsection{%s}" . "\\subsection*{%s}")
-                                        ("\\subsubsection{%s}" . "\\subsubsection*{%s}")))))
+      ;; ox-latex specific configuration
+      (with-eval-after-load 'ox-latex
+        (add-to-list 'org-latex-classes '("scrbook"
+                                          "\\documentclass[11pt]{scrbook}"
+                                          ("\\chapter{%s}" . "\\chapter*{%s}")
+                                          ("\\section{%s}" . "\\section*{%s}")
+                                          ("\\subsection{%s}" . "\\subsection*{%s}")
+                                          ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                                          ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                                          ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+      (with-eval-after-load 'ox-latex
+        (add-to-list 'org-latex-classes '("scrartcl"
+                                          "\\documentclass[11pt]{scrartcl}"
+                                          ("\\section{%s}" . "\\section*{%s}")
+                                          ("\\subsection{%s}" . "\\subsection*{%s}")
+                                          ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                                          ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                                          ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
 
 #+END_SRC
 
@@ -724,11 +776,12 @@ This is needed to allow for not exporting to latex those org headings that are t
 
 #+BEGIN_src emacs-lisp
 
-  (use-package org-contrib)
-  (use-package ox-extra
-    :after org-contrib
-    :config
-    (ox-extras-activate '(latex-header-blocks ignore-headlines)))
+    (use-package org-contrib
+      :after org)
+    (use-package ox-extra
+      :after org-contrib
+      :config
+      (ox-extras-activate '(latex-header-blocks ignore-headlines)))
   
 #+END_src
 
@@ -766,42 +819,64 @@ Build a second brain with org-roam.
 
 #+BEGIN_SRC emacs-lisp
 
-    (use-package org-roam
-      :ensure t
-      :custom
-      (org-roam-directory (file-truename "~/org/roam/"))
-      (org-roam-completion-everywhere t)
-      :bind (("C-c n l" . org-roam-buffer-toggle)
-             ("C-c n f" . org-roam-node-find)
-             ("C-c n i" . org-roam-node-insert)
-             ("C-c n c" . org-roam-capture)
-             ("C-c n g" . org-roam-graph)
-             ;; Dailies
-             ("C-c n j" . org-roam-dailies-capture-today)
-             :map org-mode-map
-             ("C-M-i" . completion-at-point)
-             :map org-roam-dailies-map
-             ("Y" . org-roam-dailies-capture-yesterday)
-             ("T" . org-roam-dailies-capture-tomorrow))
-      :bind-keymap
-      ("C-c n d" . org-roam-dailies-map)
-      :config
-      (org-roam-db-autosync-mode)
-      ;; If you're using a vertical completion framework, you might want a more informative completion interface
-      (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-      (org-roam-db-autosync-mode)
-      (org-roam-setup)
-      ;; If using org-roam-protocol
-      (require 'org-roam-dailies) ;; Ensure the keymap is available
-      (require 'org-roam-protocol))
+  (use-package org-roam
+    :after org
+    :ensure t
+    :custom
+    (org-roam-directory (file-truename "~/org/roam/"))
+    (org-roam-completion-everywhere t)
+    :bind (("C-c n l" . org-roam-buffer-toggle)
+           ("C-c n f" . org-roam-node-find)
+           ("C-c n i" . org-roam-node-insert)
+           ("C-c n c" . org-roam-capture)
+           ("C-c n g" . org-roam-graph)
+           ;; Dailies
+           ("C-c n j" . org-roam-dailies-capture-today)
+           :map org-mode-map
+           ("C-M-i" . completion-at-point)
+           :map org-roam-dailies-map
+           ("Y" . org-roam-dailies-capture-yesterday)
+           ("T" . org-roam-dailies-capture-tomorrow))
+    :bind-keymap
+    ("C-c n d" . org-roam-dailies-map)
+    :config
+    (org-roam-db-autosync-mode)
+    ;; If you're using a vertical completion framework, you might want a more informative completion interface
+    (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+    (org-roam-db-autosync-mode)
+    (org-roam-setup)
+    ;; If using org-roam-protocol
+    (require 'org-roam-dailies) ;; Ensure the keymap is available
+    (require 'org-roam-protocol))
 
 #+END_SRC
 
 Visualize the org roam graph in browser:
 
 #+begin_src emacs-lisp
-  (use-package org-roam-ui)
+
+  (use-package org-roam-ui
+    :after org-roam)
+
 #+end_src
+
+*** org-noter
+
+Used to a sync notes in an org file with documents like PDF.
+Just press 'i' in PDFView, DOCView and so on
+
+#+BEGIN_SRC emacs-lisp
+
+  (use-package org-noter
+    :if (display-graphic-p)
+    :after org
+    :config
+    (setq org-noter-notes-search-path '("~/org"))
+    ;; https://github.com/weirdNox/org-noter/issues/44
+    (defun my/no-op (&rest args))
+    (advice-add 'org-noter--set-notes-scroll :override 'my/no-op))
+
+#+END_SRC
 
 *** htmlize
 
@@ -809,32 +884,8 @@ htmlize is used by org to export to HTML.
   
 #+BEGIN_SRC emacs-lisp
 
-  (use-package htmlize)
-  
-#+END_SRC
-
-** pdf-tools
-
-#+begin_src emacs-lisp
-
-  (use-package pdf-tools
-    :straight nil
-    :config
-    (require 'pdf-occur) ;; if I don't require pdf-occur before pdf-tools-install, I get a warning at startup
-    (pdf-tools-install))
-
-#+end_src
-
-** org-noter
-
-Used to a sync notes in an org file with documents like PDF.
-Just press 'i' in PDFView, DOCView and so on
-
-#+BEGIN_SRC emacs-lisp
-  
-  (use-package org-noter
-    :config
-    (setq org-noter-notes-search-path '("~/org")))
+  (use-package htmlize
+    :defer 0)
 
 #+END_SRC
 
@@ -924,8 +975,9 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
 
   (when (string= (system-name) "nutbook")
     (use-package mu4e
-      :ensure nil
       :straight nil ;; use the system installed version
+      :defer 0
+      :ensure nil
       :config
       (setq mu4e-change-filenames-when-moving t)
       (setq mu4e-get-mail-command "mbsync -a")
@@ -1060,6 +1112,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
       (mu4e t))
     ;; Alert
     (use-package mu4e-alert
+      :defer 0
       :config
       (mu4e-alert-set-default-style 'notifications)
       (mu4e-alert-enable-mode-line-display)
