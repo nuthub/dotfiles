@@ -958,6 +958,39 @@ Open the file under cursor:
   
 #+end_src
 
+* Printing
+
+#+BEGIN_SRC emacs-lisp
+
+  (when (display-graphic-p)
+    (setq lpr-command "gtklp")
+    (setq ps-lpr-command "gtklp"))
+
+#+END_SRC
+
+* Calendar syncing
+
+#+BEGIN_SRC emacs-lisp
+
+  (when (string= (system-name) "nutbook")
+    (use-package org-caldav
+      :defer 0
+      :config
+      (setq org-icalendar-use-scheduled '(todo-start))
+      (setq org-icalendar-timezone "Europe/Berlin")
+    ;;   (setq org-caldav-calendars
+    ;;         `((:url "https://cloud.nuthouse.de/remote.php/dav/calendars/nutcase"
+    ;;                 :calendar-id "org"
+    ;;                 :files ("~/org/gtd-copy.org")
+    ;;                 :inbox "~/org/inbox.org")))
+
+      (setq org-caldav-url "https://cloud.nuthouse.de/remote.php/dav/calendars/nutcase")
+      (setq org-caldav-calendar-id "org-2")
+      (setq org-caldav-files '("~/org/gtd.org"))
+      (setq org-caldav-inbox "~/org/inbox.org")))
+
+#+END_SRC
+
 * Mail Configuration
 
 mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
