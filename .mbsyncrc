@@ -2,7 +2,7 @@
 #   Values here are used as defaults for any following Channel section that
 #   doesn't specify them.
 Expunge None
-Create Near
+Create Both
 
 # private Mail
 
