@@ -330,7 +330,7 @@ default_floating_border pixel 3
 mouse_warping none
 
 # special keys on logitech keyboard
-bindsym Print exec shutter
+#bindsym Print exec shutter
 bindsym Menu exec i3-sensible-terminal
 bindsym XF86Calculator exec em
 
