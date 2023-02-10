@@ -39,6 +39,8 @@
   
   networking.hostName = "nutbook"; # Define your hostname.
   networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+  networking.wireless.enable = false;
+  programs.nm-applet.enable = true;
 
   # Set your time zone.
   time.timeZone = "Europe/Berlin";
@@ -153,13 +155,16 @@
   hardware.acpilight.enable = true;
   programs.light.enable = true; # alternative to xbacklight
 
+  # WWan support
+  hardware.usbWwan.enable = true;
+
   # bluetooth support
   hardware.bluetooth.enable = true;
   services.blueman.enable = true;
 
   # List services that you want to enable:
   services.samba.package = pkgs.sambaFull;
-  
+
   # Enable touchpad support (enabled default in most desktopManager).
   services.xserver.libinput.enable = true;
 
@@ -257,10 +262,11 @@
 	  killall
 	  mattermost-desktop
 	  maven
+    modemmanager
+    modem-manager-gui
 	  mosquitto
 	  mpv
 	  mu # needed by (contains) mu4e
-    networkmanagerapplet
 	  nextcloud-client
     neofetch # basic system information
     nixos-option
@@ -354,7 +360,6 @@
   programs.htop.enable = true;
   programs.iftop.enable = true;
   programs.mtr.enable = true;
-  #  programs.nm-applet.enable = true;
   programs.traceroute.enable = true;
   programs.wireshark.enable = true;
 
