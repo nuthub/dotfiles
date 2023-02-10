@@ -45,6 +45,11 @@ Far :private-remote:Archives
 Near :private-local:archives
 Patterns *
 
+Channel private-autolearn
+Far :private-remote:autolearn
+Near :private-local:autolearn
+Patterns *
+
 Group private
 Channel private-inbox
 Channel private-sent
