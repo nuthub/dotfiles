@@ -189,6 +189,17 @@
 
   #   services.emacs.enable = true;
 
+  services = {
+    syncthing = {
+      enable = true;
+      user = "flake";
+      dataDir = "/home/flake/Syncthing";    # Default folder for new synced folders
+      configDir = "/home/flake/.config/syncthing";   # Folder for Syncthing's settings and keys
+    };
+  };
+
+  services.udisks2.enable = true;
+
   # links /libexec from derivations to /run/current-system/sw
   environment.pathsToLink = [ "/libexec" ];
 
@@ -331,7 +342,6 @@
 	  texlive.combined.scheme-full
 	  thunderbird
 	  udiskie
-	  udisks2
 	  vim
 	  wget
     xorg.xev
