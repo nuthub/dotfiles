@@ -959,13 +959,13 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
               (:name "Messages with images" :query "mime:image/*" :key 112)))
       (setq mu4e-maildir-shortcuts
             '(("/private/inbox" . ?p)
-              ("/private/archives/2022" . ?P)
+              ("/private/archives/2023" . ?P)
               ("/work/inbox" . ?w)
-              ("/work/archives/2022" . ?W)
+              ("/work/archives/2023" . ?W)
               ("/b7/inbox" . ?b)
-              ("/b7/archives/2022" . ?B)
+              ("/b7/archives/2023" . ?B)
               ("/tudo/inbox" . ?d)
-              ("/tudo/archives/2022" . ?D)
+              ("/tudo/archives/2023" . ?D)
               ("/tudo/fsinfo" . ?f)))
       (setq smtpmail-queue-mail nil)  ;; start in direct mode
       (setq smtpmail-queue-dir "~/Mail/queue/cur")
@@ -987,7 +987,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                       (smtpmail-smtp-service . 587)
                       (mu4e-drafts-folder . "/private/drafts")
                       (mu4e-sent-folder . "/private/sent")
-                      (mu4e-refile-folder  . "/private/archives/2022")
+                      (mu4e-refile-folder  . "/private/archives/2023")
                       (mu4e-trash-folder . "/private/trash")))
              ;; work account
              (make-mu4e-context
@@ -998,13 +998,13 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                   (string-prefix-p "/work" (mu4e-message-field msg :maildir))))
               :vars '((user-mail-address . "flake@uni-koblenz.de")
                       (user-full-name    . "Julian Flake")
-                      (mu4e-compose-signature . "Dipl.-Inf. Julian Flake\nUniversity of Koblenz-Landau, Campus Koblenz\nInstitute for Software Technology\nResearch Group Software Engineering")
+                      (mu4e-compose-signature . "Dipl.-Inf. Julian Flake\nUniversity of Koblenz\nInstitute for Software Technology\nResearch Group Software Engineering")
                       (smtpmail-smtp-server . "smtp.uni-koblenz.de")
                       (smtpmail-stream-type . ssl)
                       (smtpmail-smtp-service . 465)
                       (mu4e-drafts-folder  . "/work/drafts")
                       (mu4e-sent-folder  . "/work/sent")
-                      (mu4e-refile-folder  . "/work/archives/2022")
+                      (mu4e-refile-folder  . "/work/archives/2023")
                       (mu4e-trash-folder  . "/work/trash")))
              ;; TUDo account
              (make-mu4e-context
@@ -1021,7 +1021,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                       (smtpmail-smtp-service . 587)
                       (mu4e-drafts-folder . "/tudo/drafts")
                       (mu4e-sent-folder . "/tudo/sent")
-                      (mu4e-refile-folder  . "/tudo/archives/2022")
+                      (mu4e-refile-folder  . "/tudo/archives/2023")
                       (mu4e-trash-folder . "/tudo/trash")))
              ;; b7 account
              (make-mu4e-context
@@ -1038,7 +1038,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                       (smtpmail-smtp-service . 465)
                       (mu4e-drafts-folder . "/b7/drafts")
                       (mu4e-sent-folder . "/b7/sent")
-                      (mu4e-refile-folder  . "/b7/archives/2022")
+                      (mu4e-refile-folder  . "/b7/archives/2023")
                       (mu4e-trash-folder . "/b7/trash")))))
 
       ;; let me confirm/decline to send an email with empty subject
