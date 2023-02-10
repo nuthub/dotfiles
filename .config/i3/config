@@ -272,7 +272,7 @@ exec --no-startup-id thunderbird
 exec --no-startup-id emacsclient -nc
 exec --no-startup-id firefox
 #exec --no-startup-id pcmanfm
-exec --no-startup-id rocketchat-desktop
+exec --no-startup-id element-desktop
 exec --no-startup-id solaar -w hide
 
 
@@ -283,7 +283,7 @@ assign [class="Chromium"] $ws2
 assign [class="firefox"] $ws2
 assign [class="Thunar"] $ws3
 assign [class="pcmanfm"] $ws3
-assign [class="Rocket.Chat"] $ws9
+assign [class="Element"] $ws9
 assign [class="TelegramDesktop"] $ws9
 assign [class="Mattermost"] $ws9
  # for_window [class="Spotify"] move --no-auto-back-and-forth to workspace $ws9
