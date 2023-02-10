@@ -54,9 +54,14 @@
   #networking.firewall.allowedUDPPorts = [ 51820 ];
   # Or disable the firewall altogether.
   networking.firewall.enable = false;
-  
+
   # Select internationalisation properties.
-  # i18n.defaultLocale = "en_US.UTF-8";
+  i18n.defaultLocale = "en_US.UTF-8";
+  i18n.supportedLocales = [
+    "en_US.UTF-8/UTF-8"
+    "de_DE.UTF-8/UTF-8"
+  ];
+
   console = {
 	  font = "Lat2-Terminus16";
     #	  keyMap = "de-latin1";
