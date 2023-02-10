@@ -214,6 +214,11 @@
   };
 
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.permittedInsecurePackages = [
+    "postman"
+    "openjdk-18+36"
+  ];
+
 
   environment.systemPackages = with pkgs; [
 	  alacritty # a terminal emulator
@@ -252,6 +257,7 @@
         epkgs.vterm
         epkgs.pdf-tools
       ]))
+    element-desktop
     feh
 	  ffmpeg
     file
@@ -303,11 +309,11 @@
     pinentry-qt
 	  platformio
     polybarFull
-	  powertop
+    postman
+    powertop
     python3 # treemacs-git wants this
     qutebrowser
 	  ripgrep
-	  rocketchat-desktop
 	  rsync
 	  rxvt-unicode
 	  shutter
