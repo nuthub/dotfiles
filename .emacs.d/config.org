@@ -676,7 +676,7 @@ The global keybinding 'C-x u' is set below.
                                         ("\\subsection{%s}" . "\\subsection*{%s}")
                                         ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
                                         ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                                        ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+                                        ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))))
 
 #+END_SRC
 
