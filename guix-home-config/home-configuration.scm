@@ -33,16 +33,25 @@
 				      "docker-compose"
 				      "dunst"
 				      "emacs"
+				      "emacs-pdf-tools"
 				      "feh"
 				      "file"
+				      "flameshot"
 				      "flatpak"
 				      "ffmpeg"
+				      "font-abattis-cantarell"
+				      "font-awesome"
+				      "font-fira-code"
+				      "font-google-noto-sans-cjk"
+				      "font-hack"
+				      "font-liberation"
 				      "gcc" ;; for emacs (emacssql compilation)
 				      "gimp"
 				      "git"
 				      "gnome-keyring"
 				      "gnucash"
 				      "gnupg"
+				      "guix-icons"
 				      "i3lock"
 				      "icecat"
 				      "icedove"
@@ -53,7 +62,7 @@
 				      "libnotify" ;; desktop notification
 				      "lxappearance"
 				      "maven"
-;;				      "modem-manager"
+				      ;;				      "modem-manager"
 				      "mosquitto"
 				      "mpv"
 				      "mu"
@@ -79,6 +88,7 @@
 				      "rsync"
 				      "seahorse"
 				      "simple-scan"
+				      "solaar"
 				      "sqlite" ;; for org-roam
 				      "stapler"
 				      "stow"
@@ -111,8 +121,8 @@
                   (aliases '(("grep" . "grep --color=auto") ("ll" . "ls -l")
                              ("ls" . "ls -p --color=auto")))
                   (bashrc (list (local-file
-                                 "/home/flake/guix-home-config/.bashrc"
+                                 "/home/flake/guix/guix-home-config/.bashrc"
                                  "bashrc")))
                   (bash-profile (list (local-file
-                                       "/home/flake/guix-home-config/.bash_profile"
+                                       "/home/flake/guix/guix-home-config/.bash_profile"
                                        "bash_profile"))))))))
