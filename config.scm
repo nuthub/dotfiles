@@ -25,12 +25,6 @@
                 (group "users")
                 (home-directory "/home/flake")
                 (supplementary-groups '("wheel" "netdev" "audio" "video" "docker" "lpadmin")))
-	       (user-account
-                (name "flake2")
-                (comment "Julian Flake")
-                (group "users")
-                (home-directory "/home/flake2")
-                (supplementary-groups '("wheel" "netdev" "audio" "video")))
                %base-user-accounts))
 
  ;; Packages installed system-wide.  Users can also install packages
@@ -43,8 +37,7 @@
                          (specification->package "nss-certs"))
                    %base-packages))
 
- ;; Below is the list of system services.  To search for available
- ;; services, run 'guix system search KEYWORD' in a terminal.
+ ;; Below is the list of system services.  To search for available ;; services, run 'guix system search KEYWORD' in a terminal.
  (services
   (append (list (set-xorg-configuration
 		 (xorg-configuration (keyboard-layout keyboard-layout)))
