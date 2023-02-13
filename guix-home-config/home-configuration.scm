@@ -62,7 +62,6 @@
 				      "libnotify" ;; desktop notification
 				      "lxappearance"
 				      "maven"
-				      ;;				      "modem-manager"
 				      "mosquitto"
 				      "mpv"
 				      "mu"
@@ -79,6 +78,7 @@
 				      "pasystray"
 				      "pcmanfm"
 				      "pdfpc"
+				      "picom"
 				      "pinentry-qt"
 				      "polybar"
 				      "powertop"
