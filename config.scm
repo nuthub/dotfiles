@@ -9,10 +9,30 @@
 
 ;; Indicate which modules to import to access the variables
 ;; used in this configuration.
-(use-modules (gnu))
-(use-service-modules cups desktop docker networking ssh syncthing xorg)
+(use-modules (gnu)
+	     (guix packages)
+	     (guix download))
+(use-service-modules cups dbus desktop docker networking ssh syncthing xorg)
+
+(use-modules (nongnu packages linux)
+	     (nongnu system linux-initrd))
+
+(define %logitech-unify-udev-rules
+  (file->udev-rule
+   "42-logitech-unify-permissions.rules"
+   (let ((git-tag "0.9.2"))
+     (origin
+      (method url-fetch)      
+      (uri (string-append "https://raw.githubusercontent.com/3v1n0/Solaar/"
+			  git-tag
+			  "/rules.d/42-logitech-unify-permissions.rules"))
+      (sha256
+       (base32 "1hs855fpwls93aab4xhv3kmbx643a4f2mprw0xg4a1gl04dr9jpf"))))))
 
 (operating-system
+ (kernel linux)
+ (initrd microcode-initrd)
+ (firmware (list linux-firmware))
  (locale "en_US.utf8")
  (timezone "Europe/Berlin")
  (keyboard-layout (keyboard-layout "de"))
@@ -20,49 +40,68 @@
 
  ;; The list of user accounts ('root' is implicit).
  (users (cons* (user-account
-                (name "flake")
-                (comment "Julian Flake")
-                (group "users")
-                (home-directory "/home/flake")
-                (supplementary-groups '("wheel" "netdev" "audio" "video" "docker" "lpadmin")))
-               %base-user-accounts))
+		(name "flake")
+		(comment "Julian Flake")
+		(group "users")
+		(home-directory "/home/flake")
+		(supplementary-groups '("wheel" "netdev" "audio" "video" "input" "disk" "docker" "lpadmin" "dialout")))
+	       %base-user-accounts))
 
  ;; Packages installed system-wide.  Users can also install packages
  ;; under their own account: use 'guix search KEYWORD' to search
  ;; for packages and 'guix install PACKAGE' to install a package.
  (packages (append (list (specification->package "i3-wm")
-                         (specification->package "i3status")
-                         (specification->package "dmenu")
-                         (specification->package "st")
-                         (specification->package "nss-certs"))
-                   %base-packages))
+			 (specification->package "i3status")
+			 (specification->package "dmenu")
+			 (specification->package "st")
+			 (specification->package "gvfs")
+			 (specification->package "nss-certs"))
+		   %base-packages))
 
- ;; Below is the list of system services.  To search for available ;; services, run 'guix system search KEYWORD' in a terminal.
+ ;; Below is the list of system services.  To search for available
+ ;; services, run 'guix system search KEYWORD' in a terminal.
  (services
-  (append (list (set-xorg-configuration
-		 (xorg-configuration (keyboard-layout keyboard-layout)))
-		(service cups-service-type)
+  (append (list (service bluetooth-service-type)
+		(service cups-service-type
+			 (cups-configuration
+			  (web-interface? #t)))
 		(service docker-service-type)
-		(service syncthing-service-type
-			 (syncthing-configuration (user "flake"))))
+		(service gnome-keyring-service-type)
+		(service syncthing-service-type (syncthing-configuration (user "flake")))
+		(set-xorg-configuration (xorg-configuration (keyboard-layout keyboard-layout)))
+		(udev-rules-service 'logitech-unify %logitech-unify-udev-rules)
+	  ;; This is the default list of services we
+	  ;; are appending to.
+	  (modify-services
+	   %desktop-services
+	   
+	   (elogind-service-type
+	    config =>
+	    (elogind-configuration
+	     (inherit config)
+	     (handle-lid-switch-docked 'suspend))))))
 
-          ;; This is the default list of services we
-          ;; are appending to.
-          %desktop-services))
  (bootloader (bootloader-configuration
-              (bootloader grub-bootloader)
-              (targets (list "/dev/sda"))
-              (keyboard-layout keyboard-layout)))
+	      (bootloader grub-efi-bootloader)
+	      (targets (list "/boot/efi"))
+	      (keyboard-layout keyboard-layout)))
+ 
  (swap-devices (list (swap-space
-                      (target (uuid
-                               "ad0cdc52-f971-4b51-ac1f-e5dfbfc1a3e9")))))
+		      (target (uuid
+			       "5abe7967-fcb6-4888-8b05-a6413944c60b")))))
 
  ;; The list of file systems that get "mounted".  The unique
  ;; file system identifiers there ("UUIDs") can be obtained
  ;; by running 'blkid' in a terminal.
  (file-systems (cons* (file-system
-                       (mount-point "/")
-                       (device (uuid
-                                "98d8fe42-db5a-40a3-8683-1de65680be86"
-                                'ext4))
-                       (type "ext4")) %base-file-systems)))
+		       (mount-point "/boot/efi")
+		       (device (uuid "FCE6-96C0"
+				     'fat32))
+		       (type "vfat"))
+		      (file-system
+		       (mount-point "/")
+		       (device (uuid
+				"5c890181-055c-4db3-9a47-2e3769ec24ea"
+				'ext4))
+		       (type "ext4"))
+		      %base-file-systems)))
