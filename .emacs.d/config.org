@@ -837,6 +837,7 @@ Build a second brain with org-roam.
     :after org
     :ensure t
     :custom
+    (org-roam-database-connector 'sqlite-builtin) ;; emacs 29 and newer
     (org-roam-directory (file-truename "~/org/roam/"))
     (org-roam-completion-everywhere t)
     :bind (("C-c n l" . org-roam-buffer-toggle)
