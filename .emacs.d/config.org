@@ -537,11 +537,43 @@ The global keybinding 'C-x u' is set below.
     (add-hook 'after-init-hook #'global-flycheck-mode))
 #+END_SRC
  
-** Git support
+** magit: Git support
 
 #+BEGIN_SRC emacs-lisp
   (use-package magit
     :defer 0)
+#+END_SRC
+
+** openwith
+
+#+BEGIN_SRC emacs-lisp
+
+  (use-package openwith
+    :config
+    (setq openwith-associations
+          (list
+           (list (openwith-make-extension-regexp
+                  '("mpg" "mpeg" "mp3" "mp4"
+                    "avi" "wmv" "wav" "mov" "flv"
+                    "ogm" "ogg" "mkv"))
+                 "xdg-open"
+                 '(file))
+           (list (openwith-make-extension-regexp
+                  '("xbm" "pbm" "pgm" "ppm" "pnm"
+                    "png" "gif" "bmp" "tif" "jpeg" "jpg"))
+                 "xdg-open"
+                 '(file))
+           (list (openwith-make-extension-regexp
+                  '("doc" "xls" "ppt" "odt" "ods" "odg" "odp" "docx" "xlsx" "pptx"))
+                 "xdg-open"
+                 '(file))
+           ))
+    ;; prevent <openwith> from interfering with mail attachments
+    (require 'mm-util)
+    (add-to-list 'mm-inhibit-file-name-handlers 'openwith-file-handler)
+    ;; enable openwith mode
+    (openwith-mode 1))
+
 #+END_SRC
 
 ** Projectile
