@@ -1,2 +1,0 @@
-source ~/.profile
-xss-lock --transfer-sleep-lock -- lockscreen &
