@@ -17,3 +17,9 @@
 [core]
 	editor = emacsclient -c -a=
 	excludesFile = ~/.gitignore
+[sendemail]
+	smtpServer = smtp.uni-koblenz.de
+	smtpServerPort = 587
+	smtpEncryption = tls
+	smtpUser = flake@uni-koblenz.de
+    # (Optional: we'll leave this commented out and use a different way)
