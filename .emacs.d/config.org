@@ -177,6 +177,15 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
   
 #+END_SRC
 
+** Show search result counts in modeline
+
+#+BEGIN_SRC emacs-lisp
+
+  (setq isearch-lazy-count t)
+  (setq isearch-lazy-highlight t)
+  
+#+END_SRC
+
 ** Smart paranthesis
 
 An alternative to /smartparens/ is /paren/.
