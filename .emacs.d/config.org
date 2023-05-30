@@ -59,7 +59,7 @@ Holidays are not shown in agenda-hoidays (org-agenda 'h')
 
   (setq holiday-general-holidays
         '((holiday-fixed 1 1 "Neujahr")
-          (holiday-fixed 5 1 "1. Mai")
+          (holiday-fixed 5 1 "1. Mai / Tag der Arbeit")
           (holiday-fixed 10 3 "Tag der Deutschen Einheit")))
 
   ;; Feiertage für Bayern, weitere auskommentiert
@@ -108,10 +108,23 @@ Holidays are not shown in agenda-hoidays (org-agenda 'h')
 #+END_SRC
 
 ** Theme
-*** zenburn
+
+*** modus vivendi/operandi (light/dark)
+
 #+BEGIN_SRC emacs-lisp
-  (use-package zenburn-theme
-    :config (load-theme 'zenburn t))
+  (use-package modus-themes
+    :config
+    (load-theme 'modus-operandi t)) ;; light
+    ;;  (load-theme 'modus-vivendi)) ;; dark
+
+#+END_SRC
+
+*** solarized (light/dark)
+
+#+BEGIN_SRC emacs-lisp :tangle nil
+  (use-package solarized-theme
+    :config
+    (load-theme 'solarized-light))
 #+END_SRC
 
 ** Diminish
