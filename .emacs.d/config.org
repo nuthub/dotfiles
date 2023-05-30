@@ -948,10 +948,13 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
       (setq mu4e-maildir "~/Mail")
       (setq mu4e-confirm-quit t)
       (setq mu4e-view-show-images t)
-      (setq mu4e-view-show-addresses 't)
+      (setq mu4e-view-show-addresses t)
+      (setq mu4e-use-fancy-headers t)
+      (setq mu4e-read-option-use-builtin nil)
+      (setq mu4e-completing-read-function 'completing-read)
+      (setq mu4e-notification-support t)
       (setq mu4e-compose-format-flowed t)
       (setq mu4e-compose-cite-function 'message-cite-original) ;; alternative: 'message-cite-original-without-signature
-      (add-hook 'mu4e-compose-mode-hook (defun disable-undo-tree-mode-in-mu4e-compose() "Disable undo tree mode" (undo-tree-mode -1)))
       (setq mail-user-agent 'mu4e-user-agent)
       (require 'smtpmail)
       (setq message-send-mail-function 'smtpmail-send-it)
@@ -1053,7 +1056,11 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                       (mu4e-sent-folder . "/b7/sent")
                       (mu4e-refile-folder  . "/b7/archives/2023")
                       (mu4e-trash-folder . "/b7/trash")))))
-
+      ;; disable undo-tree for mail compose (why? I have a separate dir for )
+      (add-hook 'mu4e-compose-mode-hook
+                (defun disable-undo-tree-mode-in-mu4e-compose()
+                  "Disable undo tree mode"
+                  (undo-tree-mode -1)))
       ;; let me confirm/decline to send an email with empty subject
       (add-hook 'message-send-hook
                 (lambda() (interactive)
