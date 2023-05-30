@@ -1,3 +1,7 @@
+/* found after guix installation */
+XTerm*utf8: always
+XTerm*metaSendsEscape: true
+
 /* fonts */
 URxvt.font:		xft:Hack-Regular:pixelsize=14,xft:Symbola
 URxvt.boldFont:		xft:Hack-Bold:pixelsize=14:weight=bold,xft:Symbola
