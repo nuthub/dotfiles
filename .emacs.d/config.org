@@ -680,10 +680,12 @@ The global keybinding 'C-x u' is set below.
     :config
     ;;    (add-hook 'org-mode-hook 'turn-on-auto-fill)
     (add-hook 'org-mode-hook 'visual-line-mode)
+    (add-hook 'org-mode-hook 'auto-revert-mode)
     (setq org-directory "~/org")
     (setq org-refile-targets (quote (("~/org/gtd.org" :maxlevel . 4)
                                     ("~/org/someday.org" :maxlevel . 1)
-                                    ("~/org/tickler.org" :maxlevel . 1))))
+                                    ("~/org/tickler.org" :maxlevel . 1)
+                                    ("~/org/events.org" :maxlevel . 2))))
     (setq org-refile-use-outline-path 'file)
     (setq org-outline-path-complete-in-steps nil)
     (setq org-refile-allow-creating-parent-nodes 'confirm)
@@ -697,16 +699,17 @@ The global keybinding 'C-x u' is set below.
                           ("@org" . ?o)
                           ("@city" . ?c)
                           ("@ToRead" . ?r)))
-    (setq org-todo-keywords '((sequence "TODO(t)" "FREQ(f)" "PROJ(p)" "WAIT(w@/!)" "|" "DONE(d!)" "CNCL(c@/!)")))
+    (setq org-todo-keywords '((sequence "TODO(t)" "FREQ(f)" "EVNT(e)" "PROJ(p)" "WAIT(w@/!)" "|" "DONE(d!)" "CNCL(c@/!)")))
     (setq org-todo-repeat-to-state t)
     (setq org-startup-indented t)
     (setq org-startup-truncated nil)
     (setq org-log-done 'time)
     (setq org-log-into-drawer t)
     (setq org-num-skip-unnumbered t)
-    (setq org-agenda-files (quote ("~/org/gtd.org" "~/org/tickler.org" "~/org/someday.org" "~/org/inbox.org")))
+    (setq org-agenda-files (quote ("~/org/gtd.org" "~/org/tickler.org" "~/org/someday.org" "~/org/inbox.org" "~/org/events.org")))
     (setq org-agenda-window-setup "only-window")
-    (setq org-agenda-span 1)
+    (setq org-agenda-span 7)
+    (setq org-agenda-include-diary t)
     (setq org-agenda-custom-commands
           '(
             ("w"
@@ -720,16 +723,13 @@ The global keybinding 'C-x u' is set below.
             nil ""))
     (setq org-capture-templates
           '(
-            ("t" "Todo" entry (file "~/org/inbox.org")
-             "* TODO %?\n  %i")
-            ("r" "Reading" entry (file "~/org/inbox.org")
-             "* TODO Read: %?\n  %i")
-            ("m" "Process mail" entry (file "~/org/inbox.org")
-             "* TODO %?\nSCHEDULED: %t\nMail: %:fromname: %a")
-            ("p" "Protocol" entry (file "~/org/inbox.org")
-             "* TODO %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
-            ("L" "Protocol Link" entry (file "~/org/inbox.org")
-             "* TODO %?\n[[%:link][%:description]]")
+            ("t" "Todo" entry (file "~/org/inbox.org")            "* TODO %?\n  %i")
+            ("e" "Event" entry (file "~/org/inbox.org")           "* %^{Event Title}\n\n%^{Date and Time}T\nLocation: %^{Location}\n%i%?" :time-prompt t)
+            ("n" "Meeting Notes" entry (file "~/org/inbox.org")   "* Notes %?\n- %U\n %i")
+            ("r" "Reading" entry (file "~/org/inbox.org")         "* TODO Read: %?\n  %i")
+            ("m" "Process Mail" entry (file "~/org/inbox.org")    "* TODO %?\nSCHEDULED: %t\nMail: %:fromname: %a")
+            ("p" "Protocol" entry (file "~/org/inbox.org")        "* TODO %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
+            ("L" "Protocol Link" entry (file "~/org/inbox.org")   "* TODO %?\n[[%:link][%:description]]")
             ))
     (setq org-src-tab-acts-natively t)
     (setq org-ellipsis " ")  ;; …, ⤵, ▼, ↴, ⬎, ⤷, ⋱
@@ -972,19 +972,57 @@ Open the file under cursor:
   (when (string= (system-name) "nutbook")
     (use-package org-caldav
       :defer 0
-      :config
-      (setq org-icalendar-use-scheduled '(todo-start))
-      (setq org-icalendar-timezone "Europe/Berlin")
-    ;;   (setq org-caldav-calendars
-    ;;         `((:url "https://cloud.nuthouse.de/remote.php/dav/calendars/nutcase"
-    ;;                 :calendar-id "org"
-    ;;                 :files ("~/org/gtd-copy.org")
-    ;;                 :inbox "~/org/inbox.org")))
+      :init
+      ;; https://www.reddit.com/r/orgmode/comments/8rl8ep/making_orgcaldav_useable/
+      ;; This is the sync on close function; it also prompts for save after syncing so 
+      ;; no late changes get lost 
+      (defun org-caldav-sync-at-close ()
+        (org-caldav-sync)
+        (save-some-buffers))
 
+      ;; This is the delayed sync function; it waits until emacs has been idle for 
+      ;; "secs" seconds before syncing.  The delay is important because the caldav-sync
+      ;; can take five or ten seconds, which would be painful if it did that right at save.  
+      ;; This way it just waits until you've been idle for a while to avoid disturbing 
+      ;; the user.
+      (defvar org-caldav-sync-timer nil
+         "Timer that `org-caldav-push-timer' used to reschedule itself, or nil.")
+      (defun org-caldav-sync-with-delay (secs)
+        (when org-caldav-sync-timer
+          (cancel-timer org-caldav-sync-timer))
+        (setq org-caldav-sync-timer
+              (run-with-idle-timer
+               (* 1 secs) nil 'org-caldav-sync)))
+      :config
+      (setq org-icalendar-use-scheduled '(event-if-todo event-if-not-todo))
+      (setq org-icalendar-timezone "Europe/Berlin")
       (setq org-caldav-url "https://cloud.nuthouse.de/remote.php/dav/calendars/nutcase")
-      (setq org-caldav-calendar-id "org-2")
-      (setq org-caldav-files '("~/org/gtd.org"))
-      (setq org-caldav-inbox "~/org/inbox.org")))
+      (setq org-caldav-calendars
+            '((:calendar-id "org-2"
+                            :files ("~/org/events.org" "~/org/events-inbox.org")
+                            :inbox "~/org/events-inbox.org")))
+      ;; (:calendar-id "personal"
+      ;;                         :files ("~/org/events-personal.org" "~/org/events-personal-inbox.org")
+      ;;                         :inbox "~/org/events-personal-inbox.org")
+      ;; (setq org-icalendar-alarm-time 1)
+      ;; ;; This makes sure to-do items as a category can show up on the calendar
+      ;; (setq org-icalendar-include-todo t)
+      ;; ;; This ensures all org "deadlines" show up, and show up as due dates
+      ;; (setq org-icalendar-use-deadline '(event-if-todo event-if-not-todo todo-due))
+      ;; ;; This ensures "scheduled" org items show up, and show up as start times
+      ;; (setq org-icalendar-use-scheduled '(todo-start event-if-todo event-if-not-todo))
+      ;; Add the delayed save hook with a five minute idle timer
+      (add-hook 'after-save-hook
+                (lambda ()
+                  (when (eq major-mode 'org-mode)
+                    (org-caldav-sync-with-delay 300))))
+      ;; Add the close emacs hook
+      (add-hook 'kill-emacs-hook 'org-caldav-sync-at-close)
+      )
+    )
+
+
+
 
 #+END_SRC
 
