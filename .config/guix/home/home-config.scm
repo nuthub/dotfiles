@@ -20,7 +20,7 @@
  (packages (specifications->packages
 	    (list
 	     ;; XDG
-	     "xdg-desktop-portal" "xdg-desktop-portal-gtk" "xdg-utils"
+	     "xdg-desktop-portal" "xdg-desktop-portal-wlr" "xdg-utils" ; "xdg-desktop-portal-gtk" 
 	     ;; i3
 	     ;; "i3-wm"
 	     ;; ;; default i3 config packages
@@ -40,9 +40,9 @@
 	     "xrdb"
 	     "xrandr"
 	     ;; wayland
-	     "xorg-server-xwayland" "pipewire" "wireplumber" "slurp" "xdg-desktop-portal-wlr" "grim"
+	     "xorg-server-xwayland" "pipewire" "wireplumber" "slurp" "grim"
 	     ;; sway
-	     "sway" "swayidle" "waybar" "rxvt-unicode" "alacritty" "wofi" "swaynotificationcenter" ;; swaylock is installed via screen-locker-service-type
+	     "sway" "swayidle" "waybar" "rxvt-unicode" "alacritty" "wofi" "swaynotificationcenter" "swaylock" ;; swaylock needs to be configured in system config
 	     ;; polkit / udev / xdg / dbus / gvfs
 	     "polkit-gnome" ;; used?
 	     "tumbler" ;; D-BUS thumbnail service
@@ -135,7 +135,8 @@
 	     "inkscape" "graphviz"
 	     "flameshot" "ristretto" "sxiv" "gimp"
 	     "imagemagick" "optipng"
-	     "cheese" "ffmpeg" "mpv" "obs"
+	     "cheese" "ffmpeg" "mpv"
+	     ;; "obs"
 	     "simple-scan" "xsane"
 	     ;; Virtualization
 	     "qemu" "virt-manager"
