@@ -1,0 +1,4 @@
+currently using oh-my-zsh with powerlevel10k theme
+
+- https://ohmyz.sh/#install
+- https://github.com/romkatv/powerlevel10k#oh-my-zsh
