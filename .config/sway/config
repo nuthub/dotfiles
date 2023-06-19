@@ -71,7 +71,7 @@ exec swayidle -w \
 # You can get the names of your inputs by running: swaymsg -t get_inputs
 # Read `man 5 sway-input` for more information about this section.
 input "1:1:AT_Translated_Set_2_keyboard" xkb_layout "de"
-input "1133:16522:Logitech_Wireless_Device_PID:408a" xkb_layout "de"
+input "1133:16522:Logitech_MX_Keys" xkb_layout "de"
 
 ### Key bindings
 #
@@ -351,8 +351,6 @@ for_window [title="MGC"] floating enable
 
 
 exec --no-startup-id xrdb -load $HOME/.Xresources
-#exec --no-startup-id autorandr -c
-#exec --no-startup-id autorandr-launcher --daemonize
 exec --no-startup-id gnome-keyring-daemon
 exec --no-startup-id nm-applet --indicator
 exec --no-startup-id pasystray --volume-max=100 --notify=all # pulseaudio
