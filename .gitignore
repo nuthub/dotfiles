@@ -1,3 +1,4 @@
 /.config/zsh/.zcompdump-*
 /.emacs.d/org-caldav-*
 /.config/guix/current
+.config/zsh/.zprofile
