@@ -1,0 +1,20 @@
+[Default Applications]
+text/html=firefox.desktop
+x-scheme-handler/http=firefox.desktop
+x-scheme-handler/https=firefox.desktop
+x-scheme-handler/about=firefox.desktop
+x-scheme-handler/unknown=firefox.desktop
+x-scheme-handler/text/xml=firefox.desktop
+application/pdf=emacsclient.desktop
+image/jpeg=feh.desktop
+image/png=feh.desktop
+x-scheme-handler/eclipse+command x-scheme-handler/eclipse+mpc=_home_flake_Applications_eclipse_eclipse-java-2023-03_.desktop
+
+[Added Associations]
+application/pdf=firefox.desktop;emacsclient.desktop;
+x-scheme-handler/http=xfce4-web-browser.desktop;
+x-scheme-handler/https=xfce4-web-browser.desktop;
+image/jpeg=emacsclient.desktop;feh.desktop;
+image/png=feh.desktop;
+inode/symlink=emacsclient.desktop;
+text/x-java=emacsclient.desktop;
