@@ -19,15 +19,76 @@
 	     (gnu services syncthing)
 	     (gnu services virtualization)
 	     (gnu services xorg)
-	     (gnu packages xfce)
-	     (gnu packages networking)
-	     (gnu packages shells)
-	     (gnu packages wm)
+	     (nongnu packages fonts)
 	     (nongnu packages linux)
+	     (nongnu packages mozilla)
+	     (nongnu packages chromium)
 	     (nongnu system linux-initrd)
 	     (guix packages)
 	     (guix download)
 	     (gnu packages firmware))
+
+(use-package-modules admin
+		     aspell
+		     backup
+		     bash
+		     certs
+		     chromium
+		     compression
+		     compton
+		     cups
+		     curl
+		     docker
+		     dunst
+		     emacs
+		     emacs-xyz
+		     file
+		     freedesktop
+		     fonts
+		     gimp
+		     gnome
+		     gnome-xyz
+		     gnucash
+		     gnupg
+		     gnuzilla
+		     graphviz
+		     haskell-xyz
+		     image
+		     imagemagick
+		     image-viewers
+		     inkscape
+		     libreoffice
+		     linux
+		     lxde
+		     mail
+		     maths
+		     messaging
+		     networking
+		     package-management
+		     password-utils
+		     pdf
+		     polkit
+		     pulseaudio
+		     rsync
+		     rust-apps
+		     samba
+		     scanner
+		     shells
+		     shellutils
+		     ssh
+		     suckless
+		     sync
+		     syncthing
+		     terminals
+		     tex
+		     version-control
+		     video
+		     virtualization
+		     vpn
+		     wm
+		     xdisorg
+		     xfce
+		     xorg)
 
 ;;;
 ;;; My OS
@@ -57,14 +118,123 @@
  ;; under their own account: use 'guix search KEYWORD' to search
  ;; for packages and 'guix install PACKAGE' to install a package.
  (packages (append (list
-		    ;;    	    (specification->package "swaylock")
-		    (specification->package "polkit")
-		    (specification->package "flatpak")
-		    (specification->package "flatpak-xdg-utils")
-		    (specification->package "xdg-desktop-portal")
-		    (specification->package "xdg-desktop-portal-gtk")
-		    (specification->package "xdg-utils")
-		    (specification->package "nss-certs")
+		    ;; basics
+		    bash gnupg
+		    zsh zsh-autosuggestions zsh-syntax-highlighting
+		    ;; my shell and shell tools
+		    cups ;; to have commands like lpq etc
+		    file
+		    htop
+		    neofetch
+		    nmap
+		    octave
+		    powertop
+		    ripgrep
+		    stow
+		    trash-cli
+		    tree
+		    unzip
+		    usbutils
+		    acpi
+		    brightnessctl
+		    xbacklight
+		    ;; syncing and versioning
+		    samba
+		    binutils ;; for ar command
+		    borg
+		    curl
+		    git ;; "git:gui" "git:send-email"
+		    rsync
+		    subversion
+		    syncthing
+		    nextcloud-client
+		    yt-dlp
+		    zip
+		    ;; XDG
+		    xdg-utils
+		    xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-wlr
+		    ;; wayland
+		    xorg-server-xwayland pipewire wireplumber slurp grim grimshot
+		    ;; sway
+		    sway swayidle waybar rxvt-unicode alacritty wofi swaynotificationcenter swaylock
+		    ;; other desktop related
+		    tumbler ;; D-BUS thumbnail service
+		    poweralertd
+		    gnome-keyring
+		    gvfs
+		    feh
+		    mosquitto ;; for doorstatus in polybar
+		    ;; connectivity / media
+		    blueman 
+		    pasystray
+		    pavucontrol
+		    pulseaudio
+		    udiskie
+		    solaar
+		    ;; other sources / hubs
+		    flatpak
+		    docker
+		    ;; emacs & related
+		    emacs-next emacs-pdf-tools
+		    isync mu
+		    ;; security
+		    pinentry pinentry-tty gnupg openssh password-store wireguard-tools
+		    ;; x basics
+		    arandr autorandr
+		    lxappearance
+		    ;; my desktop apps
+		    feh zathura mpv pcmanfm file-roller gvfs baobab
+		    seahorse
+		    firefox icedove ungoogled-chromium
+		    aqbanking gnucash
+		    libreoffice
+		    ;; Office, LaTeX, PDF & Co
+		    aspell
+		    aspell-dict-de
+		    aspell-dict-en
+		    pandoc
+		    pdfpc
+		    stapler
+		    texlive biber ;; JabRef is installed via flatpak
+		    ;; media
+		    inkscape graphviz
+		    flameshot ristretto sxiv gimp
+		    imagemagick optipng
+		    cheese ffmpeg mpv
+		    ;; obs
+		    simple-scan xsane
+		    ;; Virtualization
+		    qemu virt-manager
+		    ;; for my java shells
+		    hicolor-icon-theme libxtst
+		    ;; fonts
+		    font-abattis-cantarell
+		    font-awesome
+		    font-dejavu
+		    font-fira-code
+		    font-google-noto-sans-cjk
+		    font-hack
+		    font-liberation
+		    font-microsoft-arial
+		    font-microsoft-times-new-roman
+		    font-microsoft-courier-new
+		    font-openmoji
+		    ;; themes
+		    gnome-themes-extra matcha-theme arc-theme materia-theme
+		    ;; icons
+		    adwaita-icon-theme elementary-xfce-icon-theme
+		    ;; x tools
+		    xev
+		    setxkbmap
+		    xkill
+		    xprop
+		    xrdb
+		    xrandr
+		    ;; Xorg & i3
+		    xorg-server xinit
+		    i3-wm polybar i3status alacritty dmenu polybar dunst picom rofi libnotify i3lock xss-lock ;; i3lock is installed via screen-locker-service-type
+		    ;; TLS root certificates
+		    nss-certs
 		    )
 		   %base-packages))
 
@@ -78,9 +248,11 @@
 	   ;; 	      (xorg-configuration (keyboard-layout keyboard-layout)))
 	   ;; 	     (display ":0")
 	   ;;(vt "vt7")))
-	   ;;	   (set-xorg-configuration 
-	   ;;	    (xorg-configuration
-	   ;;	     (keyboard-layout keyboard-layout)))
+	   ;; this pulls gdm in:
+	   (set-xorg-configuration 
+	    (xorg-configuration
+	     (keyboard-layout keyboard-layout)))
+	   (service openssh-service-type)
 	   (service bluetooth-service-type)
 	   (service cups-service-type
 		    (cups-configuration
@@ -93,6 +265,13 @@
 		    (screen-locker-configuration
 		     (name "swaylock")
 		     (program (file-append swaylock "/bin/swaylock"))
+		     (allow-empty-password? #f)
+		     (using-pam? #t)
+		     (using-setuid? #f)))
+	   (service screen-locker-service-type
+		    (screen-locker-configuration
+		     (name "i3lock")
+		     (program (file-append i3lock "/bin/i3lock"))
 		     (allow-empty-password? #f)
 		     (using-pam? #t)
 		     (using-setuid? #f)))
@@ -113,20 +292,14 @@
 						       "/rules.d/42-logitech-unify-permissions.rules"))
 				   (sha256
 				    (base32 "1hs855fpwls93aab4xhv3kmbx643a4f2mprw0xg4a1gl04dr9jpf"))))))
-	   ;; (simple-service 'fwupd-dbus dbus-root-service-type
-	   ;; 		   (list fwupd))
-	   ;; (simple-service 'fwupd-polkit polkit-service-type
-	   ;; 		   (list fwupd))
 	   (simple-service 'dbus-extras
 			   dbus-root-service-type (list blueman)))
 	  ;; This is the (modified) default list of services we are appending to.
 	  (modify-services %desktop-services
-			   (delete gdm-service-type)
 			   (elogind-service-type
 			    config => (elogind-configuration
 				       (inherit config)
 				       (handle-lid-switch-docked 'suspend)))
-
 			   (guix-service-type
 			    config => (guix-configuration
 				       (inherit config)
@@ -135,7 +308,8 @@
 							%default-substitute-urls))
 				       (authorized-keys (append
 							 (list (local-file "./nonguix-signing-key.pub"))
-							 %default-authorized-guix-keys)))))))
+							 %default-authorized-guix-keys))))
+			   (delete gdm-service-type))))
 
  (bootloader (bootloader-configuration
 	      (bootloader grub-efi-bootloader)

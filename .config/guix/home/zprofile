@@ -1,2 +1,14 @@
+# -*- shell-script -*-
 # If running from tty1 start sway
-[ "$(tty)" = "/dev/tty1" ] && exec dbus-run-session -- sway
+if [ "$(tty)" = "/dev/tty1" ]; then
+    export XDG_CURRENT_DESKTOP=sway
+    export XDG_SESSION_DESKTOP=sway
+    export MOZ_ENABLE_WAYLAND="1"
+    export _JAVA_AWT_WM_NONREPARENTING=1
+    export QT_QPA_PLATFORM=wayland
+    export QT_QPA_PLATFORMTHEME=qt5ct
+    export SDL_VIDEODRIVER=wayland
+    killall pipewire
+    pipewire
+    exec dbus-run-session -- sway
+fi

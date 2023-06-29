@@ -17,7 +17,7 @@ set $right l
 
 # Your preferred terminal emulator
 #set $term urxvt
-set $term "env -u WAYLAND_DISPLAY alacritty"
+set $term alacritty
 
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
@@ -128,8 +128,8 @@ input "1133:16522:Logitech_MX_Keys" xkb_layout "de"
 
     # Define workspaces and names
     set $ws0 "0:org"
-    set $ws1 "1:web"
-    set $ws2 2
+    set $ws1 "1:mail"
+    set $ws2 "2:web"
     set $ws3 3
     set $ws4 4
     set $ws5 5
@@ -276,7 +276,7 @@ bindsym XF86Calculator exec em
 bindsym Menu exec $term
 
 # create new emacs frame
-bindsym $mod+Shift+Return exec emacsclient -a emacs 
+bindsym $mod+Shift+Return exec emacsclient -c -a emacs -n -e '(switch-to-buffer nil)'  
 
 # Screenshots
 bindsym $mod+Shift+s exec grim
@@ -360,3 +360,5 @@ exec --no-startup-id udiskie -s # -t or -s (show applet always or with actions a
 exec --no-startup-id solaar -w hide
 
 #exec --no-startup-id emacs --daemon
+
+exec --no-startup-id dbus-update-activation-environment --all

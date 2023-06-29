@@ -2,3 +2,6 @@ currently using oh-my-zsh with powerlevel10k theme
 
 - https://ohmyz.sh/#install
 - https://github.com/romkatv/powerlevel10k#oh-my-zsh
+
+- ~zprofile~ contains a line to run sway when logging in on /dev/tty1
+- ~zprofile~ is maintained by guix home, since there is more added dynamically (sourcing ~/etc/profile~ and ~~/.profile~)
