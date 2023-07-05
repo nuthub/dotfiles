@@ -628,13 +628,6 @@ The global keybinding 'C-x u' is set below.
 
    #+END_SRC
 
-** nix-mode
-#+BEGIN_SRC emacs-lisp
-
-  (use-package nix-mode :defer 0)
-  
-#+END_SRC
-
 ** Platform.io
 
 #+BEGIN_SRC emacs-lisp
@@ -904,23 +897,32 @@ htmlize is used by org to export to HTML.
 
 #+END_SRC
 
-* Keep folders clean
+** GUIX
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 
-  ;; backup files: file.ext~
-  (setq backup-directory-alist `(("." . ,(expand-file-name "tmp/backups/" user-emacs-directory))))
+  (use-package guix)
+  (use-package geiser-guile
+    :config
+    ;; Angenommen das Guix-Checkout ist in ~/git/guix.
+    (with-eval-after-load 'geiser-guile
+      (add-to-list 'geiser-guile-load-path "~/git/guix"))
+    (with-eval-after-load 'yasnippet
+      (add-to-list 'yas-snippet-dirs "~/git/guix/etc/snippets/yas")))
+#+END_SRC
 
-  ;; auto-save files: #file.ext#
-  ;; auto-save-mode doesn't create the path automatically!
-  (make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)
-  (setq auto-save-list-file-prefix (expand-file-name "tmp/auto-saves/sessions/" user-emacs-directory))
-  (setq auto-save-file-name-transforms `((".*" ,(expand-file-name "tmp/auto-saves/" user-emacs-directory) t)))
+** ChatGPT Shell
 
-  ;; undo-tree-mode files: .file.ext.~undo-tree~
-  (setq undo-tree-history-directory-alist `(("." . ,(expand-file-name "tmp/undo-tree/" user-emacs-directory))))
+Store the API key in .authinfo
 
-#+end_src
+#+BEGIN_SRC emacs-lisp
+
+  (use-package chatgpt-shell
+    :config
+    (setq chatgpt-shell-openai-key
+          (auth-source-pick-first-password :host "api.openai.com")))
+
+#+END_SRC
 
 * Global key bindings
 
@@ -1018,18 +1020,8 @@ Open the file under cursor:
       (setq org-caldav-url "https://cloud.nuthouse.de/remote.php/dav/calendars/nutcase")
       (setq org-caldav-calendars
             '((:calendar-id "org-2"
-                            :files ("~/org/events.org" "~/org/events-inbox.org")
-                            :inbox "~/org/events-inbox.org")))
-      ;; (:calendar-id "personal"
-      ;;                         :files ("~/org/events-personal.org" "~/org/events-personal-inbox.org")
-      ;;                         :inbox "~/org/events-personal-inbox.org")
-      ;; (setq org-icalendar-alarm-time 1)
-      ;; ;; This makes sure to-do items as a category can show up on the calendar
-      ;; (setq org-icalendar-include-todo t)
-      ;; ;; This ensures all org "deadlines" show up, and show up as due dates
-      ;; (setq org-icalendar-use-deadline '(event-if-todo event-if-not-todo todo-due))
-      ;; ;; This ensures "scheduled" org items show up, and show up as start times
-      ;; (setq org-icalendar-use-scheduled '(todo-start event-if-todo event-if-not-todo))
+                            :files ("~/org/events.org")
+                            :inbox (file+headline "~/org/events.org" "Inbox"))))
       ;; Add the delayed save hook with a five minute idle timer
       (add-hook 'after-save-hook
                 (lambda ()
@@ -1039,9 +1031,6 @@ Open the file under cursor:
       (add-hook 'kill-emacs-hook 'org-caldav-sync-at-close)
       )
     )
-
-
-
 
 #+END_SRC
 
