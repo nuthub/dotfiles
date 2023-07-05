@@ -924,6 +924,16 @@ Store the API key in .authinfo
 
 #+END_SRC
 
+* Function
+#+BEGIN_SRC emacs-lisp
+
+  (defun my-writing-mode()
+    "My Writing Mode"
+    (interactive)
+    (olivetti-mode)
+    (variable-pitch-mode))
+
+#+END_SRC
 * Global key bindings
 
 ** General
