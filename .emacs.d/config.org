@@ -963,11 +963,6 @@ Open the file under cursor:
 
 #+end_src
 
-** Projectile
-#+BEGIN_SRC emacs-lisp
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-#+END_SRC
-
 ** Mu4e
 
 #+begin_src emacs-lisp
