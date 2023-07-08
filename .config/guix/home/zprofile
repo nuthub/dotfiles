@@ -1,4 +1,4 @@
-# -*- shell-script -*-
+y# -*- shell-script -*-
 # If running from tty1 start sway
 if [ "$(tty)" = "/dev/tty1" ]; then
     export XDG_CURRENT_DESKTOP=sway
@@ -8,7 +8,7 @@ if [ "$(tty)" = "/dev/tty1" ]; then
     export QT_QPA_PLATFORM=wayland
     export QT_QPA_PLATFORMTHEME=qt5ct
     export SDL_VIDEODRIVER=wayland
-    killall pipewire
-    pipewire
-    exec dbus-run-session -- sway
+    export GDK_BACKEND=wayland # this makes emacs not start (without pgtk)
+    export CLUTTER_BACKEND=wayland
+    exec sway # dbus session daemon is started as a herd user service
 fi

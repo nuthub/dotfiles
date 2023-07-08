@@ -9,6 +9,10 @@
 ;; Indicate which modules to import to access the variables
 ;; used in this configuration.
 (use-modules (gnu)
+	     (gnu packages firmware)
+	     (gnu packages networking)
+	     (gnu packages shells)
+	     (gnu packages wm)
 	     (gnu services cups)
 	     (gnu services dbus)
 	     (gnu services desktop)
@@ -25,70 +29,7 @@
 	     (nongnu packages chromium)
 	     (nongnu system linux-initrd)
 	     (guix packages)
-	     (guix download)
-	     (gnu packages firmware))
-
-(use-package-modules admin
-		     aspell
-		     backup
-		     bash
-		     certs
-		     chromium
-		     compression
-		     compton
-		     cups
-		     curl
-		     docker
-		     dunst
-		     emacs
-		     emacs-xyz
-		     file
-		     freedesktop
-		     fonts
-		     gimp
-		     gnome
-		     gnome-xyz
-		     gnucash
-		     gnupg
-		     gnuzilla
-		     graphviz
-		     haskell-xyz
-		     image
-		     imagemagick
-		     image-viewers
-		     inkscape
-		     libreoffice
-		     linux
-		     lxde
-		     mail
-		     maths
-		     messaging
-		     networking
-		     package-management
-		     password-utils
-		     pdf
-		     polkit
-		     pulseaudio
-		     rsync
-		     rust-apps
-		     samba
-		     scanner
-		     shells
-		     shellutils
-		     ssh
-		     suckless
-		     sync
-		     syncthing
-		     terminals
-		     tex
-		     version-control
-		     video
-		     virtualization
-		     vpn
-		     wm
-		     xdisorg
-		     xfce
-		     xorg)
+	     (guix download))
 
 ;;;
 ;;; My OS
@@ -109,133 +50,24 @@
 		(group "users")
 		(home-directory "/home/flake")
 		(shell (file-append zsh "/bin/zsh"))
-		(supplementary-groups '("wheel" "netdev" "audio" "video"
+		(supplementary-groups '("users" "wheel" "netdev" "audio" "video" "tty"
 					"input" "disk" "kvm" "docker" "lp" "lpadmin"
 					"dialout" "libvirt"))) ;; lp is needed for bluetooth
 	       %base-user-accounts))
 
- ;; Packages installed system-wide.  Users can also install packages
- ;; under their own account: use 'guix search KEYWORD' to search
- ;; for packages and 'guix install PACKAGE' to install a package.
- (packages (append (list
-		    ;; basics
-		    bash gnupg
-		    zsh zsh-autosuggestions zsh-syntax-highlighting
-		    ;; my shell and shell tools
-		    cups ;; to have commands like lpq etc
-		    file
-		    htop
-		    neofetch
-		    nmap
-		    octave
-		    powertop
-		    ripgrep
-		    stow
-		    trash-cli
-		    tree
-		    unzip
-		    usbutils
-		    acpi
-		    brightnessctl
-		    xbacklight
-		    ;; syncing and versioning
-		    samba
-		    binutils ;; for ar command
-		    borg
-		    curl
-		    git ;; "git:gui" "git:send-email"
-		    rsync
-		    subversion
-		    syncthing
-		    nextcloud-client
-		    yt-dlp
-		    zip
-		    ;; XDG
-		    xdg-utils
-		    xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-wlr
-		    ;; wayland
-		    xorg-server-xwayland pipewire wireplumber slurp grim grimshot
-		    ;; sway
-		    sway swayidle waybar rxvt-unicode alacritty wofi swaynotificationcenter swaylock
-		    ;; other desktop related
-		    tumbler ;; D-BUS thumbnail service
-		    poweralertd
-		    gnome-keyring
-		    gvfs
-		    feh
-		    mosquitto ;; for doorstatus in polybar
-		    ;; connectivity / media
-		    blueman 
-		    pasystray
-		    pavucontrol
-		    pulseaudio
-		    udiskie
-		    solaar
-		    ;; other sources / hubs
-		    flatpak
-		    docker
-		    ;; emacs & related
-		    emacs-next emacs-pdf-tools
-		    isync mu
-		    ;; security
-		    pinentry pinentry-tty gnupg openssh password-store wireguard-tools
-		    ;; x basics
-		    arandr autorandr
-		    lxappearance
-		    ;; my desktop apps
-		    feh zathura mpv pcmanfm file-roller gvfs baobab
-		    seahorse
-		    firefox icedove ungoogled-chromium
-		    aqbanking gnucash
-		    libreoffice
-		    ;; Office, LaTeX, PDF & Co
-		    aspell
-		    aspell-dict-de
-		    aspell-dict-en
-		    pandoc
-		    pdfpc
-		    stapler
-		    texlive biber ;; JabRef is installed via flatpak
-		    ;; media
-		    inkscape graphviz
-		    flameshot ristretto sxiv gimp
-		    imagemagick optipng
-		    cheese ffmpeg mpv
-		    ;; obs
-		    simple-scan xsane
-		    ;; Virtualization
-		    qemu virt-manager
-		    ;; for my java shells
-		    hicolor-icon-theme libxtst
-		    ;; fonts
-		    font-abattis-cantarell
-		    font-awesome
-		    font-dejavu
-		    font-fira-code
-		    font-google-noto-sans-cjk
-		    font-hack
-		    font-liberation
-		    font-microsoft-arial
-		    font-microsoft-times-new-roman
-		    font-microsoft-courier-new
-		    font-openmoji
-		    ;; themes
-		    gnome-themes-extra matcha-theme arc-theme materia-theme
-		    ;; icons
-		    adwaita-icon-theme elementary-xfce-icon-theme
-		    ;; x tools
-		    xev
-		    setxkbmap
-		    xkill
-		    xprop
-		    xrdb
-		    xrandr
-		    ;; Xorg & i3
-		    xorg-server xinit
-		    i3-wm polybar i3status alacritty dmenu polybar dunst picom rofi libnotify i3lock xss-lock ;; i3lock is installed via screen-locker-service-type
-		    ;; TLS root certificates
-		    nss-certs
-		    )
+ ;; Packages installed system-wide.
+ (packages (append (map specification->package
+			'(
+			  ;; basics
+			  "git"
+			  "bash"
+			  "gnupg"
+			  ;; TLS root certificates
+			  "nss-certs"
+			  ;; hardware specifics
+			  "intel-vaapi-driver" "intel-media-driver" "gmmlib"
+			  
+			  ))
 		   %base-packages))
 
  ;; Below is the list of system services.  To search for available
@@ -296,6 +128,7 @@
 			   dbus-root-service-type (list blueman)))
 	  ;; This is the (modified) default list of services we are appending to.
 	  (modify-services %desktop-services
+;;			   (delete gdm-service-type)
 			   (elogind-service-type
 			    config => (elogind-configuration
 				       (inherit config)
@@ -308,8 +141,7 @@
 							%default-substitute-urls))
 				       (authorized-keys (append
 							 (list (local-file "./nonguix-signing-key.pub"))
-							 %default-authorized-guix-keys))))
-			   (delete gdm-service-type))))
+							 %default-authorized-guix-keys)))))))
 
  (bootloader (bootloader-configuration
 	      (bootloader grub-efi-bootloader)
