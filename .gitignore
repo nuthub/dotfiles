@@ -2,3 +2,7 @@
 /.emacs.d/org-caldav-*
 /.config/guix/current
 .config/zsh/.zprofile
+/.config/Nextcloud/*.db
+/.config/Nextcloud/logs/
+/.config/Nextcloud/nextcloud.cfg.backup_*git
+*~
