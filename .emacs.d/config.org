@@ -88,8 +88,8 @@ Holidays are not shown in agenda-hoidays (org-agenda 'h')
 * Start a Server
 
 #+begin_src emacs-lisp
-  (load "server")
-  (unless (server-running-p) (server-start))
+;;  (load "server")
+;;  (unless (server-running-p) (server-start))
 #+end_src
 
 * Keep folders clean
