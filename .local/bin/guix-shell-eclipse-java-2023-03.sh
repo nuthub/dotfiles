@@ -9,3 +9,5 @@ guix shell \
      --share=$HOME \
      coreutils glib gtk+ glibc glibc-locales libxtst adwaita-icon-theme webkitgtk openjdk@17.0.5:jdk xdg-utils bash \
      -- env _JAVA_AWT_WM_NONREPARENTING=1 ~/Applications/eclipse/eclipse-java-2023-03/eclipse
+
+# --preserve='^XAUTHORITY' --expose=$XAUTHORITY \

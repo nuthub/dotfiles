@@ -1114,20 +1114,21 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
       (setq mu4e-bookmarks
             '((:name "Combined inbox" :query "maildir:/private/inbox OR maildir:/work/inbox OR maildir:/b7/inbox OR maildir:/tudo/inbox" :key 105)
               (:name "Unread messages" :query "flag:unread AND NOT flag:trashed" :key 117)
-              (:name "Drafts" :query "maildir:/private/drafts OR maildir:/work/drafts OR maildir:/b7/drafts OR maildir:/tudo/drafts" :key 100)
+              (:name "Drafts" :query "maildir:/private/drafts OR maildir:/work/drafts OR maildir:/b7/drafts" :key 100)
               (:name "Today's messages" :query "date:today..now" :key 116)
               (:name "Last 7 days" :query "date:7d..now" :hide-unread t :key 119)
               (:name "Messages with images" :query "mime:image/*" :key 112)))
       (setq mu4e-maildir-shortcuts
             '(("/private/inbox" . ?p)
               ("/private/archives/2023" . ?P)
-              ("/work/inbox" . ?w)
+  	    ("/private/autolearn/ham" . ?h)
+  	    ("/private/autolearn/spam" . ?s)
+  	    ("/private/junk" . ?j)
+  	    ("/work/inbox" . ?w)
               ("/work/archives/2023" . ?W)
               ("/b7/inbox" . ?b)
               ("/b7/archives/2023" . ?B)
-              ("/tudo/inbox" . ?d)
-              ("/tudo/archives/2023" . ?D)
-              ("/tudo/fsinfo" . ?f)))
+              ("/tudo/inbox" . ?d)))
       (setq smtpmail-queue-mail nil)  ;; start in direct mode
       (setq smtpmail-queue-dir "~/Mail/queue/cur")
       (setq mu4e-context-policy 'pick-first)
@@ -1180,10 +1181,10 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                       (smtpmail-smtp-server . "unimail.tu-dortmund.de")
                       (smtpmail-stream-type . starttls)
                       (smtpmail-smtp-service . 587)
-                      (mu4e-drafts-folder . "/tudo/drafts")
-                      (mu4e-sent-folder . "/tudo/sent")
-                      (mu4e-refile-folder  . "/tudo/archives/2023")
-                      (mu4e-trash-folder . "/tudo/trash")))
+                      (mu4e-drafts-folder . "/private/drafts")
+                      (mu4e-sent-folder . "/private/sent")
+                      (mu4e-refile-folder  . "/private/archives/2023")
+                      (mu4e-trash-folder . "/private/trash")))
              ;; b7 account
              (make-mu4e-context
               :name "B7"

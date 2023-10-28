@@ -107,7 +107,6 @@ Channel work-archives
 Channel work-junk
 Channel work-trash
 
-
 ### Blumenthal 7
 
 IMAPAccount b7
@@ -131,6 +130,7 @@ Near :b7-local:inbox
 Channel b7-trash
 Far :b7-remote:Trash
 Near :b7-local:trash
+Expunge Both
 
 Channel b7-sent
 Far :b7-remote:Sent
@@ -174,10 +174,6 @@ Far :tudo-remote:INBOX
 Near :tudo-local:inbox
 #Patterns *
 
-Channel tudo-trash
-Far :tudo-remote:Trash
-Near :tudo-local:trash
-
 Channel tudo-sent
 Far :tudo-remote:Sent
 Near :tudo-local:sent
@@ -186,24 +182,17 @@ Channel tudo-drafts
 Far :tudo-remote:Drafts
 Near :tudo-local:drafts
 
-Channel tudo-archives
-Far :tudo-remote:Archives
-Near :tudo-local:archives
-Patterns *
-
-Channel tudo-fsinfo
-Far :tudo-remote:FSinfo
-Near :tudo-local:fsinfo
-
 Channel tudo-spam
 Far :tudo-remote:Spam
 Near :tudo-local:spam
+
+Channel tudo-trash
+Far :tudo-remote:Trash
+Near :tudo-local:trash
 
 Group tudo
 Channel tudo-inbox
 Channel tudo-sent
 Channel tudo-drafts
-Channel tudo-fsinfo
-Channel tudo-archives
 Channel tudo-spam
 Channel tudo-trash
