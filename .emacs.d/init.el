@@ -4,7 +4,6 @@
 (unless noninteractive
   (message "Loading %s..." load-file-name))
 
-
 ;; Use straight.el instead of package.el
 (defvar bootstrap-version)
 (let ((bootstrap-file

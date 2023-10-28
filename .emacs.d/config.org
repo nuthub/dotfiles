@@ -1056,6 +1056,10 @@ A more distressless writing environment:
       (setq org-icalendar-use-scheduled '(event-if-todo event-if-not-todo))
       (setq org-icalendar-timezone "Europe/Berlin")
       (setq org-caldav-url "https://cloud.nuthouse.de/remote.php/dav/calendars/nutcase")
+      (setq org-caldav-files nil)
+      (setq org-caldav-inbox nil)
+      (setq org-caldav-calendar-id nil)
+      (setq org-caldav-resume-aborted 'always)
       (setq org-caldav-calendars
             '((:calendar-id "org-2"
                             :files ("~/org/events.org")
@@ -1066,9 +1070,7 @@ A more distressless writing environment:
                   (when (eq major-mode 'org-mode)
                     (org-caldav-sync-with-delay 300))))
       ;; Add the close emacs hook
-      (add-hook 'kill-emacs-hook 'org-caldav-sync-at-close)
-      )
-    )
+      (add-hook 'kill-emacs-hook 'org-caldav-sync-at-close)))
 
 #+END_SRC
 
