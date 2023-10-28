@@ -663,10 +663,6 @@ The global keybinding 'C-x u' is set below.
     ;; pdf tools
     (setq TeX-view-program-selection '((output-pdf "PDF Tools")))
     (setq TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view))))
-  ;; ZATHURA:
-  ;; https://askubuntu.com/questions/1041919/integration-of-emacs-lualatex-with-evince-zathura-not-working-in-ubuntu-18-04-h
-  ;;  (setq TeX-view-program-selection '((output-pdf "Zathura")))
-  ;;  (add-to-list 'load-path "/usr/bin/vendor_perl"))
 
 #+END_SRC
 
@@ -993,7 +989,6 @@ Open the file under cursor:
   (global-set-key (kbd "C-c l") 'org-store-link)
   (global-set-key (kbd "C-c o") 'org-switchb)
   (global-set-key (kbd "C-c n u") 'org-roam-ui-open)
-;;  (global-set-key (kbd "C-c :") 'org-time-stamp-inactive) 
 
 #+END_SRC
 
