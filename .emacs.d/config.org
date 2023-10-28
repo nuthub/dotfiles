@@ -941,6 +941,7 @@ Store the API key in .authinfo
 
 
 #+BEGIN_SRC emacs-lisp
+
   (defun my-irc()
     "Connect to my znc irc bouncer."
     (interactive)
@@ -961,16 +962,25 @@ A more distressless writing environment:
 #+END_SRC
 
 * Global key bindings
-
-** General
-
-Open the file under cursor:
+** Open the file under cursor:
 
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-x f") 'find-file-at-point)
+#+END_SRC
+
+** Increase / decrease text scale:
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C--") 'text-scale-decrease)
+  (global-set-key (kbd "C-+") 'text-scale-increase)
+#+END_SRC
+
+** Quit dialogs with ESC
+
+#+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 #+END_SRC
-  
+
 ** undo-tree
 
 #+BEGIN_SRC emacs-lisp
@@ -1001,9 +1011,7 @@ Open the file under cursor:
 ** Mu4e
 
 #+begin_src emacs-lisp
-
-  (global-set-key (kbd "C-c m") 'mu4e)
-  
+  (global-set-key (kbd "C-c m") 'mu4e)  
 #+end_src
 
 * Printing
