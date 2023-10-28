@@ -1,7 +1,3 @@
-# Default config for sway
-#
-# Copy this to ~/.config/sway/config and edit it to your liking.
-#
 # Read `man 5 sway` for a complete reference.
 
 ### Variables
@@ -16,14 +12,12 @@ set $up k
 set $right l
 
 # Your preferred terminal emulator
-#set $term urxvt
 set $term alacritty
 
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
 #set $menu dmenu_path | dmenu | xargs swaymsg exec --
-# set $menu rofi -combi-modi window#run#drun#ssh -font "hack 10" -icon-theme "Papirus" -show combi | xargs swaymsg exec --
 set $menu wofi
 
 ### Output configuration
@@ -38,16 +32,14 @@ output * bg ~/.background-image fill
 #   output HDMI-A-1 resolution 1920x1080 position 1920,0
 #
 # You can get the names of your outputs by running: swaymsg -t get_outputs
-output "Samsung Electric Company S27F350 HNHHA04215" position 0,0
-output "Samsung Electric Company S27F350 H4ZH401164" position 1920,0
-output eDP-1 position 3840,0
+output eDP-1 position 3840 0
+output "Samsung Electric Company S27F350 HNHHA04215" position 0 0
+output "Samsung Electric Company S27F350 H4ZH401164" position 1920 0
 # exec swaymsg focus output <name-or-identifier> # focus on launch
 
 ### Idle configuration
 #
-# Example configuration:
-#
-set $lockscreen 'swaylock -e -F --indicator-radius 100 -t -i ~/.lockscreen.png'
+set $lockscreen 'swaylock -e -F --indicator-radius 100 -t -i ~/.lockscreen.png -s center -c 000000'
 exec swayidle -w \
          timeout 300 $lockscreen \
          timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
@@ -70,8 +62,14 @@ exec swayidle -w \
 #
 # You can get the names of your inputs by running: swaymsg -t get_inputs
 # Read `man 5 sway-input` for more information about this section.
-input "1:1:AT_Translated_Set_2_keyboard" xkb_layout "de"
-input "1133:16522:Logitech_MX_Keys" xkb_layout "de"
+input "1:1:AT_Translated_Set_2_keyboard" {
+      xkb_layout "de"
+      xkb_options caps:ctrl_modifier
+}
+input "1133:16522:Logitech_MX_Keys" {
+      xkb_layout "de"
+      xkb_options caps:ctrl_modifier
+}
 
 ### Key bindings
 #
@@ -130,7 +128,7 @@ input "1133:16522:Logitech_MX_Keys" xkb_layout "de"
     set $ws0 "0:org"
     set $ws1 "1:mail"
     set $ws2 "2:web"
-    set $ws3 3
+    set $ws3 "3:phd"
     set $ws4 4
     set $ws5 5
     set $ws6 6
@@ -262,10 +260,10 @@ gaps outer 0px
 smart_gaps on
 
 # media and special keys
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10%
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10%
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
-bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle
+bindsym XF86AudioRaiseVolume exec --no-startup-id pamixer --increase 5 --sink 55
+bindsym XF86AudioLowerVolume exec --no-startup-id pamixer --decrease 5 --sink 55
+bindsym XF86AudioMute 	     exec --no-startup-id pamixer --toggle-mute --sink 55
+bindsym XF86AudioMicMute     exec --no-startup-id pamixer --toggle-mute --source 56
 # Screen brightness controls
 bindsym XF86MonBrightnessUp exec brightnessctl s +10%
 bindsym XF86MonBrightnessDown exec brightnessctl s 10%-
@@ -276,7 +274,8 @@ bindsym XF86Calculator exec em
 bindsym Menu exec $term
 
 # create new emacs frame
-bindsym $mod+Shift+Return exec emacsclient -c -a emacs -n -e '(switch-to-buffer nil)'  
+#bindsym $mod+Shift+Return exec emacsclient -c -n -e '(switch-to-buffer nil)' -a emacs 
+bindsym $mod+Shift+Return exec emacsclient -c -a ""
 
 # Screenshots
 bindsym $mod+Shift+s exec grim
@@ -314,8 +313,6 @@ mode "$mode_display" {
 }
 bindsym $mod+p mode "$mode_display"
 
-
-
 # additional key bindings of workspace management
 bindsym $mod+Tab workspace next_on_output
 bindsym $mod+Shift+Tab workspace prev_on_output
@@ -327,38 +324,38 @@ bindsym $mod+Shift+o move workspace to output left
 # Screen lock
 bindsym Control+mod1+Delete exec $lockscreen
 
-
-
 # window rules
 # to get app_ids use $ swaymsg -t get_tree | grep app_id
-assign [class="Emacs"] $ws0
-assign [class="Chromium"] $ws1
-assign [class="firefox"] $ws1
-assign [class="icecat-default"] $ws1
-assign [class="Pcmanfm"] $ws2
+# assign [class="Emacs"] $ws0
+#assign [class="firefox"] $ws2
 #assign [class="thunderbird"] $ws1
 
 # Set some windows to float by default
 for_window [class="Gtklp"] floating enable
-for_window [app_id=".arandr-real"] floating enable
 for_window [class=".blueman-manager-real"] floating enable
 for_window [class="Pavucontrol"] floating enable
 for_window [class=".solaar-real"] floating enable
 for_window [app_id="nm-connection-editor"] floating enable
 for_window [app_id="nm-applet"] floating enable
-# MazeGameClient
-for_window [title="MGC"] floating enable
+for_window [app_id="pavucontrol"] floating enable
+for_window [app_id=".blueman-manager-real"] floating enable
+for_window [title="MGC"] floating enable # MazeGameClient
 
-
-exec --no-startup-id xrdb -load $HOME/.Xresources
+# Autostart
+exec --no-startup-id dbus-update-activation-environment --all
+exec --no-startup-id kanshi
+# exec --no-startup-id xrdb -load $HOME/.Xresources
 exec --no-startup-id gnome-keyring-daemon
 exec --no-startup-id nm-applet --indicator
-exec --no-startup-id pasystray --volume-max=100 --notify=all # pulseaudio
+# exec --no-startup-id flameshot # does not appear in swaybar when started to early
+# exec --no-startup-id pasystray --volume-max=100 --notify=all # pulseaudio
 exec --no-startup-id blueman-applet
 exec --no-startup-id nextcloud --background
 exec --no-startup-id udiskie -s # -t or -s (show applet always or with actions available only)
 exec --no-startup-id solaar -w hide
+exec --no-startup-id emacs --daemon
+exec --no-startup-id pipewire
+exec --no-startup-id pipewire-pulse
+exec --no-startup-id wireplumber
 
-#exec --no-startup-id emacs --daemon
-
-exec --no-startup-id dbus-update-activation-environment --all
+exec_always --no-startup-id emacs-setenv.sh XDG_SESSION_TYPE WAYLAND_DISPLAY DBUS_SESSION_BUS_ADDRESS

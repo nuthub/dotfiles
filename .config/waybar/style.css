@@ -5,7 +5,8 @@
 }
 
 window#waybar {
-    background-color: rgba(60, 60, 60, 1.0);
+    /*background-color: rgba(60, 60, 60, 1.0);*/
+    background-color: #232323;
     border-bottom: 3px solid rgba(100, 114, 125, 0.5);
     color: #ffffff;
     transition-property: background-color;
@@ -50,7 +51,8 @@ button:hover {
 
 #workspaces button {
     padding: 0 5px;
-    background-color: transparent;
+    background-color: #232323;
+    /*background-color: transparent;*/
     color: #ffffff;
 }
 
@@ -87,8 +89,10 @@ button:hover {
 #mode,
 #idle_inhibitor,
 #scratchpad,
+#user,
 #mpd {
     padding: 0 10px;
+    background-color: #232323;
     color: #ffffff;
 }
 
@@ -107,16 +111,8 @@ button:hover {
     margin-right: 0;
 }
 
-#clock {
-    background-color: #232323;
-}
-
-#battery {
-    background-color: #232323;
-}
 
 #battery.charging, #battery.plugged {
-    background-color: #232323;
     color: #00dd00;
 }
 
@@ -128,7 +124,6 @@ button:hover {
 }
 
 #battery.critical:not(.charging) {
-    background-color: #232323;
     color: #ffcccc;
     animation-name: blink;
     animation-duration: 0.5s;
@@ -141,42 +136,12 @@ label:focus {
     background-color: #000000;
 }
 
-#cpu {
-    background-color: #232323;
-}
-
-#memory {
-    background-color: #232323;
-}
-
-#disk {
-    background-color: #232323;
-}
-
-#backlight {
-    background-color: #232323;
-}
-
-#network {
-    background-color: #232323;
-}
-
 #network.disconnected {
     background-color: #f53c3c;
 }
 
-#pulseaudio {
-    background-color: #232323;
-}
-
 #pulseaudio.muted {
-    background-color: #232323;
     color: #ffcccc;
-}
-
-#wireplumber {
-    background-color: #fff0f5;
-    color: #000000;
 }
 
 #wireplumber.muted {
@@ -197,16 +162,8 @@ label:focus {
     background-color: #ffa000;
 }
 
-#temperature {
-    background-color: #232323;
-}
-
 #temperature.critical {
     background-color: #eb4d4b;
-}
-
-#tray {
-    background-color: #232323;
 }
 
 #tray > .passive {
@@ -218,12 +175,7 @@ label:focus {
     background-color: #eb4d4b;
 }
 
-#idle_inhibitor {
-    background-color: #232323;
-}
-
 #idle_inhibitor.activated {
-    background-color: #232323;
     color: #ff0000;
 }
 
@@ -245,14 +197,12 @@ label:focus {
 }
 
 #language {
-    background: #232323;
     padding: 0 5px;
     margin: 0 5px;
     min-width: 16px;
 }
 
 #keyboard-state {
-    background: #232323;
     padding: 0 0px;
     margin: 0 5px;
     min-width: 16px;
