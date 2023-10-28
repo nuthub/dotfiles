@@ -692,29 +692,33 @@ The global keybinding 'C-x u' is set below.
 #+BEGIN_SRC emacs-lisp
 
   (use-package org
-    :defer 0
-    :config
-    ;;    (add-hook 'org-mode-hook 'turn-on-auto-fill)
+   :defer 0
+   :bind (:map org-mode-map
+  	("C-c C-<left>" . org-promote-subtree)
+  	("C-c C-<right>" . org-demote-subtree))
+   :config
     (add-hook 'org-mode-hook 'visual-line-mode)
     (add-hook 'org-mode-hook 'auto-revert-mode)
     (setq org-directory "~/org")
     (setq org-refile-targets (quote (("~/org/gtd.org" :maxlevel . 4)
-                                    ("~/org/someday.org" :maxlevel . 1)
-                                    ("~/org/tickler.org" :maxlevel . 1)
-                                    ("~/org/events.org" :maxlevel . 2))))
+  				      ("~/org/someday.org" :maxlevel . 1)
+  				      ("~/org/tickler.org" :maxlevel . 1)
+  				      ("~/org/events.org" :maxlevel . 2)
+  				      ("~/Dokumente/Promotion/Promotion.org" :maxlevel . 3))))
     (setq org-refile-use-outline-path 'file)
     (setq org-outline-path-complete-in-steps nil)
     (setq org-refile-allow-creating-parent-nodes 'confirm)
     (setq org-default-notes-file (concat org-directory "/inbox.org"))
     (setq org-archive-location (concat org-directory "/archive/archive-" (format-time-string "%Y" (current-time)) ".org::datetree/"))
     (setq org-export-backends (quote (ascii beamer html icalendar latex md odt)))
+    (setq org-export-in-background nil)
     (setq org-tag-alist '(("@home" . ?h)
-                          ("@work" . ?w)
-                          ("@phone" . ?p)
-                          ("@boat" . ?b)
-                          ("@org" . ?o)
-                          ("@city" . ?c)
-                          ("@ToRead" . ?r)))
+  			    ("@work" . ?w)
+  			    ("@phone" . ?p)
+  			    ("@boat" . ?b)
+  			    ("@org" . ?o)
+  			    ("@city" . ?c)
+  			    ("@ToRead" . ?r)))
     (setq org-todo-keywords '((sequence "TODO(t)" "FREQ(f)" "EVNT(e)" "PROJ(p)" "WAIT(w@/!)" "|" "DONE(d!)" "CNCL(c@/!)")))
     (setq org-todo-repeat-to-state t)
     (setq org-startup-indented t)
@@ -724,32 +728,24 @@ The global keybinding 'C-x u' is set below.
     (setq org-num-skip-unnumbered t)
     (setq org-agenda-files (quote ("~/org/gtd.org" "~/org/tickler.org" "~/org/someday.org" "~/org/inbox.org" "~/org/events.org")))
     (setq org-agenda-window-setup "only-window")
-    (setq org-agenda-span 7)
+    (setq org-agenda-span 1)
     (setq org-agenda-include-diary t)
-    (setq org-agenda-custom-commands
-          '(
-            ("w"
-             "Weekly cleanup"
-             todo
-             "CNCL|DONE|WAIT"
-             )
-            ("c"
-             "Events only"
-             agenda*)))
+    (setq org-agenda-custom-commands '(
+  					 ("w" "Weekly cleanup" todo "CNCL|DONE|WAIT")
+  					 ("c" "Events only" agenda* nil ((org-agenda-span 30)))))
     (setq org-stuck-projects
-          '("+LEVEL=2/-DONE-CNCL-FREQ"
-            ("TODO" "NEXT" "WAIT" "PROJ")
-            nil ""))
+  	    '("+LEVEL=2/-DONE-CNCL-FREQ"
+  	      ("TODO" "NEXT" "WAIT" "PROJ")
+  	      nil ""))
     (setq org-capture-templates
-          '(
-            ("t" "Todo" entry (file "~/org/inbox.org")            "* TODO %?\n  %i")
-            ("e" "Event" entry (file "~/org/inbox.org")           "* %^{Event Title}\n\n%^{Date and Time}T\nLocation: %^{Location}\n%i%?" :time-prompt t)
-            ("n" "Meeting Notes" entry (file "~/org/inbox.org")   "* Notes %?\n- %U\n %i")
-            ("r" "Reading" entry (file "~/org/inbox.org")         "* TODO Read: %?\n  %i")
-            ("m" "Process Mail" entry (file "~/org/inbox.org")    "* TODO %?\nSCHEDULED: %t\nMail: %:fromname: %a")
-            ("p" "Protocol" entry (file "~/org/inbox.org")        "* TODO %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
-            ("L" "Protocol Link" entry (file "~/org/inbox.org")   "* TODO %?\n[[%:link][%:description]]")
-            ))
+  	    '(
+  	      ("t" "Todo" entry (file "~/org/inbox.org")                    "* TODO %?\n  %i")
+  	      ("e" "Event" entry (file+headline "~/org/events.org" "Inbox") "* %^{Event Title}\n\n%^{Date and Time}T\nLocation: %^{Location}\n%i%?" :time-prompt t)
+  	      ("n" "Meeting Notes" entry (file "~/org/inbox.org")           "* Notes %?\n- %U\n %i")
+  	      ("r" "Reading" entry (file "~/org/inbox.org")                 "* TODO Read: %?\n  %i")
+  	      ("m" "Process Mail" entry (file "~/org/inbox.org")            "* TODO %?\nSCHEDULED: %t\nMail: %:fromname: %a")
+  	      ("p" "Protocol" entry (file "~/org/inbox.org")                "* TODO %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
+  	      ("L" "Protocol Link" entry (file "~/org/inbox.org")           "* TODO %?\n[[%:link][%:description]]")))
     (setq org-src-tab-acts-natively t)
     (setq org-ellipsis " ")  ;; …, ⤵, ▼, ↴, ⬎, ⤷, ⋱
     (set-face-underline 'org-ellipsis nil)
@@ -761,21 +757,23 @@ The global keybinding 'C-x u' is set below.
     ;; ox-latex specific configuration
     (with-eval-after-load 'ox-latex
       (add-to-list 'org-latex-classes '("scrbook"
-                                        "\\documentclass[11pt]{scrbook}"
-                                        ("\\chapter{%s}" . "\\chapter*{%s}")
-                                        ("\\section{%s}" . "\\section*{%s}")
-                                        ("\\subsection{%s}" . "\\subsection*{%s}")
-                                        ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                                        ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                                        ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+  				      "\\documentclass[11pt]{scrbook}"
+  				      ("\\chapter{%s}" . "\\chapter*{%s}")
+  				      ("\\section{%s}" . "\\section*{%s}")
+  				      ("\\subsection{%s}" . "\\subsection*{%s}")
+  				      ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+  				      ("\\paragraph{%s}" . "\\paragraph*{%s}")
+  				      ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
     (with-eval-after-load 'ox-latex
       (add-to-list 'org-latex-classes '("scrartcl"
-                                        "\\documentclass[11pt]{scrartcl}"
-                                        ("\\section{%s}" . "\\section*{%s}")
-                                        ("\\subsection{%s}" . "\\subsection*{%s}")
-                                        ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                                        ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                                        ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))))
+  				      "\\documentclass[11pt]{scrartcl}"
+  				      ("\\section{%s}" . "\\section*{%s}")
+  				      ("\\subsection{%s}" . "\\subsection*{%s}")
+  				      ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+  				      ("\\paragraph{%s}" . "\\paragraph*{%s}")
+  				      ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+    (setq org-beamer-environments-extra
+     	       '(("onlyenv" "O" "\\begin{onlyenv}%a" "\\end{onlyenv}"))))
 
 #+END_SRC
 
@@ -784,32 +782,32 @@ the file /etc/chromium/policies/managed/org-protocol.json with the following
  content: {  "AutoLaunchProtocolsFromOrigins": [{ "allowed_origins": [ "*" ],  "protocol":"org-protocol"}]}
 
 see https://github.com/sprig/org-capture-extension/issues/68
-                                        
+
 *** org-contrib
 
 This is needed to allow for not exporting to latex those org headings that are tagged :ignore:.
 
 #+BEGIN_src emacs-lisp
 
-    (use-package org-contrib
-      :after org)
-    (use-package ox-extra
-      :after org-contrib
-      :config
-      (ox-extras-activate '(latex-header-blocks ignore-headlines)))
-  
+  (use-package org-contrib
+    :after org)
+  (use-package ox-extra
+    :after org-contrib
+    :config
+    (ox-extras-activate '(latex-header-blocks ignore-headlines)))
+
 #+END_src
 
 *** org-journal
 
 #+BEGIN_SRC emacs-lisp
 
-  (use-package org-journal
+    (use-package org-journal
       :after org
       :config
       (setq org-journal-dir "~/org/journal/")
-      (setq org-journal-file-type 'weekly)
-      (setq org-journal-file-format "journal-%Y.org")
+      (setq org-journal-file-type 'yearly)
+      (setq org-journal-file-format "journal-%Y.org") ; breaks choosing a date
       (setq org-journal-date-format "%A, %d %B %Y")
       (setq org-journal-created-property-timestamp-format "%Y-%m-%d")
       (setq org-journal-time-format ""))
