@@ -599,8 +599,17 @@ The global keybinding 'C-x u' is set below.
 #+BEGIN_SRC emacs-lisp
   (use-package projectile
     :config
-    (projectile-mode +1))
+    (projectile-mode 1))
 #+END_SRC
+
+** frames-only-mode
+
+#+BEGIN_SRC emacs-lisp
+  (use-package frames-only-mode
+    :config
+    (frames-only-mode 1))
+#+END_SRC
+
 
 * Major modes
 ** web-mode & php-mode
@@ -927,16 +936,36 @@ Store the API key in .authinfo
 
 #+END_SRC
 
-* Function
+** ement.el
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ement)
+#+END_SRC
+
+* Functions
+
+
+
+#+BEGIN_SRC emacs-lisp
+  (defun my-irc()
+    "Connect to my znc irc bouncer."
+    (interactive)
+    (erc-tls :server "irc.nuthouse.de" :nick "nutcase"))
+
+#+END_SRC
+
+A more distressless writing environment:
+
 #+BEGIN_SRC emacs-lisp
 
   (defun my-writing-mode()
-    "My Writing Mode"
+    "Switch to my distress less writing mode"
     (interactive)
     (olivetti-mode)
     (variable-pitch-mode))
 
 #+END_SRC
+
 * Global key bindings
 
 ** General
