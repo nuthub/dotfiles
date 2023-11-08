@@ -10,6 +10,7 @@
 ;; used in this configuration.
 (use-modules (gnu)
 	     (gnu packages firmware)
+	     (gnu packages linux)
 	     (gnu packages networking)
 	     (gnu packages shells)
 	     (gnu packages wm)
@@ -18,6 +19,7 @@
 	     (gnu services dbus)
 	     (gnu services desktop)
 	     (gnu services docker)
+	     (gnu services linux)
 	     (gnu services networking)
 	     (gnu services pm)
 	     (gnu services ssh)
@@ -37,6 +39,7 @@
  (kernel linux)
  (initrd microcode-initrd)
  (firmware (list linux-firmware))
+ (kernel-loadable-modules (list v4l2loopback-linux-module))
  (locale "en_US.utf8")
  (timezone "Europe/Berlin")
  (keyboard-layout (keyboard-layout "de"))
@@ -223,6 +226,12 @@
 	   (service libvirt-service-type
 		    (libvirt-configuration
 		     (unix-sock-group  "libvirt")))
+	   (simple-service 'v4l2loopback-options-file etc-service-type
+			   (list `("modprobe.d/v4l2loopback.conf"
+				   ,(plain-file
+				     "v4l2loopback.conf"
+				     "options v4l2loopback devices=1 exclusive_caps=1 card_label=\"v4l2loopback\""))))
+	   (service kernel-module-loader-service-type  '("v4l2loopback"))
 	   (udev-rules-service 'logitech-unify
 			       (file->udev-rule
 				"42-logitech-unify-permissions.rules"
