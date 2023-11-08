@@ -124,7 +124,7 @@ button:hover {
 }
 
 #battery.critical:not(.charging) {
-    color: #ffcccc;
+    color: #dd0000;
     animation-name: blink;
     animation-duration: 0.5s;
     animation-timing-function: linear;
@@ -146,20 +146,6 @@ label:focus {
 
 #wireplumber.muted {
     background-color: #f53c3c;
-}
-
-#custom-media {
-    background-color: #66cc99;
-    color: #2a5c45;
-    min-width: 100px;
-}
-
-#custom-media.custom-spotify {
-    background-color: #66cc99;
-}
-
-#custom-media.custom-vlc {
-    background-color: #ffa000;
 }
 
 #temperature.critical {
