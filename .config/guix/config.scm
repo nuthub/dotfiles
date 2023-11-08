@@ -125,24 +125,27 @@
 			  "nextcloud-client"
 			  "yt-dlp"
 			  "zip"
+			  ;; Desktop start
 			  ;; XDG
 			  "xdg-utils"
 			  ;; I need all of these portals
 			  "xdg-desktop-portal" "xdg-desktop-portal-gtk" "xdg-desktop-portal-wlr"
 			  ;; wayland, not sure what I really need
-			  "xorg-server-xwayland" "qtwayland@5.15.10" "libcamera" "slurp" "grim" "grimshot" "swappy" "wlr-randr" "egl-wayland" ; qtwayland@6.3.2 ; wireplumber complains about missing libcamera
+			  "xorg-server-xwayland" "slurp" "grim" "grimshot" "swappy" "wlr-randr" "egl-wayland"
 			  ;; sway
-			  "sway" "swayidle" "waybar" "rxvt-unicode" "alacritty" "wofi" "swaynotificationcenter" "swaylock"
+			  "sway" "swaynotificationcenter" "swaylock" "swayidle" "waybar" "wofi"
 			  "kanshi" ; automatically switch displays
+			  "alacritty" "rxvt-unicode" 
 			  ;; other desktop related
 			  "tumbler" ; D-BUS thumbnail service
-			  "poweralertd"
 			  "gnome-keyring"
 			  "gvfs"
 			  "feh"
+			  ;; Desktop end
+			  "poweralertd"
 			  "mosquitto" ;; for doorstatus in polybar
 			  ;; connectivity / media
-			  "pipewire" "wireplumber" "pamixer" "pavucontrol"
+			  "pipewire" "pamixer" "pavucontrol" "wireplumber" "libcamera"  ; wireplumber complains about missing libcamera
 			  "bluez" "blueman"
 			  "udiskie"
 			  "solaar"
@@ -172,7 +175,8 @@
 			  "texlive" "texlive-biber" ;; JabRef is installed via flatpak
 			  ;; media
 			  "inkscape" "graphviz"
-			  "flameshot" "ristretto" "sxiv" "gimp"
+			  "flameshot" "qtwayland@5.15.10" ; flameshot needs qtwayland@5
+			  "ristretto" "sxiv" "gimp"
 			  "imagemagick" "optipng"
 			  "cheese" "ffmpeg" "mpv"
 			  "obs" "obs-wlrobs"
