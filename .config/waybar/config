@@ -18,6 +18,16 @@
         "tooltip": true,
         "tooltip-format": "{app}: {title}"
     },
+    // see also https://github.com/Alexays/Waybar/issues/1712#issuecomment-1803911617
+    "sway/window": {
+        "format": "{shell}@@{app_id}@@{title}",
+	"rewrite": {
+	  "(.*)@@(chromium-browser)@@(.*)": "$1@@chromium@@$3", // replace a specific app_id
+          "(xdg_shell)@@(.*)@@(.*)": "[$2] $3", // replace shell information
+	  "(xwayland)@@(.*)@@(.*)": "<span color=\"#FF9999\">[X]</span> $3", // replace shell information
+	  "@@@@": "" // in case no window is focused
+	}
+    },
     "idle_inhibitor": {
         "format": "{icon}",
         "format-icons": {
