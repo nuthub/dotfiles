@@ -40,14 +40,14 @@ output eDP-1 position 3840 0
 ### Idle configuration
 #
 set $lockscreen 'swaylock -e -F --indicator-radius 100 -t -i ~/.lockscreen.png -s center -c 000000'
+# This will lock your screen after 300 seconds of inactivity, then turn off
+# your displays after another 300 seconds, and turn your screens back on when
+# resumed. It will also lock your screen before your computer goes to sleep.
 exec swayidle -w \
          timeout 300 $lockscreen \
          timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
          before-sleep $lockscreen
 #
-# This will lock your screen after 300 seconds of inactivity, then turn off
-# your displays after another 300 seconds, and turn your screens back on when
-# resumed. It will also lock your screen before your computer goes to sleep.
 
 ### Input configuration
 #
@@ -269,7 +269,6 @@ bindsym XF86MonBrightnessUp exec brightnessctl set 5%+
 bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
 
 # create new emacs frame
-#bindsym $mod+Shift+Return exec emacsclient -c -n -e '(switch-to-buffer nil)' -a emacs 
 bindsym $mod+Shift+Return exec emacsclient -c -a ""
 
 # Screenshots
@@ -292,22 +291,6 @@ mode "$mode_system" {
 }
 bindsym $mod+Delete mode "$mode_system"
 
-
-
-set $mode_display Display (c)hange, (m)obile, (h)ome, (a)randr
-mode "$mode_display" {
-    bindsym c exec --no-startup-id autorandr --change --force, mode "default"
-    bindsym m exec --no-startup-id autorandr mobile, mode "default"
-    bindsym h exec --no-startup-id autorandr home, mode "default"
-    bindsym a exec arandr, mode "default"
-    
-    # back to normal: Enter or Escape or $mod+p
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-    bindsym $mod+p mode "default"
-}
-bindsym $mod+p mode "$mode_display"
-
 # additional key bindings of workspace management
 bindsym $mod+Tab workspace next_on_output
 bindsym $mod+Shift+Tab workspace prev_on_output
@@ -321,15 +304,8 @@ bindsym Control+mod1+Delete exec $lockscreen
 
 # window rules
 # to get app_ids use $ swaymsg -t get_tree | grep app_id
-# assign [class="Emacs"] $ws0
-#assign [class="firefox"] $ws2
-#assign [class="thunderbird"] $ws1
 
-# Set some windows to float by default
-for_window [class="Gtklp"] floating enable
-for_window [class=".blueman-manager-real"] floating enable
-for_window [class="Pavucontrol"] floating enable
-for_window [class=".solaar-real"] floating enable
+# Set Some windows to float by default
 for_window [app_id="nm-connection-editor"] floating enable
 for_window [app_id="nm-applet"] floating enable
 for_window [app_id="pavucontrol"] floating enable
@@ -339,20 +315,15 @@ for_window [title="MGC"] floating enable # MazeGameClient
 
 # Autostart
 exec --no-startup-id dbus-update-activation-environment --all
-exec --no-startup-id kanshi
-# exec --no-startup-id xrdb -load $HOME/.Xresources
+exec_always --no-startup-id "pkill kanshi; exec kanshi"
 exec --no-startup-id gnome-keyring-daemon
-exec --no-startup-id nm-applet --indicator
-# exec --no-startup-id flameshot # does not appear in swaybar when started to early
-# exec --no-startup-id pasystray --volume-max=100 --notify=all # pulseaudio
+exec --no-startup-id nm-applet
 exec --no-startup-id blueman-applet
 exec --no-startup-id nextcloud --background
 exec --no-startup-id udiskie -s # -t or -s (show applet always or with actions available only)
 exec --no-startup-id solaar -w hide
-exec --no-startup-id emacs --daemon
 exec --no-startup-id pipewire
 exec --no-startup-id pipewire-pulse
 exec --no-startup-id wireplumber
-exec --no-startup-id poweralertd # not sure, if I need this
-
-exec_always --no-startup-id emacs-setenv.sh XDG_SESSION_TYPE WAYLAND_DISPLAY DBUS_SESSION_BUS_ADDRESS
+exec --no-startup-id poweralertd
+exec --no-startup-id emacs --daemon

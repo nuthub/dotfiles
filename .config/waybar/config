@@ -22,10 +22,9 @@
     "sway/window": {
         "format": "{shell}@@{app_id}@@{title}",
 	"rewrite": {
-	  "(.*)@@(chromium-browser)@@(.*)": "$1@@chromium@@$3", // replace a specific app_id
-          "(xdg_shell)@@(.*)@@(.*)": "[$2] $3", // replace shell information
-	  "(xwayland)@@(.*)@@(.*)": "<span color=\"#FF9999\">[X]</span> $3", // replace shell information
-	  "@@@@": "" // in case no window is focused
+	  "@@@@": "", // in case no window is focused
+	  "(xwayland)@@(.*)@@(.*)": "[<span color=\"#FF9999\">X: $2</span>] $3", // replace shell information
+          "(xdg_shell)@@(.*)@@(.*)": "[<span color=\"#FF9999\">$2</span>] $3", // replace shell information
 	}
     },
     "idle_inhibitor": {
