@@ -7,7 +7,7 @@
     // Choose the order of the modules
     "modules-left": ["sway/workspaces", "sway/mode", "sway/scratchpad", "sway/window"],
     "modules-center": [],
-    "modules-right": ["network", "cpu", "memory", "temperature", "backlight", "battery", "wireplumber", "user", "clock", "idle_inhibitor", "tray"],
+    "modules-right": ["cpu", "memory", "temperature", "battery", "backlight", "wireplumber", "user", "clock", "idle_inhibitor", "tray"],
     "sway/mode": {
         "format": "<span style=\"italic\">{}</span>"
     },
@@ -23,8 +23,8 @@
         "format": "{shell}@@{app_id}@@{title}",
 	"rewrite": {
 	  "@@@@": "", // in case no window is focused
-	  "(xwayland)@@(.*)@@(.*)": "[<span color=\"#FF9999\">X: $2</span>] $3", // replace shell information
-          "(xdg_shell)@@(.*)@@(.*)": "[<span color=\"#FF9999\">$2</span>] $3", // replace shell information
+	  "(xwayland)@@(.*)@@(.*)": "[<span color=\"#FF9999\">X: $2</span>] $3", // format app_id for X apps
+          "(xdg_shell)@@(.*)@@(.*)": "[<span color=\"#FF9999\">$2</span>] $3", // format app_id for wayland apps
 	}
     },
     "idle_inhibitor": {
@@ -40,9 +40,9 @@
 	"show-passive-items": true
     },
     "clock": {
-        // "timezone": "America/New_York",
+        "timezone": "Europe/Berlin",
 	"tooltip-format": "<tt><small>{calendar}</small></tt>",
-	"format": "{:%H:%M   [W%U]}",
+	"format": "{:%Y-%m-%d  %H:%M   W%U}",
 	"format-alt": "{:%Y-%m-%d}",
 	"locale": "de_DE.utf8",
 	"calendar" : {
@@ -51,8 +51,8 @@
 		"mode-mon-col": 3,
 		"format": {
 		  "months":     "<span color='#ffead3'><b>{}</b></span>",
-		  "days":       "<span color='#ecc6d9'><b>{}</b></span>",
-		  "weeks":      "<span color='#99ffdd'><b>W{}</b></span>",
+		  "days":       "<span color='#dddddd'><b>{}</b></span>",
+		  "weeks":      "<span color='#888888'><b>W{}</b></span>",
 		  "weekdays":   "<span color='#ffcc66'><b>{}</b></span>",
 		  "today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
 		}
@@ -74,7 +74,7 @@
         "format-icons": ["", "", ""]
     },
     "backlight": {
-        // "device": "acpi_video1",
+        "device": "intel_backlight",
         "format": "{percent}% {icon}",
         "format-icons": ["", "", "", "", "", "", "", "", ""]
     },
