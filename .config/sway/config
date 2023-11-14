@@ -129,28 +129,29 @@ input "1133:16522:Logitech_MX_Keys" {
     set $ws1 "1:mail"
     set $ws2 "2:web"
     set $ws3 "3:phd"
-    set $ws4 4
-    set $ws5 5
-    set $ws6 6
-    set $ws7 7
-    set $ws8 8
-    set $ws9 9
-    set $ws10 10
-    set $ws11 11
+    set $ws4 "4"
+    set $ws5 "5"
+    set $ws6 "6"
+    set $ws7 "7"
+    set $ws8 "8"
+    set $ws9 "9"
+    set $ws10 "10"
+    set $ws11 "11"
       
-    # Switch to workspace
-    bindsym $mod+dead_circumflex workspace number $ws0
-    bindsym $mod+1 workspace number $ws1
-    bindsym $mod+2 workspace number $ws2
-    bindsym $mod+3 workspace number $ws3
-    bindsym $mod+4 workspace number $ws4
-    bindsym $mod+5 workspace number $ws5
-    bindsym $mod+6 workspace number $ws6
-    bindsym $mod+7 workspace number $ws7
-    bindsym $mod+8 workspace number $ws8
-    bindsym $mod+9 workspace number $ws9
-    bindsym $mod+0 workspace number $ws10
-    bindsym $mod+ssharp workspace number $ws11
+    # Move workspace to current output and switch to it
+    bindsym $mod+dead_circumflex [workspace=$ws0] move workspace to output current; workspace number $ws0
+    bindsym $mod+1 [workspace=$ws1] move workspace to output current; workspace number $ws1
+    bindsym $mod+2 [workspace=$ws2] move workspace to output current; workspace number $ws2
+    bindsym $mod+3 [workspace=$ws3] move workspace to output current; workspace number $ws3
+    bindsym $mod+4 [workspace=$ws4] move workspace to output current; workspace number $ws4
+    bindsym $mod+5 [workspace=$ws5] move workspace to output current; workspace number $ws5
+    bindsym $mod+6 [workspace=$ws6] move workspace to output current; workspace number $ws6
+    bindsym $mod+7 [workspace=$ws7] move workspace to output current; workspace number $ws7
+    bindsym $mod+8 [workspace=$ws8] move workspace to output current; workspace number $ws8
+    bindsym $mod+9 [workspace=$ws9] move workspace to output current; workspace number $ws9
+    bindsym $mod+0 [workspace=$ws10] move workspace to output current; workspace number $ws10
+    bindsym $mod+ssharp [workspace=$ws11] move workspace to output current; workspace number $ws11
+
     # Move focused container to workspace
     bindsym $mod+Shift+dead_circumflex move container to workspace number $ws0
     bindsym $mod+Shift+1 move container to workspace number $ws1
@@ -314,16 +315,21 @@ for_window [app_id="com.nextcloud.desktopclient.nextcloud"] floating enable
 for_window [title="MGC"] floating enable # MazeGameClient
 
 # Autostart
-exec --no-startup-id dbus-update-activation-environment --all
 exec_always --no-startup-id "pkill kanshi; exec kanshi"
-exec --no-startup-id gnome-keyring-daemon
-exec --no-startup-id nm-applet
-exec --no-startup-id blueman-applet
-exec --no-startup-id nextcloud --background
-exec --no-startup-id udiskie -s # -t or -s (show applet always or with actions available only)
-exec --no-startup-id solaar -w hide
-exec --no-startup-id pipewire
-exec --no-startup-id pipewire-pulse
-exec --no-startup-id wireplumber
-exec --no-startup-id poweralertd
-exec --no-startup-id emacs --daemon
+
+exec --no-startup-id {
+    dbus-update-activation-environment --all
+    gnome-keyring-daemon
+    nm-applet
+    blueman-applet
+    nextcloud --background
+    udiskie -s # -t or -s (show applet always or with actions available only
+    solaar -w hide
+    geoclue
+    gammastep-indicator
+    pipewire
+    pipewire-pulse
+    wireplumber
+    poweralertd
+    emacs --daemon
+}
