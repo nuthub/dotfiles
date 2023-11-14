@@ -618,185 +618,217 @@ The global keybinding 'C-x u' is set below.
     (frames-only-mode 1))
 #+END_SRC
 
+** editorconfig
+
+#+BEGIN_SRC emacs-lisp
+
+  (use-package editorconfig
+    :ensure t
+    :config
+    (editorconfig-mode 1))
+  
+#+END_SRC
 
 * Major modes
-** web-mode & php-mode
-
-   #+BEGIN_SRC emacs-lisp
-
-     (use-package web-mode :defer 0)
-     (use-package php-mode :defer 0)
-     
-   #+END_SRC
-
-** markdown-mode
-
-   #+BEGIN_SRC emacs-lisp
-
-     (use-package markdown-mode :defer 0)
-
-   #+END_SRC
-
-** yaml-mode
-
-   #+BEGIN_SRC emacs-lisp
-
-     (use-package yaml-mode :defer 0)
-
-   #+END_SRC
-
-** Platform.io
-
-#+BEGIN_SRC emacs-lisp
-
-  (use-package platformio-mode :defer 0)
-  
-#+END_SRC
-
-** AucTeX
-
-#+BEGIN_SRC emacs-lisp
-
-  (use-package tex
-    :defer 0
-    :straight auctex
-    :config
-    (setq TeX-auto-save t)
-    (setq TeX-parse-self t)
-    (setq-default TeX-master nil)
-    ;; synctex
-    (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
-    (setq TeX-source-correlate-method 'synctex)
-    (setq TeX-source-correlate-start-server t)
-    ;; pdf tools
-    (setq TeX-view-program-selection '((output-pdf "PDF Tools")))
-    (setq TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view))))
-
-#+END_SRC
-
-** Biblio
-
-#+begin_src emacs-lisp
-
-  (use-package biblio :defer 0)
-  
-#+end_src
-
-** pdf-tools
-
-#+begin_src emacs-lisp
-
-  (use-package pdf-tools
-    :straight nil
-    :config
-    (require 'pdf-occur) ;; if I don't require pdf-occur before pdf-tools-install, I get a warning at startup
-    (pdf-tools-install))
-
-#+end_src
-
 ** Org Mode
-*** org
+*** org core
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :noweb no-export
 
   (use-package org
-   :defer 0
-   :bind (:map org-mode-map
-  	("C-c C-<left>" . org-promote-subtree)
-  	("C-c C-<right>" . org-demote-subtree))
-   :config
+    :defer 0
+    :bind (:map org-mode-map
+      	      ("C-c C-<left>" . org-promote-subtree)
+      	      ("C-c C-<right>" . org-demote-subtree))
+    :config
+    ;; Look & Feel
     (add-hook 'org-mode-hook 'visual-line-mode)
-    (add-hook 'org-mode-hook 'auto-revert-mode)
-    (setq org-directory "~/org")
-    (setq org-refile-targets (quote (("~/org/gtd.org" :maxlevel . 4)
-  				      ("~/org/someday.org" :maxlevel . 1)
-  				      ("~/org/tickler.org" :maxlevel . 1)
-  				      ("~/org/events.org" :maxlevel . 2)
-  				      ("~/Dokumente/Promotion/Promotion.org" :maxlevel . 3))))
-    (setq org-refile-use-outline-path 'file)
-    (setq org-outline-path-complete-in-steps nil)
-    (setq org-refile-allow-creating-parent-nodes 'confirm)
-    (setq org-default-notes-file (concat org-directory "/inbox.org"))
-    (setq org-archive-location (concat org-directory "/archive/archive-" (format-time-string "%Y" (current-time)) ".org::datetree/"))
-    (setq org-export-backends (quote (ascii beamer html icalendar latex md odt)))
-    (setq org-export-in-background nil)
-    (setq org-tag-alist '(("@home" . ?h)
-  			    ("@work" . ?w)
-  			    ("@phone" . ?p)
-  			    ("@boat" . ?b)
-  			    ("@org" . ?o)
-  			    ("@city" . ?c)
-  			    ("@ToRead" . ?r)))
-    (setq org-todo-keywords '((sequence "TODO(t)" "FREQ(f)" "EVNT(e)" "PROJ(p)" "WAIT(w@/!)" "|" "DONE(d!)" "CNCL(c@/!)")))
-    (setq org-todo-repeat-to-state t)
-    (setq org-startup-indented t)
-    (setq org-startup-truncated nil)
-    (setq org-log-done 'time)
-    (setq org-log-into-drawer t)
-    (setq org-num-skip-unnumbered t)
-    (setq org-agenda-files (quote ("~/org/gtd.org" "~/org/tickler.org" "~/org/someday.org" "~/org/inbox.org" "~/org/events.org")))
-    (setq org-agenda-window-setup "only-window")
-    (setq org-agenda-span 1)
-    (setq org-agenda-include-diary t)
-    (setq org-agenda-custom-commands '(
-  					 ("w" "Weekly cleanup" todo "CNCL|DONE|WAIT")
-  					 ("c" "Events only" agenda* nil ((org-agenda-span 30)))))
-    (setq org-stuck-projects
-  	    '("+LEVEL=2/-DONE-CNCL-FREQ"
-  	      ("TODO" "NEXT" "WAIT" "PROJ")
-  	      nil ""))
-    (setq org-capture-templates
-  	    '(
-  	      ("t" "Todo" entry (file "~/org/inbox.org")                    "* TODO %?\n  %i")
-  	      ("e" "Event" entry (file+headline "~/org/events.org" "Inbox") "* %^{Event Title}\n\n%^{Date and Time}T\nLocation: %^{Location}\n%i%?" :time-prompt t)
-  	      ("n" "Meeting Notes" entry (file "~/org/inbox.org")           "* Notes %?\n- %U\n %i")
-  	      ("r" "Reading" entry (file "~/org/inbox.org")                 "* TODO Read: %?\n  %i")
-  	      ("m" "Process Mail" entry (file "~/org/inbox.org")            "* TODO %?\nSCHEDULED: %t\nMail: %:fromname: %a")
-  	      ("p" "Protocol" entry (file "~/org/inbox.org")                "* TODO %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
-  	      ("L" "Protocol Link" entry (file "~/org/inbox.org")           "* TODO %?\n[[%:link][%:description]]")))
+    (set-face-underline 'org-ellipsis nil)
     (setq org-src-tab-acts-natively t)
     (setq org-ellipsis " ")  ;; …, ⤵, ▼, ↴, ⬎, ⤷, ⋱
-    (set-face-underline 'org-ellipsis nil)
+    (setq org-startup-indented t)
+    (setq org-startup-truncated nil)
+    (setq org-num-skip-unnumbered t)
+    (setq org-num-skip-tags (list "ignore" "noexport" "unnumbered"))
     (setq org-ctrl-k-protect-subtree t)
     (setq org-return-follows-link t)
 
-    (add-to-list 'org-modules 'org-protocol)
-
-    ;; ox-latex specific configuration
-    (with-eval-after-load 'ox-latex
-      (add-to-list 'org-latex-classes '("scrbook"
-  				      "\\documentclass[11pt]{scrbook}"
-  				      ("\\chapter{%s}" . "\\chapter*{%s}")
-  				      ("\\section{%s}" . "\\section*{%s}")
-  				      ("\\subsection{%s}" . "\\subsection*{%s}")
-  				      ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-  				      ("\\paragraph{%s}" . "\\paragraph*{%s}")
-  				      ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
-    (with-eval-after-load 'ox-latex
-      (add-to-list 'org-latex-classes '("scrartcl"
-  				      "\\documentclass[11pt]{scrartcl}"
-  				      ("\\section{%s}" . "\\section*{%s}")
-  				      ("\\subsection{%s}" . "\\subsection*{%s}")
-  				      ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-  				      ("\\paragraph{%s}" . "\\paragraph*{%s}")
-  				      ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
-    (setq org-beamer-environments-extra
-     	       '(("onlyenv" "O" "\\begin{onlyenv}%a" "\\end{onlyenv}"))))
+    <<org-config-task-management-and-agenda>>
+    <<org-config-capture-templates>>
+    <<org-config-latex-export>>
+    <<org-config-display-pdf-inline>>   
+  )
 
 #+END_SRC
 
-In order to let the chromium plugin not ask every time for permission, create
-the file /etc/chromium/policies/managed/org-protocol.json with the following
- content: {  "AutoLaunchProtocolsFromOrigins": [{ "allowed_origins": [ "*" ],  "protocol":"org-protocol"}]}
+**** Task Management, Agenda, Archive, Refiling
 
-see https://github.com/sprig/org-capture-extension/issues/68
+#+NAME: org-config-task-management-and-agenda
+#+BEGIN_SRC emacs-lisp :tangle no
+
+  ;; Task management
+  (setq org-directory "~/org")
+  (setq org-default-notes-file (concat org-directory "/inbox.org"))
+  (setq org-tag-alist '(("@home" . ?h)
+          	      ("@work" . ?w)
+          	      ("@phone" . ?p)
+          	      ("@boat" . ?b)
+          	      ("@org" . ?o)
+          	      ("@city" . ?c)
+          	      ("@ToRead" . ?r)))
+  (setq org-todo-keywords '((sequence "TODO(t)" "FREQ(f)" "EVNT(e)" "PROJ(p)" "WAIT(w@/!)" "|" "DONE(d!)" "CNCL(c@/!)")))
+  (setq org-todo-repeat-to-state t)
+  (setq org-log-done 'time)
+  (setq org-log-into-drawer t)
+
+  ;; Agenda
+  (setq org-agenda-files (quote ("~/org/gtd.org" "~/org/tickler.org" "~/org/someday.org" "~/org/inbox.org" "~/org/events.org")))
+  (setq org-agenda-window-setup "only-window")
+  (setq org-agenda-span 1)
+  (setq org-agenda-include-diary t)
+  (setq org-agenda-custom-commands '(
+          			   ("w" "Weekly cleanup" todo "CNCL|DONE|WAIT")
+          			   ("c" "Events only" agenda* nil ((org-agenda-span 30)))))
+  (setq org-stuck-projects '(
+        			   "+LEVEL=2/-DONE-CNCL-FREQ"
+        			   ("TODO" "NEXT" "WAIT" "PROJ")
+        			   nil
+        			   ""))
+
+  ;; Refiling
+  (setq org-refile-targets (quote (("~/org/gtd.org" :maxlevel . 4)
+          			 ("~/org/someday.org" :maxlevel . 1)
+          			 ("~/org/tickler.org" :maxlevel . 1)
+          			 ("~/org/events.org" :maxlevel . 2))))
+  (setq org-refile-use-outline-path 'file)
+  (setq org-outline-path-complete-in-steps nil)
+  (setq org-refile-allow-creating-parent-nodes 'confirm)
+
+  ;; Archive
+  (setq org-archive-location (concat org-directory "/archive/archive-" (format-time-string "%Y" (current-time)) ".org::datetree/"))
+    
+#+END_SRC
+
+**** Org capture templates
+#+NAME: org-config-capture-templates
+#+BEGIN_SRC emacs-lisp :tangle no
+
+  (setq org-capture-templates
+    	'(
+    	  ("t" "Todo" entry (file "~/org/inbox.org")                    "* TODO %?\n  %i")
+    	  ("e" "Event" entry (file+headline "~/org/events.org" "Inbox") "* %^{Event Title}\n\n%^{Date and Time}T\nLocation: %^{Location}\n%i%?" :time-prompt t)
+    	  ("n" "Meeting Notes" entry (file "~/org/inbox.org")           "* Notes %?\n- %U\n %i")
+    	  ("r" "Reading" entry (file "~/org/inbox.org")                 "* TODO Read: %?\n  %i")
+    	  ("m" "Process Mail" entry (file "~/org/inbox.org")            "* TODO %?\nSCHEDULED: %t\nMail: %:fromname: %a")
+    	  ("p" "Protocol" entry (file "~/org/inbox.org")                "* TODO %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
+    	  ("L" "Protocol Link" entry (file "~/org/inbox.org")           "* TODO %?\n[[%:link][%:description]]")))
+  
+#+END_SRC
+
+**** LaTeX export classes + beamer support
+#+NAME: org-config-latex-export
+#+BEGIN_SRC emacs-lisp :tangle no
+
+  ;; compile latex in foreground to directly retrieve compilation errors
+  (setq org-export-in-background nil)
+
+  ;; ox-latex: Add KomaScript to the known classes
+  (with-eval-after-load 'ox-latex
+    (add-to-list 'org-latex-classes '("scrbook"
+        				    "\\documentclass[11pt]{scrbook}"
+        				    ("\\chapter{%s}" . "\\chapter*{%s}")
+        				    ("\\section{%s}" . "\\section*{%s}")
+        				    ("\\subsection{%s}" . "\\subsection*{%s}")
+        				    ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+        				    ("\\paragraph{%s}" . "\\paragraph*{%s}")
+        				    ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+  (with-eval-after-load 'ox-latex
+    (add-to-list 'org-latex-classes '("scrartcl"
+        				    "\\documentclass[11pt]{scrartcl}"
+        				    ("\\section{%s}" . "\\section*{%s}")
+        				    ("\\subsection{%s}" . "\\subsection*{%s}")
+        				    ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+        				    ("\\paragraph{%s}" . "\\paragraph*{%s}")
+        				    ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+
+  ;; add beamer to the export backends
+  (add-to-list 'org-export-backends 'beamer)
+  (setq org-beamer-environments-extra
+        '(("onlyenv" "O" "\\begin{onlyenv}%a" "\\end{onlyenv}")))
+    
+#+END_SRC
+
+**** Display PDF images inline
+
+#+NAME: org-config-display-pdf-inline
+#+BEGIN_SRC emacs-lisp :tangle no
+
+  ;; Display PDF files inline
+  ;; taken from https://stackoverflow.com/questions/15407485/inline-pdf-images-in-org-mode
+
+  (add-to-list 'image-file-name-extensions "pdf")
+
+  (setq org-image-actual-width 600)
+
+  (setq org-imagemagick-display-command "convert -density 600 \"%s\" -thumbnail \"%sx%s>\" \"%s\"")
+  (defun org-display-inline-images (&optional include-linked refresh beg end)
+    "Display inline images.
+    Normally only links without a description part are inlined, because this
+    is how it will work for export.  When INCLUDE-LINKED is set, also links
+    with a description part will be inlined.  This
+    can be nice for a quick
+    look at those images, but it does not reflect what exported files will look
+    like.
+    When REFRESH is set, refresh existing images between BEG and END.
+    This will create new image displays only if necessary.
+    BEG and END default to the buffer boundaries."
+    (interactive "P")
+    (unless refresh
+      (org-remove-inline-images)
+      (if (fboundp 'clear-image-cache) (clear-image-cache)))
+    (save-excursion
+      (save-restriction
+        (widen)
+        (setq beg (or beg (point-min)) end (or end (point-max)))
+        (goto-char beg)
+        (let ((re (concat "\\[\\[\\(\\(file:\\)\\|\\([./~]\\)\\)\\([^]\n]+?"
+                          (substring (org-image-file-name-regexp) 0 -2)
+                          "\\)\\]" (if include-linked "" "\\]")))
+              old file ov img)
+          (while (re-search-forward re end t)
+            (setq old (get-char-property-and-overlay (match-beginning 1)
+                                                     'org-image-overlay)
+    		file (expand-file-name
+                        (concat (or (match-string 3) "") (match-string 4))))
+            (when (file-exists-p file)
+              (let ((file-thumb (format "%s%s_thumb.png" (file-name-directory file) (file-name-base file))))
+                (if (file-exists-p file-thumb)
+                    (let ((thumb-time (nth 5 (file-attributes file-thumb 'string)))
+                          (file-time (nth 5 (file-attributes file 'string))))
+                      (if (time-less-p thumb-time file-time)
+    			(shell-command (format org-imagemagick-display-command
+    					       file org-image-actual-width org-image-actual-width file-thumb) nil nil)))
+                  (shell-command (format org-imagemagick-display-command
+                                         file org-image-actual-width org-image-actual-width file-thumb) nil nil))
+                (if (and (car-safe old) refresh)
+                    (image-refresh (overlay-get (cdr old) 'display))
+                  (setq img (save-match-data (create-image file-thumb)))
+                  (when img
+                    (setq ov (make-overlay (match-beginning 0) (match-end 0)))
+                    (overlay-put ov 'display img)
+                    (overlay-put ov 'face 'default)
+                    (overlay-put ov 'org-image-overlay t)
+                    (overlay-put ov 'modification-hooks
+                                 (list 'org-display-inline-remove-overlay))
+                    (push ov org-inline-image-overlays))))))))))
+#+END_SRC
 
 *** org-contrib
 
 This is needed to allow for not exporting to latex those org headings that are tagged :ignore:.
 
 #+BEGIN_src emacs-lisp
-
+  
   (use-package org-contrib
     :after org)
   (use-package ox-extra
@@ -911,6 +943,82 @@ htmlize is used by org to export to HTML.
 
 #+END_SRC
 
+** pdf-tools
+
+#+begin_src emacs-lisp
+
+  (use-package pdf-tools
+    :straight nil
+    :config
+    (require 'pdf-occur) ;; if I don't require pdf-occur before pdf-tools-install, I get a warning at startup
+    (pdf-tools-install)
+    :init
+    (setq-default pdf-view-display-size 'fit-page))
+
+#+end_src
+
+** AucTeX
+
+#+BEGIN_SRC emacs-lisp
+
+  (use-package tex
+    :defer 0
+    :straight auctex
+    :config
+    (setq TeX-auto-save t)
+    (setq TeX-parse-self t)
+    (setq-default TeX-master nil)
+    ;; synctex
+    (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
+    (setq TeX-source-correlate-method 'synctex)
+    (setq TeX-source-correlate-start-server t)
+    ;; pdf tools
+    (setq TeX-view-program-selection '((output-pdf "PDF Tools")))
+    (setq TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view))))
+
+#+END_SRC
+
+** web-mode & php-mode
+
+   #+BEGIN_SRC emacs-lisp
+
+     (use-package web-mode :defer 0)
+     (use-package php-mode :defer 0)
+     
+   #+END_SRC
+
+** markdown-mode
+
+   #+BEGIN_SRC emacs-lisp
+
+     (use-package markdown-mode :defer 0)
+
+   #+END_SRC
+
+** yaml-mode
+
+   #+BEGIN_SRC emacs-lisp
+
+     (use-package yaml-mode :defer 0)
+
+   #+END_SRC
+
+** Platform.io
+
+#+BEGIN_SRC emacs-lisp
+
+  (use-package platformio-mode :defer 0)
+  
+#+END_SRC
+
+** Biblio
+
+#+begin_src emacs-lisp
+
+  (use-package biblio :defer 0)
+  
+#+end_src
+
 ** GUIX
 
 #+BEGIN_SRC emacs-lisp
@@ -946,8 +1054,6 @@ Store the API key in .authinfo
 
 * Functions
 
-
-
 #+BEGIN_SRC emacs-lisp
 
   (defun my-irc()
@@ -961,11 +1067,12 @@ A more distressless writing environment:
 
 #+BEGIN_SRC emacs-lisp
 
-  (defun my-writing-mode()
-    "Switch to my distress less writing mode"
-    (interactive)
-    (olivetti-mode)
-    (variable-pitch-mode))
+    (defun my-writing-mode()
+      "Switch to my distress less writing mode"
+      (interactive)
+      (olivetti-mode)
+      (variable-pitch-mode)
+      (flyspell-mode 1))
 
 #+END_SRC
 
