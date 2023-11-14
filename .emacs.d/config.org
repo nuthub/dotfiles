@@ -498,6 +498,14 @@ Snippet expansion
 
  #+end_src
 
+** flyspell
+
+enchant uses aspell or hunspell or whatever it can find. Saved words are stored in ~~./config/enchant~.
+
+#+BEGIN_SRC emacs-lisp
+  (setq ispell-program-name "enchant-2")
+#+END_SRC
+
 ** which-key
 
  This helps to figure out the next keystrokes
