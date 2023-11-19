@@ -107,52 +107,6 @@ Channel work-archives
 Channel work-junk
 Channel work-trash
 
-### Blumenthal 7
-
-IMAPAccount b7
-Host imap.strato.de
-SSLType IMAPS
-User julian.flake@blumenthal7.de
-PassCmd "grep strato.de ~/.authinfo | awk 'FNR == 1 {print $6}'"
-
-MaildirStore b7-local
-Path ~/Mail/b7/
-Trash Trash
-SubFolders Verbatim
-
-IMAPStore b7-remote
-Account b7
-
-Channel b7-inbox
-Far :b7-remote:INBOX
-Near :b7-local:inbox
-
-Channel b7-trash
-Far :b7-remote:Trash
-Near :b7-local:trash
-Expunge Both
-
-Channel b7-sent
-Far :b7-remote:Sent
-Near :b7-local:sent
-
-Channel b7-drafts
-Far :b7-remote:Drafts
-Near :b7-local:drafts
-
-Channel b7-archives
-Far :b7-remote:Archives
-Near :b7-local:archives
-Patterns *
-
-Group b7
-Channel b7-inbox
-Channel b7-sent
-Channel b7-drafts
-Channel b7-archives
-Channel b7-junk
-Channel b7-trash
-
 ### TU Dortmund
 
 IMAPAccount tudo

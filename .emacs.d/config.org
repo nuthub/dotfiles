@@ -1235,9 +1235,9 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
               (:from . 22)
               (:subject)))
       (setq mu4e-bookmarks
-            '((:name "Combined inbox" :query "maildir:/private/inbox OR maildir:/work/inbox OR maildir:/b7/inbox OR maildir:/tudo/inbox" :key 105)
+            '((:name "Combined inbox" :query "maildir:/private/inbox OR maildir:/work/inbox OR maildir:/tudo/inbox" :key 105)
               (:name "Unread messages" :query "flag:unread AND NOT flag:trashed" :key 117)
-              (:name "Drafts" :query "maildir:/private/drafts OR maildir:/work/drafts OR maildir:/b7/drafts" :key 100)
+              (:name "Drafts" :query "maildir:/private/drafts OR maildir:/work/drafts" :key 100)
               (:name "Today's messages" :query "date:today..now" :key 116)
               (:name "Last 7 days" :query "date:7d..now" :hide-unread t :key 119)
               (:name "Messages with images" :query "mime:image/*" :key 112)))
@@ -1249,8 +1249,6 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
   	    ("/private/junk" . ?j)
   	    ("/work/inbox" . ?w)
               ("/work/archives/2023" . ?W)
-              ("/b7/inbox" . ?b)
-              ("/b7/archives/2023" . ?B)
               ("/tudo/inbox" . ?d)))
       (setq smtpmail-queue-mail nil)  ;; start in direct mode
       (setq smtpmail-queue-dir "~/Mail/queue/cur")
@@ -1307,24 +1305,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                       (mu4e-drafts-folder . "/private/drafts")
                       (mu4e-sent-folder . "/private/sent")
                       (mu4e-refile-folder  . "/private/archives/2023")
-                      (mu4e-trash-folder . "/private/trash")))
-             ;; b7 account
-             (make-mu4e-context
-              :name "B7"
-              :match-func
-              (lambda (msg)
-                (when msg
-                  (string-prefix-p "/b7" (mu4e-message-field msg :maildir))))
-              :vars '((user-mail-address . "julian.flake@blumenthal7.de")
-                      (user-full-name . "Julian Flake")
-                      (mu4e-compose-signature . nil)
-                      (smtpmail-smtp-server . "smtp.strato.de")
-                      (smtpmail-stream-type . ssl)
-                      (smtpmail-smtp-service . 465)
-                      (mu4e-drafts-folder . "/b7/drafts")
-                      (mu4e-sent-folder . "/b7/sent")
-                      (mu4e-refile-folder  . "/b7/archives/2023")
-                      (mu4e-trash-folder . "/b7/trash")))))
+                      (mu4e-trash-folder . "/private/trash")))))
       ;; disable undo-tree for mail compose (why? I have a separate dir for )
       (add-hook 'mu4e-compose-mode-hook
                 (defun disable-undo-tree-mode-in-mu4e-compose()
