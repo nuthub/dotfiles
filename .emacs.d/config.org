@@ -132,14 +132,13 @@ Holidays are not shown in agenda-hoidays (org-agenda 'h')
 #+BEGIN_SRC emacs-lisp
   (use-package modus-themes
     :config
-    (load-theme 'modus-operandi t)) ;; light
-    ;;  (load-theme 'modus-vivendi)) ;; dark
-
+    (load-theme 'modus-vivendi t)) ; dark
+    ;; (load-theme 'modus-operandi t)) ; light
 #+END_SRC
 
 *** solarized (light/dark)
 
-#+BEGIN_SRC emacs-lisp :tangle nil
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package solarized-theme
     :config
     (load-theme 'solarized-light))
@@ -1054,6 +1053,8 @@ Store the API key in .authinfo
 
 * Functions
 
+** Connect with my ZNC irc bouncer
+
 #+BEGIN_SRC emacs-lisp
 
   (defun my-irc()
@@ -1063,7 +1064,7 @@ Store the API key in .authinfo
 
 #+END_SRC
 
-A more distressless writing environment:
+** A more distressless writing environment
 
 #+BEGIN_SRC emacs-lisp
 
@@ -1174,6 +1175,7 @@ A more distressless writing environment:
       (setq org-caldav-files nil)
       (setq org-caldav-inbox nil)
       (setq org-caldav-calendar-id nil)
+      (setq org-caldav-show-sync-results nil)
       (setq org-caldav-resume-aborted 'always)
       (setq org-caldav-calendars
             '((:calendar-id "org-2"
