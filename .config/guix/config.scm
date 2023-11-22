@@ -91,8 +91,9 @@
 			  "gnupg"
 			  ;; TLS root certificates
 			  "nss-certs"
-			  ;; hardware specifics
-			  "intel-vaapi-driver" "intel-media-driver" "gmmlib"
+			  ;; emacs & related
+			  "emacs-pgtk" "emacs-pdf-tools"
+			  "isync" "mu"
 			  ;; my shell and shell tools
 			  "zsh" "zsh-autosuggestions" "zsh-syntax-highlighting"
 			  "cups" ;; to have commands like lpq etc
@@ -113,7 +114,6 @@
 			  "usbutils"
 			  "acpi"
 			  "brightnessctl"
-			  "xbacklight"
 			  ;; syncing and versioning
 			  "samba"
 			  "binutils" ;; for ar command
@@ -127,80 +127,75 @@
 			  "zip"
 			  ;; Desktop start
 			  ;; XDG
-			  "xdg-utils"
+			  "xdg-utils" "xdg-user-dirs"
 			  ;; I need all of these portals
 			  "xdg-desktop-portal" "xdg-desktop-portal-gtk" "xdg-desktop-portal-wlr"
 			  ;; wayland, not sure what I really need
 			  "xorg-server-xwayland" "slurp" "grim" "grimshot" "swappy" "wlr-randr" "egl-wayland"
 			  ;; sway
 			  "sway" "swaynotificationcenter" "swaylock" "swayidle" "waybar" "wofi"
+			  "alacritty"
 			  "kanshi" ; automatically switch displays
-			  "alacritty" "rxvt-unicode" 
+			  "gammastep" ; could use geoclue, if geoclue was running
 			  ;; other desktop related
 			  "tumbler" ; D-BUS thumbnail service
+			  "poweralertd"
 			  "gnome-keyring"
 			  "gvfs"
-			  "feh"
-			  ;; Desktop end
-			  "poweralertd"
-			  "mosquitto" ;; for doorstatus in polybar
 			  ;; connectivity / media
-			  "pipewire" "pamixer" "pavucontrol" "wireplumber" "libcamera"  ; wireplumber complains about missing libcamera
+			  "pipewire" "pavucontrol" "wireplumber"
 			  "bluez" "blueman"
 			  "udiskie"
 			  "solaar"
+			  ;; Desktop end
+			  "mosquitto" ;; for doorstatus in polybar
 			  ;; other sources / hubs
 			  "flatpak"
 			  "docker"
-			  ;; emacs & related
-			  "emacs-pgtk" "emacs-pdf-tools"
-			  "isync" "mu"
 			  ;; security
 			  "pinentry" "pinentry-tty" "gnupg" "openssh" "password-store" "wireguard-tools"
 			  "lxappearance" "qt5ct"
 			  ;; my desktop apps
-			  "feh" "mpv" "nemo" "file-roller" "gvfs" "baobab"
-			  "seahorse"
+			  "nemo" "file-roller" "gvfs" "baobab"
 			  "firefox" "icedove" "ungoogled-chromium"
 			  "aqbanking" "gnucash"
 			  "libreoffice"
 			  ;; Office, LaTeX, PDF & Co
-			  "aspell"
-			  "aspell-dict-de"
-			  "aspell-dict-en"
+			  "texlive" "texlive-biber" ;; JabRef is installed via flatpak
+			  "enchant"
+			  "hunspell" "hunspell-dict-de" "hunspell-dict-en" ;; "aspell" "aspell-dict-de" "aspell-dict-en" ; aspell or hunspell? Good question
 			  "pandoc"
 			  "pdfpc"
 			  "ghostscript" ;; for e.g. ps2pdf
 			  "stapler"
-			  "texlive" "texlive-biber" ;; JabRef is installed via flatpak
 			  ;; media
 			  "inkscape" "graphviz"
+			  "mpv" "imv"
 			  "flameshot" "qtwayland@5.15.10" ; flameshot needs qtwayland@5
-			  "ristretto" "sxiv" "gimp"
+			  "ristretto" "gimp"
 			  "imagemagick" "optipng"
-			  "cheese" "ffmpeg" "mpv"
-			  "obs" "obs-wlrobs"
+			  "cheese" "ffmpeg"
+			  "obs" ; obs-wlrobs is not necessary, if pipewire is running
 			  "simple-scan" "xsane"
 			  ;; Virtualization
 			  "qemu" "virt-manager"
-			  ;; for my java shells
-			  ;;"hicolor-icon-theme" "libxtst"
+
+			  ;;
+			  ;; Look & Feel
 			  ;; fonts
-			  "font-abattis-cantarell"
-			  "font-awesome"
-			  "font-dejavu"
-			  "font-fira-code"
-			  "font-google-noto-sans-cjk"
 			  "font-hack"
 			  "font-liberation"
-			  "font-microsoft-arial"
-			  "font-microsoft-times-new-roman"
-			  "font-microsoft-courier-new"
-			  "font-openmoji"
+			  "font-awesome"
+			  "font-dejavu"
+			  ;;			  "font-fira-code"
+			  "font-google-noto" ; broad range of 
+			  "font-google-noto-emoji" ; Emoji support
+			  "font-google-noto-serif-cjk" "font-google-noto-sans-cjk" ; chinese fonts
+			  "font-microsoft-arial" "font-microsoft-times-new-roman" "font-microsoft-courier-new" ; Microsoft fonts
 			  ;; themes
-			  "gnome-themes-extra" "matcha-theme" "arc-theme" "materia-theme"
+			  "gnome-themes-extra" 
 			  ;; icons
-			  "adwaita-icon-theme" "elementary-xfce-icon-theme"
+			  "adwaita-icon-theme" "elementary-xfce-icon-theme" "hicolor-icon-theme"
 			  ))
 		   %base-packages))
 
