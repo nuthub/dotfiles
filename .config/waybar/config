@@ -7,7 +7,7 @@
     // Choose the order of the modules
     "modules-left": ["sway/workspaces", "sway/mode", "sway/scratchpad", "sway/window"],
     "modules-center": [],
-    "modules-right": ["cpu", "memory", "temperature", "battery", "backlight", "wireplumber", "user", "clock", "idle_inhibitor", "tray"],
+    "modules-right": ["network", "cpu", "memory", "temperature", "battery", "backlight", "wireplumber", "user", "clock", "idle_inhibitor", "tray"],
     "sway/mode": {
         "format": "<span style=\"italic\">{}</span>"
     },
@@ -58,6 +58,11 @@
 		}
         }
     },
+    "network": {
+        "interval": 2,
+        "format": "↑{bandwidthUpBytes} ↓{bandwidthDownBytes}",
+        "tooltip-format": "{ifname}: ↑{bandwidthUpBytes} ↓{bandwidthDownBytes} ",
+    },
     "cpu": {
         "format": "{usage}% ",
         "tooltip": true
@@ -91,15 +96,6 @@
         // "format-good": "", // An empty format will hide the module
         // "format-full": "",
         "format-icons": ["", "", "", "", ""]
-    },
-    "network": {
-        // "interface": "wlp2*", // (Optional) To force the use of this interface
-        "format-wifi": "{essid} ({signalStrength}%) ",
-        "format-ethernet": "{ipaddr}/{cidr} ",
-        "tooltip-format": "{ifname} via {gwaddr} ",
-        "format-linked": "{ifname} (No IP) ",
-        "format-disconnected": "Disconnected ⚠",
-        "format-alt": "{ifname}: {ipaddr}/{cidr}"
     },
     "wireplumber": {
        "format": "{volume}% {icon}",
