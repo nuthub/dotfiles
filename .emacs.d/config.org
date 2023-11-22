@@ -684,15 +684,20 @@ The global keybinding 'C-x u' is set below.
   (setq org-agenda-files (quote ("~/org/gtd.org" "~/org/tickler.org" "~/org/someday.org" "~/org/inbox.org" "~/org/events.org")))
   (setq org-agenda-window-setup "only-window")
   (setq org-agenda-span 1)
+  (setq org-agenda-time-grid
+      '((weekly remove-match)
+  	(800 1000 1200 1400 1600 1800)
+  	"......" "----------------"))
   (setq org-agenda-include-diary t)
-  (setq org-agenda-custom-commands '(
-          			   ("w" "Weekly cleanup" todo "CNCL|DONE|WAIT")
-          			   ("c" "Events only" agenda* nil ((org-agenda-span 30)))))
-  (setq org-stuck-projects '(
-        			   "+LEVEL=2/-DONE-CNCL-FREQ"
-        			   ("TODO" "NEXT" "WAIT" "PROJ")
-        			   nil
-        			   ""))
+  (setq org-agenda-custom-commands '(("w" "Weekly cleanup" todo "CNCL|DONE")
+  				   ("c" "Events of the week" agenda ""
+  				    ((org-agenda-span 7)           ;; agenda will start in week view
+  				     (org-agenda-repeating-timestamp-show-all t)   ;; ensures that repeating events appear on all relevant dates
+  				     (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled)))) ;; limits agenda view to timestamped items
+  				   ))
+  (setq org-stuck-projects '("-noproject+LEVEL=2/-DONE-FREQ"
+  			   ("TODO" "NEXT")
+  			   nil ""))
 
   ;; Refiling
   (setq org-refile-targets (quote (("~/org/gtd.org" :maxlevel . 4)
