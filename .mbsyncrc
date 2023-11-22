@@ -1,152 +1,81 @@
 # Global configuration section
 #   Values here are used as defaults for any following Channel section that
 #   doesn't specify them.
-Expunge None
+SyncState *
 Create Both
+Remove None
+Expunge None
 
 # private Mail
 
-IMAPAccount nuthost
+IMAPAccount nuthost-imap
 Host nuthost.de
 User julian@flake.de
 PassCmd "grep nuthost.de ~/.authinfo | awk 'FNR == 1 {print $6}'"
 
+IMAPStore private-remote
+Account nuthost-imap
+
 MaildirStore private-local
 Path ~/Mail/private/
+Inbox ~/Mail/private/INBOX
 Trash Trash
 SubFolders Verbatim
 
-IMAPStore private-remote
-Account nuthost
+Channel private
+Far :private-remote:
+Near :private-local:
+Patterns * "!dovecot/*"
+Expunge Near
+# Remove Both
 
-Channel private-inbox
-Far :private-remote:INBOX
-Near :private-local:inbox
-Patterns *
-
-Channel private-sent
-Far :private-remote:Sent
-Near :private-local:sent
-
-Channel private-drafts
-Far :private-remote:Drafts
-Near :private-local:drafts
-
-Channel private-trash
-Far :private-remote:Trash
-Near :private-local:trash
-
-Channel private-junk
-Far :private-remote:Junk
-Near :private-local:junk
-
-Channel private-archives
-Far :private-remote:Archives
-Near :private-local:archives
-Patterns *
-
-Channel private-autolearn
-Far :private-remote:autolearn
-Near :private-local:autolearn
-Patterns *
-
-Group private
-Channel private-inbox
-Channel private-sent
-Channel private-drafts
-Channel private-archives
-Channel private-junk
-Channel private-trash
-
+######################
 ### Uni Koblenz
 
-IMAPAccount work
+IMAPAccount work-imap
 Host imap.uni-koblenz.de
 SSLType IMAPS
 User flake
 PassCmd "grep uni-koblenz.de ~/.authinfo | awk 'FNR == 1 {print $6}'"
 
+IMAPStore work-remote
+Account work-imap
+
 MaildirStore work-local
 Path ~/Mail/work/
+Inbox ~/Mail/work/INBOX
 Trash Trash
 SubFolders Verbatim
 
-IMAPStore work-remote
-Account work
+Channel work
+Far :work-remote:
+Near :work-local:
+Patterns * "!Shared Folders/*" "!Other Users/*"
+Expunge Both
+# Remove Both
 
-Channel work-inbox
-Far :work-remote:INBOX
-Near :work-local:inbox
 
-Channel work-trash
-Far :work-remote:Trash
-Near :work-local:trash
-
-Channel work-sent
-Far :work-remote:Sent
-Near :work-local:sent
-
-Channel work-drafts
-Far :work-remote:Drafts
-Near :work-local:drafts
-
-Channel work-junk
-Far :work-remote:Junk
-Near :work-local:junk
-
-Channel work-archives
-Far :work-remote:Archives
-Near :work-local:archives
-Patterns *
-
-Group work
-Channel work-inbox
-Channel work-sent
-Channel work-drafts
-Channel work-archives
-Channel work-junk
-Channel work-trash
-
+######################
 ### TU Dortmund
 
-IMAPAccount tudo
+IMAPAccount tudo-imap
 Host unimail.tu-dortmund.de
 SSLType IMAPS
 User smjuflak
 PassCmd "grep tu-dortmund.de ~/.authinfo | awk 'FNR == 1 {print $6}'"
 
+IMAPStore tudo-remote
+Account tudo-imap
+
 MaildirStore tudo-local
 Path ~/Mail/tudo/
+Inbox ~/Mail/tudo/INBOX
 Trash Trash
 SubFolders Verbatim
 
-IMAPStore tudo-remote
-Account tudo
-
-Channel tudo-inbox
-Far :tudo-remote:INBOX
-Near :tudo-local:inbox
-#Patterns *
-
-Channel tudo-sent
-Far :tudo-remote:Sent
-Near :tudo-local:sent
-
-Channel tudo-drafts
-Far :tudo-remote:Drafts
-Near :tudo-local:drafts
-
-Channel tudo-spam
-Far :tudo-remote:Spam
-Near :tudo-local:spam
-
-Channel tudo-trash
-Far :tudo-remote:Trash
-Near :tudo-local:trash
-
-Group tudo
-Channel tudo-inbox
-Channel tudo-sent
-Channel tudo-drafts
-Channel tudo-spam
-Channel tudo-trash
+Channel tudo
+Far :tudo-remote:
+Near :tudo-local:
+Patterns *
+Expunge Both
+Remove Both
