@@ -1,9 +1,7 @@
-guix shell \
-     --container \
-     --emulate-fhs\
-     --network \
-     --preserve='^DISPLAY$' \
-     --preserve='^DBUS_' --expose=/var/run/dbus \
-     --expose=/sys/dev --expose=/sys/devices --expose=/dev/dri \
-     --share=$HOME=$HOME \
-     coreutils findutils glib gtk+ glibc libxtst adwaita-icon-theme openjdk@17.0.5:jdk git bash which
+#!/bin/sh
+export JAVA_HOME=$(guix build openjdk@17.0.5 | grep "\-jdk$")
+guix shell openjdk@17.0.5:jdk
+
+export JAVA_HOME=$(guix build openjdk@17.0.5 | grep "\-jdk$")
+cd ~/git/carisma-tool
+guix shell openjdk@17.0.5:jdk -- ./mvnw clean verify
