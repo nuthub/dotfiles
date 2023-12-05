@@ -282,6 +282,12 @@ bindsym $mod+Shift+o move workspace to output left
 # Screen lock
 bindsym Control+mod1+Delete exec $lockscreen
 
+
+# Clipboard
+set $clipboard "~/.local/share/clipman.json"
+exec wl-paste -t text --watch clipman store --max-items 1024
+bindsym $mod+y exec clipman pick --tool="wofi" --max-items=30
+
 # window rules
 # to get app_ids use $ swaymsg -t get_tree | grep app_id
 
