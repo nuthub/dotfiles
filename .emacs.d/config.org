@@ -1105,6 +1105,17 @@ Just press 'i' in PDFView, DOCView and so on
 
    #+END_SRC
 
+** JustFile mode
+
+Two modes:
+- just-mode to edit justfiles
+- justl.el to run just on justfiles
+
+#+begin_src emacs-lisp
+  (use-package just-mode)
+  (use-package justl)
+#+end_src
+
 ** Platform.io
 
 #+BEGIN_SRC emacs-lisp
