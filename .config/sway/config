@@ -297,7 +297,9 @@ for_window [app_id="nm-applet"] floating enable
 for_window [app_id="pavucontrol"] floating enable
 for_window [app_id=".blueman-manager-real"] floating enable
 for_window [app_id="com.nextcloud.desktopclient.nextcloud"] floating enable
+for_window [app_id=".solaar-real"] floating enable
 for_window [title="MGC"] floating enable # MazeGameClient
+
 
 # Autostart
 exec_always --no-startup-id "pkill kanshi; exec kanshi"
