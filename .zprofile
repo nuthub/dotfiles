@@ -4,14 +4,19 @@
 
 # Set up the system, user profile, and related variables.
 source /etc/profile
-# Set up the home environment profile.
+# Set up the home environment profile (not necessary, when GUIX home is not used)
 # source ~/.profile
-# not necessary, when GUIX home is not used
 
-PATH=$HOME/.local/bin:$PATH
-TERMINAL=alacritty
-EDITOR="emacsclient -nc"
-XDG_DATA_DIRS=$XDG_DATA_DIRS:/var/lib/flatpak/exports/share:/home/flake/.local/share/flatpak/exports/share
+# Guix profile (for packages installed by `guix package`)
+export GUIX_PROFILE="/home/flake/.guix-profile"
+. "$GUIX_PROFILE/etc/profile"
+
+export PATH=$HOME/.local/bin:$PATH
+export TERMINAL=alacritty
+export EDITOR="emacsclient -nc"
+export XDG_DATA_DIRS=$XDG_DATA_DIRS:/var/lib/flatpak/exports/share:/home/flake/.local/share/flatpak/exports/share
+
+export JAVA_HOME=$(guix build openjdk@17.0.5 | grep "\-jdk$")
 
 # If running from tty1 start sway
 if [ "$(tty)" = "/dev/tty1" ]; then
@@ -22,5 +27,6 @@ if [ "$(tty)" = "/dev/tty1" ]; then
     #    export QT_QPA_PLATFORMTHEME=qt5ct
     export GDK_BACKEND=wayland # this makes emacs not start (without pgtk)
     export MOZ_ENABLE_WAYLAND="1" # this makes firefox start wayland native
-    exec dbus-run-session -- sway
+    exec dbus-run-session -- sway > .sway.log 2>&1
 fi
+
