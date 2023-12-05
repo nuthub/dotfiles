@@ -148,14 +148,6 @@ Holidays are not shown in agenda-hoidays (org-agenda 'h')
     ;; (load-theme 'modus-operandi t)) ; light
 #+END_SRC
 
-*** solarized (light/dark)
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package solarized-theme
-    :config
-    (load-theme 'solarized-light))
-#+END_SRC
-
 ** Diminish
 
 This is to hide minor modes from mode line. You can use `:diminish foo-mode` then in use-package(...)
@@ -168,7 +160,15 @@ This is to hide minor modes from mode line. You can use `:diminish foo-mode` the
 
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'default-frame-alist '(font . "Hack-12"))
+  ;;  (add-to-list 'default-frame-alist '(font . "Fira Code-12"))
 #+END_SRC
+
+** Smooth scrolling
+
+#+begin_src emacs-lisp
+  (pixel-scroll-precision-mode)
+  (setq pixel-scroll-precision-large-scroll-height 40.0)
+#+end_src
 
 ** Line numbers on the left
    
@@ -193,6 +193,9 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
 #+begin_src emacs-lisp
 
   (use-package all-the-icons)
+
+  (use-package all-the-icons-completion
+    :config (all-the-icons-completion-mode))
   
 #+end_src
 
@@ -298,56 +301,56 @@ Completion allows you to quickly select an item from a list of candidates.
   (use-package consult
     ;; Replace bindings. Lazily loaded due by `use-package'.
     :bind (;; C-c bindings (mode-specific-map)
-	   ("C-c M-x" . consult-mode-command)
-	   ("C-c h" . consult-history)
-	   ("C-c k" . consult-kmacro)
-	   ("C-c m" . consult-man)
-	   ("C-c i" . consult-info)
-	   ([remap Info-search] . consult-info)
-	   ;; C-x bindings (ctl-x-map)
-	   ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
-	   ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
-	   ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
-	   ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
-	   ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
-	   ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
-	   ;; Custom M-# bindings for fast register access
-	   ("M-#" . consult-register-load)
-	   ("M-'" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
-	   ("C-M-#" . consult-register)
-	   ;; Other custom bindings
-	   ("M-y" . consult-yank-pop)                ;; orig. yank-pop
-	   ;; M-g bindings (goto-map)
-	   ("M-g e" . consult-compile-error)
-	   ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
-	   ("M-g g" . consult-goto-line)             ;; orig. goto-line
-	   ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
-	   ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
-	   ("M-g m" . consult-mark)
-	   ("M-g k" . consult-global-mark)
-	   ("M-g i" . consult-imenu)
-	   ("M-g I" . consult-imenu-multi)
-	   ;; M-s bindings (search-map)
-	   ("M-s d" . consult-find)
-	   ("M-s D" . consult-locate)
-	   ("M-s g" . consult-grep)
-	   ("M-s G" . consult-git-grep)
-	   ("M-s r" . consult-ripgrep)
-	   ("M-s l" . consult-line)
-	   ("M-s L" . consult-line-multi)
-	   ("M-s k" . consult-keep-lines)
-	   ("M-s u" . consult-focus-lines)
-	   ;; Isearch integration
-	   ("M-s e" . consult-isearch-history)
-	   :map isearch-mode-map
-	   ("M-e" . consult-isearch-history)         ;; orig. isearch-edit-string
-	   ("M-s e" . consult-isearch-history)       ;; orig. isearch-edit-string
-	   ("M-s l" . consult-line)                  ;; needed by consult-line to detect isearch
-	   ("M-s L" . consult-line-multi)            ;; needed by consult-line to detect isearch
-	   ;; Minibuffer history
-	   :map minibuffer-local-map
-	   ("M-s" . consult-history)                 ;; orig. next-matching-history-element
-	   ("M-r" . consult-history))                ;; orig. previous-matching-history-element
+  	   ("C-c M-x" . consult-mode-command)
+  	   ("C-c h" . consult-history)
+  	   ("C-c k" . consult-kmacro)
+  	   ("C-c m" . consult-man)
+  	   ("C-c i" . consult-info)
+  	   ([remap Info-search] . consult-info)
+  	   ;; C-x bindings (ctl-x-map)
+  	   ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
+  	   ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
+  	   ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
+  	   ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
+  	   ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
+  	   ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
+  	   ;; Custom M-# bindings for fast register access
+  	   ("M-#" . consult-register-load)
+  	   ("M-'" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
+  	   ("C-M-#" . consult-register)
+  	   ;; Other custom bindings
+  	   ("M-y" . consult-yank-pop)                ;; orig. yank-pop
+  	   ;; M-g bindings (goto-map)
+  	   ("M-g e" . consult-compile-error)
+  	   ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
+  	   ("M-g g" . consult-goto-line)             ;; orig. goto-line
+  	   ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
+  	   ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
+  	   ("M-g m" . consult-mark)
+  	   ("M-g k" . consult-global-mark)
+  	   ("M-g i" . consult-imenu)
+  	   ("M-g I" . consult-imenu-multi)
+  	   ;; M-s bindings (search-map)
+  	   ("M-s d" . consult-find)
+  	   ("M-s D" . consult-locate)
+  	   ("M-s g" . consult-grep)
+  	   ("M-s G" . consult-git-grep)
+  	   ("M-s r" . consult-ripgrep)
+  	   ("M-s l" . consult-line)
+  	   ("M-s L" . consult-line-multi)
+  	   ("M-s k" . consult-keep-lines)
+  	   ("M-s u" . consult-focus-lines)
+  	   ;; Isearch integration
+  	   ("M-s e" . consult-isearch-history)
+  	   :map isearch-mode-map
+  	   ("M-e" . consult-isearch-history)         ;; orig. isearch-edit-string
+  	   ("M-s e" . consult-isearch-history)       ;; orig. isearch-edit-string
+  	   ("M-s l" . consult-line)                  ;; needed by consult-line to detect isearch
+  	   ("M-s L" . consult-line-multi)            ;; needed by consult-line to detect isearch
+  	   ;; Minibuffer history
+  	   :map minibuffer-local-map
+  	   ("M-s" . consult-history)                 ;; orig. next-matching-history-element
+  	   ("M-r" . consult-history))                ;; orig. previous-matching-history-element
 
     ;; Enable automatic preview at point in the *Completions* buffer. This is
     ;; relevant when you use the default completion UI.
@@ -360,7 +363,7 @@ Completion allows you to quickly select an item from a list of candidates.
     ;; preview for `consult-register', `consult-register-load',
     ;; `consult-register-store' and the Emacs built-ins.
     (setq register-preview-delay 0.5
-	  register-preview-function #'consult-register-format)
+  	register-preview-function #'consult-register-format)
 
     ;; Optionally tweak the register preview window.
     ;; This adds thin lines, sorting and hides the mode line of the window.
@@ -368,7 +371,7 @@ Completion allows you to quickly select an item from a list of candidates.
 
     ;; Use Consult to select xref locations with preview
     (setq xref-show-xrefs-function #'consult-xref
-	  xref-show-definitions-function #'consult-xref)
+  	xref-show-definitions-function #'consult-xref)
 
     ;; Configure other variables and modes in the :config section,
     ;; after lazily loading the package.
@@ -459,7 +462,6 @@ Enriches selection lists (and completion minibuffers, e.g. consult) with additio
 
    ;; Consult users will also want the embark-consult package.
    (use-package embark-consult
-     :ensure t
      :after (embark consult)
      :demand t ; only necessary if you have the hook below
      ;; if you want to have consult previews as you move around an
@@ -613,7 +615,18 @@ The global keybinding 'C-x u' is set below.
 
 #+END_SRC
 
-** Projectile
+** Project.el
+
+This is the built-in project package. I'm not sure, which feature offers that is missing from project.el and that I want to use.
+
+What I want is:
+- Open dired on project change
+#+begin_src emacs-lisp
+  ;; (require project)
+  ;; (add-to-list 'project-switch-commands (project-dired "Dired"))
+#+end_src
+
+** COMMENT Projectile
 
 #+BEGIN_SRC emacs-lisp
   (use-package projectile
@@ -632,47 +645,119 @@ The global keybinding 'C-x u' is set below.
 ** editorconfig
 
 #+BEGIN_SRC emacs-lisp
-
   (use-package editorconfig
     :ensure t
+    :diminish t
     :config
     (editorconfig-mode 1))
-  
 #+END_SRC
 
 * Major modes
 ** Org Mode
-*** org core
+*** Org core
 
 #+BEGIN_SRC emacs-lisp :noweb no-export
-
   (use-package org
     :defer 0
+    ;; the bind may defer the package loading, see documentation (C-h f use-package RET)
     :bind (:map org-mode-map
       	      ("C-c C-<left>" . org-promote-subtree)
-      	      ("C-c C-<right>" . org-demote-subtree))
+      	      ("C-c C-<right>" . org-demote-subtree)
+  	      ("C-c ," . org-timestamp-inactive))
     :config
-    ;; Look & Feel
-    (add-hook 'org-mode-hook 'visual-line-mode)
-    (set-face-underline 'org-ellipsis nil)
-    (setq org-src-tab-acts-natively t)
-    (setq org-ellipsis " ")  ;; …, ⤵, ▼, ↴, ⬎, ⤷, ⋱
-    (setq org-startup-indented t)
-    (setq org-startup-truncated nil)
-    (setq org-num-skip-unnumbered t)
-    (setq org-num-skip-tags (list "ignore" "noexport" "unnumbered"))
-    (setq org-ctrl-k-protect-subtree t)
-    (setq org-return-follows-link t)
-
+    <<org-config-look-and-feel>>
     <<org-config-task-management-and-agenda>>
     <<org-config-capture-templates>>
     <<org-config-latex-export>>
     <<org-config-display-pdf-inline>>   
   )
+#+END_SRC
+*** Org's basic Look & Feel
 
+#+NAME: org-config-look-and-feel
+#+begin_src emacs-lisp
+  (add-hook 'org-mode-hook 'visual-line-mode)
+  (set-face-underline 'org-ellipsis nil)
+  (setq org-ellipsis " …")
+  (setq org-startup-indented t)
+  (setq org-startup-truncated nil)
+  (setq org-src-tab-acts-natively t)
+  (setq org-ctrl-k-protect-subtree t)
+  (setq org-return-follows-link t)
+  (setq org-num-skip-unnumbered t)
+  (setq org-num-skip-tags (list "ignore" "noexport" "unnumbered"))
+  ;; beautiful bullets
+  (use-package org-bullets
+    :config
+    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+#+end_src
+
+*** Display PDF images inline
+
+#+NAME: org-config-display-pdf-inline
+#+BEGIN_SRC emacs-lisp :tangle no
+
+  ;; Display PDF files inline
+  ;; taken from https://stackoverflow.com/questions/15407485/inline-pdf-images-in-org-mode
+
+  (add-to-list 'image-file-name-extensions "pdf")
+
+  (setq org-image-actual-width 600)
+
+  (setq org-imagemagick-display-command "convert -density 600 \"%s\" -thumbnail \"%sx%s>\" \"%s\"")
+  (defun org-display-inline-images (&optional include-linked refresh beg end)
+    "Display inline images.
+    Normally only links without a description part are inlined, because this
+    is how it will work for export.  When INCLUDE-LINKED is set, also links
+    with a description part will be inlined.  This
+    can be nice for a quick
+    look at those images, but it does not reflect what exported files will look
+    like.
+    When REFRESH is set, refresh existing images between BEG and END.
+    This will create new image displays only if necessary.
+    BEG and END default to the buffer boundaries."
+    (interactive "P")
+    (unless refresh
+      (org-remove-inline-images)
+      (if (fboundp 'clear-image-cache) (clear-image-cache)))
+    (save-excursion
+      (save-restriction
+        (widen)
+        (setq beg (or beg (point-min)) end (or end (point-max)))
+        (goto-char beg)
+        (let ((re (concat "\\[\\[\\(\\(file:\\)\\|\\([./~]\\)\\)\\([^]\n]+?"
+                          (substring (org-image-file-name-regexp) 0 -2)
+                          "\\)\\]" (if include-linked "" "\\]")))
+              old file ov img)
+          (while (re-search-forward re end t)
+            (setq old (get-char-property-and-overlay (match-beginning 1)
+                                                     'org-image-overlay)
+    		file (expand-file-name
+                        (concat (or (match-string 3) "") (match-string 4))))
+            (when (file-exists-p file)
+              (let ((file-thumb (format "%s%s_thumb.png" (file-name-directory file) (file-name-base file))))
+                (if (file-exists-p file-thumb)
+                    (let ((thumb-time (nth 5 (file-attributes file-thumb 'string)))
+                          (file-time (nth 5 (file-attributes file 'string))))
+                      (if (time-less-p thumb-time file-time)
+    			(shell-command (format org-imagemagick-display-command
+    					       file org-image-actual-width org-image-actual-width file-thumb) nil nil)))
+                  (shell-command (format org-imagemagick-display-command
+                                         file org-image-actual-width org-image-actual-width file-thumb) nil nil))
+                (if (and (car-safe old) refresh)
+                    (image-refresh (overlay-get (cdr old) 'display))
+                  (setq img (save-match-data (create-image file-thumb)))
+                  (when img
+                    (setq ov (make-overlay (match-beginning 0) (match-end 0)))
+                    (overlay-put ov 'display img)
+                    (overlay-put ov 'face 'default)
+                    (overlay-put ov 'org-image-overlay t)
+                    (overlay-put ov 'modification-hooks
+                                 (list 'org-display-inline-remove-overlay))
+                    (push ov org-inline-image-overlays))))))))))
 #+END_SRC
 
-**** Task Management, Agenda, Archive, Refiling
+*** Task Management, Agenda, Archive, Refiling
 
 #+NAME: org-config-task-management-and-agenda
 #+BEGIN_SRC emacs-lisp :tangle no
@@ -890,11 +975,6 @@ Build a second brain with org-roam.
 
   (use-package org-roam
     :after org
-    :ensure t
-    :custom
-    (org-roam-database-connector 'sqlite-builtin) ;; emacs 29 and newer
-    (org-roam-directory (file-truename "~/org/roam/"))
-    (org-roam-completion-everywhere t)
     :bind (("C-c n l" . org-roam-buffer-toggle)
            ("C-c n f" . org-roam-node-find)
            ("C-c n i" . org-roam-node-insert)
@@ -910,6 +990,9 @@ Build a second brain with org-roam.
     :bind-keymap
     ("C-c n d" . org-roam-dailies-map)
     :config
+    (setq org-roam-database-connector 'sqlite-builtin) ;; emacs 29 and newer
+    (setq org-roam-directory (file-truename "~/org/roam/"))
+    (setq org-roam-completion-everywhere t)
     (org-roam-db-autosync-mode)
     ;; If you're using a vertical completion framework, you might want a more informative completion interface
     (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
@@ -1086,7 +1169,7 @@ Store the API key in .authinfo
 #+BEGIN_SRC emacs-lisp
 
     (defun my-writing-mode()
-      "Switch to my distress less writing mode"
+      "Switch to my distress less writing mode. An alternative is \"writeroom-mode\""
       (interactive)
       (olivetti-mode)
       (variable-pitch-mode)
@@ -1095,13 +1178,20 @@ Store the API key in .authinfo
 #+END_SRC
 
 * Global key bindings
-** Open the file under cursor:
+** Comment / Uncomment Region
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-x C-,") 'comment-region)
+  (global-set-key (kbd "C-x C-.") 'uncomment-region)
+#+end_src
+
+** Open the file under cursor
 
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-x f") 'find-file-at-point)
 #+END_SRC
 
-** Increase / decrease text scale:
+** Increase / decrease text scale
 
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C--") 'text-scale-decrease)
@@ -1123,7 +1213,7 @@ Store the API key in .authinfo
 ** Org mode
 
 #+BEGIN_SRC emacs-lisp
-  
+
   (global-set-key (kbd "C-c a") 'org-agenda)
   (global-set-key (kbd "C-c j") 'org-journal-new-date-entry)
   (global-set-key (kbd "C-c c") 'org-capture)
@@ -1147,7 +1237,7 @@ Store the API key in .authinfo
   (global-set-key (kbd "C-c m") 'mu4e)  
 #+end_src
 
-* Printing
+* COMMENT Printing
 
 #+BEGIN_SRC emacs-lisp
 
