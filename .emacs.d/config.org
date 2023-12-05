@@ -20,9 +20,21 @@
   
 #+END_SRC
 
-* Package management
-Package management is done with straight.el now. The bootstrapping of this has been moved to my init.el since this allows to use straight.el to load org mode which is required for the literate configuration you see here. Otherwise emacs would use the built-in version of org which may be too old for the more bleeding edge character of a straight.el maintained emacs installation.
-straight.el offers the 'use-package' command (see also init.el).
+#+RESULTS:
+| efs/display-startup-time |
+
+* Bootstrap straight.el
+
+The bootstrap process of this literate config is the following:
+
+1. in ~early-init.el~: we avoid enabling package.el at startup
+2. in ~init.el~: we setup ~straight.el~ and pull a recent version of org mode to org-babel-load-file this file (~config.org~), which tangles it into ~config.el~
+3. here, in ~config.org~ or ~config.el~, respectively, we install 'use-package' via straight.el and use straight.el's version of 'use-package' by default.
+
+#+BEGIN_SRC emacs-lisp
+  (straight-use-package 'use-package)
+  (setq straight-use-package-by-default t)
+#+END_SRC
 
 * Basic personal information
   
