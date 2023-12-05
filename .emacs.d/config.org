@@ -258,7 +258,7 @@ An alternative to /smartparens/ is /paren/.
 #+BEGIN_SRC emacs-lisp
 
   (use-package vertico
-    :config
+    :init
     (vertico-mode)
     ;; Different scroll margin
     ;;(setq vertico-scroll-margin 0)
@@ -274,9 +274,37 @@ An alternative to /smartparens/ is /paren/.
     :init
     (savehist-mode))
 
+  ;; A few more useful configurations...
+  (use-package emacs
+    :init
+    ;; Add prompt indicator to `completing-read-multiple'.
+    ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
+    (defun crm-indicator (args)
+      (cons (format "[CRM%s] %s"
+                    (replace-regexp-in-string
+                     "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
+                     crm-separator)
+                    (car args))
+            (cdr args)))
+    (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+
+    ;; Do not allow the cursor in the minibuffer prompt
+    (setq minibuffer-prompt-properties
+          '(read-only t cursor-intangible t face minibuffer-prompt))
+    (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+
+    ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
+    ;; Vertico commands are hidden in normal buffers.
+    ;; (setq read-extended-command-predicate
+    ;;       #'command-completion-default-include-p)
+
+    ;; Enable recursive minibuffers
+    (setq enable-recursive-minibuffers t))
+
 #+END_SRC
 
 ** Orderless
+This package provides an orderless completion style that divides the pattern into space-separated components, and matches candidates that match all of the components in any order. [[https://github.com/oantolin/orderless]]
 
 #+BEGIN_SRC emacs-lisp
 
@@ -404,11 +432,11 @@ Completion allows you to quickly select an item from a list of candidates.
     ;; By default `consult-project-function' uses `project-root' from project.el.
     ;; Optionally configure a different project root function.
     ;;;; 1. project.el (the default)
-    ;; (setq consult-project-function #'consult--default-project--function)
+    (setq consult-project-function #'consult--default-project--function)
     ;;;; 2. vc.el (vc-root-dir)
-    ;; (setq consult-project-function (lambda (_) (vc-root-dir)))
+    (setq consult-project-function (lambda (_) (vc-root-dir)))
     ;;;; 3. locate-dominating-file
-    ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
+    (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
     ;;;; 4. projectile.el (projectile-project-root)
     ;; (autoload 'projectile-project-root "projectile")
     ;; (setq consult-project-function (lambda (_) (projectile-project-root)))
@@ -436,12 +464,37 @@ Enriches selection lists (and completion minibuffers, e.g. consult) with additio
     ;; enabled right away. Note that this forces loading the package.
     (marginalia-mode))
   #+END_src
+** Company mode
+
+#+begin_src emacs-lisp
+  (use-package company
+    :defer 0
+    :diminish company-mode
+    :config
+    (add-hook 'after-init-hook #'global-company-mode))
+#+end_src
+
+** Syntax check with flycheck
+
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck
+    :defer 0
+    :diminish flycheck-mode
+    :config
+    (add-hook 'after-init-hook #'global-flycheck-mode))
+#+END_SRC
+ 
+** Spell check with flyspell (using enchant)
+
+enchant uses aspell or hunspell or whatever it can find. Saved words are stored in ~~./config/enchant~.
+
+#+BEGIN_SRC emacs-lisp
+  (setq ispell-program-name "enchant-2")
+#+END_SRC
 
 ** embark & embark-consult
 #+BEGIN_SRC emacs-lisp
   (use-package embark
-     :ensure t
-     :defer 0
      :bind
      (("C-." . embark-act)         ;; pick some comfortable binding
       ("C-;" . embark-dwim)        ;; good alternative: M-.
@@ -496,28 +549,21 @@ Allows to browse bibtex file(s), insert citations, open files, links and notes. 
 
 Snippet expansion
 - default key for expansion is <TAB>
-- company does not show snippets for completion-at-point
+- company does not show snippets for completion-at-point, but there is ongoing work
 
- #+begin_src emacs-lisp
-
+#+begin_src emacs-lisp
    (use-package yasnippet
      :defer 0
      :config
      (yas-global-mode))
+#+END_SRC
 
-   ;; snippets
+Snippets aren't included in the base package. Therefore, they need to be loaded separately.
+
+#+begin_src emacs-lisp
    (use-package yasnippet-snippets
      :defer 0)
-
  #+end_src
-
-** flyspell
-
-enchant uses aspell or hunspell or whatever it can find. Saved words are stored in ~~./config/enchant~.
-
-#+BEGIN_SRC emacs-lisp
-  (setq ispell-program-name "enchant-2")
-#+END_SRC
 
 ** which-key
 
@@ -560,53 +606,31 @@ The global keybinding 'C-x u' is set below.
   
 #+END_SRC
 
-** Syntax check and auto completion
-
-#+BEGIN_SRC emacs-lisp
-  (use-package company
-    :defer 0
-    :diminish company-mode
-    :config
-    (add-hook 'after-init-hook #'global-company-mode))
-
-  (use-package flycheck
-    :defer 0
-    :diminish flycheck-mode
-    :config
-    (add-hook 'after-init-hook #'global-flycheck-mode))
-#+END_SRC
- 
-** magit: Git support
-
-#+BEGIN_SRC emacs-lisp
-  (use-package magit
-    :defer 0)
-#+END_SRC
-
-** openwith
+** COMMENT openwith
 
 #+BEGIN_SRC emacs-lisp
 
   (use-package openwith
+    :defer 0
     :config
     (setq openwith-associations
-          (list
-           (list (openwith-make-extension-regexp
-                  '("mpg" "mpeg" "mp3" "mp4"
-                    "avi" "wmv" "wav" "mov" "flv"
-                    "ogm" "ogg" "mkv"))
-                 "xdg-open"
-                 '(file))
-           ;; (list (openwith-make-extension-regexp
-           ;;        '("xbm" "pbm" "pgm" "ppm" "pnm"
-           ;;          "png" "gif" "bmp" "tif" "jpeg" "jpg"))
-           ;;       "xdg-open"
-           ;;       '(file))
-           (list (openwith-make-extension-regexp
-                  '("doc" "xls" "ppt" "odt" "ods" "odg" "odp" "docx" "xlsx" "pptx"))
-                 "xdg-open"
-                 '(file))
-           ))
+	  (list
+	   (list (openwith-make-extension-regexp
+		  '("mpg" "mpeg" "mp3" "mp4"
+		    "avi" "wmv" "wav" "mov" "flv"
+		    "ogm" "ogg" "mkv"))
+		 "xdg-open"
+		 '(file))
+	   ;; (list (openwith-make-extension-regexp
+	   ;;        '("xbm" "pbm" "pgm" "ppm" "pnm"
+	   ;;          "png" "gif" "bmp" "tif" "jpeg" "jpg"))
+	   ;;       "xdg-open"
+	   ;;       '(file))
+	   (list (openwith-make-extension-regexp
+		  '("doc" "xls" "ppt" "odt" "ods" "odg" "odp" "docx" "xlsx" "pptx"))
+		 "xdg-open"
+		 '(file))
+	   ))
     ;; prevent <openwith> from interfering with mail attachments
     (require 'mm-util)
     (add-to-list 'mm-inhibit-file-name-handlers 'openwith-file-handler)
