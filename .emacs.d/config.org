@@ -834,7 +834,7 @@ What I want is:
     
 #+END_SRC
 
-**** Org capture templates
+*** Org capture templates
 #+NAME: org-config-capture-templates
 #+BEGIN_SRC emacs-lisp :tangle no
 
@@ -842,153 +842,86 @@ What I want is:
     	'(
     	  ("t" "Todo" entry (file "~/org/inbox.org")                    "* TODO %?\n  %i")
     	  ("e" "Event" entry (file+headline "~/org/events.org" "Inbox") "* %^{Event Title}\n\n%^{Date and Time}T\nLocation: %^{Location}\n%i%?" :time-prompt t)
-    	  ("n" "Meeting Notes" entry (file "~/org/inbox.org")           "* Notes %?\n- %U\n %i")
-    	  ("r" "Reading" entry (file "~/org/inbox.org")                 "* TODO Read: %?\n  %i")
+    	  ("n" "Note" entry (file "~/org/inbox.org")           "* NOTE %U %?\n- %i")
     	  ("m" "Process Mail" entry (file "~/org/inbox.org")            "* TODO %?\nSCHEDULED: %t\nMail: %:fromname: %a")
     	  ("p" "Protocol" entry (file "~/org/inbox.org")                "* TODO %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
     	  ("L" "Protocol Link" entry (file "~/org/inbox.org")           "* TODO %?\n[[%:link][%:description]]")))
   
 #+END_SRC
 
-**** LaTeX export classes + beamer support
+*** LaTeX export classes + beamer support
+
+For syntax highlighted source code blocks, I use the font-locking mode of emacs. The package engrave-faces contains LaTeX, Ansi and HTML faces.
+#+begin_src emacs-lisp
+  (use-package engrave-faces)
+#+end_src
+
+
 #+NAME: org-config-latex-export
 #+BEGIN_SRC emacs-lisp :tangle no
+
+  ;; Include e set (or known email address)
+  (setq org-export-with-email t)
 
   ;; compile latex in foreground to directly retrieve compilation errors
   (setq org-export-in-background nil)
 
+  ;; use emacs's font-locking for syntax highlighting in LaTeX exports
+
+  (setq org-latex-src-block-backend 'engraved)
+
   ;; ox-latex: Add KomaScript to the known classes
   (with-eval-after-load 'ox-latex
     (add-to-list 'org-latex-classes '("scrbook"
-        				    "\\documentclass[11pt]{scrbook}"
-        				    ("\\chapter{%s}" . "\\chapter*{%s}")
-        				    ("\\section{%s}" . "\\section*{%s}")
-        				    ("\\subsection{%s}" . "\\subsection*{%s}")
-        				    ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-        				    ("\\paragraph{%s}" . "\\paragraph*{%s}")
-        				    ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+                    		    "\\documentclass[11pt]{scrbook}"
+                    		    ("\\chapter{%s}" . "\\chapter*{%s}")
+                    		    ("\\section{%s}" . "\\section*{%s}")
+                    		    ("\\subsection{%s}" . "\\subsection*{%s}")
+                    		    ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                    		    ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                    		    ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
   (with-eval-after-load 'ox-latex
     (add-to-list 'org-latex-classes '("scrartcl"
-        				    "\\documentclass[11pt]{scrartcl}"
-        				    ("\\section{%s}" . "\\section*{%s}")
-        				    ("\\subsection{%s}" . "\\subsection*{%s}")
-        				    ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-        				    ("\\paragraph{%s}" . "\\paragraph*{%s}")
-        				    ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+                    		    "\\documentclass[11pt]{scrartcl}"
+                    		    ("\\section{%s}" . "\\section*{%s}")
+                    		    ("\\subsection{%s}" . "\\subsection*{%s}")
+                    		    ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                    		    ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                    		    ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+  (with-eval-after-load 'ox-latex
+    (add-to-list 'org-latex-classes '("my-beamer"
+              			    "\\documentclass[presentation,aspectratio=169,allowframebreaks]{beamer}
+    \\usepackage{pdfpages}
+    \\institute[RGSE]{University of Koblenz, Research Group Software Engineering}
+    \\setbeamertemplate{caption}{\\raggedright\\insertcaption\\par}
+    \\beamertemplatenavigationsymbolsempty%
+    \\addtobeamertemplate{navigation symbols}{}{%
+        \\usebeamerfont{footline}%
+        \\usebeamercolor[fg]{footline}%
+        \\hspace{1em}%
+        \\insertframenumber % / \\inserttotalframenumber%
+    }
+    \\setbeamertemplate{section page}{%
+      \\begin{centering}%
+        \\begin{beamercolorbox}[sep=12pt,center]{section title}%
+          \\usebeamerfont{section title}\\insertsection\\par%
+        \\end{beamercolorbox}%
+      \\end{centering}%
+   }%
+   \\AtBeginSection[]{%
+     \\begin{frame}%
+       \\sectionpage%
+     \\end{frame}%
+   }%"
+              			    ("\\section{%s}" . "\\section*{%s}")
+              			    ("\\subsection{%s}" . "\\subsection*{%s}")
+              			    ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
 
   ;; add beamer to the export backends
   (add-to-list 'org-export-backends 'beamer)
   (setq org-beamer-environments-extra
         '(("onlyenv" "O" "\\begin{onlyenv}%a" "\\end{onlyenv}")))
-    
-#+END_SRC
 
-**** Display PDF images inline
-
-#+NAME: org-config-display-pdf-inline
-#+BEGIN_SRC emacs-lisp :tangle no
-
-  ;; Display PDF files inline
-  ;; taken from https://stackoverflow.com/questions/15407485/inline-pdf-images-in-org-mode
-
-  (add-to-list 'image-file-name-extensions "pdf")
-
-  (setq org-image-actual-width 600)
-
-  (setq org-imagemagick-display-command "convert -density 600 \"%s\" -thumbnail \"%sx%s>\" \"%s\"")
-  (defun org-display-inline-images (&optional include-linked refresh beg end)
-    "Display inline images.
-    Normally only links without a description part are inlined, because this
-    is how it will work for export.  When INCLUDE-LINKED is set, also links
-    with a description part will be inlined.  This
-    can be nice for a quick
-    look at those images, but it does not reflect what exported files will look
-    like.
-    When REFRESH is set, refresh existing images between BEG and END.
-    This will create new image displays only if necessary.
-    BEG and END default to the buffer boundaries."
-    (interactive "P")
-    (unless refresh
-      (org-remove-inline-images)
-      (if (fboundp 'clear-image-cache) (clear-image-cache)))
-    (save-excursion
-      (save-restriction
-        (widen)
-        (setq beg (or beg (point-min)) end (or end (point-max)))
-        (goto-char beg)
-        (let ((re (concat "\\[\\[\\(\\(file:\\)\\|\\([./~]\\)\\)\\([^]\n]+?"
-                          (substring (org-image-file-name-regexp) 0 -2)
-                          "\\)\\]" (if include-linked "" "\\]")))
-              old file ov img)
-          (while (re-search-forward re end t)
-            (setq old (get-char-property-and-overlay (match-beginning 1)
-                                                     'org-image-overlay)
-    		file (expand-file-name
-                        (concat (or (match-string 3) "") (match-string 4))))
-            (when (file-exists-p file)
-              (let ((file-thumb (format "%s%s_thumb.png" (file-name-directory file) (file-name-base file))))
-                (if (file-exists-p file-thumb)
-                    (let ((thumb-time (nth 5 (file-attributes file-thumb 'string)))
-                          (file-time (nth 5 (file-attributes file 'string))))
-                      (if (time-less-p thumb-time file-time)
-    			(shell-command (format org-imagemagick-display-command
-    					       file org-image-actual-width org-image-actual-width file-thumb) nil nil)))
-                  (shell-command (format org-imagemagick-display-command
-                                         file org-image-actual-width org-image-actual-width file-thumb) nil nil))
-                (if (and (car-safe old) refresh)
-                    (image-refresh (overlay-get (cdr old) 'display))
-                  (setq img (save-match-data (create-image file-thumb)))
-                  (when img
-                    (setq ov (make-overlay (match-beginning 0) (match-end 0)))
-                    (overlay-put ov 'display img)
-                    (overlay-put ov 'face 'default)
-                    (overlay-put ov 'org-image-overlay t)
-                    (overlay-put ov 'modification-hooks
-                                 (list 'org-display-inline-remove-overlay))
-                    (push ov org-inline-image-overlays))))))))))
-#+END_SRC
-
-*** org-contrib
-
-This is needed to allow for not exporting to latex those org headings that are tagged :ignore:.
-
-#+BEGIN_src emacs-lisp
-  
-  (use-package org-contrib
-    :after org)
-  (use-package ox-extra
-    :after org-contrib
-    :config
-    (ox-extras-activate '(latex-header-blocks ignore-headlines)))
-
-#+END_src
-
-*** org-journal
-
-#+BEGIN_SRC emacs-lisp
-
-    (use-package org-journal
-      :after org
-      :config
-      (setq org-journal-dir "~/org/journal/")
-      (setq org-journal-file-type 'yearly)
-      (setq org-journal-file-format "journal-%Y.org") ; breaks choosing a date
-      (setq org-journal-date-format "%A, %d %B %Y")
-      (setq org-journal-created-property-timestamp-format "%Y-%m-%d")
-      (setq org-journal-time-format ""))
-
-#+END_SRC
-
-*** org-superstar
-
-Beautiful bullets. org-superstar is a descendent of org-bullets.
-
-#+BEGIN_SRC emacs-lisp
-
-  (use-package org-superstar
-    :after org
-    :hook (org-mode . org-superstar-mode))
-  
 #+END_SRC
 
 *** org-roam
@@ -1037,6 +970,63 @@ Visualize the org roam graph in browser:
 
 #+end_src
 
+*** org-journal
+
+#+BEGIN_SRC emacs-lisp
+
+    (use-package org-journal
+      :after org
+      :config
+      (setq org-journal-dir "~/org/journal/")
+      (setq org-journal-file-type 'yearly)
+      (setq org-journal-file-format "journal-%Y.org") ; breaks choosing a date
+      (setq org-journal-date-format "%A, %d %B %Y")
+      (setq org-journal-created-property-timestamp-format "%Y-%m-%d")
+      (setq org-journal-time-format ""))
+
+#+END_SRC
+
+*** org-babel
+Active some Babel languages
+
+#+BEGIN_SRC emacs-lisp
+
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((dot . t)
+     (emacs-lisp .t)
+     (java .t)
+     (shell . t)
+     (sqlite . t)))
+      
+#+END_SRC
+
+*** HTML Export
+
+htmlize is used by org to export to HTML.
+  
+#+BEGIN_SRC emacs-lisp
+
+  (use-package htmlize
+    :defer 0)
+
+#+END_SRC
+
+*** org-contrib
+
+This is needed to allow for not exporting to latex those org headings that are tagged :ignore:.
+
+#+BEGIN_src emacs-lisp
+  
+  (use-package org-contrib
+    :after org)
+  (use-package ox-extra
+    :after org-contrib
+    :config
+    (ox-extras-activate '(latex-header-blocks ignore-headlines)))
+
+#+END_src
+
 *** org-noter
 
 Used to a sync notes in an org file with documents like PDF.
@@ -1052,17 +1042,6 @@ Just press 'i' in PDFView, DOCView and so on
     ;; https://github.com/weirdNox/org-noter/issues/44
     (defun my/no-op (&rest args))
     (advice-add 'org-noter--set-notes-scroll :override 'my/no-op))
-
-#+END_SRC
-
-*** htmlize
-
-htmlize is used by org to export to HTML.
-  
-#+BEGIN_SRC emacs-lisp
-
-  (use-package htmlize
-    :defer 0)
 
 #+END_SRC
 
