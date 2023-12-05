@@ -1159,13 +1159,55 @@ Store the API key in .authinfo
 
 #+END_SRC
 
-** ement.el
+** COMMENT ement.el
 
 #+BEGIN_SRC emacs-lisp
   (use-package ement)
 #+END_SRC
 
-* Functions
+** COMMENT JAVA LSP
+
+#+begin_src emacs-lisp
+  ;;  (use-package projectile)
+  ;;  (use-package flycheck)
+  ;;  (use-package yasnippet :config (yas-global-mode))
+  (use-package lsp-mode :hook ((lsp-mode . lsp-enable-which-key-integration)))
+  (use-package hydra)
+  ;;  (use-package company)
+  (use-package lsp-ui)
+  ;; (use-package which-key :config (which-key-mode))
+  (use-package lsp-java :config (add-hook 'java-mode-hook 'lsp))
+  (use-package dap-mode :after lsp-mode :config (dap-auto-configure-mode))
+  ;; (use-package dap-java :ensure nil)
+  ;; (use-package helm-lsp)
+  ;; (use-package helm
+  ;; :config (helm-mode))
+  (use-package lsp-treemacs)
+#+end_src
+
+** eglot Java
+The built-in LSP server
+
+#+begin_src emacs-lisp
+  (add-hook 'java-mode-hook 'eglot-java-mode)
+  (add-hook 'eglot-java-mode-hook (lambda ()                                        
+    (define-key eglot-java-mode-map (kbd "C-c l n") #'eglot-java-file-new)
+    (define-key eglot-java-mode-map (kbd "C-c l x") #'eglot-java-run-main)
+    (define-key eglot-java-mode-map (kbd "C-c l t") #'eglot-java-run-test)
+    (define-key eglot-java-mode-map (kbd "C-c l N") #'eglot-java-project-new)
+    (define-key eglot-java-mode-map (kbd "C-c l T") #'eglot-java-project-build-task)
+    (define-key eglot-java-mode-map (kbd "C-c l R") #'eglot-java-project-build-refresh)))
+
+#+end_src
+
+** magit: Git support
+
+#+BEGIN_SRC emacs-lisp
+  (use-package magit
+    :defer 0)
+#+END_SRC
+
+* My Convenience Functions
 
 ** Connect with my ZNC irc bouncer
 
