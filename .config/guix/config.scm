@@ -14,6 +14,7 @@
 	     (gnu packages networking)
 	     (gnu packages shells)
 	     (gnu packages wm)
+	     (gnu packages gnome) ; for geoclue polkit service
 	     (gnu packages admin)
 	     (gnu services cups)
 	     (gnu services dbus)
@@ -85,6 +86,9 @@
  ;; Packages installed system-wide.
  (packages (append (map (compose list specification->package+output)
 			'(
+			  ;; hardware related
+			  "i915-firmware"
+			  "intel-vaapi-driver"
 			  ;; basics
 			  "git" "git:send-email" "git:gui" 
 			  "bash"
@@ -92,16 +96,19 @@
 			  ;; TLS root certificates
 			  "nss-certs"
 			  ;; emacs & related
-			  "emacs-pgtk" "emacs-pdf-tools"
+			  "emacs-pgtk" "emacs-pdf-tools" "emacs-vterm"
 			  "isync" "mu"
+			  "openjdk@17.0.5:jdk" ; java-lsp wants this
+			  "python" ; treemacs wants python3
 			  ;; my shell and shell tools
 			  "zsh" "zsh-autosuggestions" "zsh-syntax-highlighting"
+			  "bind:utils"
 			  "cups" ;; to have commands like lpq etc
 			  "file"
 			  "efibootmgr"
 			  "htop"
 			  "neofetch"
-			  "bind:utils"
+			  "just"
 			  "net-tools"
 			  "nmap"
 			  "octave"
@@ -115,11 +122,12 @@
 			  "acpi"
 			  "brightnessctl"
 			  ;; syncing and versioning
-			  "samba"
 			  "binutils" ;; for ar command
-			  "curl"
 			  "borg"
+			  "curl"
+			  "davfs2"
 			  "rsync"
+			  "samba"
 			  "subversion"
 			  "syncthing"
 			  "nextcloud-client"
@@ -133,10 +141,10 @@
 			  ;; wayland, not sure what I really need
 			  "xorg-server-xwayland" "slurp" "grim" "grimshot" "swappy" "wlr-randr" "egl-wayland"
 			  ;; sway
-			  "sway" "swaynotificationcenter" "swaylock" "swayidle" "waybar" "wofi"
+			  "sway" "swaynotificationcenter" "swaylock" "swayidle" "waybar" "wofi" "wl-clipboard" "clipman"
 			  "alacritty"
 			  "kanshi" ; automatically switch displays
-			  "gammastep" ; could use geoclue, if geoclue was running
+			  "gammastep" "geoclue" ; could use geoclue, if geoclue was running
 			  ;; other desktop related
 			  "tumbler" ; D-BUS thumbnail service
 			  "poweralertd"
@@ -157,7 +165,7 @@
 			  "lxappearance" "qt5ct"
 			  ;; my desktop apps
 			  "nemo" "file-roller" "gvfs" "baobab"
-			  "firefox" "icedove" "ungoogled-chromium"
+			  "firefox" "icedove" "ungoogled-chromium-wayland"
 			  "aqbanking" "gnucash"
 			  "libreoffice"
 			  ;; Office, LaTeX, PDF & Co
@@ -187,7 +195,9 @@
 			  "font-liberation"
 			  "font-awesome"
 			  "font-dejavu"
-			  ;;			  "font-fira-code"
+			  ;; Nerd-Fonts are installed by M-x nerd-icons-install-fonts
+			  ;; all-the-icons are installed by M-x all-the-icons-install-f
+			  ;; "font-fira-code" ; needed?
 			  "font-google-noto" ; broad range of 
 			  "font-google-noto-emoji" ; Emoji support
 			  "font-google-noto-serif-cjk" "font-google-noto-sans-cjk" ; chinese fonts
@@ -235,6 +245,13 @@
 			       (file->udev-rule
 				"42-logitech-unify-permissions.rules"
 				(file-append solaar "/share/solaar/udev-rules.d/42-logitech-unify-permissions.rules")))
+
+	   ;; (service geoclue-service-type) 
+	   (simple-service 'geoclue-polkit-rule polkit-service-type 
+			   (list (file-union
+				  "polkit-geoclue"
+				  `(("share/polkit-1/rules.d/geoclue.rules"
+				     ,(file-append geoclue "/share/polkit-1/rules.d/org.freedesktop.GeoClue2.rules"))))))
 	   (simple-service 'dbus-extras
 			   dbus-root-service-type (list blueman)))
 	  ;; This is the (modified) default list of services we are appending to.
