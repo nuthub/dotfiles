@@ -27,7 +27,7 @@
 ;; Load my literate config
 (org-babel-load-file
  (expand-file-name
-  "config.org"
+  "README.org"
   user-emacs-directory))
 
 (provide 'init)

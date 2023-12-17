@@ -5,8 +5,7 @@
 .org-id-locations
 auto-save-list/
 bookmarks
-config.el
-desktop.el
+README.el
 eln-cache/
 elpa/
 eshell/
