@@ -1435,6 +1435,19 @@ The global keybinding 'C-x u' is set below.
 
 #+END_SRC
 
+There is a package https://github.com/joostkremers/writeroom-mode?tab=readme-ov-file that does similar things.
+
+** Synchronization between JabRef keywords and org-roam nodes
+
+#+begin_src emacs-lisp
+  (use-package org-roam-citation-keyword-nodes
+    :after roam citar
+    :demand t
+    :straight (org-roam-citation-keyword-nodes
+  	     :type git :host github
+  	     :repo "nuthub/org-roam-citation-keyword-nodes"))
+#+end_src
+
 * Global key bindings
 ** Comment / Uncomment Region
 
