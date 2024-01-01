@@ -46,12 +46,6 @@ The bootstrap process of this literate config is the following:
   (setq user-mail-address "julian@flake.de")
 #+END_SRC
 
-** My default browser is chromium:
-#+BEGIN_SRC emacs-lisp
-  ;; (setq browse-url-browser-function 'browse-url-chromium)
-  ;; (setq browse-url-browser-function 'browse-url-default-browser) ;; not necessary, it's the default
-#+END_SRC
-
 ** TODO Some localizations for the calendar
 
 Holidays are not shown in agenda-hoidays (org-agenda 'h')
@@ -63,10 +57,7 @@ Holidays are not shown in agenda-hoidays (org-agenda 'h')
         calendar-month-name-array ["Januar" "Februar" "März" "April" "Mai"
                                    "Juni" "Juli" "August" "September"
                                    "Oktober" "November" "Dezember"])
-#+END_SRC
 
-
-#+BEGIN_SRC emacs-lisp
   (setq solar-n-hemi-seasons
         '("Frühlingsanfang" "Sommeranfang" "Herbstanfang" "Winteranfang"))
 
@@ -77,13 +68,7 @@ Holidays are not shown in agenda-hoidays (org-agenda 'h')
 
   ;; Feiertage für Bayern, weitere auskommentiert
   (setq holiday-christian-holidays
-        '((holiday-float 12 0 -4 "1. Advent" 24)
-          (holiday-float 12 0 -3 "2. Advent" 24)
-          (holiday-float 12 0 -2 "3. Advent" 24)
-          (holiday-float 12 0 -1 "4. Advent" 24)
-          (holiday-fixed 12 25 "1. Weihnachtstag")
-          (holiday-fixed 12 26 "2. Weihnachtstag")
-          (holiday-fixed 1 6 "Heilige Drei Könige")
+        '(;;(holiday-fixed 1 6 "Heilige Drei Könige")
           (holiday-easter-etc -48 "Rosenmontag")
           ;; (holiday-easter-etc -3 "Gründonnerstag")
           (holiday-easter-etc  -2 "Karfreitag")
@@ -93,10 +78,16 @@ Holidays are not shown in agenda-hoidays (org-agenda 'h')
           (holiday-easter-etc +49 "Pfingstsonntag")
           (holiday-easter-etc +50 "Pfingstmontag")
           (holiday-easter-etc +60 "Fronleichnam")
-          (holiday-fixed 8 15 "Mariae Himmelfahrt")
+          ;;(holiday-fixed 8 15 "Mariae Himmelfahrt")
           (holiday-fixed 11 1 "Allerheiligen")
           ;; (holiday-float 11 3 1 "Buss- und Bettag" 16)
-          (holiday-float 11 0 1 "Totensonntag" 20)))
+  	(holiday-float 11 0 1 "Totensonntag" 20)
+  	(holiday-float 12 0 -4 "1. Advent" 24)
+          (holiday-float 12 0 -3 "2. Advent" 24)
+          (holiday-float 12 0 -2 "3. Advent" 24)
+          (holiday-float 12 0 -1 "4. Advent" 24)
+          (holiday-fixed 12 25 "1. Weihnachtstag")
+          (holiday-fixed 12 26 "2. Weihnachtstag")))
 #+END_SRC
 * Start a server
 
@@ -174,19 +165,20 @@ This is to hide minor modes from mode line. You can use `:diminish foo-mode` the
 
 ** Line numbers on the left
    
-Since Emacs 26 there is a builtin `display-line-numbers-mode`.
+=display-line-numbers-mode= is a built in minor mode
 
 #+BEGIN_SRC emacs-lisp
-    (global-display-line-numbers-mode t)
-    ;; Disable line numbers for some modes
-    (dolist (mode '(org-mode-hook
-                    vterm-mode-hook
-                    term-mode-hook
-                    shell-mode-hook
-                    eshell-mode-hook
-                    pdf-view-mode-hook
-  		  nov-mode-hook))
-      (add-hook mode (lambda () (display-line-numbers-mode 0))))
+  (global-display-line-numbers-mode t)
+  ;; Disable line numbers for some modes
+  (dolist (mode '(org-mode-hook
+  		org-agenda-mode-hook
+                  vterm-mode-hook
+                  term-mode-hook
+                  shell-mode-hook
+                  eshell-mode-hook
+                  pdf-view-mode-hook
+  		nov-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 0))))
 #+END_SRC
 
 ** All-the-icons
@@ -495,115 +487,254 @@ For syntax highlighted source code blocks, I use the font-locking mode of emacs.
           \\usebeamerfont{section title}\\insertsection\\par%
         \\end{beamercolorbox}%
       \\end{centering}%
-   }%
-   \\AtBeginSection[]{%
+    }%
+    \\AtBeginSection[]{%
      \\begin{frame}%
        \\sectionpage%
      \\end{frame}%
-   }%"
-              			    ("\\section{%s}" . "\\section*{%s}")
-              			    ("\\subsection{%s}" . "\\subsection*{%s}")
-              			    ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
+    }%"
+                    		    ("\\section{%s}" . "\\section*{%s}")
+                    		    ("\\subsection{%s}" . "\\subsection*{%s}")
+                    		    ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
 
-  ;; add beamer to the export backends
-  (add-to-list 'org-export-backends 'beamer)
-  (setq org-beamer-environments-extra
-        '(("onlyenv" "O" "\\begin{onlyenv}%a" "\\end{onlyenv}")))
+    ;; add beamer to the export backends
+    (add-to-list 'org-export-backends 'beamer)
+    (setq org-beamer-environments-extra
+          '(("onlyenv" "O" "\\begin{onlyenv}%a" "\\end{onlyenv}")))
 
+    ;; koma-letter
+    (eval-after-load 'ox '(require 'ox-koma-letter))
+
+    (eval-after-load 'ox-koma-letter
+      '(progn
+         (add-to-list 'org-latex-classes
+                      '("my-koma-letter"
+  		      "\\documentclass[11pt,parskip,DIV=15,fromalign=right]\{scrlttr2\}
+  \\usepackage[german]{babel}
+  \\renewcommand{\\familydefault}{\\sfdefault}
+         \[DEFAULT-PACKAGES]
+         \[PACKAGES]
+         \[EXTRA]"))
+
+         (setq org-koma-letter-default-class "my-letter")))
 #+END_SRC
 
-*** org-roam
+*** Display PDF images inline
+
+#+BEGIN_SRC emacs-lisp :tangle no :noweb-ref org-config-display-pdf-inline
+
+  ;; Display PDF files inline
+  ;; taken from https://stackoverflow.com/questions/15407485/inline-pdf-images-in-org-mode
+
+  (add-to-list 'image-file-name-extensions "pdf")
+
+  (setq org-image-actual-width 600)
+
+  (setq org-imagemagick-display-command "convert -density 600 \"%s\" -thumbnail \"%sx%s>\" \"%s\"")
+  (defun org-display-inline-images (&optional include-linked refresh beg end)
+    "Display inline images.
+    Normally only links without a description part are inlined, because this
+    is how it will work for export.  When INCLUDE-LINKED is set, also links
+    with a description part will be inlined.  This
+    can be nice for a quick
+    look at those images, but it does not reflect what exported files will look
+    like.
+    When REFRESH is set, refresh existing images between BEG and END.
+    This will create new image displays only if necessary.
+    BEG and END default to the buffer boundaries."
+    (interactive "P")
+    (unless refresh
+      (org-remove-inline-images)
+      (if (fboundp 'clear-image-cache) (clear-image-cache)))
+    (save-excursion
+      (save-restriction
+        (widen)
+        (setq beg (or beg (point-min)) end (or end (point-max)))
+        (goto-char beg)
+        (let ((re (concat "\\[\\[\\(\\(file:\\)\\|\\([./~]\\)\\)\\([^]\n]+?"
+                          (substring (org-image-file-name-regexp) 0 -2)
+                          "\\)\\]" (if include-linked "" "\\]")))
+              old file ov img)
+          (while (re-search-forward re end t)
+            (setq old (get-char-property-and-overlay (match-beginning 1)
+                                                     'org-image-overlay)
+    		file (expand-file-name
+                        (concat (or (match-string 3) "") (match-string 4))))
+            (when (file-exists-p file)
+              (let ((file-thumb (format "%s%s_thumb.png" (file-name-directory file) (file-name-base file))))
+                (if (file-exists-p file-thumb)
+                    (let ((thumb-time (nth 5 (file-attributes file-thumb 'string)))
+                          (file-time (nth 5 (file-attributes file 'string))))
+                      (if (time-less-p thumb-time file-time)
+    			(shell-command (format org-imagemagick-display-command
+    					       file org-image-actual-width org-image-actual-width file-thumb) nil nil)))
+                  (shell-command (format org-imagemagick-display-command
+                                         file org-image-actual-width org-image-actual-width file-thumb) nil nil))
+                (if (and (car-safe old) refresh)
+                    (image-refresh (overlay-get (cdr old) 'display))
+                  (setq img (save-match-data (create-image file-thumb)))
+                  (when img
+                    (setq ov (make-overlay (match-beginning 0) (match-end 0)))
+                    (overlay-put ov 'display img)
+                    (overlay-put ov 'face 'default)
+                    (overlay-put ov 'org-image-overlay t)
+                    (overlay-put ov 'modification-hooks
+                                 (list 'org-display-inline-remove-overlay))
+                    (push ov org-inline-image-overlays))))))))))
+#+END_SRC
+
+** Syntax highlighting in org mode exports
+
+For syntax highlighted source code blocks, I use the font-locking mode of emacs. The package engrave-faces contains LaTeX, Ansi and HTML faces.
+
+#+begin_src emacs-lisp
+  (use-package engrave-faces)
+#+end_src
+
+** org-roam
 
 Build a second brain with org-roam.
 
 #+BEGIN_SRC emacs-lisp
 
-   (use-package org-roam
-     :after org
-     :straight (:type git
-  	      :local-repo "~/git/org-roam")
-     :demand t ; this makes 
-     :bind (("C-c n l" . org-roam-buffer-toggle)
-            ("C-c n f" . org-roam-node-find)
-            ("C-c n i" . org-roam-node-insert)
-            ("C-c n c" . org-roam-capture)
-            ("C-c n g" . org-roam-graph)
-            ;; Dailies
-            ("C-c n j" . org-roam-dailies-capture-today)
-            :map org-mode-map
-            ("C-M-i" . completion-at-point)
-            :map org-roam-dailies-map
-            ("Y" . org-roam-dailies-capture-yesterday)
-            ("T" . org-roam-dailies-capture-tomorrow))
-     :bind-keymap
-     ("C-c n d" . org-roam-dailies-map)
-     :config
-     (setq org-roam-database-connector 'sqlite-builtin) ;; emacs 29 and newer
-     (setq org-roam-directory (file-truename "~/org/roam/"))
-     (setq org-roam-completion-everywhere t)
-     ;; If you're using a vertical completion framework, you might want a more informative completion interface
-     (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-     (org-roam-db-autosync-mode)
-     (org-roam-setup)
-     (org-roam-update-org-id-locations)
-     ;; If using org-roam-protocol
-     (require 'org-roam-dailies) ;; Ensure the keymap is available
-     (require 'org-roam-protocol)
-     (setq org-roam-capture-templates '(
-   				     ("d" "default" plain "%?"
-   				      :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-   				      :unnarrowed t)
-   				     ("n" "literature note" plain "%?"
-   				      :target (file+head
-   					       "%(expand-file-name (or citar-org-roam-subdir \"\") org-roam-directory)/${citar-citekey}.org"
-   					       "#+title: [${citar-citekey}] ${note-title}.\n\n")
-   				      :unnarrowed t))
-   	)
-     ) ; use-package org-roam
+  (use-package org-roam
+    :after org
+    :straight (:type git
+      		   :local-repo "~/git/org-roam")
+    :demand t ; this makes 
+    :bind (("C-c n l" . org-roam-buffer-toggle)
+           ("C-c n f" . org-roam-node-find)
+           ("C-c n i" . org-roam-node-insert)
+           ("C-c n c" . org-roam-capture)
+           ("C-c n g" . org-roam-graph)
+           ;; Dailies
+           ("C-c n j" . org-roam-dailies-capture-date)
+           :map org-mode-map
+           ("C-M-i" . completion-at-point)
+           :map org-roam-dailies-map
+           ("Y" . org-roam-dailies-capture-yesterday)
+           ("T" . org-roam-dailies-capture-tomorrow))
+    :bind-keymap
+    ("C-c n d" . org-roam-dailies-map)
+    :config
+    (setq org-roam-database-connector 'sqlite-builtin) ;; emacs 29 and newer
+    (setq org-roam-directory (file-truename "~/org/roam/"))
+    (setq org-roam-completion-everywhere t)
+    ;; If you're using a vertical completion framework, you might want a more informative completion interface
+    (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+    (org-roam-db-autosync-mode)
+    (org-roam-setup)
+    (org-roam-update-org-id-locations)
+    (setq org-roam-capture-templates '(
+      				     ("d" "default" plain "%?"
+      				      :target (file+head
+      					       "%<%Y%m%d%H%M%S>-${slug}.org"
+      					       "#+title: ${title}\n")
+      				      :unnarrowed t)
+      				     ("n" "literature note" plain "%?"
+      				      :target (file+head
+      					       "%(expand-file-name (or citar-org-roam-subdir \"\") org-roam-directory)/${citar-citekey}.org"
+      					       "#+title: [${citar-citekey}] ${note-title}\n#+filetags: literature_note\n\n")
+      				      :unnarrowed t))) ; org-roam-capture-templates
+    (require 'org-roam-dailies) ;; Ensure the keymap is available
+    (setq org-roam-dailies-capture-templates '(
+  					     ("d" "default" entry "* %?"
+  					      :target
+  					      (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n- Tags :: [[id:b3cb74b2-a385-4132-a55e-8cf561eed9fc][Journaling]]\n* Daily Planing
+- [ ] Journal [[elisp:(org-roam-dailies-goto-yesterday 1)][yesterday]]
+- [ ] Process [[file:~/Syncthing/org/inbox.org][inbox]]
+- [ ] Check [[elisp:(mu4e)][mails]]
+- [ ] Check [[elisp:(org-agenda-list)][agenda]]\n")))) ; org-roam-dailies-capture-templaes
+    ) ; use-package org-roam
 
 #+END_SRC
 
-Visualize the org roam graph in browser:
+Visualize the org roam graph in browser
 
 #+begin_src emacs-lisp
-
   (use-package org-roam-ui
-    :after org-roam)
-
+    :after org-roam
+    :config
+    (setq org-roam-ui-sync-theme t
+  	org-roam-ui-follow t
+  	org-roam-ui-update-on-save t
+  	org-roam-ui-open-on-start t))
 #+end_src
 
-*** org-journal
+** org-super-agenda
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
+  (use-package org-super-agenda
+    :config
+    (setq org-super-agenda-groups
+  	'(;; Each group has an implicit boolean OR operator between its selectors.
+            (:name "Today"  ; Optionally specify section name
+                   :time-grid t)  ; Items that appear on the time grid
+            (:name "Important"
+                   :priority "A")
+  	  (:name "Category B"
+  		 :priority "B")
+            (:priority<= "C")
+            ;; Set order of multiple groups at once
+            (:order-multi (2 (:name "Work related"
+                                    :tag ("teaching" "work"))
+                             (:name "Personal"
+                                    :habit t
+                                    :tag "self")
+                             (:name "Promotion"
+                                    :habit t
+                                    :tag "promotion")
+  			   (:name "Reading"
+                                    :habit t
+                                    :tag "self")))
+            ;; Groups supply their own section names when none are given
+            (:todo "WAIT" :order 8)  ; Set order of this section
+            (:todo ("SOMEDAY" "TO-READ" "CHECK" "TO-WATCH" "WATCHING")
+                   ;; Show this group at the end of the agenda (since it has the
+                   ;; highest number). If you specified this group last, items
+                   ;; with these todo keywords that e.g. have priority A would be
+                   ;; displayed in that group instead, because items are grouped
+                   ;; out in the order the groups are listed.
+                   :order 9)
+            ;; After the last group, the agenda will display items that didn't
+            ;; match any of these groups, with the default order position of 99
+            ))
+    (setq org-superagenda-mode 1))
+#+end_src
 
-    (use-package org-journal
-      :after org
-      :config
-      (setq org-journal-dir "~/org/journal/")
-      (setq org-journal-file-type 'yearly)
-      (setq org-journal-file-format "journal-%Y.org") ; breaks choosing a date
-      (setq org-journal-date-format "%A, %d %B %Y")
-      (setq org-journal-created-property-timestamp-format "%Y-%m-%d")
-      (setq org-journal-time-format ""))
+** COMMENT org-journal
 
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package org-journal
+    :after org
+    :config
+    (setq org-journal-dir "~/org/journal/")
+    (setq org-journal-file-type 'yearly)
+    (setq org-journal-file-format "journal-%Y.org") ; breaks choosing a date
+    (setq org-journal-date-format "%A, %d %B %Y")
+    (setq org-journal-created-property-timestamp-format "%Y-%m-%d")
+    (setq org-journal-time-format ""))
 #+END_SRC
 
-*** org-babel
+** org-babel
 Active some Babel languages
 
 #+BEGIN_SRC emacs-lisp
 
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((dot . t)
-     (emacs-lisp .t)
-     (java .t)
-     (shell . t)
-     (sqlite . t)))
-      
+  (use-package org
+    :after chatgpt-shell
+    :config
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((dot . t)
+       (emacs-lisp .t)
+       (java .t)
+       (shell . t)
+       (sqlite . t))))
+    
 #+END_SRC
 
-*** HTML Export
+** HTML Export
 
 htmlize is used by org to export to HTML.
   
@@ -614,7 +745,7 @@ htmlize is used by org to export to HTML.
 
 #+END_SRC
 
-*** org-contrib
+** org-contrib
 
 This is needed to allow for not exporting to latex those org headings that are tagged :ignore:.
 
@@ -629,12 +760,12 @@ This is needed to allow for not exporting to latex those org headings that are t
 
 #+END_src
 
-*** org-noter
+** COMMENT org-noter
 
 Used to a sync notes in an org file with documents like PDF.
 Just press 'i' in PDFView, DOCView and so on
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 
   (use-package org-noter
     :if (display-graphic-p)
@@ -646,6 +777,12 @@ Just press 'i' in PDFView, DOCView and so on
     (advice-add 'org-noter--set-notes-scroll :override 'my/no-op))
 
 #+END_SRC
+
+** ox-hugo
+
+#+begin_src emacs-lisp
+  (use-package ox-hugo)
+#+end_src
 
 ** pdf-tools
 
@@ -821,7 +958,6 @@ The built-in LSP server
 (Vertical) Completion framework: Vertico is the successor of selectrum.
 
 #+BEGIN_SRC emacs-lisp
-
   (use-package vertico
     :init
     (vertico-mode)
@@ -872,7 +1008,6 @@ The built-in LSP server
 This package provides an orderless completion style that divides the pattern into space-separated components, and matches candidates that match all of the components in any order. [[https://github.com/oantolin/orderless]]
 
 #+BEGIN_SRC emacs-lisp
-
   (use-package orderless
     :init
     ;; Configure a custom style dispatcher (see the Consult wiki)
@@ -881,7 +1016,6 @@ This package provides an orderless completion style that divides the pattern int
     (setq completion-styles '(orderless basic)
           completion-category-defaults nil
           completion-category-overrides '((file (styles partial-completion)))))
-
 #+END_SRC
 
 ** Consult
@@ -889,7 +1023,6 @@ This package provides an orderless completion style that divides the pattern int
 Completion allows you to quickly select an item from a list of candidates.
 
 #+BEGIN_SRC emacs-lisp
-
   ;; Example configuration for Consult
   (use-package consult
     ;; Replace bindings. Lazily loaded due by `use-package'.
@@ -1009,6 +1142,7 @@ Completion allows you to quickly select an item from a list of candidates.
     ;; (setq consult-project-function nil)
     )
 #+END_SRC
+
 ** Marginalia
 
 Enriches selection lists (and completion minibuffers, e.g. consult) with additional information.
@@ -1058,17 +1192,6 @@ enchant uses aspell or hunspell or whatever it can find. ~enchant-lsmod-2~ tells
   (setq ispell-program-name "enchant-2")
   (add-hook 'text-mode-hook 'flyspell-mode)
   (add-hook 'prog-mode-hook 'flyspell-prog-mode)
-
-  (defun jf/spell-switch-de ()
-    (interactive)
-    (ispell-change-dictionary "de_DE")
-    (flyspell-buffer))
-
-  (defun jf/spell-switch-en ()
-    (interactive)
-    (ispell-change-dictionary "en_US")
-    (flyspell-buffer))
-
 #+END_SRC
 
 ** embark & embark-consult
@@ -1188,13 +1311,11 @@ This helps to figure out the next keystrokes
 The package /undo-tree/ contains more features than vundo, e.g. timestamps, diffs, etc. I never used those features.
 
 #+BEGIN_SRC emacs-lisp
-
   (use-package undo-tree
     :defer 0
     :diminish undo-tree-mode
     :config
     (global-undo-tree-mode))
-
 #+END_SRC
 
 The global keybinding 'C-x u' is set below.
@@ -1232,26 +1353,13 @@ The global keybinding 'C-x u' is set below.
   	 (list (openwith-make-extension-regexp
   		'("doc" "xls" "ppt" "odt" "ods" "odg" "odp" "docx" "xlsx" "pptx"))
   	       "xdg-open"
-  	       '(file))
-  	 ))
+  	       '(file))))
     ;; prevent <openwith> from interfering with mail attachments
     (require 'mm-util)
     (add-to-list 'mm-inhibit-file-name-handlers 'openwith-file-handler)
     ;; enable openwith mode
     (openwith-mode 1))
-
 #+END_SRC
-
-** Project.el
-
-This is the built-in project package. I'm not sure, which feature offers that is missing from project.el and that I want to use.
-
-What I want is:
-- Open dired on project change
-#+begin_src emacs-lisp
-  ;; (require project)
-  ;; (add-to-list 'project-switch-commands (project-dired "Dired"))
-#+end_src
 
 ** COMMENT Projectile
 
@@ -1291,34 +1399,34 @@ What I want is:
     (sway-x-focus-through-sway-mode)) ;; Temporary workaround for Sway bug 6216)
 #+end_src
 
-** editorconfig
-
-#+BEGIN_SRC emacs-lisp
-  (use-package editorconfig
-    :ensure t
-    :diminish t
-    :config
-    (editorconfig-mode 1))
-#+END_SRC
-
 * Some convenience functions
 
+** Switch dictionary for flyspell
+#+begin_src emacs-lisp
+  (defun jf/spell-switch-de ()
+    (interactive)
+    (ispell-change-dictionary "de_DE")
+    (flyspell-buffer))
+
+  (defun jf/spell-switch-en ()
+    (interactive)
+    (ispell-change-dictionary "en_US")
+    (flyspell-buffer))
+#+end_src
 ** Connect with my ZNC irc bouncer
 
 #+BEGIN_SRC emacs-lisp
-
-  (defun my-irc()
+  (defun jf/my-irc()
     "Connect to my znc irc bouncer."
     (interactive)
     (erc-tls :server "irc.nuthouse.de" :nick "nutcase"))
-
 #+END_SRC
 
 ** A more distressless writing environment
 
 #+BEGIN_SRC emacs-lisp
 
-    (defun my-writing-mode()
+    (defun jf/my-writing-mode()
       "Switch to my distress less writing mode. An alternative is \"writeroom-mode\""
       (interactive)
       (olivetti-mode)
