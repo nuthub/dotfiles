@@ -56,13 +56,9 @@ exec swayidle -w \
 #
 # You can get the names of your inputs by running: swaymsg -t get_inputs
 # Read `man 5 sway-input` for more information about this section.
-input "1:1:AT_Translated_Set_2_keyboard" {
+input type:keyboard {
       xkb_layout "de"
-      xkb_options caps:ctrl_modifier
-}
-input "1133:16522:Logitech_MX_Keys" {
-      xkb_layout "de"
-      xkb_options caps:ctrl_modifier
+      xkb_options ctrl:nocaps
 }
 
 ### Key bindings

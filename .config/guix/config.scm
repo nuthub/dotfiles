@@ -43,23 +43,21 @@
  (kernel-loadable-modules (list v4l2loopback-linux-module))
  (locale "en_US.utf8")
  (timezone "Europe/Berlin")
- (keyboard-layout (keyboard-layout "de"))
+ (keyboard-layout (keyboard-layout "de" #:options '("ctrl:nocaps")))
  (host-name "nutbook")
 
  ;; The list of file systems that get "mounted".  The unique
  ;; file system identifiers there ("UUIDs") can be obtained
  ;; by running 'blkid' in a terminal.
- (file-systems (cons* (file-system
-		       (mount-point "/boot/efi")
-		       (device (uuid "FCE6-96C0"
-				     'fat32))
-		       (type "vfat"))
-		      (file-system
-		       (mount-point "/")
-		       (device (uuid
-				"5c890181-055c-4db3-9a47-2e3769ec24ea"
-				'ext4))
-		       (type "ext4"))
+ (file-systems (cons* (file-system (mount-point "/boot/efi")
+				   (device (uuid "FCE6-96C0"
+						 'fat32))
+				   (type "vfat"))
+		      (file-system (mount-point "/")
+				   (device (uuid
+					    "5c890181-055c-4db3-9a47-2e3769ec24ea"
+					    'ext4))
+				   (type "ext4"))
 		      %base-file-systems))
 
  (swap-devices (list (swap-space
