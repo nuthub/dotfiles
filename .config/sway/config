@@ -227,6 +227,10 @@ bar {
 exec swaync
 bindsym $mod+Shift+n exec swaync-client -t -sw
 
+
+# font(s)
+font pango: "FontAwesome NotoSans" Regular 10
+
 # borders
 
 # avoid title bars
