@@ -258,7 +258,6 @@ An alternative to /smartparens/ is /paren/.
 
 * Major modes
 ** Org Mode
-*** Org core
 
 #+BEGIN_SRC emacs-lisp :noweb no-export
   (use-package org
@@ -276,11 +275,10 @@ An alternative to /smartparens/ is /paren/.
     <<org-config-display-pdf-inline>>   
     )
 #+END_SRC
-*** Org's basic Look & Feel
 
-#+NAME: org-config-look-and-feel
-#+begin_src emacs-lisp
-  (add-hook 'org-mode-hook 'visual-line-mode)
+*** Org's basics & Look & Feel
+
+#+begin_src emacs-lisp :noweb-ref org-config-look-and-feel
   (set-face-underline 'org-ellipsis nil)
   (setq org-ellipsis " …")
   (setq org-startup-indented t)
@@ -291,81 +289,17 @@ An alternative to /smartparens/ is /paren/.
   (setq org-num-skip-unnumbered t)
   (setq org-num-skip-tags (list "ignore" "noexport" "unnumbered"))
   (setq org-goto-interface 'outline-path-completion)
+  (setq org-cite-global-bibliography '("~/Documents/Literatur/Literatur.bib"))
   ;; beautiful bullets
   (use-package org-bullets
     :config
     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+  (add-hook 'org-mode-hook 'visual-line-mode)
 #+end_src
-
-*** Display PDF images inline
-
-#+NAME: org-config-display-pdf-inline
-#+BEGIN_SRC emacs-lisp :tangle no
-
-  ;; Display PDF files inline
-  ;; taken from https://stackoverflow.com/questions/15407485/inline-pdf-images-in-org-mode
-
-  (add-to-list 'image-file-name-extensions "pdf")
-
-  (setq org-image-actual-width 600)
-
-  (setq org-imagemagick-display-command "convert -density 600 \"%s\" -thumbnail \"%sx%s>\" \"%s\"")
-  (defun org-display-inline-images (&optional include-linked refresh beg end)
-    "Display inline images.
-    Normally only links without a description part are inlined, because this
-    is how it will work for export.  When INCLUDE-LINKED is set, also links
-    with a description part will be inlined.  This
-    can be nice for a quick
-    look at those images, but it does not reflect what exported files will look
-    like.
-    When REFRESH is set, refresh existing images between BEG and END.
-    This will create new image displays only if necessary.
-    BEG and END default to the buffer boundaries."
-    (interactive "P")
-    (unless refresh
-      (org-remove-inline-images)
-      (if (fboundp 'clear-image-cache) (clear-image-cache)))
-    (save-excursion
-      (save-restriction
-        (widen)
-        (setq beg (or beg (point-min)) end (or end (point-max)))
-        (goto-char beg)
-        (let ((re (concat "\\[\\[\\(\\(file:\\)\\|\\([./~]\\)\\)\\([^]\n]+?"
-                          (substring (org-image-file-name-regexp) 0 -2)
-                          "\\)\\]" (if include-linked "" "\\]")))
-              old file ov img)
-          (while (re-search-forward re end t)
-            (setq old (get-char-property-and-overlay (match-beginning 1)
-                                                     'org-image-overlay)
-    		file (expand-file-name
-                        (concat (or (match-string 3) "") (match-string 4))))
-            (when (file-exists-p file)
-              (let ((file-thumb (format "%s%s_thumb.png" (file-name-directory file) (file-name-base file))))
-                (if (file-exists-p file-thumb)
-                    (let ((thumb-time (nth 5 (file-attributes file-thumb 'string)))
-                          (file-time (nth 5 (file-attributes file 'string))))
-                      (if (time-less-p thumb-time file-time)
-    			(shell-command (format org-imagemagick-display-command
-    					       file org-image-actual-width org-image-actual-width file-thumb) nil nil)))
-                  (shell-command (format org-imagemagick-display-command
-                                         file org-image-actual-width org-image-actual-width file-thumb) nil nil))
-                (if (and (car-safe old) refresh)
-                    (image-refresh (overlay-get (cdr old) 'display))
-                  (setq img (save-match-data (create-image file-thumb)))
-                  (when img
-                    (setq ov (make-overlay (match-beginning 0) (match-end 0)))
-                    (overlay-put ov 'display img)
-                    (overlay-put ov 'face 'default)
-                    (overlay-put ov 'org-image-overlay t)
-                    (overlay-put ov 'modification-hooks
-                                 (list 'org-display-inline-remove-overlay))
-                    (push ov org-inline-image-overlays))))))))))
-#+END_SRC
 
 *** Task Management, Agenda, Archive, Refiling
 
-#+NAME: org-config-task-management-and-agenda
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle no :noweb-ref org-config-task-management-and-agenda
 
   ;; Task management
   (setq org-directory "~/org")
@@ -383,12 +317,12 @@ An alternative to /smartparens/ is /paren/.
   (setq org-log-into-drawer t)
 
   ;; Agenda
-  (setq org-agenda-files (quote ("~/org/gtd.org" "~/org/tickler.org" "~/org/someday.org" "~/org/inbox.org" "~/org/events.org")))
+  (setq org-agenda-files (quote ("~/org/gtd.org" "~/org/tickler.org" "~/org/someday.org" "~/org/inbox.org" "~/org/events-personal.org")))
   (setq org-agenda-window-setup "only-window")
   (setq org-agenda-span 1)
   (setq org-agenda-time-grid
         '((weekly remove-match)
-  	(800 1000 1200 1400 1600 1800)
+  	(1000 1200 1600 1800)
   	". . . " "- - - - - - - - "))
   (setq org-agenda-include-diary t)
   (setq org-agenda-custom-commands '(("w" "Weekly cleanup" todo "CNCL|DONE")
@@ -405,7 +339,7 @@ An alternative to /smartparens/ is /paren/.
   (setq org-refile-targets (quote (("~/org/gtd.org" :maxlevel . 4)
           			 ("~/org/someday.org" :maxlevel . 1)
           			 ("~/org/tickler.org" :maxlevel . 1)
-          			 ("~/org/events.org" :maxlevel . 2))))
+          			 ("~/org/events-personal.org" :maxlevel . 2))))
   (setq org-refile-use-outline-path 'file)
   (setq org-outline-path-complete-in-steps nil)
   (setq org-refile-allow-creating-parent-nodes 'confirm)
@@ -416,62 +350,61 @@ An alternative to /smartparens/ is /paren/.
 #+END_SRC
 
 *** Org capture templates
-#+NAME: org-config-capture-templates
-#+BEGIN_SRC emacs-lisp :tangle no
+
+#+BEGIN_SRC emacs-lisp :tangle no :noweb-ref org-config-capture-templates
 
   (setq org-capture-templates
         '(
-    	("t" "Todo" entry (file "~/org/inbox.org")                    "* TODO %?\n  %i")
-    	("e" "Event" entry (file+headline "~/org/events.org" "Inbox") "* %^{Event Title}\n\n%^{Date and Time}T\nLocation: %^{Location}\n%i%?" :time-prompt t)
-    	("n" "Note" entry (file "~/org/inbox.org")           "* NOTE %U %?\n- %i")
-    	("m" "Process Mail" entry (file "~/org/inbox.org")            "* TODO %?\nSCHEDULED: %t\nMail: %:fromname: %a")
-    	("p" "Protocol" entry (file "~/org/inbox.org")                "* TODO %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
-    	("L" "Protocol Link" entry (file "~/org/inbox.org")           "* TODO %?\n[[%:link][%:description]]")))
+    	("t" "Todo" entry (file "~/org/inbox.org")
+           "* TODO %?\n  %i")
+    	("e" "Event" entry (file+headline "~/org/events-personal.org" "Inbox")
+  	 "* %^{Event Title}\n\n%^{Date and Time}T\nLocation: %^{Location}\n%i%?" :time-prompt t)
+    	("n" "Note" entry (file "~/org/inbox.org")
+           "* NOTE %U %?\n- %i")
+    	("m" "Process Mail" entry (file "~/org/inbox.org")
+           "* TODO %?\nSCHEDULED: %t\nMail: %:fromname: %a")
+  	;; ("r" "Recipe" entry (file "~/org/cookbook.org")
+  	;;  "%(org-chef-get-recipe-from-url)"
+  	;;  :empty-lines 1)
+  	("R" "Recipe" entry (file "~/org/cookbook.org")
+  	 "* %^{Recipe title: }\n  :PROPERTIES:\n  :source-url:\n :prep-time:\n  :cook-time:\n  :ready-in:\n  :END:\n** Zutaten\n   %?\n** Zubereitung\n\n")))
 
 #+END_SRC
 
 *** LaTeX export classes + beamer support
 
-For syntax highlighted source code blocks, I use the font-locking mode of emacs. The package engrave-faces contains LaTeX, Ansi and HTML faces.
-#+begin_src emacs-lisp
-  (use-package engrave-faces)
-#+end_src
+#+BEGIN_SRC emacs-lisp :tangle no :noweb-ref org-config-latex-export
 
+    ;; Include e set (or known email address)
+    (setq org-export-with-email t)
 
-#+NAME: org-config-latex-export
-#+BEGIN_SRC emacs-lisp :tangle no
+    ;; compile latex in foreground to directly retrieve compilation errors
+    (setq org-export-in-background nil)
 
-  ;; Include e set (or known email address)
-  (setq org-export-with-email t)
+    ;; use emacs's font-locking for syntax highlighting in LaTeX exports
+    (setq org-latex-src-block-backend 'engraved)
 
-  ;; compile latex in foreground to directly retrieve compilation errors
-  (setq org-export-in-background nil)
-
-  ;; use emacs's font-locking for syntax highlighting in LaTeX exports
-
-  (setq org-latex-src-block-backend 'engraved)
-
-  ;; ox-latex: Add KomaScript to the known classes
-  (with-eval-after-load 'ox-latex
-    (add-to-list 'org-latex-classes '("scrbook"
-                    		    "\\documentclass[11pt]{scrbook}"
-                    		    ("\\chapter{%s}" . "\\chapter*{%s}")
-                    		    ("\\section{%s}" . "\\section*{%s}")
-                    		    ("\\subsection{%s}" . "\\subsection*{%s}")
-                    		    ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                    		    ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                    		    ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
-  (with-eval-after-load 'ox-latex
-    (add-to-list 'org-latex-classes '("scrartcl"
-                    		    "\\documentclass[11pt]{scrartcl}"
-                    		    ("\\section{%s}" . "\\section*{%s}")
-                    		    ("\\subsection{%s}" . "\\subsection*{%s}")
-                    		    ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                    		    ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                    		    ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
-  (with-eval-after-load 'ox-latex
-    (add-to-list 'org-latex-classes '("my-beamer"
-              			    "\\documentclass[presentation,aspectratio=169,allowframebreaks]{beamer}
+    ;; ox-latex: Add KomaScript to the known classes
+    (with-eval-after-load 'ox-latex
+      (add-to-list 'org-latex-classes '("scrbook"
+                          		    "\\documentclass[11pt]{scrbook}"
+                          		    ("\\chapter{%s}" . "\\chapter*{%s}")
+                          		    ("\\section{%s}" . "\\section*{%s}")
+                          		    ("\\subsection{%s}" . "\\subsection*{%s}")
+                          		    ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                          		    ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                          		    ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+    (with-eval-after-load 'ox-latex
+      (add-to-list 'org-latex-classes '("scrartcl"
+                          		    "\\documentclass[11pt]{scrartcl}"
+                          		    ("\\section{%s}" . "\\section*{%s}")
+                          		    ("\\subsection{%s}" . "\\subsection*{%s}")
+                          		    ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                          		    ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                          		    ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+    (with-eval-after-load 'ox-latex
+      (add-to-list 'org-latex-classes '("my-beamer"
+                    		    "\\documentclass[presentation,aspectratio=169,allowframebreaks]{beamer}
     \\usepackage{pdfpages}
     \\institute[RGSE]{University of Koblenz, Research Group Software Engineering}
     \\setbeamertemplate{caption}{\\raggedright\\insertcaption\\par}
