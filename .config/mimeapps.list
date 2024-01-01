@@ -8,9 +8,11 @@ x-scheme-handler/text/xml=emacsclient.desktop
 application/pdf=emacsclient.desktop
 image/jpeg=imv.desktop
 image/png=imv.desktop
+text/plain=emacsclient.desktop
 
 [Added Associations]
 image/jpeg=imv.desktop;emacsclient.desktop;
 image/png=imv.desktop;emacsclient.desktop;
 inode/symlink=emacsclient.desktop;
 text/x-java=emacsclient.desktop;
+text/plain=emacsclient.desktop;
