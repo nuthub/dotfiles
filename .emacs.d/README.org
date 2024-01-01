@@ -821,15 +821,16 @@ Two modes:
 
 ** ChatGPT Shell
 
-Store the API key in .authinfo
+Store the API key in .authinfo. ChatGPT and Dall-E use the same API key.
 
 #+BEGIN_SRC emacs-lisp
 
   (use-package chatgpt-shell
-    :config
-    (setq chatgpt-shell-openai-key
-          (auth-source-pick-first-password :host "api.openai.com")))
-
+   :requires shell-maker
+   :ensure t
+   :config (setq chatgpt-shell-openai-key (auth-source-pick-first-password
+  				 :host "api.openai.com")))
+   
 #+END_SRC
 
 ** nov
@@ -1299,17 +1300,35 @@ The global keybinding 'C-x u' is set below.
 ** Agressive Indent
 
 #+BEGIN_SRC emacs-lisp
-
   (use-package aggressive-indent
     :defer 0
     :config (aggressive-indent-global-mode))
-
 #+END_SRC
 
-** COMMENT openwith
+** Project.el
 
-#+BEGIN_SRC emacs-lisp :tangle no
+This is the built-in project package. I'm not sure, which feature offers that is missing from project.el and that I want to use.
 
+What I want is:
+- Open dired on project change
+#+begin_src emacs-lisp
+  ;; (require project)
+  ;; (add-to-list 'project-switch-commands (project-dired "Dired"))
+#+end_src
+
+** editorconfig
+
+#+BEGIN_SRC emacs-lisp
+  (use-package editorconfig
+    :ensure t
+    :diminish t
+    :config
+    (editorconfig-mode 1))
+#+END_SRC
+
+** openwith
+
+#+BEGIN_SRC emacs-lisp
   (use-package openwith
     :defer 0
     :config
