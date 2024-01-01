@@ -5,6 +5,7 @@
 
 * Startup time
 
+Taken from /emacs from scratch/.
 #+BEGIN_SRC emacs-lisp
 
   ;; The default is 800 kilobytes.  Measured in bytes.
@@ -1512,13 +1513,6 @@ The global keybinding 'C-x u' is set below.
     :if (string= (system-name) "nutbook")
     :defer 0
     :init
-    ;; https://www.reddit.com/r/orgmode/comments/8rl8ep/making_orgcaldav_useable/
-    ;; This is the sync on close function; it also prompts for save after syncing so 
-    ;; no late changes get lost 
-    (defun org-caldav-sync-at-close ()
-      (org-caldav-sync)
-      (save-some-buffers))
-
     ;; This is the delayed sync function; it waits until emacs has been idle for 
     ;; "secs" seconds before syncing.  The delay is important because the caldav-sync
     ;; can take five or ten seconds, which would be painful if it did that right at save.  
@@ -1534,24 +1528,43 @@ The global keybinding 'C-x u' is set below.
              (* 1 secs) nil 'org-caldav-sync)))
     :config
     (setq org-icalendar-use-scheduled '(event-if-todo event-if-not-todo))
-    (setq org-icalendar-timezone "Europe/Berlin")
-    (setq org-caldav-url "https://cloud.nuthouse.de/remote.php/dav/calendars/nutcase")
-    (setq org-caldav-files nil)
-    (setq org-caldav-inbox nil)
-    (setq org-caldav-calendar-id nil)
-    (setq org-caldav-show-sync-results nil)
     (setq org-caldav-resume-aborted 'always)
+    (setq org-icalendar-timezone "Europe/Berlin") ; holds for all my calendars
+    (setq org-caldav-show-sync-results nil)
+    (setq org-caldav-url nil
+  	org-caldav-files '("~/org/events-personal.org")
+  	org-caldav-inbox nil
+  	org-caldav-calendar-id nil)
     (setq org-caldav-calendars
-          '((:calendar-id "org-2"
-                          :files ("~/org/events.org")
-                          :inbox (file+headline "~/org/events.org" "Inbox"))))
+  	'((:url "https://cloud.nuthouse.de/remote.php/dav/calendars/nutcase"
+  		:calendar-id "personal"
+                  :files ("~/org/events-personal.org")
+                  :inbox (file+headline "~/org/events-personal.org" "Inbox"))
+  	  ;; (:url "https://sogo.uni-koblenz.de/SOGo/dav/flake/Calendar/personal/"
+  	  ;;  	:calendar-id "personal"
+  	  ;;  	:files ("~/org/events-rgse.org")
+  	  ;;  	:inbox (file+headline "~/org/events-rgse.org" "Inbox")
+  	  ;;  	:sync-direction 'cal->org)
+  	  ;; (:url "https://cloud.nuthouse.de/remote.php/dav/calendars/nutcase"
+  	  ;; 	:calendar-id "contact_birthdays"
+  	  ;; 	:files ("~/org/events-birthdays.org")
+  	  ;; 	:inbox (file+headline "~/org/events-birthdays.org" "Inbox"))
+  	      ))
+    ;; (:calendar-id "Calendar"
+  			;; :url "https://sogo.uni-koblenz.de/SOGo/dav/flake/"
+  			;; :files ("~/org/events-rgse.org")
+  			;; :inbox (file+headline "~/org/events-rgse.org" "Inbox"))
+    
     ;; Add the delayed save hook with a five minute idle timer
     (add-hook 'after-save-hook
               (lambda ()
                 (when (eq major-mode 'org-mode)
                   (org-caldav-sync-with-delay 300))))
-    ;; Add the close emacs hook
-    (add-hook 'kill-emacs-hook 'org-caldav-sync-at-close))
+    ;; Final sync on kill-emacs
+    (add-hook 'kill-emacs-hook
+  	    (lambda ()
+  	      (org-caldav-sync)
+  	      (save-some-buffers))))
 
 #+END_SRC
 
