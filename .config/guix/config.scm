@@ -23,6 +23,7 @@
 	     (gnu services linux)
 	     (gnu services networking)
 	     (gnu services pm)
+	     (gnu services samba)
 	     (gnu services ssh)
 	     (gnu services syncthing)
 	     (gnu services virtualization)
@@ -94,22 +95,23 @@
 			  ;; TLS root certificates
 			  "nss-certs"
 			  ;; emacs & related
-			  "emacs-pgtk" "emacs-pdf-tools" "emacs-vterm"
+			  "emacs-pgtk-xwidgets" "emacs-pdf-tools" "emacs-vterm"
 			  "isync" "mu"
 			  "openjdk@17.0.5:jdk" ; java-lsp wants this
 			  "python" ; treemacs wants python3
 			  ;; my shell and shell tools
 			  "zsh" "zsh-autosuggestions" "zsh-syntax-highlighting"
-			  "bind:utils"
-			  "cups" ;; to have commands like lpq etc
-			  "file"
 			  "efibootmgr"
+			  "bind:utils" ; for dig
+			  "cups" ; for lpq
+			  "file"
+			  "fzf"
 			  "htop"
-			  "neofetch"
 			  "just"
-			  "net-tools"
+			  "neofetch"
+			  "net-tools" ; for ifconfig  netstat  route
 			  "nmap"
-			  "octave"
+			  "bc" "octave"
 			  "powertop"
 			  "ripgrep"
 			  "stow"
@@ -123,9 +125,8 @@
 			  "binutils" ;; for ar command
 			  "borg"
 			  "curl"
-			  "davfs2"
+			  "glib:bin" ; has gio which allows to mount davfs as user
 			  "rsync"
-			  "samba"
 			  "subversion"
 			  "syncthing"
 			  "nextcloud-client"
@@ -137,9 +138,11 @@
 			  ;; I need all of these portals
 			  "xdg-desktop-portal" "xdg-desktop-portal-gtk" "xdg-desktop-portal-wlr"
 			  ;; wayland, not sure what I really need
-			  "xorg-server-xwayland" "slurp" "grim" "grimshot" "swappy" "wlr-randr" "egl-wayland"
+			  "xorg-server-xwayland" "slurp" "grim" "grimshot" "swappy" "wlr-randr" "egl-wayland" "wdisplays"
 			  ;; sway
-			  "sway" "swaynotificationcenter" "swaylock" "swayidle" "waybar" "wofi" "wl-clipboard" "clipman"
+			  "sway" "waybar" "wofi" "swaylock" "swayidle" "swaynotificationcenter"
+			  "wl-clipboard" "clipman" "wtype"
+			  "avizo" "pamixer" ; avizo uses pamixer :-(
 			  "alacritty"
 			  "kanshi" ; automatically switch displays
 			  "gammastep" "geoclue" ; could use geoclue, if geoclue was running
@@ -147,7 +150,6 @@
 			  "tumbler" ; D-BUS thumbnail service
 			  "poweralertd"
 			  "gnome-keyring"
-			  "gvfs"
 			  ;; connectivity / media
 			  "pipewire" "pavucontrol" "wireplumber"
 			  "bluez" "blueman"
@@ -160,9 +162,10 @@
 			  "docker"
 			  ;; security
 			  "pinentry" "pinentry-tty" "gnupg" "openssh" "password-store" "wireguard-tools"
+			  "lxqt-policykit"
 			  "lxappearance" "qt5ct"
 			  ;; my desktop apps
-			  "nemo" "file-roller" "gvfs" "baobab"
+			  "nemo" "file-roller" "baobab" "gvfs"
 			  "firefox" "icedove" "ungoogled-chromium-wayland"
 			  "aqbanking" "gnucash"
 			  "libreoffice"
@@ -180,22 +183,19 @@
 			  "flameshot" "qtwayland@5.15.10" ; flameshot needs qtwayland@5
 			  "ristretto" "gimp"
 			  "imagemagick" "optipng"
-			  "cheese" "ffmpeg"
-			  "obs" ; obs-wlrobs is not necessary, if pipewire is running
+			  "cheese" "ffmpeg" "obs" "handbrake" ; obs-wlrobs is not necessary, if pipewire is running
 			  "simple-scan" "xsane"
 			  ;; Virtualization
 			  "qemu" "virt-manager"
-
 			  ;;
 			  ;; Look & Feel
 			  ;; fonts
-			  "font-hack"
+			  "font-hack" "font-fira-code" ; two competitors
 			  "font-liberation"
 			  "font-awesome"
 			  "font-dejavu"
 			  ;; Nerd-Fonts are installed by M-x nerd-icons-install-fonts
-			  ;; all-the-icons are installed by M-x all-the-icons-install-f
-			  ;; "font-fira-code" ; needed?
+			  ;; all-the-icons are installed by M-x all-the-icons-install-fonts
 			  "font-google-noto" ; broad range of 
 			  "font-google-noto-emoji" ; Emoji support
 			  "font-google-noto-serif-cjk" "font-google-noto-sans-cjk" ; chinese fonts
@@ -212,6 +212,22 @@
  (services
   (append (list
 	   (service openssh-service-type)
+	   (service samba-service-type (samba-configuration
+					(enable-smbd? #t)
+					(config-file (plain-file "smb.conf" "\
+[global]
+map to guest = Bad User
+logging = syslog@1
+
+[public]
+browsable = yes
+path = /home/flake/Public
+read only = yes
+guest ok = yes
+guest only = yes\n"))))
+	   (service syncthing-service-type
+		    (syncthing-configuration
+		     (user "flake")))
 	   (service bluetooth-service-type)
 	   (service cups-service-type
 		    (cups-configuration
@@ -227,9 +243,6 @@
 		     (allow-empty-password? #f)
 		     (using-pam? #t)
 		     (using-setuid? #f)))
-	   (service syncthing-service-type
-		    (syncthing-configuration
-		     (user "flake")))
 	   (service libvirt-service-type
 		    (libvirt-configuration
 		     (unix-sock-group  "libvirt")))
