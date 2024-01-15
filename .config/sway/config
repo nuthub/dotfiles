@@ -303,6 +303,12 @@ set $clipboard "~/.local/share/clipman.json"
 exec wl-paste -t text --watch clipman store --max-items 1024
 bindsym $mod+y exec clipman pick --tool="wofi" --max-items=30
 
+# Emoji chooser
+bindsym $mod+i exec wofi-emoji
+
+# Just chooser
+#bindsym $mod+j exec just --choose --chooser "wofi -d"
+
 # window rules
 # to get app_ids use $ swaymsg -t get_tree | grep app_id
 
@@ -310,9 +316,11 @@ bindsym $mod+y exec clipman pick --tool="wofi" --max-items=30
 for_window [app_id="nm-connection-editor"] floating enable
 for_window [app_id="nm-applet"] floating enable
 for_window [app_id="pavucontrol"] floating enable
+for_window [app_id="wdisplays"] floating enable
 for_window [app_id=".blueman-manager-real"] floating enable
 for_window [app_id="com.nextcloud.desktopclient.nextcloud"] floating enable
 for_window [app_id=".solaar-real"] floating enable
+for_window [app_id="lxqt-policykit-agent"] floating enable
 for_window [title="MGC"] floating enable # MazeGameClient
 
 
