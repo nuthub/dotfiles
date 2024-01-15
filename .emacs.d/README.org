@@ -542,55 +542,55 @@ Build a second brain with org-roam.
 
 #+BEGIN_SRC emacs-lisp
 
-  (use-package org-roam
-    :after org
-    :straight (:type git
-      		   :local-repo "~/git/org-roam")
-    :demand t ; this makes 
-    :bind (("C-c n l" . org-roam-buffer-toggle)
-           ("C-c n f" . org-roam-node-find)
-           ("C-c n i" . org-roam-node-insert)
-           ("C-c n c" . org-roam-capture)
-           ("C-c n g" . org-roam-graph)
-           ;; Dailies
-           ("C-c n j" . org-roam-dailies-capture-date)
-           :map org-mode-map
-           ("C-M-i" . completion-at-point)
-           :map org-roam-dailies-map
-           ("Y" . org-roam-dailies-capture-yesterday)
-           ("T" . org-roam-dailies-capture-tomorrow))
-    :bind-keymap
-    ("C-c n d" . org-roam-dailies-map)
-    :config
-    (setq org-roam-database-connector 'sqlite-builtin) ;; emacs 29 and newer
-    (setq org-roam-directory (file-truename "~/org/roam/"))
-    (setq org-roam-completion-everywhere t)
-    ;; If you're using a vertical completion framework, you might want a more informative completion interface
-    (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-    (org-roam-db-autosync-mode)
-    (org-roam-setup)
-    (org-roam-update-org-id-locations)
-    (setq org-roam-capture-templates '(
-      				     ("d" "default" plain "%?"
-      				      :target (file+head
-      					       "%<%Y%m%d%H%M%S>-${slug}.org"
-      					       "#+title: ${title}\n")
-      				      :unnarrowed t)
-      				     ("n" "literature note" plain "%?"
-      				      :target (file+head
-      					       "%(expand-file-name (or citar-org-roam-subdir \"\") org-roam-directory)/${citar-citekey}.org"
-      					       "#+title: [${citar-citekey}] ${note-title}\n#+filetags: literature_note\n\n")
-      				      :unnarrowed t))) ; org-roam-capture-templates
-    (require 'org-roam-dailies) ;; Ensure the keymap is available
-    (setq org-roam-dailies-capture-templates '(
-  					     ("d" "default" entry "* %?"
-  					      :target
-  					      (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n- Tags :: [[id:b3cb74b2-a385-4132-a55e-8cf561eed9fc][Journaling]]\n* Daily Planing
-- [ ] Journal [[elisp:(org-roam-dailies-goto-yesterday 1)][yesterday]]
-- [ ] Process [[file:~/Syncthing/org/inbox.org][inbox]]
-- [ ] Check [[elisp:(mu4e)][mails]]
-- [ ] Check [[elisp:(org-agenda-list)][agenda]]\n")))) ; org-roam-dailies-capture-templaes
-    ) ; use-package org-roam
+    (use-package org-roam
+      :after org
+      :straight (:type git
+        		   :local-repo "~/git/org-roam")
+      :demand t ; this makes 
+      :bind (("C-c n l" . org-roam-buffer-toggle)
+             ("C-c n f" . org-roam-node-find)
+             ("C-c n i" . org-roam-node-insert)
+             ("C-c n c" . org-roam-capture)
+             ("C-c n g" . org-roam-graph)
+             ;; Dailies
+             ("C-c n j" . org-roam-dailies-capture-date)
+             :map org-mode-map
+             ("C-M-i" . completion-at-point)
+             :map org-roam-dailies-map
+             ("Y" . org-roam-dailies-capture-yesterday)
+             ("T" . org-roam-dailies-capture-tomorrow))
+      :bind-keymap
+      ("C-c n d" . org-roam-dailies-map)
+      :config
+      (setq org-roam-database-connector 'sqlite-builtin) ;; emacs 29 and newer
+      (setq org-roam-directory (file-truename "~/org/roam/"))
+      (setq org-roam-completion-everywhere t)
+      ;; If you're using a vertical completion framework, you might want a more informative completion interface
+      (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+      (org-roam-db-autosync-mode)
+      (org-roam-setup)
+      (org-roam-update-org-id-locations)
+      (setq org-roam-capture-templates '(
+        				     ("d" "default" plain "%?"
+        				      :target (file+head
+        					       "%<%Y%m%d%H%M%S>-${slug}.org"
+        					       "#+title: ${title}\n")
+        				      :unnarrowed t)
+        				     ("n" "literature note" plain "%?"
+        				      :target (file+head
+        					       "%(expand-file-name (or citar-org-roam-subdir \"\") org-roam-directory)/${citar-citekey}.org"
+        					       "#+title: [${citar-citekey}] ${note-title}\n#+filetags: literature_note\n\n")
+        				      :unnarrowed t))) ; org-roam-capture-templates
+      (require 'org-roam-dailies) ;; Ensure the keymap is available
+      (setq org-roam-dailies-capture-templates '(
+    					     ("d" "default" entry "* %?"
+    					      :target
+    					      (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d (%A)>\n#+filetags: daily\n\n- Links: [[id:b3cb74b2-a385-4132-a55e-8cf561eed9fc][Journaling]]\n\n* Daily Planing
+  - [ ] Journal [[elisp:(org-roam-dailies-goto-yesterday 1)][yesterday]]
+  - [ ] Process [[file:~/Syncthing/org/inbox.org][inbox]]
+  - [ ] Check [[elisp:(mu4e)][mails]]
+  - [ ] Check [[elisp:(org-agenda-list)][agenda]]\n")))) ; org-roam-dailies-capture-templaes
+      ) ; use-package org-roam
 
 #+END_SRC
 
@@ -1465,7 +1465,7 @@ There is a package https://github.com/joostkremers/writeroom-mode?tab=readme-ov-
     ;; This way it just waits until you've been idle for a while to avoid disturbing 
     ;; the user.
     (defvar org-caldav-sync-timer nil
-       "Timer that `org-caldav-push-timer' used to reschedule itself, or nil.")
+      "Timer that `org-caldav-push-timer' used to reschedule itself, or nil.")
     (defun org-caldav-sync-with-delay (secs)
       (when org-caldav-sync-timer
         (cancel-timer org-caldav-sync-timer))
