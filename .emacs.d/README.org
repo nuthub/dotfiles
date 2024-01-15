@@ -304,42 +304,53 @@ An alternative to /smartparens/ is /paren/.
   ;; Task management
   (setq org-directory "~/org")
   (setq org-default-notes-file (concat org-directory "/inbox.org"))
-  (setq org-tag-alist '(("@home" . ?h)
-          	      ("@work" . ?w)
-          	      ("@phone" . ?p)
-          	      ("@boat" . ?b)
-          	      ("@org" . ?o)
-          	      ("@city" . ?c)
-          	      ("@ToRead" . ?r)))
+  (setq org-tag-alist '(("house" . ?h)
+    		      ("personal" . ?p)
+            	      ("promotion" . ?P)
+    		      ("self" . ?s)
+            	      ("work" . ?w)
+            	      ("teaching" . ?t)
+            	      ("sail" . ?S)
+  		      ("nerdism" . ?n)))
   (setq org-todo-keywords '((sequence "TODO(t)" "FREQ(f)" "EVNT(e)" "PROJ(p)" "WAIT(w@/!)" "|" "DONE(d!)" "CNCL(c@/!)")))
   (setq org-todo-repeat-to-state t)
   (setq org-log-done 'time)
   (setq org-log-into-drawer t)
 
   ;; Agenda
-  (setq org-agenda-files (quote ("~/org/gtd.org" "~/org/tickler.org" "~/org/someday.org" "~/org/inbox.org" "~/org/events-personal.org")))
-  (setq org-agenda-window-setup "only-window")
+  (setq org-agenda-files '("~/org/gtd.org"
+  			 "~/org/tickler.org"
+  			 "~/org/someday.org"
+  			 "~/org/inbox.org"
+  			 "~/org/events-personal.org"
+  			 "~/org/events-rgse.org"
+  			 "~/org/events-work.org"))
+  (setq org-agenda-window-setup 'current-frame)
   (setq org-agenda-span 1)
   (setq org-agenda-time-grid
         '((weekly remove-match)
-  	(1000 1200 1600 1800)
-  	". . . " "- - - - - - - - "))
+    	nil
+    	"......." "------------------"))
   (setq org-agenda-include-diary t)
-  (setq org-agenda-custom-commands '(("w" "Weekly cleanup" todo "CNCL|DONE")
-  				   ("c" "Events of the week" agenda ""
-  				    ((org-agenda-span 7)           ;; agenda will start in week view
-  				     (org-agenda-repeating-timestamp-show-all t)   ;; ensures that repeating events appear on all relevant dates
-  				     (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled)))) ;; limits agenda view to timestamped items
-  				   ))
+  (setq org-agenda-custom-commands
+        '(("w" "Weekly cleanup" todo "CNCL|DONE")
+    	("c" "Events of the week" agenda ""
+  	 (
+  	  ;; agenda will start in week view
+  	  (org-agenda-span 7)
+  	  ;; ensures that repeating events appear on all relevant dates
+    	  (org-agenda-repeating-timestamp-show-all t)
+  	  ;; limits agenda view to timestamped items
+    	  (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))))))
   (setq org-stuck-projects '("-noproject+LEVEL=2/-DONE-FREQ"
-  			   ("TODO" "NEXT")
-  			   nil ""))
+    			   ("TODO" "NEXT")
+    			   nil ""))
 
   ;; Refiling
   (setq org-refile-targets (quote (("~/org/gtd.org" :maxlevel . 4)
-          			 ("~/org/someday.org" :maxlevel . 1)
-          			 ("~/org/tickler.org" :maxlevel . 1)
-          			 ("~/org/events-personal.org" :maxlevel . 2))))
+            			 ("~/org/someday.org" :maxlevel . 1)
+            			 ("~/org/tickler.org" :maxlevel . 1)
+            			 ("~/org/events-personal.org" :maxlevel . 2))))
   (setq org-refile-use-outline-path 'file)
   (setq org-outline-path-complete-in-steps nil)
   (setq org-refile-allow-creating-parent-nodes 'confirm)
@@ -602,38 +613,33 @@ Visualize the org roam graph in browser
     :config
     (setq org-super-agenda-groups
   	'(;; Each group has an implicit boolean OR operator between its selectors.
-            (:name "Today"  ; Optionally specify section name
+            (:name "Events"  ; Optionally specify section name
                    :time-grid t)  ; Items that appear on the time grid
-            (:name "Important"
-                   :priority "A")
-  	  (:name "Category B"
-  		 :priority "B")
-            (:priority<= "C")
-            ;; Set order of multiple groups at once
-            (:order-multi (2 (:name "Work related"
-                                    :tag ("teaching" "work"))
-                             (:name "Personal"
-                                    :habit t
-                                    :tag "self")
-                             (:name "Promotion"
-                                    :habit t
-                                    :tag "promotion")
-  			   (:name "Reading"
-                                    :habit t
-                                    :tag "self")))
-            ;; Groups supply their own section names when none are given
-            (:todo "WAIT" :order 8)  ; Set order of this section
-            (:todo ("SOMEDAY" "TO-READ" "CHECK" "TO-WATCH" "WATCHING")
-                   ;; Show this group at the end of the agenda (since it has the
-                   ;; highest number). If you specified this group last, items
-                   ;; with these todo keywords that e.g. have priority A would be
-                   ;; displayed in that group instead, because items are grouped
-                   ;; out in the order the groups are listed.
-                   :order 9)
-            ;; After the last group, the agenda will display items that didn't
-            ;; match any of these groups, with the default order position of 99
-            ))
-    (setq org-superagenda-mode 1))
+  	   (:name "Direct Actions"
+  		  :category ("Actions"))
+             (:name "Personal"
+                    :tag ("personal" "self"))
+  	   (:name "Work"
+                    :tag ("teaching" "work")
+  		  :category ("Work" "Lehre"))
+             (:name "Promotion"
+                    :tag "promotion"
+  		  :category "Promotion")
+  	   (:name "Reading"
+                    :category "reading")
+  	   (:name "House Routines"
+                    :tag "house")
+  	   (:name "Sailing"
+                    :tag "sail"
+  		  :category "Segeln")
+  	   (:name "Habits"
+                    :habit t)
+             ;; Groups supply their own section names when none are given
+             (:todo "WAIT" :order 8)  ; Set order of this section
+             ;; After the last group, the agenda will display items that didn't
+             ;; match any of these groups, with the default order position of 99
+             ))
+    (org-super-agenda-mode))
 #+end_src
 
 ** COMMENT org-journal
@@ -1213,6 +1219,7 @@ Allows to browse bibtex file(s), insert citations, open files, links and notes. 
     :defer 0
     :no-require
     :bind
+    (("C-c b" . #'citar-open))
     (:map minibuffer-local-map ("M-b" . citar-insert-preset))
     (:map org-mode-map :package org ("C-c b" . #'org-cite-insert))
     :hook
@@ -1432,66 +1439,6 @@ There is a package https://github.com/joostkremers/writeroom-mode?tab=readme-ov-
     :straight (org-roam-citation-keyword-nodes
   	     :type git :host github
   	     :repo "nuthub/org-roam-citation-keyword-nodes"))
-#+end_src
-
-* Global key bindings
-** Comment / Uncomment Region
-
-#+begin_src emacs-lisp
-  (global-set-key (kbd "C-x C-,") 'comment-region)
-  (global-set-key (kbd "C-x C-.") 'uncomment-region)
-#+end_src
-
-** Open the file under cursor
-
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-x f") 'find-file-at-point)
-#+END_SRC
-
-** Increase / decrease text scale
-
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C--") 'text-scale-decrease)
-  (global-set-key (kbd "C-+") 'text-scale-increase)
-#+END_SRC
-
-** Quit dialogs with ESC
-
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-#+END_SRC
-
-** undo-tree
-
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-x u") 'undo-tree-visualize)
-#+END_SRC
-
-** Org mode
-
-#+BEGIN_SRC emacs-lisp
-
-  (global-set-key (kbd "C-c a") 'org-agenda)
-  (global-set-key (kbd "C-c j") 'org-journal-new-date-entry)
-  (global-set-key (kbd "C-c c") 'org-capture)
-  (global-set-key (kbd "C-c l") 'org-store-link)
-  (global-set-key (kbd "C-c o") 'org-switchb)
-  (global-set-key (kbd "C-c n u") 'org-roam-ui-open)
-
-#+END_SRC
-
-** Magit
-
-#+begin_src emacs-lisp
-
-  (global-set-key (kbd "C-c g") 'magit-status)
-
-#+end_src
-
-** Mu4e
-
-#+begin_src emacs-lisp
-  (global-set-key (kbd "C-c m") 'mu4e)  
 #+end_src
 
 * COMMENT Printing
@@ -1731,4 +1678,66 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
 
 #+end_src
 
+When signing mails with openpgp (or gnupg), use the key associated with the sender address.
+
+#+begin_src emacs-lisp
+
+  (setq mml-secure-openpgp-sign-with-sender t)
+
+#+end_src
+* Global key bindings
+** Comment / Uncomment Region
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-x C-,") 'comment-region)
+  (global-set-key (kbd "C-x C-.") 'uncomment-region)
+#+end_src
+
+** Open the file under cursor
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x f") 'find-file-at-point)
+#+END_SRC
+
+** Increase / decrease text scale
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C--") 'text-scale-decrease)
+  (global-set-key (kbd "C-+") 'text-scale-increase)
+#+END_SRC
+
+** Quit dialogs with ESC
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+#+END_SRC
+
+** undo-tree
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x u") 'undo-tree-visualize)
+#+END_SRC
+
+** Org mode
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-c a") 'org-agenda)
+;;  (global-set-key (kbd "C-c j") 'org-journal-new-date-entry)
+  (global-set-key (kbd "C-c c") 'org-capture)
+  (global-set-key (kbd "C-c l") 'org-store-link)
+  (global-set-key (kbd "C-c o") 'org-switchb)
+  (global-set-key (kbd "C-c n u") 'org-roam-ui-open)
+#+END_SRC
+
+** Magit
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c g") 'magit-status)
+#+end_src
+
+** Mu4e
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c m") 'mu4e)
+#+end_src
 
