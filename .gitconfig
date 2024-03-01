@@ -1,6 +1,7 @@
 [user]
 	email = flake@uni-koblenz.de
 	name = Julian Flake
+	signingkey = DF4539EF
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
@@ -22,4 +23,5 @@
 	smtpServerPort = 587
 	smtpEncryption = tls
 	smtpUser = flake@uni-koblenz.de
-    # (Optional: we'll leave this commented out and use a different way)
+[commit]
+	gpgsign = true
