@@ -204,6 +204,8 @@
 			  "gnome-themes-extra" 
 			  ;; icons
 			  "adwaita-icon-theme" "elementary-xfce-icon-theme" "hicolor-icon-theme"
+			  ;; from nutguix
+			  "wl-mirror" "gtklp" "astah-professional"
 			  ))
 		   %base-packages))
 
