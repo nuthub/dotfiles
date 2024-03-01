@@ -1563,9 +1563,12 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
     (setq mu4e-confirm-quit t)
     (setq mu4e-view-show-images t)
     (setq mu4e-view-show-addresses t)
+    (setq mu4e-org-link-query-in-headers-mode t)
     (define-key mu4e-view-mode-map (kbd "C--") nil t) ; remove key binding
     (define-key mu4e-view-mode-map (kbd "C-+") nil t) ; remove key binding
-    (setq mu4e-use-fancy-headers t)
+    (define-key mu4e-headers-mode-map (kbd "C--") nil t) ; remove key binding
+    (define-key mu4e-headers-mode-map (kbd "C-+") nil t) ; remove key binding
+    (setq mu4e-use-fancy-chars t)
     (setq mu4e-read-option-use-builtin nil)
     (setq mu4e-completing-read-function 'completing-read)
     (setq mu4e-notification-support t)
@@ -1586,11 +1589,11 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
           '((:name "Combined inbox" :query "maildir:/private/INBOX OR maildir:/work/INBOX OR maildir:/tudo/INBOX" :key ?i)
             (:name "Unread messages" :query "flag:unread AND NOT flag:trashed" :key ?u)
             (:name "Drafts" :query "maildir:/private/Drafts OR maildir:/work/Drafts" :key ?d)
+  	  (:name "Mailing-Lists" :query "maildir:/private/INBOX/*" :key ?m)
             (:name "Today's messages" :query "date:today..now" :key ?n)
             (:name "Last 7 days" :query "date:7d..now" :hide-unread t :key ?7)
             (:name "Trashed mails" :query "flag:trashed" :hide-unread nil :key ?t)
-            (:name "Messages with PDFs" :query "mime:application/pdf" :key ?p)
-  	    (:name "Messages with images" :query "mime:image/*" :key ?m)))
+            (:name "Messages with PDFs" :query "mime:application/pdf" :key ?p)))
     (setq mu4e-maildir-shortcuts
           '(("/private/INBOX" . ?p)
             ("/private/Archives/2024" . ?P)
