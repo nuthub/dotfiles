@@ -161,7 +161,7 @@
 			  "flatpak"
 			  "docker"
 			  ;; security
-			  "pinentry" "pinentry-tty" "gnupg" "openssh" "password-store" "wireguard-tools"
+			  "pinentry" "pinentry-tty" "gnupg" "openssh" "password-store" "wireguard-tools" "openvpn" "network-manager-openvpn"
 			  "lxqt-policykit"
 			  "lxappearance" "qt5ct"
 			  ;; my desktop apps
@@ -186,7 +186,7 @@
 			  "cheese" "ffmpeg" "obs" "handbrake" ; obs-wlrobs is not necessary, if pipewire is running
 			  "simple-scan" "xsane"
 			  ;; Virtualization
-			  "qemu" "virt-manager"
+			  "qemu" "virt-manager" "ovmf"
 			  ;;
 			  ;; Look & Feel
 			  ;; fonts
@@ -259,12 +259,12 @@ guest only = yes\n"))))
 				"42-logitech-unify-permissions.rules"
 				(file-append solaar "/share/solaar/udev-rules.d/42-logitech-unify-permissions.rules")))
 
-	   ;; (service geoclue-service-type) 
-	   (simple-service 'geoclue-polkit-rule polkit-service-type 
-			   (list (file-union
-				  "polkit-geoclue"
-				  `(("share/polkit-1/rules.d/geoclue.rules"
-				     ,(file-append geoclue "/share/polkit-1/rules.d/org.freedesktop.GeoClue2.rules"))))))
+	   ;;(service geoclue-service-type) 
+	   ;; (simple-service 'geoclue-polkit-rule polkit-service-type 
+	   ;; 		    (list (file-union
+	   ;; 			   "polkit-geoclue"
+	   ;; 			   `(("share/polkit-1/rules.d/geoclue.rules"
+	   ;; 			      ,(file-append geoclue "/share/polkit-1/rules.d/org.freedesktop.GeoClue2.rules"))))))
 	   (simple-service 'dbus-extras
 			   dbus-root-service-type (list blueman)))
 	  ;; This is the (modified) default list of services we are appending to.
