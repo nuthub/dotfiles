@@ -898,7 +898,10 @@ The built-in LSP server
 
 #+BEGIN_SRC emacs-lisp
   (use-package magit
-    :defer 0)
+    :defer 0
+    :config
+    ;; gpg signing is at transient level 5, default was to show up to level 4
+    (setq transient-default-level 5))
 #+END_SRC
 
 * Minor modes & common packages
