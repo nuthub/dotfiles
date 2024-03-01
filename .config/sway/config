@@ -300,8 +300,8 @@ bindsym Control+mod1+Delete exec $lockscreen
 
 # Clipboard
 set $clipboard "~/.local/share/clipman.json"
-exec wl-paste -t text --watch clipman store --max-items 1024
-bindsym $mod+y exec clipman pick --tool="wofi" --max-items=30
+exec wl-paste -t text --watch clipman store --max-items 32
+bindsym $mod+y exec clipman pick --tool="wofi" --max-items=32
 
 # Emoji chooser
 bindsym $mod+i exec wofi-emoji
@@ -337,7 +337,7 @@ exec --no-startup-id {
     udiskie -s # -t or -s (show applet always or with actions available only
     solaar -w hide
     avizo-service
-    geoclue
+#    geoclue # (not installed)
     gammastep-indicator
     pipewire
     pipewire-pulse
