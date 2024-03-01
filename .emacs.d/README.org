@@ -1513,21 +1513,13 @@ If there is more than one, let the user choose."
       	'((:url "https://cloud.nuthouse.de/remote.php/dav/calendars/nutcase"
   		:calendar-id "personal"
   		:files ("~/org/events-personal.org")
-  		:inbox (file+headline "~/org/events-personal.org" "Inbox"))
-  	  ;; (:url "https://cloud.nuthouse.de/remote.php/dav/calendars/nutcase"
-  	  ;; 	:calendar-id "contact_birthdays"
-  	  ;; 	:files ("~/org/events-birthdays.org")
-  	  ;; 	:inbox (file+headline "~/org/events-birthdays.org")
-  	  ;; 	:sync-direction 'cal->org)
-  	  ;; (:url "https://sogo.uni-koblenz.de/SOGo/dav/flake/Calendar/"
-  	  ;; 	:calendar-id "personal/"
-  	  ;; 	:files ("~/org/events-work.org")
-  	  ;; 	:inbox (file+headline "~/org/events-work.org" "Inbox"))
+  		:inbox (file+headline "~/org/events-personal.org" "Inbox")
+  		:days-in-past 365)
   	  (:url "https://sogo.uni-koblenz.de/SOGo/dav/rgse/Calendar/"
   		:calendar-id "312BB5-63163180-97-5010D400"
   		:files ("~/org/events-rgse.org")
-  		:inbox (file+headline "~/org/events-rgse.org" "Inbox")))))
-
+  		:inbox (file+headline "~/org/events-rgse.org" "Inbox")
+  		:sync-direction 'cal->org))))
 
   ;; Add the delayed save hook with a five minute idle timer
   (add-hook 'after-save-hook
