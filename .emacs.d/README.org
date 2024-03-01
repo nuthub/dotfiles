@@ -49,7 +49,7 @@ The bootstrap process of this literate config is the following:
 
 ** TODO Some localizations for the calendar
 
-Holidays are not shown in agenda-hoidays (org-agenda 'h')
+Holidays are not shown in agenda-holidays (org-agenda 'h')
 
 #+BEGIN_SRC emacs-lisp
   (setq calendar-week-start-day 1
@@ -57,7 +57,14 @@ Holidays are not shown in agenda-hoidays (org-agenda 'h')
                                  "Donnerstag" "Freitag" "Samstag"]
         calendar-month-name-array ["Januar" "Februar" "März" "April" "Mai"
                                    "Juni" "Juli" "August" "September"
-                                   "Oktober" "November" "Dezember"])
+                                   "Oktober" "November" "Dezember"]
+        calendar-intermonth-text
+        '(propertize
+  	(format "%2d"
+  		(car
+  		 (calendar-iso-from-absolute
+                    (calendar-absolute-from-gregorian (list month day year)))))
+  	'font-lock-face 'font-lock-function-name-face))
 
   (setq solar-n-hemi-seasons
         '("Frühlingsanfang" "Sommeranfang" "Herbstanfang" "Winteranfang"))
@@ -82,8 +89,8 @@ Holidays are not shown in agenda-hoidays (org-agenda 'h')
           ;;(holiday-fixed 8 15 "Mariae Himmelfahrt")
           (holiday-fixed 11 1 "Allerheiligen")
           ;; (holiday-float 11 3 1 "Buss- und Bettag" 16)
-  	(holiday-float 11 0 1 "Totensonntag" 20)
-  	(holiday-float 12 0 -4 "1. Advent" 24)
+    	(holiday-float 11 0 1 "Totensonntag" 20)
+    	(holiday-float 12 0 -4 "1. Advent" 24)
           (holiday-float 12 0 -3 "2. Advent" 24)
           (holiday-float 12 0 -2 "3. Advent" 24)
           (holiday-float 12 0 -1 "4. Advent" 24)
