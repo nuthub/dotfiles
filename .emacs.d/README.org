@@ -750,12 +750,13 @@ Just press 'i' in PDFView, DOCView and so on
 #+BEGIN_SRC emacs-lisp
 
   (use-package tex
-    :defer 0
+    :defer nil
     :straight auctex
     :config
     (setq TeX-auto-save t)
     (setq TeX-parse-self t)
     (setq-default TeX-master nil)
+    (setq TeX-engine 'luatex)
     ;; synctex
     (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
     (setq TeX-source-correlate-method 'synctex)
@@ -1237,6 +1238,7 @@ Allows to browse bibtex file(s), insert citations, open files, links and notes. 
     (setq org-cite-insert-processor 'citar)
     (setq org-cite-follow-processor 'citar)
     (setq org-cite-activate-processor 'citar)
+    ;; (setq org-cite-export-processors '((latex biblatex) (t basic)))
     (setq citar-bibliography org-cite-global-bibliography)
     (setq citar-library-paths '("~/Documents/Literatur/bibtex-pdfs"))
     (setq citar-at-point-function 'embark-act))
