@@ -1448,14 +1448,35 @@ There is a package https://github.com/joostkremers/writeroom-mode?tab=readme-ov-
   	     :repo "nuthub/org-roam-citation-keyword-nodes"))
 #+end_src
 
-* COMMENT Printing
+** Open automounted drives
 
-#+BEGIN_SRC emacs-lisp :tangle no
+From https://mbork.pl/2024-02-17_Opening_external_drives_in_Dired
 
+#+begin_src emacs-lisp
+(defcustom jf/automount-directory (format "/media/%s" user-login-name)
+  "Directory under which drives are automounted.")
+
+(defun jf/automount-open-in-dired ()
+  "Open the automounted drive in Dired.
+If there is more than one, let the user choose."
+  (interactive)
+  (let ((dirs (directory-files jf/automount-directory nil "^[^.]")))
+    (dired (file-name-concat
+            jf/automount-directory 
+            (cond ((null dirs)
+                   (error "No drives mounted at the moment"))
+                  ((= (length dirs) 1)
+                   (car dirs))
+                  (t
+                   (completing-read "Open in dired: " dirs nil t)))))))
+#+end_src
+
+* Printing
+
+#+BEGIN_SRC emacs-lisp
   (when (display-graphic-p)
     (setq lpr-command "gtklp")
     (setq ps-lpr-command "gtklp"))
-
 #+END_SRC
 
 * Calendar syncing
@@ -1732,7 +1753,6 @@ When signing mails with openpgp (or gnupg), use the key associated with the send
 
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-c a") 'org-agenda)
-;;  (global-set-key (kbd "C-c j") 'org-journal-new-date-entry)
   (global-set-key (kbd "C-c c") 'org-capture)
   (global-set-key (kbd "C-c l") 'org-store-link)
   (global-set-key (kbd "C-c o") 'org-switchb)
