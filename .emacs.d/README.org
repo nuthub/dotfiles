@@ -205,11 +205,9 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
 ** A beautiful modeline
 
 #+BEGIN_SRC emacs-lisp
-
   (use-package doom-modeline
     :init (doom-modeline-mode 1)
     :custom ((doom-modeline-height 18)))
-
 #+END_SRC
 
 ** Show search result counts in modeline
@@ -1409,15 +1407,23 @@ What I want is:
 
 ** Switch dictionary for flyspell
 #+begin_src emacs-lisp
-  (defun jf/spell-switch-de ()
+  (defun jf/switch-spell-dict-to-de ()
     (interactive)
     (ispell-change-dictionary "de_DE")
     (flyspell-buffer))
 
-  (defun jf/spell-switch-en ()
+  (defun jf/switch-spell-dict-to-en ()
     (interactive)
     (ispell-change-dictionary "en_US")
     (flyspell-buffer))
+
+  (defun jf/toggle-spell-dict ()
+    (interactive)
+    (if (equal ispell-local-dictionary "de_DE")
+        (ispell-change-dictionary "en_US")
+      (ispell-change-dictionary "de_DE")
+      (flyspell-buffer)))
+    
 #+end_src
 ** Connect with my ZNC irc bouncer
 
