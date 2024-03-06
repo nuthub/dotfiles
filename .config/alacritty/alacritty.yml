@@ -1,5 +1,0 @@
-import:
-
-# Modus themes: https://codeberg.org/Zi0n7/Alacritty-modus-themes.git
-#- ~/.config/alacritty/Alacritty-modus-themes/modus-operandi.yaml
- - ~/.config/alacritty/Alacritty-modus-themes/modus-vivendi.yaml
