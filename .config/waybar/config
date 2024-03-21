@@ -41,7 +41,7 @@
 
     "custom/notification": {
       "tooltip": false,
-      "format": "{icon}",
+      "format": "{icon} {}",
       "format-icons": {
 	"notification": "<span foreground='red'><sup></sup></span>",
 	"none": "",
@@ -69,8 +69,7 @@
     "clock": {
         "timezone": "Europe/Berlin",
 	"locale": "de_DE.utf8",
-	"format": "{:W%W %Y-%m-%d   %H:%M  }",
-//	"format-alt": "{:%Y-%m-%d}",
+	"format": "{:W%W %Y-%m-%d   %H:%M}",
 	"tooltip-format": "<tt><small>{calendar}</small></tt>",
 	"calendar" : {
 		"mode": "year",
@@ -97,13 +96,13 @@
     },
 
     "cpu": {
-        "format": "{usage}% ", 
+        "format": "{usage}% cpu",
         "tooltip": true,
 	"on-click": "alacritty -e htop"
     },
 
     "memory": {
-        "format": "{}% "
+        "format": "{}% mem"
     },
 
     "temperature": {
@@ -117,8 +116,8 @@
 
     "backlight": {
         "device": "intel_backlight",
-        "format": "{percent}% {icon}",
-        "format-icons": ["", "", "", "", "", "", "", "", ""]
+        "format": "{percent}% bri {icon}",
+        "format-icons": ["", "", "", "", "", "", "", "", ""]
     },
 
     "battery": {
@@ -137,10 +136,10 @@
     },
 
     "wireplumber": {
-       "format": "{volume}% {icon}",
+       "format": "{volume}% vol {icon}",
        "format-muted": "",
        "on-click": "pavucontrol",
-       "format-icons": ["", "", ""]
+       "format-icons": ["", "", ""]
     },
 
     "user": {

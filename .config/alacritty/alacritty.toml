@@ -1,9 +1,5 @@
 import = ["/home/flake/.config/alacritty/alacritty-themes/themes/modus-vivendi.toml"]
 
-[bell.command]
-args = ["Finished Task", "Alacritty"]
-program = "notify-send"
-
 [colors]
 draw_bold_text_with_bright_colors = true
 

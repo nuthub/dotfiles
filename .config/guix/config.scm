@@ -190,10 +190,8 @@
 			  ;;
 			  ;; Look & Feel
 			  ;; fonts
-			  "font-hack" "font-fira-code" ; two competitors
-			  "font-liberation"
-			  "font-awesome"
-			  "font-dejavu"
+			  "font-fira-code" ; "font-hack" is also nice, but doesn't support ligatures
+			  "font-awesome" ; some icons
 			  ;; Nerd-Fonts are installed by M-x nerd-icons-install-fonts
 			  ;; all-the-icons are installed by M-x all-the-icons-install-fonts
 			  "font-google-noto" ; broad range of 

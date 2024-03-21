@@ -1,7 +1,5 @@
 window {
     border: 3px solid rgba(100, 114, 125, 0.5);
-    font-family: FontAwesome, NotoSansRegular, sans-serif;
-    font-size: 14px;
     background-color: #232323;
     color: #ffffff;
 }
