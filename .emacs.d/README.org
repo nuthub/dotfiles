@@ -125,10 +125,51 @@ Holidays are not shown in agenda-holidays (org-agenda 'h')
 * Look & feel
 ** Font
 
+I set my default fonts in ~~/.fonts.conf~. This is just an example:
+
+#+begin_src xml :tangle no
+  <?xml version="1.0"?>
+  <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
+  <fontconfig>
+    <alias>
+      <family>monospace</family>
+      <prefer>
+        <family>Fira Code</family>
+      </prefer>
+    </alias>
+    <alias>
+      <family>sans-serif</family>
+      <prefer>
+        <family>Noto Sans</family>
+      </prefer>
+    </alias>
+  </fontconfig>
+#+end_src
+
+** Ligatures
+
 #+BEGIN_SRC emacs-lisp
-  (add-to-list 'default-frame-alist '(font . "Hack-12"))
-  ;; (add-to-list 'default-frame-alist '(font . "Fira Code-12"))
-  ;; (add-to-list 'default-frame-alist '(font . "Noto Sans Mono-12"))
+
+  (use-package ligature
+   :config
+   ;; Enable the www ligature in every possible major mode
+   ;; (ligature-set-ligatures 't '("www"))
+
+   ;; Enable the www ligature in every possible major mode
+   (ligature-set-ligatures 'org-mode '("www" "->"))
+
+   ;; Enable ligatures in programming modes
+   (ligature-set-ligatures 'prog-mode '("www" "**" "***" "**/" "*>" "*/" "\\\\" "\\\\\\" "{-" "::"
+                                        ":::" ":=" "!!" "!=" "!==" "-}" "----" "-->" "->" "->>"
+                                        "-<" "-<<" "-~" "#{" "#[" "##" "###" "####" "#(" "#?" "#_"
+                                        "#_(" ".-" ".=" ".." "..<" "..." "?=" "??" ";;" "/*" "/**"
+                                        "/=" "/==" "/>" "//" "///" "&&" "||" "||=" "|=" "|>" "^=" "$>"
+                                        "++" "+++" "+>" "=:=" "==" "===" "==>" "=>" "=>>" "<="
+                                        "=<<" "=/=" ">-" ">=" ">=>" ">>" ">>-" ">>=" ">>>" "<*"
+                                        "<*>" "<|" "<|>" "<$" "<$>" "<!--" "<-" "<--" "<->" "<+"
+                                        "<+>" "<=" "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<"
+                                        "<~" "<~~" "</" "</>" "~@" "~-" "~>" "~~" "~~>" "%%"))
+   (global-ligature-mode 't))
 #+END_SRC
 
 ** General appearance
@@ -145,16 +186,48 @@ Holidays are not shown in agenda-holidays (org-agenda 'h')
 
 #+END_SRC
 
-** Theme
+** Spacious Padding
 
+#+BEGIN_SRC emacs-lisp
+  (use-package spacious-padding
+    :config
+    (setq spacious-padding-widths
+  	'( :internal-border-width 15
+  	   :header-line-width 4
+  	   :mode-line-width 6
+  	   :tab-width 4
+  	   :right-divider-width 30
+  	   :scroll-bar-width 8))
+    (spacious-padding-mode 1))
+#+END_SRC
+
+** Theme
 *** modus vivendi/operandi (light/dark)
 
 #+BEGIN_SRC emacs-lisp
   (use-package modus-themes
+    :after (spacious-padding)
     :config
-    (load-theme 'modus-vivendi t)) ; dark
-  ;; (load-theme 'modus-operandi t)) ; light
+    (load-theme 'modus-vivendi t) ; dark
+    ;; (load-theme 'modus-operandi t) ; light
+    (spacious-padding-mode))
 #+END_SRC
+
+** Smooth scrolling
+
+#+begin_src emacs-lisp
+  (pixel-scroll-precision-mode)
+  (setq pixel-scroll-precision-large-scroll-height 40.0)
+#+end_src
+
+** A beautiful modeline
+
+#+begin_src emacs-lisp
+  (use-package doom-modeline
+    :init (doom-modeline-mode 1)
+    :config
+    (setq doom-modeline-height 18))
+#+end_src
 
 ** Diminish
 
@@ -164,52 +237,6 @@ This is to hide minor modes from mode line. You can use `:diminish foo-mode` the
   (use-package diminish)
 #+END_SRC
    
-** Smooth scrolling
-
-#+begin_src emacs-lisp
-  (pixel-scroll-precision-mode)
-  (setq pixel-scroll-precision-large-scroll-height 40.0)
-#+end_src
-
-** Line numbers on the left
-   
-=display-line-numbers-mode= is a built in minor mode
-
-#+BEGIN_SRC emacs-lisp
-  (global-display-line-numbers-mode t)
-  ;; Disable line numbers for some modes
-  (dolist (mode '(org-mode-hook
-  		org-agenda-mode-hook
-                  vterm-mode-hook
-                  term-mode-hook
-                  shell-mode-hook
-                  eshell-mode-hook
-                  pdf-view-mode-hook
-  		nov-mode-hook))
-    (add-hook mode (lambda () (display-line-numbers-mode 0))))
-#+END_SRC
-
-** All-the-icons
-
-You must run 'M-x all-the-icons-install-fonts' to actually download the icons to '~/.local/share/fonts/'.
-
-#+begin_src emacs-lisp
-
-  (use-package all-the-icons)
-
-  (use-package all-the-icons-completion
-    :config (all-the-icons-completion-mode))
-
-#+end_src
-
-** A beautiful modeline
-
-#+BEGIN_SRC emacs-lisp
-  (use-package doom-modeline
-    :init (doom-modeline-mode 1)
-    :custom ((doom-modeline-height 18)))
-#+END_SRC
-
 ** Show search result counts in modeline
 
 #+BEGIN_SRC emacs-lisp
@@ -217,6 +244,28 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
   (setq isearch-lazy-count t)
   (setq isearch-lazy-highlight t)
 
+#+END_SRC
+
+** Line numbers on the left
+   
+=display-line-numbers-mode= is a built in minor mode
+
+#+BEGIN_SRC emacs-lisp
+  (global-display-line-numbers-mode 0)
+  ;; Disable line numbers for some modes
+    ;; (dolist (mode '(org-mode-hook
+    ;; 		org-agenda-mode-hook
+    ;;                 vterm-mode-hook
+    ;;                 term-mode-hook
+    ;;                 shell-mode-hook
+    ;;                 eshell-mode-hook
+    ;;                 pdf-view-mode-hook
+    ;; 		nov-mode-hook))
+    ;;   (add-hook mode (lambda () (display-line-numbers-mode 0))))
+    ;; Enable line numbers for some modes
+    (dolist (mode '(prog-mode-hook))
+      (add-hook mode (lambda ()
+  			 (display-line-numbers-mode 1))))
 #+END_SRC
 
 ** Smart paranthesis & Highlight parenthesis
@@ -237,6 +286,19 @@ An alternative to /smartparens/ is /paren/.
   (use-package rainbow-delimiters
     :config
     (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+#+end_src
+
+** All-the-icons
+
+You must run 'M-x all-the-icons-install-fonts' to actually download the icons to '~/.local/share/fonts/'.
+
+#+begin_src emacs-lisp
+
+  (use-package all-the-icons)
+
+  (use-package all-the-icons-completion
+    :config (all-the-icons-completion-mode))
+
 #+end_src
 
 ** COMMENT Highlight indent guides
@@ -615,6 +677,21 @@ Visualize the org roam graph in browser
   	org-roam-ui-open-on-start t))
 #+end_src
 
+** ox-hugo
+
+#+begin_src emacs-lisp
+  (use-package ox-hugo)
+#+end_src
+
+** HTML Export
+
+htmlize is used by org to export to HTML.
+  
+#+BEGIN_SRC emacs-lisp
+  (use-package htmlize
+    :defer 0)
+#+END_SRC
+
 ** org-super-agenda
 
 #+begin_src emacs-lisp
@@ -679,17 +756,6 @@ Activate some Babel languages
     (add-to-list 'org-babel-tangle-lang-exts '("cypher" . "cypher")))
 #+end_src
 
-** HTML Export
-
-htmlize is used by org to export to HTML.
-  
-#+BEGIN_SRC emacs-lisp
-
-  (use-package htmlize
-    :defer 0)
-
-#+END_SRC
-
 ** org-contrib
 
 This is needed to allow for not exporting to latex those org headings that are tagged :ignore:.
@@ -723,11 +789,16 @@ Just press 'i' in PDFView, DOCView and so on
 
 #+END_SRC
 
-** ox-hugo
+* Other major modes
+** magit: Git support
 
-#+begin_src emacs-lisp
-  (use-package ox-hugo)
-#+end_src
+#+BEGIN_SRC emacs-lisp
+  (use-package magit
+    :defer 0
+    :config
+    ;; gpg signing is at transient level 5, default was to show up to level 4
+    (setq transient-default-level 5))
+#+END_SRC
 
 ** pdf-tools
 
@@ -741,6 +812,14 @@ Just press 'i' in PDFView, DOCView and so on
     :init
     (setq-default pdf-view-display-size 'fit-page))
 
+#+end_src
+
+** Biblio
+
+#+begin_src emacs-lisp
+
+  (use-package biblio :defer 0)
+  
 #+end_src
 
 ** AucTeX
@@ -764,6 +843,17 @@ Just press 'i' in PDFView, DOCView and so on
     (setq TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view))))
 
 #+END_SRC
+
+** JustFile mode
+
+Two modes:
+- just-mode to edit justfiles
+- justl.el to run just on justfiles
+
+#+begin_src emacs-lisp
+  (use-package just-mode)
+  (use-package justl)
+#+end_src
 
 ** web-mode & php-mode
 
@@ -790,17 +880,6 @@ Just press 'i' in PDFView, DOCView and so on
 
    #+END_SRC
 
-** JustFile mode
-
-Two modes:
-- just-mode to edit justfiles
-- justl.el to run just on justfiles
-
-#+begin_src emacs-lisp
-  (use-package just-mode)
-  (use-package justl)
-#+end_src
-
 ** Platform.io
 
 #+BEGIN_SRC emacs-lisp
@@ -808,14 +887,6 @@ Two modes:
   (use-package platformio-mode :defer 0)
   
 #+END_SRC
-
-** Biblio
-
-#+begin_src emacs-lisp
-
-  (use-package biblio :defer 0)
-  
-#+end_src
 
 ** GUIX
 
@@ -892,16 +963,6 @@ The built-in LSP server
 
 #+end_src
 
-** magit: Git support
-
-#+BEGIN_SRC emacs-lisp
-  (use-package magit
-    :defer 0
-    :config
-    ;; gpg signing is at transient level 5, default was to show up to level 4
-    (setq transient-default-level 5))
-#+END_SRC
-
 * Minor modes & common packages
 ** Vertico
 
@@ -951,7 +1012,6 @@ The built-in LSP server
 
     ;; Enable recursive minibuffers
     (setq enable-recursive-minibuffers t))
-
 #+END_SRC
 
 ** Orderless
@@ -969,7 +1029,6 @@ This package provides an orderless completion style that divides the pattern int
 #+END_SRC
 
 ** Consult
-
 Completion allows you to quickly select an item from a list of candidates.
 
 #+BEGIN_SRC emacs-lisp
@@ -1113,6 +1172,7 @@ Enriches selection lists (and completion minibuffers, e.g. consult) with additio
     ;; enabled right away. Note that this forces loading the package.
     (marginalia-mode))
 #+END_src
+
 ** COMMENT Company mode
 
 #+begin_src emacs-lisp :tangle no
