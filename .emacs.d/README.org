@@ -1245,6 +1245,7 @@ enchant uses aspell or hunspell or whatever it can find. ~enchant-lsmod-2~ tells
 
 #+BEGIN_SRC emacs-lisp
   (setq ispell-program-name "enchant-2")
+  (ispell-change-dictionary "de_DE")
   (add-hook 'text-mode-hook 'flyspell-mode)
   (add-hook 'prog-mode-hook 'flyspell-prog-mode)
 #+END_SRC
@@ -1507,6 +1508,18 @@ What I want is:
 #+END_SRC
 
 There is a package https://github.com/joostkremers/writeroom-mode?tab=readme-ov-file that does similar things.
+
+** Focus on Subtree (clone + narrow)
+
+#+begin_src emacs-lisp
+  (defun jf/narrow-to-subtree-in-indirect-buffer ()
+    "Create an indirect cloned buffer and narrow to org subtree in the clone."
+    (interactive)
+    (clone-indirect-buffer
+     (concat "<org subtree> " (nth 4 (org-heading-components)))
+     t)
+    (org-narrow-to-subtree))
+#+end_src
 
 ** Synchronization between JabRef keywords and org-roam nodes
 
@@ -1784,11 +1797,29 @@ When signing mails with openpgp (or gnupg), use the key associated with the send
 
 #+end_src
 * Global key bindings
+** Increase / decrease text scale
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C--") 'text-scale-decrease)
+  (global-set-key (kbd "C-+") 'text-scale-increase)
+#+END_SRC
+
 ** Comment / Uncomment Region
 
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-x C-,") 'comment-region)
   (global-set-key (kbd "C-x C-.") 'uncomment-region)
+#+end_src
+
+** Revert buffer
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c r") 'revert-buffer)
+#+end_src
+
+** Open GTD file
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c t") (lambda () (interactive) (find-file "~/org/gtd.org")))
 #+end_src
 
 ** Open the file under cursor
@@ -1797,23 +1828,23 @@ When signing mails with openpgp (or gnupg), use the key associated with the send
   (global-set-key (kbd "C-x f") 'find-file-at-point)
 #+END_SRC
 
-** Increase / decrease text scale
+** Switch dictionary
 
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C--") 'text-scale-decrease)
-  (global-set-key (kbd "C-+") 'text-scale-increase)
-#+END_SRC
-
-** Quit dialogs with ESC
-
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-#+END_SRC
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c d") 'jf/toggle-spell-dict)
+#+end_src
 
 ** undo-tree
 
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-x u") 'undo-tree-visualize)
+#+END_SRC
+
+** COMMENT Quit dialogs with ESC
+CLOSED: [2024-03-28 Thu 23:07]
+
+#+BEGIN_SRC emacs-lisp
+  ;; (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 #+END_SRC
 
 ** Org mode
@@ -1824,6 +1855,7 @@ When signing mails with openpgp (or gnupg), use the key associated with the send
   (global-set-key (kbd "C-c l") 'org-store-link)
   (global-set-key (kbd "C-c o") 'org-switchb)
   (global-set-key (kbd "C-c n u") 'org-roam-ui-open)
+  (global-set-key (kbd "C-c j") 'consult-org-heading)
 #+END_SRC
 
 ** Magit
