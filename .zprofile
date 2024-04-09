@@ -16,7 +16,8 @@ export TERMINAL=alacritty
 export EDITOR="emacsclient -nc"
 export XDG_DATA_DIRS=$XDG_DATA_DIRS:/var/lib/flatpak/exports/share:/home/flake/.local/share/flatpak/exports/share
 
-export JAVA_HOME=$(guix build openjdk@17.0.5 | grep "\-jdk$")
+export JAVA_HOME=$(guix build openjdk@21 | grep "\-jdk$")
+export export _JAVA_AWT_WM_NONREPARENTING=1
 
 # If running from tty1 start sway
 if [ "$(tty)" = "/dev/tty1" ]; then

@@ -97,7 +97,7 @@
 			  ;; emacs & related
 			  "emacs-pgtk-xwidgets" "emacs-pdf-tools" "emacs-vterm"
 			  "isync" "mu"
-			  "openjdk@17.0.5:jdk" ; java-lsp wants this
+			  "openjdk@21:jdk" ; java-lsp wants this, otherwise I'd just use it in guix shells only
 			  "python" ; treemacs wants python3
 			  ;; my shell and shell tools
 			  "zsh" "zsh-autosuggestions" "zsh-syntax-highlighting"
