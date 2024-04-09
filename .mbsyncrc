@@ -4,7 +4,7 @@
 SyncState *
 Create Both
 Remove None
-Expunge None
+Expunge Both
 
 # private Mail
 
@@ -26,8 +26,6 @@ Channel private
 Far :private-remote:
 Near :private-local:
 Patterns * "!dovecot/*"
-Expunge Near
-# Remove Both
 
 ######################
 ### Uni Koblenz
@@ -51,8 +49,6 @@ Channel work
 Far :work-remote:
 Near :work-local:
 Patterns * "!Shared Folders/*" "!Other Users/*"
-Expunge Both
-# Remove Both
 
 
 ######################
@@ -77,5 +73,3 @@ Channel tudo
 Far :tudo-remote:
 Near :tudo-local:
 Patterns *
-Expunge Both
-Remove Both

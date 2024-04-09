@@ -1521,11 +1521,11 @@ If there is more than one, let the user choose."
       	org-caldav-inbox nil
       	org-caldav-calendar-id nil)
     (setq org-caldav-calendars
-      	'((:url "https://cloud.nuthouse.de/remote.php/dav/calendars/nutcase"
+  	'(
+  	  (:url "https://cloud.nuthouse.de/remote.php/dav/calendars/nutcase"
   		:calendar-id "personal"
   		:files ("~/org/events-personal.org")
-  		:inbox (file+headline "~/org/events-personal.org" "Inbox")
-  		:days-in-past 365)
+  		:inbox (file+headline "~/org/events-personal.org" "Inbox"))
   	  (:url "https://sogo.uni-koblenz.de/SOGo/dav/rgse/Calendar/"
   		:calendar-id "312BB5-63163180-97-5010D400"
   		:files ("~/org/events-rgse.org")
@@ -1582,7 +1582,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
     (setq mu4e-completing-read-function 'completing-read)
     (setq mu4e-notification-support t)
     (setq mu4e-compose-format-flowed t)
-    (setq mu4e-compose-cite-function 'message-cite-original) ;; alternative: 'message-cite-original-without-signature
+    (setq message-cite-function 'message-cite-original) ;; alternative: 'message-cite-original-without-signature
     (setq mail-user-agent 'mu4e-user-agent)
     (require 'smtpmail)
     (setq message-send-mail-function 'smtpmail-send-it)
@@ -1626,7 +1626,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                 (string-prefix-p "/private" (mu4e-message-field msg :maildir))))
             :vars '((user-mail-address . "julian@flake.de")
                     (user-full-name . "Julian Flake")
-                    (mu4e-compose-signature . nil)
+                    (message-signature . nil)
                     (smtpmail-smtp-server . "nuthost.de")
                     (smtpmail-stream-type . starttls)
                     (smtpmail-smtp-service . 587)
@@ -1643,7 +1643,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                 (string-prefix-p "/work" (mu4e-message-field msg :maildir))))
             :vars '((user-mail-address . "flake@uni-koblenz.de")
                     (user-full-name    . "Julian Flake")
-                    (mu4e-compose-signature . "Dipl.-Inf. Julian Flake\n\nUniversität Koblenz\nFachbereich Informatik\nInstitut für Softwaretechnik\nPostfach 20 16 02 | D-56016 Koblenz\n\nTel.: +49 261 287 2787\nE-Mail: flake@uni-koblenz.de\nWebsite: https://www.uni-koblenz.de/~flake")
+  		  (message-signature . "Dipl.-Inf. Julian Flake\n\nUniversity of Koblenz\nFaculty 4: Computer Science\nInstitute for Software Technology\nPB 20 16 02 | D-56016 Koblenz | Germany\n\nVoice: +49 261 287 2787\nEmail: flake@uni-koblenz.de\nhttps://www.uni-koblenz.de/~flake")
                     (smtpmail-smtp-server . "smtp.uni-koblenz.de")
                     (smtpmail-stream-type . ssl)
                     (smtpmail-smtp-service . 465)
@@ -1660,7 +1660,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                 (string-prefix-p "/tudo" (mu4e-message-field msg :maildir))))
             :vars '((user-mail-address . "julian.flake@tu-dortmund.de")
                     (user-full-name . "Julian Flake")
-                    (mu4e-compose-signature . nil)
+                    (message-signature . nil)
                     (smtpmail-smtp-server . "unimail.tu-dortmund.de")
                     (smtpmail-stream-type . starttls)
                     (smtpmail-smtp-service . 587)
@@ -1668,11 +1668,15 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                     (mu4e-sent-folder . "/private/Sent")
                     (mu4e-refile-folder  . "/private/Archives/2024")
                     (mu4e-trash-folder . "/private/Trash")))))
+
     ;; disable undo-tree for mail compose (why? I have a separate dir for )
     (add-hook 'mu4e-compose-mode-hook
-              (defun disable-undo-tree-mode-in-mu4e-compose()
-                "Disable undo tree mode"
-                (undo-tree-mode -1)))
+              (lambda()
+  		(undo-tree-mode -1)))
+
+    ;; let me confirm every message
+    (setq message-confirm-send t)
+
     ;; let me confirm/decline to send an email with empty subject
     (add-hook 'message-send-hook
               (lambda() (interactive)
@@ -1680,19 +1684,16 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                     (yes-or-no-p "Really send without Subject? ")
                     (keyboard-quit))))
 
-    ;; add meta information to replies and forwards
-    ;; problem: we don't have variables substituted by original Subject: (e.g. %s) and To: (e.g. %t)
-    ;; (defun citation-line-function ()
-    ;;   (setq message-citation-line-format
-    ;;         (if (eq mu4e-compose-type 'reply)
-    ;;             "On %a %d %b %Y %T %z (%Z), %f wrote:\n"
-    ;;           (if (eq mu4e-compose-type 'forward)
-    ;;               "----- Forwarded message -----\nSubject: %s\nFrom: %f\nTo: %t\nDate: %a %d %b %Y %T %z (%Z)\n\n"))))
-    ;; (add-hook 'mu4e-compose-pre-hook 'citation-line-function)
-    ;; this at least adds the date of cited mail:
+    ;; this adds the date of a cited mail:
     (setq message-citation-line-function 'message-insert-formatted-citation-line)
+
+    ;; setup icalendar / org mode support
     (require 'mu4e-icalendar)
-    (mu4e-icalendar-setup)
+    (setq gnus-icalendar-org-capture-file "~/org/events-personal.org")
+    (setq gnus-icalendar-org-capture-headline '("Inbox"))
+    (gnus-icalendar-org-setup)
+    
+    ;; start mu4e (in background)
     (mu4e t)) ; end of use-package mu4e
 
   ;; (use-package mu4e-views
