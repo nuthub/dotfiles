@@ -6,3 +6,9 @@
 /.config/Nextcloud/logs/
 /.config/Nextcloud/nextcloud.cfg.backup_*git
 *~
+/.emacs.d/recentf
+/.emacs.d/persist/
+/.emacs.d/abbrev_defs
+/.emacs.d/.dap-breakpoints
+/.emacs.d/nov-places
+/.local/bin/guix-shell-*.sh
