@@ -107,6 +107,7 @@
 			  "file"
 			  "fzf"
 			  "htop"
+			  "jq" ; needed by sway / zoom
 			  "just"
 			  "neofetch"
 			  "net-tools" ; for ifconfig  netstat  route
@@ -138,11 +139,11 @@
 			  ;; I need all of these portals
 			  "xdg-desktop-portal" "xdg-desktop-portal-gtk" "xdg-desktop-portal-wlr"
 			  ;; wayland, not sure what I really need
-			  "xorg-server-xwayland" "slurp" "grim" "grimshot" "swappy" "wlr-randr" "egl-wayland" "wdisplays"
+			  "xorg-server-xwayland" "wlr-randr" "egl-wayland" "wdisplays" "slurp" ; "grim" "swappy" "grimshot" 
 			  ;; sway
-			  "sway" "waybar" "wofi" "swaylock" "swayidle" "swaynotificationcenter"
-			  "wl-clipboard" "clipman" "wtype"
-			  "avizo" "pamixer" ; avizo uses pamixer :-(
+			  "sway" "waybar" "wofi" "swaylock" "swayidle" "swaynotificationcenter" "libnotify" "i3-autotiling"
+			  "wl-clipboard" "clipman" "wtype" ; wofi-emoji needs wtype
+			  "wob" ; OSD overlay
 			  "alacritty"
 			  "kanshi" ; automatically switch displays
 			  "gammastep" "geoclue" ; could use geoclue, if geoclue was running
@@ -199,9 +200,10 @@
 			  "font-google-noto-serif-cjk" "font-google-noto-sans-cjk" ; chinese fonts
 			  "font-microsoft-arial" "font-microsoft-times-new-roman" "font-microsoft-courier-new" ; Microsoft fonts
 			  ;; themes
-			  "gnome-themes-extra" 
+			  "gnome-themes-extra"
 			  ;; icons
-			  "adwaita-icon-theme" "elementary-xfce-icon-theme" "hicolor-icon-theme"
+			  "adwaita-icon-theme"
+			  "elementary-xfce-icon-theme" "hicolor-icon-theme" ; (gives nice icons in waybar also)
 			  ;; from nutguix
 			  "wl-mirror" "gtklp" "astah-professional"
 			  ))
