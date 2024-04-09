@@ -317,51 +317,64 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
   (use-package olivetti)
 #+END_SRC
 
-* Major modes
-** Org Mode
-
-#+BEGIN_SRC emacs-lisp :noweb no-export
-  (use-package org
-    :defer 0
-    ;; the bind may defer the package loading, see documentation (C-h f use-package RET)
-    :bind (:map org-mode-map
-      	      ("C-c C-<left>" . org-promote-subtree)
-      	      ("C-c C-<right>" . org-demote-subtree)
-  	      ("C-c ," . org-timestamp-inactive))
-    :config
-    <<org-config-look-and-feel>>
-    <<org-config-task-management-and-agenda>>
-    <<org-config-capture-templates>>
-    <<org-config-latex-export>>
-    <<org-config-display-pdf-inline>>   
-    )
-#+END_SRC
-
+* Org mode
+** Org Mode basics: Look&Feel, task management, capture templates, LaTex export
 *** Org's basics & Look & Feel
 
-#+begin_src emacs-lisp :noweb-ref org-config-look-and-feel
-  (set-face-underline 'org-ellipsis nil)
-  (setq org-ellipsis " …")
-  (setq org-startup-indented t)
-  (setq org-startup-truncated nil)
-  (setq org-src-tab-acts-natively t)
-  (setq org-ctrl-k-protect-subtree t)
-  (setq org-return-follows-link t)
-  (setq org-num-skip-unnumbered t)
-  (setq org-num-skip-tags (list "ignore" "noexport" "unnumbered"))
-  (setq org-goto-interface 'outline-path-completion)
-  (setq org-cite-global-bibliography '("~/Documents/Literatur/Literatur.bib"))
-  ;; beautiful bullets
-  (use-package org-bullets
-    :config
-    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
-  (add-hook 'org-mode-hook 'visual-line-mode)
+#+begin_src emacs-lisp
+  (defun jf/org-setup-look-and-feel ()
+    (set-face-underline 'org-ellipsis nil)
+    (setq org-ellipsis " …")
+    (setq org-startup-indented t)
+    (setq org-startup-truncated nil)
+    (setq org-src-tab-acts-natively t)
+    (setq org-ctrl-k-protect-subtree t)
+    (setq org-return-follows-link t)
+    (setq org-num-skip-unnumbered t)
+    (setq org-num-skip-tags (list "ignore" "noexport" "unnumbered"))
+    (setq org-goto-interface 'outline-path-completion)
+    (setq org-cite-global-bibliography '("~/Documents/Literatur/Literatur.bib"))
+    (add-hook 'org-mode-hook (lambda ()
+       			     (visual-line-mode 1)
+  			     (variable-pitch-mode 1)))
+    ;; Force to fixed-pitch certain elements in org mode, when I switch to variable-pitch-mode
+    ;; To find the face at point, use 'C-u C-x =' (~what-cursor-position~ with prefix)
+    (custom-theme-set-faces
+     'user
+     '(org-block ((t (:inherit fixed-pitch))))
+     '(org-block-begin-line ((t (:inherit shadow fixed-pitch))))
+     '(org-block-end-line ((t (:inherit shadow fixed-pitch))))
+     '(org-checkbox ((t (:inherit (fixed-pitch)))))
+     '(org-code ((t (:inherit (shadow fixed-pitch)))))
+     '(org-date ((t (:inherit (fixed-pitch)))))
+     '(org-document-info ((t (:foreground "dark orange"))))
+     '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
+     '(org-done ((t (:inherit (fixed-pitch)))))
+     '(org-drawer ((t (:inherit (fixed-pitch)))))
+     '(org-formula ((t (:inherit (fixed-pitch)))))
+     '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
+     '(org-link ((t (:foreground "royal blue" :underline t))))
+     '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+     '(org-property-value ((t (:inherit fixed-pitch))) t)
+     '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+     '(org-table ((t (:inherit fixed-pitch :foreground "#83a598"))))
+     '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
+     '(org-target ((t (:inherit (fixed-pitch)))))
+     '(org-todo ((t (:inherit (fixed-pitch)))))
+     '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
+        
+    ;; beautiful bullets
+    (use-package org-bullets
+      :config
+      (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))))
+
 #+end_src
 
 *** Task Management, Agenda, Archive, Refiling
 
-#+BEGIN_SRC emacs-lisp :tangle no :noweb-ref org-config-task-management-and-agenda
+#+BEGIN_SRC emacs-lisp
 
+  (defun jf/org-setup-task-management-and-agenda ()
     ;; Task management
     (setq org-directory "~/org")
     (setq org-default-notes-file (concat org-directory "/inbox.org"))
@@ -373,7 +386,7 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
               	      ("teaching" . ?t)
               	      ("sail" . ?S)
     		      ("nerdism" . ?n)))
-    (setq org-todo-keywords '((sequence "TODO(t)" "FREQ(f)" "EVNT(e)" "PROJ(p)" "WAIT(w@/!)" "|" "DONE(d!)" "CNCL(c@/!)")))
+    (setq org-todo-keywords '((sequence "TODO(t)" "FREQ(f)" "EVNT(e)" "PROJ(p)" "WAIT(w/!)" "|" "SKIP(s!)" "DONE(d!)" "CNCL(c/!)")))
     (setq org-todo-repeat-to-state t)
     (setq org-log-done 'time)
     (setq org-log-into-drawer t)
@@ -386,12 +399,12 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
     			 "~/org/events-personal.org"
     			 "~/org/events-rgse.org"
     			 "~/org/events-work.org"))
-    (setq org-agenda-window-setup 'current-frame)
+    (setq org-agenda-window-setup 'reorganize-frame)
     (setq org-agenda-span 1)
     (setq org-agenda-time-grid
-          '((weekly remove-match)
-      	nil
-      	"......." "------------------"))
+          '((daily today require-timed)
+  	   (800 1000 1200 1400 1600 1800 2000)
+  	   " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄"))
     (setq org-agenda-include-diary t)
     (setq org-agenda-custom-commands
           '(("w" "Weekly cleanup" todo "CNCL|DONE")
@@ -414,78 +427,76 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
               			 ("~/org/events-personal.org" :maxlevel . 2)
   				 ("~/org/events-rgse.org" :maxlevel . 2))))
     (setq org-refile-use-outline-path 'file)
-    (setq org-outline-path-complete-in-steps nil)
     (setq org-refile-allow-creating-parent-nodes 'confirm)
+    (setq org-outline-path-complete-in-steps nil)
 
     ;; Archive
-    (setq org-archive-location (concat org-directory "/archive/archive-" (format-time-string "%Y" (current-time)) ".org::datetree/"))
+    (setq org-archive-location (concat org-directory "/archive/archive-" (format-time-string "%Y" (current-time)) ".org::datetree/")))
 
 #+END_SRC
 
 *** Org capture templates
 
-#+BEGIN_SRC emacs-lisp :tangle no :noweb-ref org-config-capture-templates
-
-  (setq org-capture-templates
-        '(
-    	("t" "Todo" entry (file "~/org/inbox.org")
-           "* TODO %?\n  %i")
-    	("e" "Event" entry (file+headline "~/org/events-personal.org" "Inbox")
-  	 "* %^{Event Title}\n\n%^{Date and Time}T\nLocation: %^{Location}\n%i%?" :time-prompt t)
-    	("n" "Note" entry (file "~/org/inbox.org")
-           "* NOTE %U %?\n- %i")
-    	("m" "Process Mail" entry (file "~/org/inbox.org")
-           "* TODO %?\nSCHEDULED: %t\nMail: %:fromname: %a")
-  	;; ("r" "Recipe" entry (file "~/org/cookbook.org")
-  	;;  "%(org-chef-get-recipe-from-url)"
-  	;;  :empty-lines 1)
-  	("R" "Recipe" entry (file "~/org/cookbook.org")
-  	 "* %^{Recipe title: }\n  :PROPERTIES:\n  :source-url:\n :prep-time:\n  :cook-time:\n  :ready-in:\n  :END:\n** Zutaten\n   %?\n** Zubereitung\n\n")))
-
+#+BEGIN_SRC emacs-lisp
+  (defun jf/org-setup-capture-templates ()
+    (setq org-capture-templates
+  	'(
+    	  ("t" "Todo" entry (file "~/org/inbox.org")
+             "* TODO %?\n  %i")
+  	  
+    	  ("T" "Todo from Mail" entry (file "~/org/inbox.org")
+             "* TODO %?\nSCHEDULED: %t\nMail von %:fromname: %a")
+  	  
+    	  ("e" "Event" entry (file+headline "~/org/events-personal.org" "Inbox")
+  	   "* %^{Event Title}\n\n%^{Date and Time}T\nLocation: %^{Location}\n\n%i%?" :time-prompt t)
+  	  
+    	  ("E" "Event from Mail" entry (file+headline "~/org/events-personal.org" "Inbox")
+  	   "* %^{Event Title|%:subject}\n\n%^{Date and Time}T\n- Location: %^{Location}\n- Invitation: %a\n\n%i%?" :time-prompt t))))
 #+END_SRC
 
 *** LaTeX export classes + beamer support
 
-#+BEGIN_SRC emacs-lisp :tangle no :noweb-ref org-config-latex-export
+#+BEGIN_SRC emacs-lisp
 
-  ;; use luatex as LaTeX Compiler
-  (setq org-latex-compiler "lualatex")
+  (defun jf/org-setup-latex-export ()
+    ;; use luatex as LaTeX Compiler
+    (setq org-latex-compiler "lualatex")
 
-  ;; Include e set (or known email address)
-  (setq org-export-with-email t)
+    ;; Include e set (or known email address)
+    (setq org-export-with-email t)
 
-  ;; compile latex in foreground to directly retrieve compilation errors
-  (setq org-export-in-background nil)
+    ;; compile latex in foreground to directly retrieve compilation errors
+    (setq org-export-in-background nil)
 
-  ;; use emacs's font-locking for syntax highlighting in LaTeX exports
-  (setq org-latex-src-block-backend 'engraved)
+    ;; use emacs's font-locking for syntax highlighting in LaTeX exports
+    (setq org-latex-src-block-backend 'engraved)
 
-  ;; ox-latex: Add KomaScript to the known classes
-  (with-eval-after-load 'ox-latex
-    (add-to-list 'org-latex-classes '("scrbook"
-                                	    "\\documentclass[11pt]{scrbook}"
-                                	    ("\\chapter{%s}" . "\\chapter*{%s}")
-                                	    ("\\section{%s}" . "\\section*{%s}")
-                                	    ("\\subsection{%s}" . "\\subsection*{%s}")
-                                	    ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                                	    ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                                	    ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
-  (with-eval-after-load 'ox-latex
-    (add-to-list 'org-latex-classes '("scrartcl"
-                                	    "\\documentclass[11pt]{scrartcl}"
-                                	    ("\\section{%s}" . "\\section*{%s}")
-                                	    ("\\subsection{%s}" . "\\subsection*{%s}")
-                                	    ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                                	    ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                                	    ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
-  (with-eval-after-load 'ox-latex
-    (add-to-list 'org-latex-classes '("moderncv"
-                                	    "\\documentclass{moderncv}"
-                                	    ("\\section{%s}" . "\\section*{%s}")
-        				    ("\\subsection{%s}" . "\\subsection{%s}"))))
-  (with-eval-after-load 'ox-latex
-    (add-to-list 'org-latex-classes '("my-beamer"
-                          	    "\\documentclass[presentation,aspectratio=169,allowframebreaks]{beamer}
+    ;; ox-latex: Add KomaScript to the known classes
+    (with-eval-after-load 'ox-latex
+      (add-to-list 'org-latex-classes '("scrbook"
+                                	      "\\documentclass[11pt]{scrbook}"
+                                	      ("\\chapter{%s}" . "\\chapter*{%s}")
+                                	      ("\\section{%s}" . "\\section*{%s}")
+                                	      ("\\subsection{%s}" . "\\subsection*{%s}")
+                                	      ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                                	      ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                                	      ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+    (with-eval-after-load 'ox-latex
+      (add-to-list 'org-latex-classes '("scrartcl"
+                                	      "\\documentclass[11pt]{scrartcl}"
+                                	      ("\\section{%s}" . "\\section*{%s}")
+                                	      ("\\subsection{%s}" . "\\subsection*{%s}")
+                                	      ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                                	      ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                                	      ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+    (with-eval-after-load 'ox-latex
+      (add-to-list 'org-latex-classes '("moderncv"
+                                	      "\\documentclass{moderncv}"
+                                	      ("\\section{%s}" . "\\section*{%s}")
+        				      ("\\subsection{%s}" . "\\subsection{%s}"))))
+    (with-eval-after-load 'ox-latex
+      (add-to-list 'org-latex-classes '("my-beamer"
+                          	      "\\documentclass[presentation,aspectratio=169,allowframebreaks]{beamer}
           \\usepackage{pdfpages}
           \\institute[RGSE]{University of Koblenz, Research Group Software Engineering}
           \\setbeamertemplate{caption}{\\raggedright\\insertcaption\\par}
@@ -508,47 +519,49 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
              \\sectionpage%
            \\end{frame}%
           }%"
-                          	    ("\\section{%s}" . "\\section*{%s}")
-                          	    ("\\subsection{%s}" . "\\subsection*{%s}")
-                          	    ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
+                          	      ("\\section{%s}" . "\\section*{%s}")
+                          	      ("\\subsection{%s}" . "\\subsection*{%s}")
+                          	      ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
 
-  ;; add beamer to the export backends
-  (add-to-list 'org-export-backends 'beamer)
-  (setq org-beamer-environments-extra
-        '(("onlyenv" "O" "\\begin{onlyenv}%a" "\\end{onlyenv}")))
+    ;; add beamer to the export backends
+    (add-to-list 'org-export-backends 'beamer)
+    (setq org-beamer-environments-extra
+  	'(("onlyenv" "O" "\\begin{onlyenv}%a" "\\end{onlyenv}")))
 
-  ;; koma-letter
-  (eval-after-load 'ox '(require 'ox-koma-letter))
+    ;; koma-letter
+    (eval-after-load 'ox '(require 'ox-koma-letter))
 
-  (eval-after-load 'ox-koma-letter
-    '(progn
-       (add-to-list 'org-latex-classes
-                    '("my-koma-letter"
-        		    "\\documentclass[11pt,parskip,DIV=15,fromalign=right]\{scrlttr2\}
+    (eval-after-load 'ox-koma-letter
+      '(progn
+         (add-to-list 'org-latex-classes
+                      '("my-koma-letter"
+        		      "\\documentclass[11pt,parskip,DIV=15,fromalign=right]\{scrlttr2\}
         \\usepackage[german]{babel}
         \\renewcommand{\\familydefault}{\\sfdefault}
                \[DEFAULT-PACKAGES]
                \[PACKAGES]
                \[EXTRA]"))
 
-       (setq org-koma-letter-default-class "my-koma-letter")))
+         (setq org-koma-letter-default-class "my-koma-letter"))))
 
 #+END_SRC
 
 *** Display PDF images inline
 
-#+BEGIN_SRC emacs-lisp :tangle no :noweb-ref org-config-display-pdf-inline
+#+BEGIN_SRC emacs-lisp
 
-  ;; Display PDF files inline
-  ;; taken from https://stackoverflow.com/questions/15407485/inline-pdf-images-in-org-mode
+  (defun jf/org-setup-display-pdf-inline ()
 
-  (add-to-list 'image-file-name-extensions "pdf")
+    ;; Display PDF files inline
+    ;; taken from https://stackoverflow.com/questions/15407485/inline-pdf-images-in-org-mode
 
-  (setq org-image-actual-width 600)
+    (add-to-list 'image-file-name-extensions "pdf")
 
-  (setq org-imagemagick-display-command "convert -density 600 \"%s\" -thumbnail \"%sx%s>\" \"%s\"")
-  (defun org-display-inline-images (&optional include-linked refresh beg end)
-    "Display inline images.
+    (setq org-image-actual-width 600)
+
+    (setq org-imagemagick-display-command "convert -density 600 \"%s\" -thumbnail \"%sx%s>\" \"%s\"")
+    (defun org-display-inline-images (&optional include-linked refresh beg end)
+      "Display inline images.
     Normally only links without a description part are inlined, because this
     is how it will work for export.  When INCLUDE-LINKED is set, also links
     with a description part will be inlined.  This
@@ -558,48 +571,65 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
     When REFRESH is set, refresh existing images between BEG and END.
     This will create new image displays only if necessary.
     BEG and END default to the buffer boundaries."
-    (interactive "P")
-    (unless refresh
-      (org-remove-inline-images)
-      (if (fboundp 'clear-image-cache) (clear-image-cache)))
-    (save-excursion
-      (save-restriction
-        (widen)
-        (setq beg (or beg (point-min)) end (or end (point-max)))
-        (goto-char beg)
-        (let ((re (concat "\\[\\[\\(\\(file:\\)\\|\\([./~]\\)\\)\\([^]\n]+?"
-                          (substring (org-image-file-name-regexp) 0 -2)
-                          "\\)\\]" (if include-linked "" "\\]")))
-              old file ov img)
-          (while (re-search-forward re end t)
-            (setq old (get-char-property-and-overlay (match-beginning 1)
-                                                     'org-image-overlay)
-    		file (expand-file-name
-                        (concat (or (match-string 3) "") (match-string 4))))
-            (when (file-exists-p file)
-              (let ((file-thumb (format "%s%s_thumb.png" (file-name-directory file) (file-name-base file))))
-                (if (file-exists-p file-thumb)
-                    (let ((thumb-time (nth 5 (file-attributes file-thumb 'string)))
-                          (file-time (nth 5 (file-attributes file 'string))))
-                      (if (time-less-p thumb-time file-time)
-    			(shell-command (format org-imagemagick-display-command
-    					       file org-image-actual-width org-image-actual-width file-thumb) nil nil)))
-                  (shell-command (format org-imagemagick-display-command
-                                         file org-image-actual-width org-image-actual-width file-thumb) nil nil))
-                (if (and (car-safe old) refresh)
-                    (image-refresh (overlay-get (cdr old) 'display))
-                  (setq img (save-match-data (create-image file-thumb)))
-                  (when img
-                    (setq ov (make-overlay (match-beginning 0) (match-end 0)))
-                    (overlay-put ov 'display img)
-                    (overlay-put ov 'face 'default)
-                    (overlay-put ov 'org-image-overlay t)
-                    (overlay-put ov 'modification-hooks
-                                 (list 'org-display-inline-remove-overlay))
-                    (push ov org-inline-image-overlays))))))))))
+      (interactive "P")
+      (unless refresh
+        (org-remove-inline-images)
+        (if (fboundp 'clear-image-cache) (clear-image-cache)))
+      (save-excursion
+        (save-restriction
+  	(widen)
+  	(setq beg (or beg (point-min)) end (or end (point-max)))
+  	(goto-char beg)
+  	(let ((re (concat "\\[\\[\\(\\(file:\\)\\|\\([./~]\\)\\)\\([^]\n]+?"
+                            (substring (org-image-file-name-regexp) 0 -2)
+                            "\\)\\]" (if include-linked "" "\\]")))
+                old file ov img)
+            (while (re-search-forward re end t)
+              (setq old (get-char-property-and-overlay (match-beginning 1)
+                                                       'org-image-overlay)
+    		  file (expand-file-name
+  			(concat (or (match-string 3) "") (match-string 4))))
+              (when (file-exists-p file)
+                (let ((file-thumb (format "%s%s_thumb.png" (file-name-directory file) (file-name-base file))))
+  		(if (file-exists-p file-thumb)
+                      (let ((thumb-time (nth 5 (file-attributes file-thumb 'string)))
+                            (file-time (nth 5 (file-attributes file 'string))))
+                        (if (time-less-p thumb-time file-time)
+    			  (shell-command (format org-imagemagick-display-command
+    						 file org-image-actual-width org-image-actual-width file-thumb) nil nil)))
+                    (shell-command (format org-imagemagick-display-command
+  					 file org-image-actual-width org-image-actual-width file-thumb) nil nil))
+  		(if (and (car-safe old) refresh)
+                      (image-refresh (overlay-get (cdr old) 'display))
+                    (setq img (save-match-data (create-image file-thumb)))
+                    (when img
+                      (setq ov (make-overlay (match-beginning 0) (match-end 0)))
+                      (overlay-put ov 'display img)
+                      (overlay-put ov 'face 'default)
+                      (overlay-put ov 'org-image-overlay t)
+                      (overlay-put ov 'modification-hooks
+  				 (list 'org-display-inline-remove-overlay))
+                      (push ov org-inline-image-overlays)))))))))))
 #+END_SRC
 
-** Syntax highlighting in org mode exports
+*** Finally setup org
+#+BEGIN_SRC emacs-lisp :noweb no-export
+  (use-package org
+    :defer 0
+    ;; the bind may defer the package loading, see documentation (C-h f use-package RET)
+    :bind (:map org-mode-map
+      	      ("C-c C-<left>" . org-promote-subtree)
+      	      ("C-c C-<right>" . org-demote-subtree)
+  	      ("C-c ," . org-timestamp-inactive))
+    :config
+    (jf/org-setup-look-and-feel)
+    (jf/org-setup-task-management-and-agenda)
+    (jf/org-setup-capture-templates)
+    (jf/org-setup-latex-export)
+    (jf/org-setup-display-pdf-inline))
+#+END_SRC
+
+** Org mode exports: syntax highlighting with engrave-faces
 
 For syntax highlighted source code blocks, I use the font-locking mode of emacs. The package engrave-faces contains LaTeX, Ansi and HTML faces.
 
@@ -656,11 +686,7 @@ Build a second brain with org-roam.
       (setq org-roam-dailies-capture-templates '(
     					     ("d" "default" entry "* %?"
     					      :target
-    					      (file+head "%<%Y-%m-%d_%A>.org" "#+title: %<%Y-%m-%d (%A)>\n#+filetags: daily\n\n- Links: [[id:b3cb74b2-a385-4132-a55e-8cf561eed9fc][Journaling]]\n\n* Daily Planing
-  - [ ] Journal [[elisp:(org-roam-dailies-goto-yesterday 1)][yesterday]]
-  - [ ] Process [[file:~/Syncthing/org/inbox.org][inbox]]
-  - [ ] Check [[elisp:(mu4e)][mails]]
-  - [ ] Check [[elisp:(org-agenda-list)][agenda]]\n")))) ; org-roam-dailies-capture-templaes
+    					      (file+head "%<%Y-%m-%d_%A>.org" "#+title: %<%Y-%m-%d (%A)>\n#+filetags: daily\n\n- Links: [[id:b3cb74b2-a385-4132-a55e-8cf561eed9fc][Journaling]]\n* Träume\n* Daily Planing\n- [ ] Journal [[elisp:(org-roam-dailies-goto-yesterday 1)][yesterday]]\n- [ ] Process [[file:~/Syncthing/org/inbox.org][inbox]]\n- [ ] Check [[elisp:(mu4e)][mails]]\n- [ ] Check [[elisp:(org-agenda-list)][agenda]]\n* Emotionen\n")))) ; org-roam-dailies-capture-templaes
       ) ; use-package org-roam
 
 #+END_SRC
@@ -718,8 +744,6 @@ htmlize is used by org to export to HTML.
   	   (:name "Sailing"
                     :tag "sail"
   		  :category "Segeln")
-  	   (:name "Habits"
-                    :habit t)
              ;; Groups supply their own section names when none are given
              (:todo "WAIT" :order 8)  ; Set order of this section
              ;; After the last group, the agenda will display items that didn't
