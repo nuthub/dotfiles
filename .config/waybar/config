@@ -70,11 +70,13 @@
         "timezone": "Europe/Berlin",
 	"locale": "de_DE.utf8",
 	"format": "{:W%W %Y-%m-%d   %H:%M}",
-	"tooltip-format": "<tt><small>{calendar}</small></tt>",
+	// ugly hack because of https://github.com/Alexays/Waybar/issues/2240#issuecomment-2064237563
+	// Example:            10 11 12 13 14 15 16 W00   10 11 12 13 14 15 16 W00   10 11 12 13 14 15 16 W00 
+	"tooltip-format": "<tt>                                                                              \n{calendar}</tt>",
 	"calendar" : {
 		"mode": "year",
 		"weeks-pos": "left",
-		"mode-mon-col": 3,
+		"mode-mon-col": 3, // https://github.com/Alexays/Waybar/issues/2240
 		"format": {
 		  "months":     "<span color='#ffead3'><b>{}</b></span>",
 		  "days":       "<span color='#dddddd'><b>{}</b></span>",
@@ -96,9 +98,10 @@
     },
 
     "cpu": {
-        "format": "{usage}% cpu",
-        "tooltip": true,
-	"on-click": "alacritty -e htop"
+    	   "format": "{icon} {usage}% cpu",
+       	   "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
+       	   "tooltip": true,
+       	   "on-click": "alacritty -e htop"
     },
 
     "memory": {
