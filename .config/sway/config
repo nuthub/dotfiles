@@ -337,11 +337,9 @@ exec --no-startup-id {
     nextcloud --background
     udiskie -s # -t or -s (show applet always or with actions available only
     solaar -w hide
-#    geoclue # (not installed)
     gammastep-indicator
     pipewire
     pipewire-pulse
     wireplumber
-    poweralertd
     emacs --daemon
 }
