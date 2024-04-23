@@ -1,3 +1,4 @@
+alias sudo="doas"
 alias ls="ls --color=auto"
 alias ll="ls -l"
 alias open="xdg-open"
