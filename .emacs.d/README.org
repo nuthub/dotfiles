@@ -374,64 +374,69 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
 
 #+BEGIN_SRC emacs-lisp
 
-  (defun jf/org-setup-task-management-and-agenda ()
-    ;; Task management
-    (setq org-directory "~/org")
-    (setq org-default-notes-file (concat org-directory "/inbox.org"))
-    (setq org-tag-alist '(("house" . ?h)
-      		      ("personal" . ?p)
-              	      ("promotion" . ?P)
-      		      ("self" . ?s)
-              	      ("work" . ?w)
-              	      ("teaching" . ?t)
-              	      ("sail" . ?S)
-    		      ("nerdism" . ?n)))
-    (setq org-todo-keywords '((sequence "TODO(t)" "FREQ(f)" "EVNT(e)" "PROJ(p)" "WAIT(w/!)" "|" "SKIP(s!)" "DONE(d!)" "CNCL(c/!)")))
-    (setq org-todo-repeat-to-state t)
-    (setq org-log-done 'time)
-    (setq org-log-into-drawer t)
+    (defun jf/org-setup-task-management-and-agenda ()
+      ;; Task management
+      (setq org-directory "~/org")
+      (setq org-default-notes-file (concat org-directory "/inbox.org"))
+      (setq org-tag-alist '(("direct" . ?d)
+          			("personal" . ?p)
+      			("house" . ?h)
+      			("promotion" . ?P)
+                  		("reading" . ?r)
+                  		("work" . ?w)
+                  		("teaching" . ?t)
+                  		("sail" . ?S)
+        			("nerdism" . ?n)))
+      (setq org-todo-keywords '((sequence "TODO(t)" "FREQ(f)" "EVNT(e)" "PROJ(p)" "WAIT(w/!)" "|" "SKIP(s!)" "DONE(d!)" "CNCL(c/!)")))
+      (setq org-todo-repeat-to-state t)
+      (setq org-log-done 'time)
+      (setq org-log-into-drawer t)
 
-    ;; Agenda
-    (setq org-agenda-files '("~/org/gtd.org"
-    			 "~/org/tickler.org"
-    			 "~/org/someday.org"
-    			 "~/org/inbox.org"
-    			 "~/org/events-personal.org"
-    			 "~/org/events-rgse.org"
-    			 "~/org/events-work.org"))
-    (setq org-agenda-window-setup 'reorganize-frame)
-    (setq org-agenda-span 1)
-    (setq org-agenda-time-grid
-          '((daily today require-timed)
-  	   (800 1000 1200 1400 1600 1800 2000)
-  	   " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄"))
-    (setq org-agenda-include-diary t)
-    (setq org-agenda-custom-commands
-          '(("w" "Weekly cleanup" todo "CNCL|DONE")
-      	("c" "Events of the week" agenda ""
-    	 (
-    	  ;; agenda will start in week view
-    	  (org-agenda-span 7)
-    	  ;; ensures that repeating events appear on all relevant dates
-      	  (org-agenda-repeating-timestamp-show-all t)
-    	  ;; limits agenda view to timestamped items
-      	  (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))))))
-    (setq org-stuck-projects '("-noproject+LEVEL=2/-DONE-FREQ"
-      			   ("TODO" "NEXT")
-      			   nil ""))
+      ;; Agenda
+      (setq org-agenda-files '("~/org/gtd.org"
+        			   "~/org/tickler.org"
+        			   "~/org/someday.org"
+        			   "~/org/inbox.org"
+        			   "~/org/calendar.org"))
+      ;; the file calendar.org is read-only, allow this file-local-variable to be set
+      ;; see README, Troubleshooting section https://gitlab.com/hperrey/khalel
+      (setq safe-local-variable-values
+    	(quote
+    	 ((buffer-read-only . 1))))
 
-    ;; Refiling
-    (setq org-refile-targets (quote (("~/org/gtd.org" :maxlevel . 4)
-              			 ("~/org/someday.org" :maxlevel . 1)
-              			 ("~/org/tickler.org" :maxlevel . 1)
-              			 ("~/org/events-personal.org" :maxlevel . 2)
-  				 ("~/org/events-rgse.org" :maxlevel . 2))))
-    (setq org-refile-use-outline-path 'file)
-    (setq org-refile-allow-creating-parent-nodes 'confirm)
-    (setq org-outline-path-complete-in-steps nil)
+      (setq org-agenda-window-setup 'reorganize-frame)
+      (setq org-agenda-span 1)
+      (setq org-agenda-time-grid
+            '((daily today require-timed remove-match)
+      	  (800 1000 1200 1400 1600 1800 2000)
+      	  " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄"))
+      (setq org-agenda-include-diary nil)
+      (setq org-agenda-custom-commands
+            '(("w" "Weekly cleanup" todo "CNCL|DONE")
+          	  ("c" "Events of the week" agenda ""
+        	   (
+        	    ;; agenda will start in week view
+        	    (org-agenda-span 7)
+        	    ;; ensures that repeating events appear on all relevant dates
+          	    (org-agenda-repeating-timestamp-show-all t)
+        	    ;; limits agenda view to timestamped items
+          	    (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))))))
+      (setq org-stuck-projects '("-noproject+LEVEL=2/-DONE-FREQ"
+          			     ("TODO" "NEXT")
+          			     nil ""))
+      (setq org-deadline-warning-days 7)
+      ;; Refiling
+      (setq org-refile-targets (quote (("~/org/gtd.org" :maxlevel . 4)
+                  			   ("~/org/someday.org" :maxlevel . 1)
+                  			   ("~/org/tickler.org" :maxlevel . 1)
+                  			   ("~/org/events-personal.org" :maxlevel . 2)
+      				   ("~/org/events-rgse.org" :maxlevel . 2))))
+      (setq org-refile-use-outline-path 'file)
+      (setq org-refile-allow-creating-parent-nodes 'confirm)
+      (setq org-outline-path-complete-in-steps nil)
 
-    ;; Archive
-    (setq org-archive-location (concat org-directory "/archive/archive-" (format-time-string "%Y" (current-time)) ".org::datetree/")))
+      ;; Archive
+      (setq org-archive-location (concat org-directory "/archive/archive-" (format-time-string "%Y" (current-time)) ".org::datetree/")))
 
 #+END_SRC
 
@@ -725,25 +730,22 @@ htmlize is used by org to export to HTML.
     :config
     (setq org-super-agenda-groups
   	'(;; Each group has an implicit boolean OR operator between its selectors.
-            (:name "Events"  ; Optionally specify section name
+            (:name ""  ; Optionally specify section name
                    :time-grid t)  ; Items that appear on the time grid
   	   (:name "Direct Actions"
-  		  :category ("Actions"))
+  		  :tag ("direct"))
              (:name "Personal"
-                    :tag ("personal" "self"))
+                    :tag ("personal"))
   	   (:name "Work"
-                    :tag ("teaching" "work")
-  		  :category ("Work" "Lehre"))
+                    :tag ("work" "teaching"))
              (:name "Promotion"
-                    :tag "promotion"
-  		  :category "Promotion")
+                    :tag "promotion")
   	   (:name "Reading"
                     :category "reading")
   	   (:name "House Routines"
                     :tag "house")
   	   (:name "Sailing"
-                    :tag "sail"
-  		  :category "Segeln")
+                    :tag "sail")
              ;; Groups supply their own section names when none are given
              (:todo "WAIT" :order 8)  ; Set order of this section
              ;; After the last group, the agenda will display items that didn't
@@ -1224,9 +1226,9 @@ Enriches selection lists (and completion minibuffers, e.g. consult) with additio
     ;; (corfu-scroll-margin 5)        ;; Use scroll margin
 
     ;; Enable Corfu only for certain modes.
-    :hook ((prog-mode . corfu-mode)
-           (shell-mode . corfu-mode)
-           (eshell-mode . corfu-mode))
+    ;; :hook ((prog-mode . corfu-mode)
+    ;;        (shell-mode . corfu-mode)
+    ;;        (eshell-mode . corfu-mode))
 
     ;; Recommended: Enable Corfu globally.  This is recommended since Dabbrev can
     ;; be used globally (M-/).  See also the customization variable
@@ -1253,7 +1255,7 @@ Enriches selection lists (and completion minibuffers, e.g. consult) with additio
 
 ** Syntax check with flycheck
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package flycheck
     :defer 0
     :diminish flycheck-mode
@@ -1589,57 +1591,23 @@ If there is more than one, let the user choose."
 
 * Calendar syncing
 
-#+BEGIN_SRC emacs-lisp
+- I use *vdirsyncer* to synchronize all my remote Calendars and Contacts with my home folder
+- I use *khal* to edit the ics files in my home folder (not really, but khal is installed now)
+- *khalel* is a package that allows me to interact with khal from within emacs and to create a (read only :( ) ~calendar.org~ file for inclusion in my agenda.
 
-  (use-package org-caldav
-    :if (string= (system-name) "nutbook")
-    :defer 0
-    :init
-    ;; This is the delayed sync function; it waits until emacs has been idle for 
-    ;; "secs" seconds before syncing.  The delay is important because the caldav-sync
-    ;; can take five or ten seconds, which would be painful if it did that right at save.  
-    ;; This way it just waits until you've been idle for a while to avoid disturbing 
-    ;; the user.
-    (defvar org-caldav-sync-timer nil
-      "Timer that `org-caldav-push-timer' used to reschedule itself, or nil.")
-    (defun org-caldav-sync-with-delay (secs)
-      (when org-caldav-sync-timer
-        (cancel-timer org-caldav-sync-timer))
-      (setq org-caldav-sync-timer
-            (run-with-idle-timer
-             (* 1 secs) nil 'org-caldav-sync)))
+#+begin_src emacs-lisp
+  (use-package khalel
+    :after org
     :config
-    (setq org-icalendar-use-scheduled '(event-if-todo event-if-not-todo))
-    (setq org-caldav-resume-aborted 'always)
-    (setq org-icalendar-timezone "Europe/Berlin") ; holds for all my calendars
-    (setq org-caldav-show-sync-results nil)
-    (setq org-caldav-url nil
-      	org-caldav-files nil
-      	org-caldav-inbox nil
-      	org-caldav-calendar-id nil)
-    (setq org-caldav-calendars
-  	'(
-  	  (:url "https://cloud.nuthouse.de/remote.php/dav/calendars/nutcase"
-  		:calendar-id "personal"
-  		:files ("~/org/events-personal.org")
-  		:inbox (file+headline "~/org/events-personal.org" "Inbox"))
-  	  (:url "https://sogo.uni-koblenz.de/SOGo/dav/rgse/Calendar/"
-  		:calendar-id "312BB5-63163180-97-5010D400"
-  		:files ("~/org/events-rgse.org")
-  		:inbox (file+headline "~/org/events-rgse.org" "Inbox")
-  		:sync-direction 'cal->org))))
-
-  ;; Add the delayed save hook with a five minute idle timer
-  (add-hook 'after-save-hook
-      	  (lambda ()
-              (when (eq major-mode 'org-mode)
-                (org-caldav-sync-with-delay 300))))
-  ;; Final sync on kill-emacs
-  (add-hook 'kill-emacs-hook
-      	  (lambda ()
-      	    (org-caldav-sync)
-      	    (save-some-buffers)))
-#+END_SRC
+    ;; (setq khalel-khal-command "khal")
+    ;; (setq khalel-vdirsyncer-command "vdirsyncer")
+    (setq khalel-capture-key "k")
+    (setq khalel-import-org-file (concat org-directory "/" "calendar.org"))
+    (setq khalel-import-start-date "-2m")
+    (setq khalel-import-end-date "+12m")
+    (setq khalel-import-org-file-confirm-overwrite nil)
+    (khalel-add-capture-template))
+#+end_src
 
 * Mail configuration
 
@@ -1766,29 +1734,16 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                     (mu4e-refile-folder  . "/private/Archives/2024")
                     (mu4e-trash-folder . "/private/Trash")))))
 
-    ;; disable undo-tree for mail compose (why? I have a separate dir for )
-    (add-hook 'mu4e-compose-mode-hook
-              (lambda()
-  		(undo-tree-mode -1)))
 
-    ;; let me confirm every message
-    (setq message-confirm-send t)
-
-    ;; let me confirm/decline to send an email with empty subject
-    (add-hook 'message-send-hook
-              (lambda() (interactive)
-                (or (message-field-value "Subject")
-                    (yes-or-no-p "Really send without Subject? ")
-                    (keyboard-quit))))
-
-    ;; this adds the date of a cited mail:
-    (setq message-citation-line-function 'message-insert-formatted-citation-line)
-
-    ;; setup icalendar / org mode support
+    ;; Calendar support    
     (require 'mu4e-icalendar)
-    (setq gnus-icalendar-org-capture-file "~/org/events-personal.org")
-    (setq gnus-icalendar-org-capture-headline '("Inbox"))
-    (gnus-icalendar-org-setup)
+    (require 'khalel-icalendar)
+    ;; (mu4e-icalendar-setup) ; obsolete since 1.11.22
+    ;; gnus / mu4e
+    ;; icalendar -> org sync
+    ;; (setq gnus-icalendar-org-capture-file "~/org/events-personal.org")
+    ;; (setq gnus-icalendar-org-capture-headline '("Inbox"))
+    ;; (gnus-icalendar-org-setup)
     
     ;; start mu4e (in background)
     (mu4e t)) ; end of use-package mu4e
@@ -1814,12 +1769,57 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
 #+end_src
 
 When signing mails with openpgp (or gnupg), use the key associated with the sender address.
+#+begin_src emacs-lisp
+  (setq mml-secure-openpgp-sign-with-sender t)
+#+end_src
 
+Before sending an email, I'd like to check some things.
 #+begin_src emacs-lisp
 
-  (setq mml-secure-openpgp-sign-with-sender t)
+  ;; 1. let me confirm every message
+  (setq message-confirm-send t)
 
+  ;; 2. let me confirm/decline to send an email with empty subject
+  (defun jf/message-warn-if-no-subject() 
+    (or (message-field-value "Subject")
+        (yes-or-no-p "Really send without Subject? ")
+        (keyboard-quit)))
+
+  (add-hook 'message-send-hook #'jf/message-warn-if-no-subject)
+
+  ;; 3. warn if no attachment can be found, although there should be one.
+  ;; this is from https://github.com/munen/emacs.d/?tab=readme-ov-file#check-for-supposed-attachments-prior-to-sending-them
+  ;; I moved the functions in my own namespace and slightly modified them
+  (defun jf/message-attachment-present-p ()
+    "Return t if a non-gpg attachment is found in the current message."
+    (save-excursion
+      (save-restriction
+        (widen)
+        (goto-char (point-min))
+        (when (search-forward "<#part type" nil t) t))))
+
+  (setq jf/message-attachment-regexp
+        ;; if lower case letters are used, the search is case insensitive
+        (regexp-opt '("we send"
+                      "i send"
+                      "attach"
+                      "angehängt"
+                      "anhang")))
+
+  (defun jf/message-warn-if-no-attachments ()
+    "Check if there is an attachment in the message if I claim it."
+    (when (and (save-excursion
+                 (save-restriction
+    		 (widen)
+    		 (goto-char (point-min))
+    		 (re-search-forward jf/message-attachment-regexp nil t)))
+    	     (not (jf/message-attachment-present-p)))
+      (unless (y-or-n-p "No attachment. Send the message?")
+        (keyboard-quit))))
+
+  (add-hook 'message-send-hook #'jf/message-warn-if-no-attachments)
 #+end_src
+
 * Global key bindings
 ** Increase / decrease text scale
 

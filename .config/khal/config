@@ -1,0 +1,37 @@
+[locale]
+local_timezone= Europe/Berlin
+default_timezone= Europe/Berlin
+timeformat = %H:%M
+dateformat = %Y-%m-%d
+longdateformat = %Y-%m-%d %a
+datetimeformat = %Y-%m-%d %H:%M
+longdatetimeformat = %Y-%m-%d %H:%M
+
+[view]
+blank_line_before_day = True
+
+[calendars]
+
+[[ics]]
+path = ~/.calendars/*
+type = discover
+
+[[personal]]
+path = ~/.calendars/nuthouse/personal
+priority = 20
+
+[[birthdays]]
+path = ~/.calendars/nuthouse/contact_birthdays
+priority = 20
+
+[[rgse]]
+path = ~/.calendars/uniko/312BB5-63163180-97-5010D400
+readonly = True
+
+[[rgse_absense]]
+path = ~/.calendars/uniko/313D3E-63163180-5F-2183C9C0
+readonly = True
+
+[[lab_b015]]
+path = ~/.calendars/uniko/2EF1A4-63163180-17F-77541380
+readonly = True

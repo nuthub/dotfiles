@@ -1,0 +1,178 @@
+# An example configuration for vdirsyncer.
+#
+# Move it to ~/.vdirsyncer/config or ~/.config/vdirsyncer/config and edit it.
+# Run `vdirsyncer --help` for CLI usage.
+#
+# Optional parameters are commented out.
+# This file doesn't document all available parameters, see
+# http://vdirsyncer.pimutils.org/ for the rest of them.
+
+[general]
+# A folder where vdirsyncer can store some metadata about each pair.
+status_path = "~/.calendars/status/"
+
+############
+#
+# nuthouse.de
+#
+[pair nuthouse_calendar]
+a = "nuthouse_calendar_remote"
+b = "nuthouse_calendar_local"
+collections = ["from a", "from b"]
+metadata = ["displayname"]
+conflict_resolution = "a wins"
+
+[storage nuthouse_calendar_remote]
+type = "caldav"
+url = "https://cloud.nuthouse.de/remote.php/dav"
+username = "nutcase"
+password.fetch = ["shell", "grep cloud.nuthouse.de ~/.authinfo | awk 'FNR == 1 {print $8}'" ]
+
+[storage nuthouse_calendar_local]
+type = "filesystem"
+path = "~/.calendars/nuthouse"
+fileext = ".ics"
+
+[pair nuthouse_contacts]
+a = "nuthouse_contacts_remote"
+b = "nuthouse_contacts_local"
+collections = ["from a", "from b"]
+metadata = ["displayname"]
+conflict_resolution = "a wins"
+
+[storage nuthouse_contacts_remote]
+type = "carddav"
+url = "https://cloud.nuthouse.de/remote.php/dav"
+username = "nutcase"
+password.fetch = ["shell", "grep cloud.nuthouse.de ~/.authinfo | awk 'FNR == 1 {print $8}'" ]
+
+[storage nuthouse_contacts_local]
+type = "filesystem"
+path = "~/.contacts/nuthouse"
+fileext = ".vcf"
+
+
+
+############
+#
+# uni-koblenz.de
+#
+[pair uniko_calendar]
+a = "uniko_calendar_remote"
+b = "uniko_calendar_local"
+collections = ["from a", "from b"]
+metadata = ["displayname"]
+
+[storage uniko_calendar_remote]
+type = "caldav"
+url = "https://sogo.uni-koblenz.de/SOGo/dav/rgse/Calendar/"
+username = "flake@uni-koblenz.de"
+password.fetch = ["shell", "grep sogo.uni-koblenz.de ~/.authinfo | awk 'FNR == 1 {print $8}'" ]
+read_only = true
+
+[storage uniko_calendar_local]
+type = "filesystem"
+path = "~/.calendars/uniko"
+fileext = ".ics"
+
+############
+#
+# Action For Happiness
+#
+[pair afh_calendar]
+a = "afh_calendar_remote"
+b = "afh_calendar_local"
+collections = null
+metadata = ["displayname"]
+
+[storage afh_calendar_remote]
+type = "http"
+url = "https://calendar.google.com/calendar/ical/d2q3jc93oq7lkjnapbb5f0v9jc%40group.calendar.google.com/public/basic.ics"
+read_only = true
+
+[storage afh_calendar_local]
+type = "filesystem"
+path = "~/.calendars/afh"
+fileext = ".ics"
+
+############
+#
+# Der Mond
+#
+[pair dermond_calendar]
+a = "dermond_calendar_remote"
+b = "dermond_calendar_local"
+collections = null
+metadata = ["displayname"]
+
+[storage dermond_calendar_remote]
+type = "http"
+url = "https://www.der-mond.de/ical/calendar.ics"
+read_only = true
+
+[storage dermond_calendar_local]
+type = "filesystem"
+path = "~/.calendars/mond"
+fileext = ".ics"
+
+############
+#
+# C3RE
+#
+[pair c3re_calendar]
+a = "c3re_calendar_remote"
+b = "c3re_calendar_local"
+collections = null
+metadata = ["displayname"]
+
+[storage c3re_calendar_remote]
+type = "caldav"
+url = "https://cloud.c3re.de/remote.php/dav/public-calendars/RLKKkdjNYgXH8yEz/?export"
+read_only = true
+
+[storage c3re_calendar_local]
+type = "filesystem"
+path = "~/.calendars/c3re"
+fileext = ".ics"
+
+############
+#
+# DPV
+#
+[pair dpv_calendar]
+a = "dpv_calendar_remote"
+b = "dpv_calendar_local"
+collections = null
+metadata = ["displayname"]
+
+[storage dpv_calendar_remote]
+type = "http"
+url = "https://www.w3.org/groups/cg/dpvcg/calendar/export/?include_canceled=0"
+read_only = true
+
+[storage dpv_calendar_local]
+type = "filesystem"
+path = "~/.calendars/dpv"
+fileext = ".ics"
+
+
+############
+#
+# SCH
+#
+[pair sch_calendar]
+a = "sch_calendar_remote"
+b = "sch_calendar_local"
+collections = null
+metadata = ["displayname"]
+
+[storage sch_calendar_remote]
+type = "http"
+url = "https://sc-haltern.de/index.php?option=com_jevents&task=icals.export&format=ical&catids=112,114,142&years=0&k=94489f2f7599b6eaede7de30fd01b22a"
+read_only = true
+
+[storage sch_calendar_local]
+type = "filesystem"
+path = "~/.calendars/sch"
+fileext = ".ics"
+
