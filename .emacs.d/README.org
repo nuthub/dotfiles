@@ -772,10 +772,22 @@ Search for literature in literature databases like arxiv and dblp
   (use-package biblio)
 #+end_src
 
-** TODO AucTeX
+** AucTeX
+- https://github.com/progfolio/elpaca/issues/245
+- https://github.com/progfolio/elpaca/wiki/auctex
 
-#+begin_src emacs-lisp :tangle no
-  (use-package auctex
+#+begin_src emacs-lisp
+  (use-package tex
+    :ensure (auctex
+  	   :pre-build (("./autogen.sh")
+  		       ("./configure"
+  			"--without-texmf-dir"
+  			"--with-packagelispdir=./"
+  			"--with-packagedatadir=./")
+                         ("make"))
+  	   :build (:not elpaca--compile-info) ;; Make will take care of this step
+  	   :files ("*.el" "doc/*.info*" "etc" "images" "latex" "style")
+  	   :version (lambda (_) (require 'tex-site) AUCTeX-version))
     :config
     (setq TeX-auto-save t)
     (setq TeX-parse-self t)
