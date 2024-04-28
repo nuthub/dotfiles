@@ -160,12 +160,26 @@ I set my default fonts in ~~/.fonts.conf~. This is just an example:
     (setq inhibit-startup-screen t)) ;; don't show splash
 #+end_src
 
-** COMMENT Spacious Padding
-CLOSED: [2024-04-10 Wed 15:27]
+** Theme
+Modus Themes
+#+begin_src emacs-lisp
+  (use-package modus-themes
+    :config
+    (load-theme 'modus-operandi t))
+;;  (load-theme 'modus-vivendi t))
+#+end_src
 
-There is an issue in the order of loading this package and the theme.
+** doom-modeline (a beautiful modeline)
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
+  (use-package doom-modeline
+    :config
+    ;;(setq doom-modeline-height 18)
+    (doom-modeline-mode 1))
+#+end_src
+
+** Spacious Padding
+#+begin_src emacs-lisp
   (use-package spacious-padding
     :config
     (setq spacious-padding-widths
@@ -178,29 +192,11 @@ There is an issue in the order of loading this package and the theme.
     (spacious-padding-mode 1))
 #+end_src
 
-** Theme
-Modus Themes
-#+begin_src emacs-lisp
-  (use-package modus-themes
-    :config
-    (load-theme 'modus-operandi t))
-;;  (load-theme 'modus-vivendi t))
-#+end_src
-
 ** Smooth scrolling
 
 #+begin_src emacs-lisp
   (pixel-scroll-precision-mode)
   (setq pixel-scroll-precision-large-scroll-height 40.0)
-#+end_src
-
-** doom-modeline (a beautiful modeline)
-
-#+begin_src emacs-lisp
-  (use-package doom-modeline
-    :config
-    (setq doom-modeline-height 18)
-    (doom-modeline-mode 1))
 #+end_src
 
 ** Window numbering
