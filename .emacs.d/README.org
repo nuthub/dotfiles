@@ -6,7 +6,7 @@
 * Startup time
 
 Taken from /emacs from scratch/.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
 
   ;; The default is 800 kilobytes.  Measured in bytes.
   (setq gc-cons-threshold (* 50 1000 1000))
@@ -20,7 +20,7 @@ Taken from /emacs from scratch/.
 
   (add-hook 'emacs-startup-hook #'efs/display-startup-time)
 
-#+END_SRC
+#+end_src
 
 #+RESULTS:
 | efs/display-startup-time |
@@ -29,16 +29,13 @@ Taken from /emacs from scratch/.
   
 ** This is used to identify myself, and to find my own GnuPG key
   
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (setq user-full-name "Julian Flake")
   (setq user-mail-address "julian@flake.de")
-#+END_SRC
+#+end_src
 
-** TODO Some localizations for the calendar
-
-Holidays are not shown in agenda-holidays (org-agenda 'h')
-
-#+BEGIN_SRC emacs-lisp
+** Some localizations for the calendar
+#+begin_src emacs-lisp
   (setq calendar-week-start-day 1
         calendar-day-name-array ["Sonntag" "Montag" "Dienstag" "Mittwoch"
                                  "Donnerstag" "Freitag" "Samstag"]
@@ -83,18 +80,10 @@ Holidays are not shown in agenda-holidays (org-agenda 'h')
           (holiday-float 12 0 -1 "4. Advent" 24)
           (holiday-fixed 12 25 "1. Weihnachtstag")
           (holiday-fixed 12 26 "2. Weihnachtstag")))
-#+END_SRC
-* Start a server
-
-#+begin_src emacs-lisp
-  ;;  (load "server")
-  ;;  (unless (server-running-p) (server-start))
 #+end_src
-
 * Keep folders clean
 
 #+begin_src emacs-lisp
-
   ;; backup files: file.ext~
   (setq backup-directory-alist `(("." . ,(expand-file-name "tmp/backups/" user-emacs-directory))))
 
@@ -106,7 +95,6 @@ Holidays are not shown in agenda-holidays (org-agenda 'h')
 
   ;; undo-tree-mode files: .file.ext.~undo-tree~
   (setq undo-tree-history-directory-alist `(("." . ,(expand-file-name "tmp/undo-tree/" user-emacs-directory))))
-
 #+end_src
 
 * Look & feel
@@ -135,7 +123,7 @@ I set my default fonts in ~~/.fonts.conf~. This is just an example:
 
 ** Ligatures
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package ligature
     :config
     ;; Enable the www ligature in every possible major mode
@@ -156,11 +144,11 @@ I set my default fonts in ~~/.fonts.conf~. This is just an example:
                                          "<+>" "<=" "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<"
                                          "<~" "<~~" "</" "</>" "~@" "~-" "~>" "~~" "~~>" "%%"))
     (global-ligature-mode 't))
-#+END_SRC
+#+end_src
 
 ** General appearance
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package emacs :ensure nil
     :config
     (menu-bar-mode -1) ; switch off menu bar
@@ -170,14 +158,14 @@ I set my default fonts in ~~/.fonts.conf~. This is just an example:
     (global-hl-line-mode t) ; highlight the current line
     (setq visible-bell t)
     (setq inhibit-startup-screen t)) ;; don't show splash
-#+END_SRC
+#+end_src
 
 ** COMMENT Spacious Padding
 CLOSED: [2024-04-10 Wed 15:27]
 
 There is an issue in the order of loading this package and the theme.
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle no
   (use-package spacious-padding
     :config
     (setq spacious-padding-widths
@@ -188,16 +176,16 @@ There is an issue in the order of loading this package and the theme.
   	   :right-divider-width 30
   	   :scroll-bar-width 8))
     (spacious-padding-mode 1))
-#+END_SRC
+#+end_src
 
 ** Theme
 Modus Themes
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package modus-themes
     :config
     (load-theme 'modus-operandi t))
 ;;  (load-theme 'modus-vivendi t))
-#+END_SRC
+#+end_src
 
 ** Smooth scrolling
 
@@ -227,29 +215,27 @@ This minor mode allows to switch windows in a frame by M-x, while x is a number 
 
 This is to hide minor modes from mode line. You can use `:diminish foo-mode` then in use-package(...)
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package diminish
     :config
     (diminish 'smartparens-mode)
     (diminish 'flycheck-mode)
     (diminish 'which-key-mode)
     (diminish 'undo-tree-mode))
-#+END_SRC
+#+end_src
    
 ** Show search result counts in modeline
 
-#+BEGIN_SRC emacs-lisp
-
+#+begin_src emacs-lisp
   (setq isearch-lazy-count t)
   (setq isearch-lazy-highlight t)
-
-#+END_SRC
+#+end_src
 
 ** Line numbers on the left
    
 =display-line-numbers-mode= is a built in minor mode
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (global-display-line-numbers-mode 0)
   ;; Disable line numbers for some modes
     ;; (dolist (mode '(org-mode-hook
@@ -264,21 +250,21 @@ This is to hide minor modes from mode line. You can use `:diminish foo-mode` the
     ;; Enable line numbers for some modes
     (dolist (mode '(prog-mode-hook))
       (add-hook mode (lambda ()
-  			 (display-line-numbers-mode 1))))
-#+END_SRC
+  		     (display-line-numbers-mode 1))))
+#+end_src
 
 ** Smart paranthesis & Highlight parenthesis
 
 An alternative to /smartparens/ is /paren/.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package smartparens
     :config
     (progn
       (require 'smartparens-config)
       (smartparens-global-mode t)
       (show-paren-mode t)))
-#+END_SRC
+#+end_src
 
 #+begin_src emacs-lisp
   (use-package rainbow-delimiters
@@ -307,9 +293,9 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
 
 ** Olivetti mode (writing environment)
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package olivetti)
-#+END_SRC
+#+end_src
 
 * Org mode
 ** Org Mode basics: Look&Feel, task management, capture templates, LaTex export
@@ -361,82 +347,80 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
     (use-package org-bullets
       :config
       (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))))
-
 #+end_src
 
 *** Task Management, Agenda, Archive, Refiling
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
+  (defun jf/org-setup-task-management-and-agenda ()
+    ;; Task management
+    (setq org-directory "~/org")
+    (setq org-default-notes-file (concat org-directory "/inbox.org"))
+    (setq org-tag-alist '(("direct" . ?d)
+                          ("personal" . ?p)
+                          ("house" . ?h)
+                          ("promotion" . ?P)
+                          ("reading" . ?r)
+                          ("work" . ?w)
+                          ("teaching" . ?t)
+                          ("sail" . ?S)
+                          ("nerdism" . ?n)))
+    (setq org-todo-keywords '((sequence "TODO(t)" "FREQ(f)" "EVNT(e)" "PROJ(p)" "WAIT(w/!)" "|" "SKIP(s!)" "DONE(d!)" "CNCL(c/!)")))
+    (setq org-todo-repeat-to-state t)
+    (setq org-log-done 'time)
+    (setq org-log-into-drawer t)
 
-    (defun jf/org-setup-task-management-and-agenda ()
-      ;; Task management
-      (setq org-directory "~/org")
-      (setq org-default-notes-file (concat org-directory "/inbox.org"))
-      (setq org-tag-alist '(("direct" . ?d)
-          			("personal" . ?p)
-      			("house" . ?h)
-      			("promotion" . ?P)
-                  		("reading" . ?r)
-                  		("work" . ?w)
-                  		("teaching" . ?t)
-                  		("sail" . ?S)
-        			("nerdism" . ?n)))
-      (setq org-todo-keywords '((sequence "TODO(t)" "FREQ(f)" "EVNT(e)" "PROJ(p)" "WAIT(w/!)" "|" "SKIP(s!)" "DONE(d!)" "CNCL(c/!)")))
-      (setq org-todo-repeat-to-state t)
-      (setq org-log-done 'time)
-      (setq org-log-into-drawer t)
+    ;; Agenda
+    (setq org-agenda-files '("~/org/gtd.org"
+                             "~/org/tickler.org"
+                             "~/org/inbox.org"
+                             "~/org/calendar.org"))
+    ;; the file calendar.org is read-only, allow this file-local-variable to be set.
+    ;; See Troubleshooting section in README.org at https://gitlab.com/hperrey/khalel/
+    (setq safe-local-variable-values
+          (quote
+           ((buffer-read-only . 1))))
 
-      ;; Agenda
-      (setq org-agenda-files '("~/org/gtd.org"
-        			   "~/org/tickler.org"
-        			   "~/org/someday.org"
-        			   "~/org/inbox.org"
-        			   "~/org/calendar.org"))
-      ;; the file calendar.org is read-only, allow this file-local-variable to be set
-      ;; see README, Troubleshooting section https://gitlab.com/hperrey/khalel
-      (setq safe-local-variable-values
-    	(quote
-    	 ((buffer-read-only . 1))))
+    (setq org-agenda-window-setup 'reorganize-frame)
+    (setq org-agenda-span 1)
+    (setq org-agenda-time-grid
+          '((daily today require-timed remove-match)
+            (800 1000 1200 1400 1600 1800 2000)
+            " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄"))
+    (setq org-agenda-include-diary nil)
+    (setq org-agenda-custom-commands
+          '(
+            ("w" "Weekly cleanup" todo "CNCL|DONE")
+            ("c" "Important events" agenda* nil
+             ((org-agenda-files '("~/org/calendar.org"))
+              (org-agenda-span 7)
+              (org-agenda-skip-function '(org-agenda-skip-entry-if
+                                          'regexp ":c3re:\\|:afh:\\|:mond:"))))
+            ("C" "All events" agenda* nil
+             ((org-agenda-files '("~/org/calendar.org"))
+              (org-agenda-span 7)))))
 
-      (setq org-agenda-window-setup 'reorganize-frame)
-      (setq org-agenda-span 1)
-      (setq org-agenda-time-grid
-            '((daily today require-timed remove-match)
-      	  (800 1000 1200 1400 1600 1800 2000)
-      	  " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄"))
-      (setq org-agenda-include-diary nil)
-      (setq org-agenda-custom-commands
-            '(("w" "Weekly cleanup" todo "CNCL|DONE")
-          	  ("c" "Events of the week" agenda ""
-        	   (
-        	    ;; agenda will start in week view
-        	    (org-agenda-span 7)
-        	    ;; ensures that repeating events appear on all relevant dates
-          	    (org-agenda-repeating-timestamp-show-all t)
-        	    ;; limits agenda view to timestamped items
-          	    (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled))))))
-      (setq org-stuck-projects '("-noproject+LEVEL=2/-DONE-FREQ"
-          			     ("TODO" "NEXT")
-          			     nil ""))
-      (setq org-deadline-warning-days 7)
-      ;; Refiling
-      (setq org-refile-targets (quote (("~/org/gtd.org" :maxlevel . 4)
-                  			   ("~/org/someday.org" :maxlevel . 1)
-                  			   ("~/org/tickler.org" :maxlevel . 1)
-                  			   ("~/org/events-personal.org" :maxlevel . 2)
-      				   ("~/org/events-rgse.org" :maxlevel . 2))))
-      (setq org-refile-use-outline-path 'file)
-      (setq org-refile-allow-creating-parent-nodes 'confirm)
-      (setq org-outline-path-complete-in-steps nil)
+    (setq org-stuck-projects '("-noproject+LEVEL=2/-DONE-FREQ"
+                               ("TODO" "NEXT")
+                               nil ""))
+    (setq org-deadline-warning-days 7)
+    ;; Refiling
+    (setq org-refile-targets (quote (("~/org/gtd.org" :maxlevel . 4)
+                                     ("~/org/someday.org" :maxlevel . 1)
+                                     ("~/org/tickler.org" :maxlevel . 1)
+                                     ("~/org/events-personal.org" :maxlevel . 2)
+                                     ("~/org/events-rgse.org" :maxlevel . 2))))
+    (setq org-refile-use-outline-path 'file)
+    (setq org-refile-allow-creating-parent-nodes 'confirm)
+    (setq org-outline-path-complete-in-steps nil)
 
-      ;; Archive
-      (setq org-archive-location (concat org-directory "/archive/archive-" (format-time-string "%Y" (current-time)) ".org::datetree/")))
-
-#+END_SRC
+    ;; Archive
+    (setq org-archive-location (concat org-directory "/archive/archive-" (format-time-string "%Y" (current-time)) ".org::datetree/")))
+#+end_src
 
 *** Org capture templates
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (defun jf/org-setup-capture-templates ()
     (setq org-capture-templates
   	'(
@@ -451,12 +435,11 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
   	  
     	  ("E" "Event from Mail" entry (file+headline "~/org/events-personal.org" "Inbox")
   	   "* %^{Event Title|%:subject}\n\n%^{Date and Time}T\n- Location: %^{Location}\n- Invitation: %a\n\n%i%?" :time-prompt t))))
-#+END_SRC
+#+end_src
 
 *** LaTeX export classes + beamer support
 
-#+BEGIN_SRC emacs-lisp
-
+#+begin_src emacs-lisp
   (defun jf/org-setup-latex-export ()
     ;; use luatex as LaTeX Compiler
     (setq org-latex-compiler "lualatex")
@@ -542,8 +525,7 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
                \[EXTRA]"))
 
          (setq org-koma-letter-default-class "my-koma-letter"))))
-
-#+END_SRC
+#+end_src
 
 *** Org babel
 #+begin_src emacs-lisp
@@ -560,8 +542,7 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
 
 *** Display PDF images inline
 
-#+BEGIN_SRC emacs-lisp
-
+#+begin_src emacs-lisp
   (defun jf/org-setup-display-pdf-inline ()
 
     ;; Display PDF files inline
@@ -622,10 +603,10 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
                       (overlay-put ov 'modification-hooks
   				 (list 'org-display-inline-remove-overlay))
                       (push ov org-inline-image-overlays)))))))))))
-#+END_SRC
+#+end_src
 
 *** Finally setup org
-#+BEGIN_SRC emacs-lisp :noweb no-export
+#+begin_src emacs-lisp :noweb no-export
   (use-package org :ensure nil ; already loaded, otherwise this won't get tangled
     ;; the bind may defer the package loading, see documentation (C-h f use-package RET)
     :bind (:map org-mode-map
@@ -637,8 +618,9 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
     (jf/org-setup-task-management-and-agenda)
     (jf/org-setup-capture-templates)
     (jf/org-setup-latex-export)
+    (jf/org-setup-babel)
     (jf/org-setup-display-pdf-inline))
-#+END_SRC
+#+end_src
 
 ** Org mode exports: syntax highlighting with engrave-faces
 
@@ -649,58 +631,53 @@ For syntax highlighted source code blocks, I use the font-locking mode of emacs.
 #+end_src
 
 ** org-roam
-
 Build a second brain with org-roam.
+#+begin_src emacs-lisp
+  (use-package org-roam
+    :after org
+    :bind (("C-c n l" . org-roam-buffer-toggle)
+           ("C-c n f" . org-roam-node-find)
+           ("C-c n i" . org-roam-node-insert)
+           ("C-c n c" . org-roam-capture)
+           ("C-c n g" . org-roam-graph)
+           ;; Dailies
+           ("C-c n j" . org-roam-dailies-capture-date)
+           :map org-mode-map
+           ("C-M-i" . completion-at-point)
+           :map org-roam-dailies-map
+           ("Y" . org-roam-dailies-capture-yesterday)
+           ("T" . org-roam-dailies-capture-tomorrow))
+    :bind-keymap
+    ("C-c n d" . org-roam-dailies-map)
+    :config
+    (setq org-roam-database-connector 'sqlite-builtin) ;; emacs 29 and newer
+    (setq org-roam-directory (file-truename "~/org/roam/"))
+    (setq org-roam-completion-everywhere t)
+    ;; If you're using a vertical completion framework, you might want a more informative completion interface
+    (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+    (org-roam-db-autosync-mode)
+    (org-roam-setup)
+    (org-roam-update-org-id-locations)
+    (setq org-roam-capture-templates '(
+                                       ("d" "default" plain "%?"
+                                        :target (file+head
+                                                 "%<%Y%m%d%H%M%S>-${slug}.org"
+                                                 "#+title: ${title}\n")
+                                        :unnarrowed t)
+                                       ("n" "literature note" plain "%?"
+                                        :target (file+head
+                                                 "%(expand-file-name (or citar-org-roam-subdir \"\") org-roam-directory)/${citar-citekey}.org"
+                                                 "#+title: [${citar-citekey}] ${note-title}\n#+filetags: literature_note\n\n")
+                                        :unnarrowed t))) ; org-roam-capture-templates
+    (require 'org-roam-dailies) ;; Ensure the keymap is available
+    (setq org-roam-dailies-capture-templates '(
+                                               ("d" "default" entry "* %?"
+                                                :target
+                                                (file+head "%<%Y-%m-%d_%A>.org" "#+title: %<%Y-%m-%d (%A)>\n#+filetags: daily\n\n- Links: [[id:b3cb74b2-a385-4132-a55e-8cf561eed9fc][Journaling]]\n* Träume\n* Daily Planing\n- [ ] Journal [[elisp:(org-roam-dailies-goto-yesterday 1)][yesterday]]\n- [ ] Process [[file:~/Syncthing/org/inbox.org][inbox]]\n- [ ] Check [[elisp:(mu4e)][mails]]\n- [ ] Check [[elisp:(org-agenda-list)][agenda]]\n* Emotionen\n")))) ; org-roam-dailies-capture-templaes
+    ) ; org-roam
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
-
-    (use-package org-roam
-      :after org
-      :bind (("C-c n l" . org-roam-buffer-toggle)
-             ("C-c n f" . org-roam-node-find)
-             ("C-c n i" . org-roam-node-insert)
-             ("C-c n c" . org-roam-capture)
-             ("C-c n g" . org-roam-graph)
-             ;; Dailies
-             ("C-c n j" . org-roam-dailies-capture-date)
-             :map org-mode-map
-             ("C-M-i" . completion-at-point)
-             :map org-roam-dailies-map
-             ("Y" . org-roam-dailies-capture-yesterday)
-             ("T" . org-roam-dailies-capture-tomorrow))
-      :bind-keymap
-      ("C-c n d" . org-roam-dailies-map)
-      :config
-      (setq org-roam-database-connector 'sqlite-builtin) ;; emacs 29 and newer
-      (setq org-roam-directory (file-truename "~/org/roam/"))
-      (setq org-roam-completion-everywhere t)
-      ;; If you're using a vertical completion framework, you might want a more informative completion interface
-      (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-      (org-roam-db-autosync-mode)
-      (org-roam-setup)
-      (org-roam-update-org-id-locations)
-      (setq org-roam-capture-templates '(
-        				     ("d" "default" plain "%?"
-        				      :target (file+head
-        					       "%<%Y%m%d%H%M%S>-${slug}.org"
-        					       "#+title: ${title}\n")
-        				      :unnarrowed t)
-        				     ("n" "literature note" plain "%?"
-        				      :target (file+head
-        					       "%(expand-file-name (or citar-org-roam-subdir \"\") org-roam-directory)/${citar-citekey}.org"
-        					       "#+title: [${citar-citekey}] ${note-title}\n#+filetags: literature_note\n\n")
-        				      :unnarrowed t))) ; org-roam-capture-templates
-      (require 'org-roam-dailies) ;; Ensure the keymap is available
-      (setq org-roam-dailies-capture-templates '(
-    					     ("d" "default" entry "* %?"
-    					      :target
-    					      (file+head "%<%Y-%m-%d_%A>.org" "#+title: %<%Y-%m-%d (%A)>\n#+filetags: daily\n\n- Links: [[id:b3cb74b2-a385-4132-a55e-8cf561eed9fc][Journaling]]\n* Träume\n* Daily Planing\n- [ ] Journal [[elisp:(org-roam-dailies-goto-yesterday 1)][yesterday]]\n- [ ] Process [[file:~/Syncthing/org/inbox.org][inbox]]\n- [ ] Check [[elisp:(mu4e)][mails]]\n- [ ] Check [[elisp:(org-agenda-list)][agenda]]\n* Emotionen\n")))) ; org-roam-dailies-capture-templaes
-      ) ; use-package org-roam
-
-#+END_SRC
-
-Visualize the org roam graph in browser
-
+Visualize the org roam graph in browser.
 #+begin_src emacs-lisp
   (use-package org-roam-ui
     :after org-roam
@@ -721,9 +698,9 @@ Visualize the org roam graph in browser
 
 htmlize is used by org to export to HTML.
   
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package htmlize)
-#+END_SRC
+#+end_src
 
 ** org-super-agenda
 
@@ -760,27 +737,26 @@ htmlize is used by org to export to HTML.
 
 This is needed to allow for not exporting to latex those org headings that are tagged :ignore:.
 
-#+BEGIN_src emacs-lisp
+#+begin_src emacs-lisp
   (use-package ox-extra :ensure org-contrib
     :after org
     :config
     (ox-extras-activate '(latex-header-blocks ignore-headlines)))
-#+END_src
+#+end_src
 
 * Other major modes
 ** magit: Git support
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package magit
     :config
     ;; gpg signing is at transient level 5, default was to show up to level 4
     (setq transient-default-level 5))
-#+END_SRC
+#+end_src
 
 ** pdf-tools
 
 #+begin_src emacs-lisp
-
   (use-package pdf-tools
     :ensure nil ;; use the system installed version (elpaca keyword)
     :config
@@ -788,7 +764,6 @@ This is needed to allow for not exporting to latex those org headings that are t
     (pdf-tools-install)
     :init
     (setq-default pdf-view-display-size 'fit-page))
-
 #+end_src
 
 ** Biblio
@@ -799,7 +774,7 @@ Search for literature in literature databases like arxiv and dblp
 
 ** TODO AucTeX
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle no
   (use-package auctex
     :config
     (setq TeX-auto-save t)
@@ -813,7 +788,7 @@ Search for literature in literature databases like arxiv and dblp
     ;; pdf tools
     (setq TeX-view-program-selection '((output-pdf "PDF Tools")))
     (setq TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view))))
-#+END_SRC
+#+end_src
 
 ** JustFile mode
 
@@ -828,31 +803,31 @@ Two modes:
 
 ** web-mode & php-mode
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package web-mode)
   (use-package php-mode)
-#+END_SRC
+#+end_src
 
 ** markdown-mode
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package markdown-mode)
-#+END_SRC
+#+end_src
 
 ** yaml-mode
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package yaml-mode)
-#+END_SRC
+#+end_src
 
 ** Platform.io
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package platformio-mode)
-#+END_SRC
+#+end_src
 
 ** GUIX
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package guix)
   (use-package geiser-guile
     :config
@@ -861,25 +836,25 @@ Two modes:
       (add-to-list 'geiser-guile-load-path "~/git/guix/master"))
     (with-eval-after-load 'yasnippet
       (add-to-list 'yas-snippet-dirs "~/git/guix/master/etc/snippets/yas")))
-#+END_SRC
+#+end_src
 
 ** ChatGPT Shell
 
 Store the API key in .authinfo. ChatGPT and Dall-E use the same API key.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package chatgpt-shell
    :after shell-maker
    :config (setq chatgpt-shell-openai-key
   	       (auth-source-pick-first-password
   				 :host "api.openai.com")))
-#+END_SRC
+#+end_src
 
 ** COMMENT ement.el
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle no
   (use-package ement)
-#+END_SRC
+#+end_src
 
 ** COMMENT JAVA LSP
 
@@ -913,7 +888,6 @@ The built-in LSP server
     (define-key eglot-java-mode-map (kbd "C-c l N") #'eglot-java-project-new)
     (define-key eglot-java-mode-map (kbd "C-c l T") #'eglot-java-project-build-task)
     (define-key eglot-java-mode-map (kbd "C-c l R") #'eglot-java-project-build-refresh)))
-
 #+end_src
 
 * Minor modes & common packages
@@ -927,7 +901,7 @@ Persist history over Emacs restarts. E.g. Vertico sorts by history position.
 
 ** Vertico
 (Vertical) Completion framework: Vertico is the successor of selectrum.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (defun crm-indicator (args)
     (cons (format "[CRM%s] %s"
                   (replace-regexp-in-string
@@ -960,12 +934,12 @@ Persist history over Emacs restarts. E.g. Vertico sorts by history position.
     (setq enable-recursive-minibuffers t)
 
     (vertico-mode))
-#+END_SRC
+#+end_src
 
 ** Orderless
 This package provides an orderless completion style that divides the pattern into space-separated components, and matches candidates that match all of the components in any order. [[https://github.com/oantolin/orderless]]
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package orderless
     :init
     ;; Configure a custom style dispatcher (see the Consult wiki)
@@ -974,12 +948,12 @@ This package provides an orderless completion style that divides the pattern int
     (setq completion-styles '(orderless basic)
           completion-category-defaults nil
           completion-category-overrides '((file (styles partial-completion)))))
-#+END_SRC
+#+end_src
 
 ** Consult
 Completion allows you to quickly select an item from a list of candidates.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   ;; Example configuration for Consult
   (use-package consult
     ;; Replace bindings. Lazily loaded due by `use-package'.
@@ -1098,13 +1072,13 @@ Completion allows you to quickly select an item from a list of candidates.
     ;;;; 5. No project support
     ;; (setq consult-project-function nil)
     )
-#+END_SRC
+#+end_src
 
 ** Marginalia
 
 Enriches selection lists (and completion minibuffers, e.g. consult) with additional information.
 
-#+BEGIN_src emacs-lisp
+#+begin_src emacs-lisp
   ;; Enable rich annotations using the Marginalia package
   (use-package marginalia
     :bind (:map minibuffer-local-map
@@ -1114,7 +1088,7 @@ Enriches selection lists (and completion minibuffers, e.g. consult) with additio
     ;; Must be in the :init section of use-package such that the mode gets
     ;; enabled right away. Note that this forces loading the package.
     (marginalia-mode))
-#+END_src
+#+end_src
 
 ** Corfu (Company replacement)
 
@@ -1159,17 +1133,17 @@ Enriches selection lists (and completion minibuffers, e.g. consult) with additio
 
 enchant uses aspell or hunspell or whatever it can find. ~enchant-lsmod-2~ tells, what enchant-2 can find. Saved words are stored in ~~./config/enchant~.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package emacs :ensure nil
     :config
     (setq ispell-program-name "enchant-2")
     (ispell-change-dictionary "de_DE")
     (add-hook 'text-mode-hook 'flyspell-mode)
     (add-hook 'prog-mode-hook 'flyspell-prog-mode))
-#+END_SRC
+#+end_src
 
 ** embark & embark-consult
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package embark
     :bind
     (("C-." . embark-act)         ;; pick some comfortable binding
@@ -1197,12 +1171,12 @@ enchant uses aspell or hunspell or whatever it can find. ~enchant-lsmod-2~ tells
     ;; auto-updating embark collect buffer
     :hook
     (embark-collect-mode . consult-preview-at-point-mode))
-#+END_SRC
+#+end_src
 
 ** citar & citar-embark & citar-org-roam
 
 Allows to browse bibtex file(s), insert citations, open files, links and notes. It's a helm-bibtext replacement.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package citar
     :no-require
     :after org
@@ -1221,7 +1195,7 @@ Allows to browse bibtex file(s), insert citations, open files, links and notes. 
     (setq citar-bibliography org-cite-global-bibliography)
     (setq citar-library-paths '("~/Documents/Literatur/bibtex-pdfs"))
     (setq citar-at-point-function 'embark-act))
-#+END_SRC
+#+end_src
 
 Embark integration is provided by /citar-embark/. Press C-. (or RET in org buffers) on any citation key to see possible actions.
 #+begin_src emacs-lisp
@@ -1243,7 +1217,6 @@ The package /citar-org-roam/ provides usage of org roam to take bibliographical 
 #+end_src
 
 ** yasnippets (snippet expansion)
-
 Snippet expansion
 - default key for expansion is <TAB>
 - company does not show snippets for completion-at-point, but there is ongoing work
@@ -1253,7 +1226,7 @@ Snippet expansion
   (use-package yasnippet
     :config
     (yas-global-mode))
-#+END_SRC
+#+end_src
 
 Snippets aren't included in the base package. Therefore, they need to be loaded separately.
 #+begin_src emacs-lisp
@@ -1262,40 +1235,40 @@ Snippets aren't included in the base package. Therefore, they need to be loaded 
 
 ** which-key
 This helps to figure out the next keystrokes
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package which-key
     :config
     (setq which-key-idle-delay 1)
     (which-key-mode))
-#+END_SRC
+#+end_src
 
 ** undo-tree
 The package /undo-tree/ contains more features than vundo, e.g. timestamps, diffs, etc. I never used those features.
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package undo-tree
     :config
     (global-undo-tree-mode))
-#+END_SRC
+#+end_src
 The global keybinding 'C-x u' is set below.
 
 ** Agressive Indent
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package aggressive-indent
     :config
     (aggressive-indent-global-mode))
-#+END_SRC
+#+end_src
 
 ** editorconfig
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package editorconfig
     :config
     (editorconfig-mode 1))
-#+END_SRC
+#+end_src
 
 ** openwith
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (use-package openwith
     :config
     (setq openwith-associations
@@ -1320,27 +1293,7 @@ The global keybinding 'C-x u' is set below.
     (add-to-list 'mm-inhibit-file-name-handlers 'openwith-file-handler)
     ;; enable openwith mode
     (openwith-mode 1))
-#+END_SRC
-
-** COMMENT Projectile
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package projectile
-    :config
-    (projectile-mode 1))
-#+END_SRC
-
-** COMMENT frames-only-mode
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package frames-only-mode
-    :after (embark)
-    :config
-    ;; make embark work with frames-only-mode enabled
-    ;; see also https://github.com/oantolin/embark/issues/690
-    (add-to-list 'frames-only-mode-use-window-functions 'embark-act)
-    (frames-only-mode 1))
-#+END_SRC
+#+end_src
 
 ** COMMENT sway (needs shackle?)
 
@@ -1371,34 +1324,31 @@ The global keybinding 'C-x u' is set below.
     (if (equal ispell-local-dictionary "de_DE")
         (ispell-change-dictionary "en_US")
       (ispell-change-dictionary "de_DE")
-      (flyspell-buffer)))
-    
+      (flyspell-buffer)))    
 #+end_src
-** Connect with my ZNC irc bouncer
 
-#+BEGIN_SRC emacs-lisp
+** COMMENT Connect with my ZNC irc bouncer 
+Not necessary anymore, since I have a IRC/matrix bridge now
+#+begin_src emacs-lisp
   (defun jf/my-irc()
     "Connect to my znc irc bouncer."
     (interactive)
     (erc-tls :server "irc.nuthouse.de" :nick "nutcase"))
-#+END_SRC
+#+end_src
 
 ** A more distressless writing environment
 
-#+BEGIN_SRC emacs-lisp
-
-    (defun jf/my-writing-mode()
-      "Switch to my distress less writing mode. An alternative is \"writeroom-mode\""
-      (interactive)
-      (olivetti-mode)
-      (variable-pitch-mode))
-
-#+END_SRC
+#+begin_src emacs-lisp
+  (defun jf/my-writing-mode()
+    "Switch to my distress less writing mode. An alternative is \"writeroom-mode\""
+    (interactive)
+    (olivetti-mode)
+    (variable-pitch-mode))
+#+end_src
 
 There is a package https://github.com/joostkremers/writeroom-mode?tab=readme-ov-file that does similar things.
 
 ** Focus on Subtree (clone + narrow)
-
 #+begin_src emacs-lisp
   (defun jf/narrow-to-subtree-in-indirect-buffer ()
     "Create an indirect cloned buffer and narrow to org subtree in the clone."
@@ -1441,11 +1391,11 @@ If there is more than one, let the user choose."
 
 * Printing
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (when (display-graphic-p)
     (setq lpr-command "gtklp")
     (setq ps-lpr-command "gtklp"))
-#+END_SRC
+#+end_src
 
 * Calendar syncing
 
@@ -1557,8 +1507,9 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
   	  ("/work/INBOX" . ?w)
             ("/work/Archives/2024" . ?W)
   	  ("/tudo/INBOX" . ?d)))
-    (setq smtpmail-queue-mail nil)  ;; start in direct mode
-    (setq smtpmail-queue-dir "~/Mail/queue/cur")
+    
+    ;;
+    ;; contexts
     (setq mu4e-context-policy 'pick-first)
     (setq mu4e-contexts
           (list
@@ -1614,36 +1565,11 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                     (mu4e-refile-folder  . "/private/Archives/2024")
                     (mu4e-trash-folder . "/private/Trash")))))
 
-
-    ;; Calendar support    
+    ;; Calendar support
     (require 'mu4e-icalendar)
-    ;; (mu4e-icalendar-setup) ; obsolete since 1.11.22
-    ;; gnus / mu4e
-    ;; icalendar -> org sync
-    ;; (setq gnus-icalendar-org-capture-file "~/org/events-personal.org")
-    ;; (setq gnus-icalendar-org-capture-headline '("Inbox"))
-    ;; (gnus-icalendar-org-setup)
     
     ;; start mu4e (in background)
     (mu4e t)) ; end of use-package mu4e
-
-  ;; (use-package mu4e-views
-  ;;   :if (string= (system-name) "nutbook")
-  ;;   :after mu4e
-  ;;   :bind (:map mu4e-headers-mode-map
-  ;; 		("v" . mu4e-views-mu4e-select-view-msg-method) ;; select viewing method
-  ;; 		("M-n" . mu4e-views-cursor-msg-view-window-down) ;; from headers window scroll the email view
-  ;; 		("M-p" . mu4e-views-cursor-msg-view-window-up) ;; from headers window scroll the email view
-  ;; 		("f" . mu4e-views-toggle-auto-view-selected-message) ;; toggle opening messages automatically when moving in the headers view
-  ;; 		("i" . mu4e-views-mu4e-view-as-nonblocked-html) ;; show currently selected email with all remote content
-  ;; 		)
-  ;;   :config
-  ;;   ;; (setq mu4e-views-completion-method 'ivy) ;; use ivy for completion
-  ;;   (setq mu4e-views-default-view-method "html") ;; make xwidgets default
-  ;;   (mu4e-views-mu4e-use-view-msg-method "html") ;; select the default
-  ;;   (setq mu4e-views-next-previous-message-behaviour 'stick-to-current-window) ;; when pressing n and p stay in the current window
-  ;;   (setq mu4e-views-auto-view-selected-message t)) ;; automatically open messages when moving in the headers view
-
 #+end_src
 
 When signing mails with openpgp (or gnupg), use the key associated with the sender address.
@@ -1653,18 +1579,14 @@ When signing mails with openpgp (or gnupg), use the key associated with the send
 
 Before sending an email, I'd like to check some things.
 #+begin_src emacs-lisp
-
   ;; 1. let me confirm every message
   (setq message-confirm-send t)
-
   ;; 2. let me confirm/decline to send an email with empty subject
   (defun jf/message-warn-if-no-subject() 
     (or (message-field-value "Subject")
         (yes-or-no-p "Really send without Subject? ")
         (keyboard-quit)))
-
   (add-hook 'message-send-hook #'jf/message-warn-if-no-subject)
-
   ;; 3. warn if no attachment can be found, although there should be one.
   ;; this is from https://github.com/munen/emacs.d/?tab=readme-ov-file#check-for-supposed-attachments-prior-to-sending-them
   ;; I moved the functions in my own namespace and slightly modified them
@@ -1700,14 +1622,12 @@ Before sending an email, I'd like to check some things.
 
 * Global key bindings
 ** Increase / decrease text scale
-
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (global-set-key (kbd "C--") 'text-scale-decrease)
   (global-set-key (kbd "C-+") 'text-scale-increase)
-#+END_SRC
+#+end_src
 
 ** Comment / Uncomment Region
-
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-x C-,") 'comment-region)
   (global-set-key (kbd "C-x C-.") 'uncomment-region)
@@ -1719,56 +1639,47 @@ Before sending an email, I'd like to check some things.
 #+end_src
 
 ** Open GTD file
-
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-c t") (lambda () (interactive) (find-file "~/org/gtd.org")))
 #+end_src
 
 ** Open the file under cursor
-
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (global-set-key (kbd "C-x f") 'find-file-at-point)
-#+END_SRC
+#+end_src
 
 ** Switch dictionary
-
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-c d") 'jf/toggle-spell-dict)
 #+end_src
 
 ** undo-tree
-
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (global-set-key (kbd "C-x u") 'undo-tree-visualize)
-#+END_SRC
-
-** COMMENT Quit dialogs with ESC
-CLOSED: [2024-03-28 Thu 23:07]
-
-#+BEGIN_SRC emacs-lisp
-  ;; (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-#+END_SRC
+#+end_src
 
 ** Org mode
-
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp
   (global-set-key (kbd "C-c a") 'org-agenda)
   (global-set-key (kbd "C-c c") 'org-capture)
   (global-set-key (kbd "C-c l") 'org-store-link)
   (global-set-key (kbd "C-c o") 'org-switchb)
   (global-set-key (kbd "C-c n u") 'org-roam-ui-open)
   (global-set-key (kbd "C-c j") 'consult-org-heading)
-#+END_SRC
+#+end_src
 
 ** Magit
-
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-c g") 'magit-status)
 #+end_src
 
 ** Mu4e
-
 #+begin_src emacs-lisp
+  ;; in conflict with 'consult-man
   (global-set-key (kbd "C-c m") 'mu4e)
 #+end_src
 
+** citar-open in non org/latex buffers
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c b") 'citar-open)
+#+end_src
