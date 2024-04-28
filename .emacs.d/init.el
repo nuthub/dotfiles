@@ -4,6 +4,12 @@
 (unless noninteractive
   (message "Loading %s..." load-file-name))
 
+;; don't store customizations in init.el, since this file is versioned
+;; instead use and gitignore custom.el
+(setq custom-file (concat user-emacs-directory "custom.el"))
+(when (file-exists-p custom-file)
+  (load custom-file))
+
 (defvar elpaca-installer-version 0.7)
 (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
 (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
@@ -47,28 +53,17 @@
 (elpaca elpaca-use-package
   ;; Enable use-package :ensure support for Elpaca.
   (elpaca-use-package-mode)
+  ;; make :ensure t the default
   (setq use-package-always-ensure t))
 
 ;; load recent org version
 (elpaca org)
 (elpaca-wait)
+
 ;; Load my literate config
-(org-babel-load-file
- (expand-file-name
-  "README.org"
-  user-emacs-directory))
+(org-babel-load-file (expand-file-name
+		      "README.org"
+		      user-emacs-directory))
 
 (provide 'init)
 ;;; init.el ends here
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
