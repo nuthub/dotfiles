@@ -26,6 +26,7 @@
 	     (gnu services samba)
 	     (gnu services ssh)
 	     (gnu services syncthing)
+	     (gnu services mcron)
 	     (gnu services virtualization)
 	     (gnu services xorg)
 	     (gnu system setuid)
@@ -35,200 +36,198 @@
 	     (nongnu packages chromium)
 	     (nongnu system linux-initrd))
 
-(define vdirsyncer-job
-;; Update the index database as user "charlie" at 12:15PM
-;; and 19:15PM.  This runs from the user's home directory.
-#~(job "*\\15 * * * *" "vdirsyncer sync" #:user "flake"))
-
 ;;;
 ;;; My OS
 ;;;
 (operating-system
- (kernel linux)
- (initrd microcode-initrd)
- (firmware (list linux-firmware))
- (kernel-loadable-modules (list v4l2loopback-linux-module))
- (locale "en_US.utf8")
- (timezone "Europe/Berlin")
- (keyboard-layout (keyboard-layout "de" #:options '("ctrl:nocaps")))
- (host-name "nutbook")
+  (kernel linux)
+  (initrd microcode-initrd)
+  (firmware (list linux-firmware))
+  (kernel-loadable-modules (list v4l2loopback-linux-module))
+  (locale "en_US.utf8")
+  (timezone "Europe/Berlin")
+  (keyboard-layout (keyboard-layout "de" #:options '("ctrl:nocaps")))
+  (host-name "nutbook")
 
- ;; The list of file systems that get "mounted".  The unique
- ;; file system identifiers there ("UUIDs") can be obtained
- ;; by running 'blkid' in a terminal.
- (file-systems (cons* (file-system (mount-point "/boot/efi")
-				   (device (uuid "FCE6-96C0"
-						 'fat32))
-				   (type "vfat"))
-		      (file-system (mount-point "/")
-				   (device (uuid
-					    "5c890181-055c-4db3-9a47-2e3769ec24ea"
-					    'ext4))
-				   (type "ext4"))
-		      %base-file-systems))
+  ;; The list of file systems that get "mounted".  The unique
+  ;; file system identifiers there ("UUIDs") can be obtained
+  ;; by running 'blkid' in a terminal.
+  (file-systems (cons* (file-system (mount-point "/boot/efi")
+				    (device (uuid "FCE6-96C0"
+						  'fat32))
+				    (type "vfat"))
+		       (file-system (mount-point "/")
+				    (device (uuid
+					     "5c890181-055c-4db3-9a47-2e3769ec24ea"
+					     'ext4))
+				    (type "ext4"))
+		       %base-file-systems))
 
- (swap-devices (list (swap-space
-		      (target (uuid
-			       "5abe7967-fcb6-4888-8b05-a6413944c60b")))))
+  (swap-devices (list (swap-space
+		       (target (uuid
+				"5abe7967-fcb6-4888-8b05-a6413944c60b")))))
 
- (bootloader (bootloader-configuration
-	      (bootloader grub-efi-bootloader)
-	      (targets (list "/boot/efi"))
-	      (keyboard-layout keyboard-layout)))
+  (bootloader (bootloader-configuration
+	       (bootloader grub-efi-bootloader)
+	       (targets (list "/boot/efi"))
+	       (keyboard-layout keyboard-layout)))
 
- ;; The list of user accounts ('root' is implicit).
- (users (cons* (user-account
-		(name "flake")
-		(comment "Julian Flake")
-		(group "users")
-		(home-directory "/home/flake")
-		(shell (file-append zsh "/bin/zsh"))
-		(supplementary-groups '("users" "wheel" "netdev" "audio" "video" "tty"
-					"input" "disk" "kvm" "docker" "lp" "lpadmin"
-					"dialout" "libvirt"))) ;; lp is needed for bluetooth
-	       %base-user-accounts))
- (setuid-programs
-  (append (list (setuid-program
-		 (program (file-append opendoas "/bin/doas"))))
-	  %setuid-programs))
+  ;; The list of user accounts ('root' is implicit).
+  (users (cons* (user-account
+		 (name "flake")
+		 (comment "Julian Flake")
+		 (group "users")
+		 (home-directory "/home/flake")
+		 (shell (file-append zsh "/bin/zsh"))
+		 (supplementary-groups '("users" "wheel" "netdev" "audio" "video" "tty"
+					 "input" "disk" "kvm" "docker" "lp" "lpadmin"
+					 "dialout" "libvirt"))) ;; lp is needed for bluetooth
+		%base-user-accounts))
+  (setuid-programs
+   (append (list (setuid-program
+		  (program (file-append opendoas "/bin/doas"))))
+	   %setuid-programs))
 
- ;; Packages installed system-wide.
- (packages (append (map (compose list specification->package+output)
-			'(
-			  ;; hardware related
-			  "i915-firmware"
-			  "intel-vaapi-driver"
-			  ;; basics
-			  "git" "git:send-email" "git:gui"
-			  "bash"
-			  "gnupg"
-			  "opendoas" ; install it additionally to make man pages available
-			  ;; TLS root certificates
-			  ;;"nss-certs" ; is part of %base-packages now (2024-04-21)
-			  ;; emacs & related
-			  "emacs-pgtk-xwidgets" "emacs-pdf-tools" "emacs-vterm"
-			  "isync" "mu"
-			  "vdirsyncer" "khal" "khard"
-			  "openjdk@21:jdk" ; java-lsp wants this, otherwise I'd just use it in guix shells only
-			  "python" ; treemacs wants python3
-			  ;; my shell and shell tools
-			  "zsh" "zsh-autosuggestions" "zsh-syntax-highlighting"
-			  "efibootmgr"
-			  "bind:utils" ; for dig
-			  "cups" ; for lpq
-			  "file"
-			  "fzf"
-			  "htop"
-			  "jq" ; needed by sway / zoom
-			  "just"
-			  "neofetch"
-			  "net-tools" ; for ifconfig  netstat  route
-			  "nmap"
-			  "bc" "octave"
-			  "powertop"
-			  "ripgrep"
-			  "stow"
-			  "trash-cli"
-			  "tree"
-			  "unzip"
-			  "usbutils"
-			  "acpi"
-			  "brightnessctl"
-			  ;; syncing and versioning
-			  "binutils" ;; for ar command
-			  "borg"
-			  "curl"
-			  "glib:bin" ; has gio which allows to mount davfs as user
-			  "rsync"
-			  "subversion"
-			  "syncthing"
-			  "nextcloud-client"
-			  "yt-dlp"
-			  "zip"
-			  ;; Desktop start
-			  ;; XDG
-			  "xdg-utils" "xdg-user-dirs"
-			  ;; I need all of these portals
-			  "xdg-desktop-portal" "xdg-desktop-portal-gtk" "xdg-desktop-portal-wlr"
-			  ;; wayland, not sure what I really need
-			  "wlr-randr" "wdisplays" "slurp" ; "grim" "swappy" "grimshot" "egl-wayland" "xorg-server-xwayland" 
-			  ;; sway
-			  "sway" "waybar" "wofi" "swaylock" "swayidle" "swaynotificationcenter" "libnotify"
-			  "wl-clipboard" "clipman" "wtype" ; wofi-emoji needs wtype
-			  "wob" ; OSD overlay
-			  "alacritty"
-			  "kanshi" ; automatically switch displays
-			  "gammastep" "geoclue" ; could use geoclue, if geoclue was running
-			  ;; other desktop related
-			  "tumbler" ; D-BUS thumbnail service
-			  "gnome-keyring"
-			  ;; connectivity / media
-			  "pipewire" "pavucontrol" "wireplumber"
-			  "bluez" "blueman"
-			  "udiskie"
-			  "solaar"
-			  ;; Desktop end
-			  "mosquitto" ;; for doorstatus in polybar
-			  ;; other sources / hubs
-			  "flatpak"
-			  "docker"
-			  ;; security
-			  "pinentry" "pinentry-tty" "gnupg" "openssh" "password-store"
-			  "wireguard-tools" "openvpn" "network-manager-openvpn" "openfortivpn" "network-manager-fortisslvpn"
-			  "lxqt-policykit"
-			  "lxappearance" "qt5ct"
-			  ;; my desktop apps
-			  "nemo" "file-roller" "baobab" "gvfs"
-			  "firefox" "icedove" "ungoogled-chromium-wayland"
-			  "aqbanking" "gnucash"
-			  "libreoffice"
-			  ;; Office, LaTeX, PDF & Co
-			  "texlive" "texlive-biber" ;; JabRef is installed via flatpak
-			  "enchant"
-			  "hunspell" "hunspell-dict-de" "hunspell-dict-en" ;; "aspell" "aspell-dict-de" "aspell-dict-en" ; aspell or hunspell? Good question
-			  "pandoc"
-			  "pdfpc"
-			  "ghostscript" ;; for e.g. ps2pdf
-			  "stapler"
-			  ;; media
-			  "inkscape" "graphviz"
-			  "mpv" "imv"
-			  "flameshot" "qtwayland@5.15.10" ; flameshot needs qtwayland@5
-			  "ristretto" "gimp"
-			  "imagemagick" "optipng"
-			  "cheese" "ffmpeg" "obs" "handbrake" ; obs-wlrobs is not necessary, if pipewire is running
-			  "simple-scan" "xsane"
-			  ;; Virtualization
-			  "qemu" "virt-manager" "ovmf"
-			  ;;
-			  ;; Look & Feel
-			  ;; fonts
-			  "font-fira-code" ; "font-hack" is also nice, but doesn't support ligatures
-			  "font-awesome" ; some icons
-			  ;; Nerd-Fonts are installed by M-x nerd-icons-install-fonts
-			  ;; all-the-icons are installed by M-x all-the-icons-install-fonts
-			  "font-google-noto" ; broad range of 
-			  "font-google-noto-emoji" ; Emoji support
-			  "font-google-noto-serif-cjk" "font-google-noto-sans-cjk" ; chinese fonts
-			  "font-microsoft-arial" "font-microsoft-times-new-roman" "font-microsoft-courier-new" ; Microsoft fonts
-			  ;; themes
-			  "gnome-themes-extra"
-			  ;; icons
-			  "adwaita-icon-theme"
-			  "elementary-xfce-icon-theme" "hicolor-icon-theme" ; (gives nice icons in waybar also)
-			  ;; from nutguix
-			  "wl-mirror" "gtklp" "astah-professional"
-			  ))
-		   %base-packages))
+  ;; Packages installed system-wide.
+  (packages (append (map (compose list specification->package+output)
+			 '(
+			   ;; hardware related
+			   "i915-firmware"
+			   "intel-vaapi-driver"
+			   ;; basics
+			   "git" "git:send-email" "git:gui"
+			   "bash"
+			   "gnupg"
+			   "opendoas" ; install it additionally to make man pages available
+			   "mailutils" ; rottlog seems to need this
+			   ;; TLS root certificates
+			   ;;"nss-certs" ; is part of %base-packages now (2024-04-21)
+			   ;; emacs & related
+			   "emacs-pgtk-xwidgets" "emacs-pdf-tools" "emacs-vterm"
+			   "make" "perl" "texinfo" ; building auctex for elpaca needs these
+			   "isync" "mu"
+			   "vdirsyncer" "khal" "khard"
+			   ;; Programming languages
+			   "openjdk@21:jdk" ; java-lsp wants this, otherwise I'd just use it in guix shells only
+			   "python" ; treemacs wants python3
+			   ;; my shell and shell tools
+			   "zsh" "zsh-autosuggestions" "zsh-syntax-highlighting"
+			   "efibootmgr"
+			   "bind:utils" ; for dig
+			   "cups" ; for lpq
+			   "file"
+			   "fzf"
+			   "htop"
+			   "jq" ; needed by sway / zoom
+			   "just"
+			   "neofetch"
+			   "net-tools" ; for ifconfig  netstat  route
+			   "nmap"
+			   "bc" "octave"
+			   "powertop"
+			   "ripgrep"
+			   "stow"
+			   "trash-cli"
+			   "tree"
+			   "unzip"
+			   "usbutils"
+			   "acpi"
+			   "brightnessctl"
+			   ;; syncing and versioning
+			   "binutils" ;; for ar command
+			   "borg"
+			   "curl"
+			   "glib:bin" ; has gio which allows to mount davfs as user
+			   "rsync"
+			   "subversion"
+			   "syncthing"
+			   "nextcloud-client"
+			   "yt-dlp"
+			   "zip"
+			   ;; Desktop start
+			   ;; XDG
+			   "xdg-utils" "xdg-user-dirs"
+			   ;; I need all of these portals
+			   "xdg-desktop-portal" "xdg-desktop-portal-gtk" "xdg-desktop-portal-wlr"
+			   ;; wayland, not sure what I really need
+			   "wlr-randr" "wdisplays" "slurp" ; "grim" "swappy" "grimshot" "egl-wayland" "xorg-server-xwayland" 
+			   ;; sway
+			   "sway" "waybar" "wofi" "swaylock" "swayidle" "swaynotificationcenter" "libnotify"
+			   "wl-clipboard" "clipman" "wtype" ; wofi-emoji needs wtype
+			   "wob" ; OSD overlay
+			   "alacritty"
+			   "kanshi" ; automatically switch displays
+			   "gammastep" "geoclue" ; could use geoclue, if geoclue was running
+			   ;; other desktop related
+			   "tumbler" ; D-BUS thumbnail service
+			   "gnome-keyring"
+			   ;; connectivity / media
+			   "pipewire" "pavucontrol" "wireplumber"
+			   "bluez" "blueman"
+			   "udiskie"
+			   "solaar"
+			   ;; Desktop end
+			   "mosquitto" ;; for doorstatus in polybar
+			   ;; other sources / hubs
+			   "flatpak"
+			   "docker"
+			   ;; security
+			   "pinentry" "pinentry-tty" "gnupg" "openssh" "password-store"
+			   "wireguard-tools" "openvpn" "network-manager-openvpn" "openfortivpn" "network-manager-fortisslvpn"
+			   "lxqt-policykit"
+			   "lxappearance" "qt5ct"
+			   ;; my desktop apps
+			   "nemo" "file-roller" "baobab" "gvfs"
+			   "firefox" "icedove" "ungoogled-chromium-wayland"
+			   ;;; "aqbanking" "gnucash"
+			   "libreoffice"
+			   ;; Office, LaTeX, PDF & Co
+			   "texlive" "texlive-biber" ;; JabRef is installed via flatpak
+			   "enchant"
+			   "hunspell" "hunspell-dict-de" "hunspell-dict-en" ;; "aspell" "aspell-dict-de" "aspell-dict-en" ; aspell or hunspell? Good question
+			   "pandoc"
+			   "pdfpc"
+			   "ghostscript" ;; for e.g. ps2pdf
+			   "stapler"
+			   ;; media
+			   "inkscape" "graphviz"
+			   "mpv" "imv"
+			   "flameshot" "qtwayland@5.15.10" ; flameshot needs qtwayland@5
+			   "ristretto" "gimp"
+			   "imagemagick" "optipng"
+			   "cheese" "ffmpeg" "obs" "handbrake" ; obs-wlrobs is not necessary, if pipewire is running
+			   "simple-scan" "xsane"
+			   ;; Virtualization
+			   "qemu" "virt-manager" "ovmf"
+			   ;;
+			   ;; Look & Feel
+			   ;; fonts
+			   "font-fira-code" ; "font-hack" is also nice, but doesn't support ligatures
+			   "font-awesome" ; some icons
+			   ;; Nerd-Fonts are installed by M-x nerd-icons-install-fonts
+			   ;; all-the-icons are installed by M-x all-the-icons-install-fonts
+			   "font-google-noto" ; broad range of 
+			   "font-google-noto-emoji" ; Emoji support
+			   "font-google-noto-serif-cjk" "font-google-noto-sans-cjk" ; chinese fonts
+			   "font-microsoft-arial" "font-microsoft-times-new-roman" "font-microsoft-courier-new" ; Microsoft fonts
+			   ;; themes
+			   "gnome-themes-extra"
+			   ;; icons
+			   "adwaita-icon-theme"
+			   "elementary-xfce-icon-theme" "hicolor-icon-theme" ; (gives nice icons in waybar also)
+			   ;; from nutguix
+			   "wl-mirror" "gtklp" "astah-professional"
+			   ))
+		    %base-packages))
 
- ;; Below is the list of system services.  To search for available
- ;; services, run 'guix system search KEYWORD' in a terminal.
- (services
-  (append (list
-	   (service openssh-service-type)
-	   (service samba-service-type (samba-configuration
-					(enable-smbd? #t)
-					(config-file (plain-file "smb.conf" "\
+  ;; Below is the list of system services.  To search for available
+  ;; services, run 'guix system search KEYWORD' in a terminal.
+  (services
+   (append (list
+	    (service openssh-service-type)
+	    (service samba-service-type (samba-configuration
+					 (enable-smbd? #t)
+					 (config-file (plain-file "smb.conf" "\
 [global]
 map to guest = Bad User
 logging = syslog@1
@@ -251,6 +250,15 @@ guest only = yes\n"))))
 	    (service syncthing-service-type
 		     (syncthing-configuration
 		      (user "flake")))
+	    (service mcron-service-type
+                     (mcron-configuration
+                      (jobs (list
+			     #~(job "*\\15 * * * *"
+				    (string-append
+				     "SSL_CERT_DIR=/run/current-system/profile/etc/ssl/certs"
+				     " "
+				     "vdirsyncer sync")
+			     	    #:user "flake")))))
 	    (service bluetooth-service-type)
 	    (service cups-service-type
 		     (cups-configuration

@@ -414,6 +414,21 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
     (setq org-archive-location (concat org-directory "/archive/archive-" (format-time-string "%Y" (current-time)) ".org::datetree/")))
 #+end_src
 
+*** Safe elisp org-links
+
+#+begin_src emacs-lisp
+  (defun jf/org-setup-safe-elisp-links ()
+    (setq org-confirm-elisp-link-whitelist
+  	'("(khalel-edit-calendar-event)"
+  	  "(progn (khalel-run-vdirsyncer) (khalel-import-events))"
+  	  "(org-roam-dailies-goto-yesterday)"
+  	  "(mu4e)"
+  	  "(org-agenda-list)"))
+
+    (setq org-confirm-elisp-link-not-regexp
+  	(mapconcat 'identity org-confirm-elisp-link-whitelist "\\|")))
+#+end_src
+
 *** Org capture templates
 
 #+begin_src emacs-lisp
@@ -946,7 +961,6 @@ Persist history over Emacs restarts. E.g. Vertico sorts by history position.
 
 ** Orderless
 This package provides an orderless completion style that divides the pattern into space-separated components, and matches candidates that match all of the components in any order. [[https://github.com/oantolin/orderless]]
-
 #+begin_src emacs-lisp
   (use-package orderless
     :init
@@ -1418,10 +1432,26 @@ If there is more than one, let the user choose."
     ;; (setq khalel-khal-command "khal")
     ;; (setq khalel-vdirsyncer-command "vdirsyncer")
     (setq khalel-capture-key "k")
+    (setq khalel-default-calendar "Persönlich")
     (setq khalel-import-org-file (concat org-directory "/" "calendar.org"))
     (setq khalel-import-start-date "-2m")
     (setq khalel-import-end-date "+12m")
     (setq khalel-import-org-file-confirm-overwrite nil)
+    (setq khalel-import-format "* {title} {cancelled} :{calendar}:
+:PROPERTIES:
+:CALENDAR: {calendar}
+:CATEGORY: {calendar}
+:LOCATION: {location}
+:ID: {uid}
+:END:
+- When: <{start-date-long} {start-time}>--<{end-date-long} {end-time}>
+- Where: {location}
+- Description: {description}
+- URL: {url}
+- Organizer: {organizer}
+
+[[elisp:(khalel-edit-calendar-event)][Edit this event]]    [[elisp:(progn (khalel-run-vdirsyncer) (khalel-import-events))][Sync and update all]]
+")
     (khalel-add-capture-template)
     (require 'khalel-icalendar))
 #+end_src
