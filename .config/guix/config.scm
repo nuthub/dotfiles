@@ -125,6 +125,7 @@
 			   ;; hardware related
 			   "i915-firmware"
 			   "intel-vaapi-driver"
+			   "intel-media-driver-nonfree" "libva-utils"
 			   ;; basics
 			   "git" "git:send-email" "git:gui"
 			   "bash"
