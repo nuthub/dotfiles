@@ -229,7 +229,7 @@
 			   "cheese" "ffmpeg" "obs" "handbrake" ; obs-wlrobs is not necessary, if pipewire is running
 			   "simple-scan" "xsane"
 			   ;; Virtualization
-			   "qemu" "virt-manager" "ovmf"
+			   "qemu" "virt-manager" "ovmf-x86-64"
 			   ;;
 			   ;; Look & Feel
 			   ;; fonts
