@@ -285,11 +285,8 @@ guest only = yes\n"))))
                      (mcron-configuration
                       (jobs (list
 			     #~(job "*\\15 * * * *"
-				    (string-append
-				     "SSL_CERT_DIR=/run/current-system/profile/etc/ssl/certs"
-				     " "
-				     "vdirsyncer sync")
-			     	    #:user "flake")))))
+				    "/home/flake/.local/bin/sync-calendars.sh"
+				    #:user "flake")))))
 	    (service bluetooth-service-type)
 	    (service cups-service-type
 		     (cups-configuration
