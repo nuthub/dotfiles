@@ -9,34 +9,16 @@
 ;; Indicate which modules to import to access the variables
 ;; used in this configuration.
 (use-modules (gnu)
-	     (gnu packages firmware)
-	     (gnu packages linux)
-	     (gnu packages networking)
-	     (gnu packages shells)
-	     (gnu packages wm)
-	     (gnu packages gnome) ; for geoclue polkit service
-	     (gnu packages package-management)
-	     (gnu packages admin)
-	     (gnu services cups)
-	     (gnu services dbus)
-	     (gnu services desktop)
-	     (gnu services docker)
-	     (gnu services linux)
-	     (gnu services networking)
-	     (gnu services pm)
-	     (gnu services samba)
-	     (gnu services ssh)
-	     (gnu services syncthing)
-	     (gnu services mcron)
-	     (gnu services virtualization)
-	     (gnu services xorg)
-	     (gnu system setuid)
 	     (guix channels)
 	     (nongnu packages fonts)
 	     (nongnu packages linux)
 	     (nongnu packages mozilla)
 	     (nongnu packages chromium)
 	     (nongnu system linux-initrd))
+
+(use-system-modules setuid)
+(use-package-modules admin firmware gnome linux networking package-management shells wm)
+(use-service-modules cups dbus desktop docker linux networking pm samba ssh syncthing mcron virtualization xorg)
 
 (define my-channels
   ;; Channels that should be available to
