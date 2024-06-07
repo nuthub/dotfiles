@@ -1658,6 +1658,23 @@ Before sending an email, I'd like to check some things.
   (add-hook 'message-send-hook #'jf/message-warn-if-no-attachments)
 #+end_src
 
+* Guix fixes
+** tramp / sftpd / gvfsd-fuse
+On my Guix system, the process for ~gvfsd-fuse~ is running as ~.gvfsd-fuse-real~. Therefore, the function ~tramp-process-running-p~ does not detect the running process. A similar problem exists with flathub package of emacs: https://github.com/flathub/org.gnu.emacs/issues/27 . Adding the advice from the issue helps, although it could be more elegant.
+
+#+begin_src emacs-lisp :tangle yes
+  (defun tramp-process-running-p--mock (process-name)
+    "gvfs* is always running."
+    (when (string-match "gvfs.*" process-name)
+      t))
+
+  (advice-add 'tramp-process-running-p
+  	    :before-until
+  	    #'tramp-process-running-p--mock)
+#+end_src
+
+Best option would be to fix ~tramp-process-running-p~ upstream. An emacs lisp version of ~pidof~ or ~pgrep~ would make it easier.
+
 * Global key bindings
 ** Increase / decrease text scale
 #+begin_src emacs-lisp
