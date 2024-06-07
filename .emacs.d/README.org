@@ -1530,6 +1530,8 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
     (setq mu4e-bookmarks
           '((:name "Combined inbox" :query "maildir:/private/INBOX OR maildir:/work/INBOX OR maildir:/tudo/INBOX" :key ?i)
             (:name "Unread messages" :query "flag:unread AND NOT flag:trashed" :key ?u)
+            (:name "Sent" :query "maildir:/private/Sent OR maildir:/work/Sent" :key ?s)
+            (:name "Archives" :query "maildir:/private/Archives/2024 OR maildir:/work/Archives/2024" :key ?a)
             (:name "Drafts" :query "maildir:/private/Drafts OR maildir:/work/Drafts" :key ?d)
   	  (:name "Mailing-Lists" :query "maildir:/private/INBOX/*" :key ?m)
             (:name "Today's messages" :query "date:today..now" :key ?n)
