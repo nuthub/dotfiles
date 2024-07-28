@@ -1403,6 +1403,19 @@ There is a package https://github.com/joostkremers/writeroom-mode?tab=readme-ov-
   	   :repo "nuthub/org-roam-citation-keyword-nodes"))
 #+end_src
 
+** Revert a buffer visiting a file that is optionally created
+I use this to trigger a reload of my generated calendar file after it has been rewritten.
+#+begin_src emacs-lisp
+  (defun jf/revert-file-visiting-buffer (filename)
+    "Reverts open buffer visiting FILENAME. If no buffer is visiting FILENAME, a buffer is created that visits FILENAME."
+    (save-excursion)
+    (or (find-buffer-visiting filename)
+        (find-file filename))
+    (set-buffer (find-buffer-visiting filename))
+    (revert-buffer nil t)
+    (message (concat filename " reverted")))
+#+end_src
+
 ** Open automounted drives
 From https://mbork.pl/2024-02-17_Opening_external_drives_in_Dired
 #+begin_src emacs-lisp
