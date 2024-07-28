@@ -801,16 +801,12 @@ Search for literature in literature databases like arxiv and dblp
 
 #+begin_src emacs-lisp
   (use-package tex
-    :ensure (auctex
-  	   :pre-build (("./autogen.sh")
-  		       ("./configure"
-  			"--without-texmf-dir"
-  			"--with-packagelispdir=./"
-  			"--with-packagedatadir=./")
-                         ("make"))
-  	   :build (:not elpaca--compile-info) ;; Make will take care of this step
-  	   :files ("*.el" "doc/*.info*" "etc" "images" "latex" "style")
-  	   :version (lambda (_) (require 'tex-site) AUCTeX-version))
+    :ensure
+    (auctex :repo "https://git.savannah.gnu.org/git/auctex.git" :branch "main"
+  	  :pre-build (("make" "elpa"))
+  	  :build (:not elpaca--compile-info) ;; Make will take care of this step
+  	  :files ("*.el" "doc/*.info*" "etc" "images" "latex" "style")
+  	  :version (lambda (_) (require 'tex-site) AUCTeX-version))
     :config
     (setq TeX-auto-save t)
     (setq TeX-parse-self t)
