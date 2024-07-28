@@ -1419,42 +1419,53 @@ If there is more than one, let the user choose."
     (setq ps-lpr-command "gtklp"))
 #+end_src
 
-* Calendar syncing
+* Calendar & Contact syncing
 
 - I use *vdirsyncer* to synchronize all my remote Calendars and Contacts with my home folder
 - I use *khal* to edit the ics files in my home folder (not really, but khal is installed now)
 - *khalel* is a package that allows me to interact with khal from within emacs and to create a (read only :( ) ~calendar.org~ file for inclusion in my agenda.
+- I use *khard* for editing vcards outside of Nextcloud
+- *khardel*, analogously to *khardel*, allows me to edit contacts from within Emacs
 
 #+begin_src emacs-lisp
   (use-package khalel
+    :ensure t
+    :after org
+      :config
+      ;; (setq khalel-khal-command "khal")
+      ;; (setq khalel-vdirsyncer-command "vdirsyncer")
+      (setq khalel-capture-key "k")
+      (setq khalel-default-calendar "Persönlich")
+      (setq khalel-import-org-file (concat org-directory "/" "calendar.org"))
+      (setq khalel-import-start-date "-2m")
+      (setq khalel-import-end-date "+12m")
+      (setq khalel-import-org-file-confirm-overwrite nil)
+      (setq khalel-import-format "* {title} {cancelled} :{calendar}:
+  :PROPERTIES:
+  :CALENDAR: {calendar}
+  :CATEGORY: {calendar}
+  :LOCATION: {location}
+  :ID: {uid}
+  :END:
+  - When: <{start-date-long} {start-time}>--<{end-date-long} {end-time}>
+  - Where: {location}
+  - Description: {description}
+  - URL: {url}
+  - Organizer: {organizer}
+
+  [[elisp:(khalel-edit-calendar-event)][Edit this event]]    [[elisp:(progn (khalel-run-vdirsyncer) (khalel-import-events))][Sync and update all]]
+  ")
+      (khalel-add-capture-template)
+      (require 'khalel-icalendar))
+
+  (use-package khardel
     :after org
     :config
-    ;; (setq khalel-khal-command "khal")
-    ;; (setq khalel-vdirsyncer-command "vdirsyncer")
-    (setq khalel-capture-key "k")
-    (setq khalel-default-calendar "Persönlich")
-    (setq khalel-import-org-file (concat org-directory "/" "calendar.org"))
-    (setq khalel-import-start-date "-2m")
-    (setq khalel-import-end-date "+12m")
-    (setq khalel-import-org-file-confirm-overwrite nil)
-    (setq khalel-import-format "* {title} {cancelled} :{calendar}:
-:PROPERTIES:
-:CALENDAR: {calendar}
-:CATEGORY: {calendar}
-:LOCATION: {location}
-:ID: {uid}
-:END:
-- When: <{start-date-long} {start-time}>--<{end-date-long} {end-time}>
-- Where: {location}
-- Description: {description}
-- URL: {url}
-- Organizer: {organizer}
-
-[[elisp:(khalel-edit-calendar-event)][Edit this event]]    [[elisp:(progn (khalel-run-vdirsyncer) (khalel-import-events))][Sync and update all]]
-")
-    (khalel-add-capture-template)
-    (require 'khalel-icalendar))
+    (require 'khardel)
+    (require 'khardel-org))
 #+end_src
+
+* Contact syncing
 
 * Mail configuration
 
