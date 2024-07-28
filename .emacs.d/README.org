@@ -175,6 +175,8 @@ Modus Themes
   (use-package doom-modeline
     :config
     ;;(setq doom-modeline-height 18)
+    (setq doom-modeline-total-line-number t)
+    (setq doom-modeline-mu4e t)
     (doom-modeline-mode 1))
 #+end_src
 
@@ -249,7 +251,7 @@ This is to hide minor modes from mode line. You can use `:diminish foo-mode` the
   		     (display-line-numbers-mode 1))))
 #+end_src
 
-** Smart paranthesis & Highlight parenthesis
+** Smart paranthesis & Highlight (rainbowishly) parenthesis
 
 An alternative to /smartparens/ is /paren/.
 
@@ -340,9 +342,9 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
      '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
         
     ;; beautiful bullets
-    (use-package org-bullets
+    (use-package org-superstar
       :config
-      (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))))
+      (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))))
 #+end_src
 
 *** Task Management, Agenda, Archive, Refiling
@@ -377,7 +379,7 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
           (quote
            ((buffer-read-only . 1))))
 
-    (setq org-agenda-window-setup 'reorganize-frame)
+    (setq org-agenda-window-setup 'current-window)
     (setq org-agenda-span 1)
     (setq org-agenda-time-grid
           '((daily today require-timed remove-match)
@@ -618,7 +620,7 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
 #+end_src
 
 *** Finally setup org
-#+begin_src emacs-lisp :noweb no-export
+#+begin_src emacs-lisp
   (use-package org :ensure nil ; already loaded, otherwise this won't get tangled
     ;; the bind may defer the package loading, see documentation (C-h f use-package RET)
     :bind (:map org-mode-map
@@ -725,14 +727,14 @@ htmlize is used by org to export to HTML.
                    :time-grid t)  ; Items that appear on the time grid
   	  (:name "Direct Actions"
   		 :tag ("direct"))
-  	  (:name "Personal"
-                   :tag ("personal"))
   	  (:name "Work"
                    :tag ("work" "teaching"))
   	  (:name "Promotion"
                    :tag "promotion")
   	  (:name "Reading"
                    :category "reading")
+  	  (:name "Personal"
+                   :tag ("personal"))
   	  (:name "House Routines"
                    :tag "house")
   	  (:name "Sailing"
