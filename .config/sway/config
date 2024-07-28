@@ -125,9 +125,9 @@ input type:keyboard {
 
     # Define workspaces and names
     set $ws0 0:org
-    set $ws1 1:mail
-    set $ws2 2:web
-    set $ws3 3:phd
+    set $ws1 1:cal
+    set $ws2 2:mail
+    set $ws3 3:web
     set $ws4 4
     set $ws5 5
     set $ws6 6
