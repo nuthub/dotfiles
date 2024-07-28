@@ -389,11 +389,17 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
     (setq org-agenda-custom-commands
           '(
             ("w" "Weekly cleanup" todo "CNCL|DONE")
+  	  ("d" "Deadlines" agenda "Show deadlines"
+  	   ((org-agenda-span 'year)
+  	    (org-agenda-time-grid nil)
+  	    (org-agenda-show-all-dates nil)
+  	    (org-agenda-entry-types '(:deadline)) ;; this entry excludes :scheduled
+  	    (org-deadline-warning-days 0)))
             ("c" "Important events" agenda* nil
              ((org-agenda-files '("~/org/calendar.org"))
               (org-agenda-span 7)
               (org-agenda-skip-function '(org-agenda-skip-entry-if
-                                          'regexp ":c3re:\\|:afh:\\|:mond:"))))
+                                          'regexp ":C3RE:\\|:AfH:\\|:Mond:"))))
             ("C" "All events" agenda* nil
              ((org-agenda-files '("~/org/calendar.org"))
               (org-agenda-span 7)))))
@@ -405,9 +411,7 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
     ;; Refiling
     (setq org-refile-targets (quote (("~/org/gtd.org" :maxlevel . 4)
                                      ("~/org/someday.org" :maxlevel . 1)
-                                     ("~/org/tickler.org" :maxlevel . 1)
-                                     ("~/org/events-personal.org" :maxlevel . 2)
-                                     ("~/org/events-rgse.org" :maxlevel . 2))))
+                                     ("~/org/tickler.org" :maxlevel . 1))))
     (setq org-refile-use-outline-path 'file)
     (setq org-refile-allow-creating-parent-nodes 'confirm)
     (setq org-outline-path-complete-in-steps nil)
@@ -630,6 +634,7 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
     :config
     (jf/org-setup-look-and-feel)
     (jf/org-setup-task-management-and-agenda)
+    (jf/org-setup-safe-elisp-links)
     (jf/org-setup-capture-templates)
     (jf/org-setup-latex-export)
     (jf/org-setup-babel)
