@@ -22,11 +22,18 @@ olat-umount:
 
 # Reconfigure the system
 guix-reconfigure:
-	sudo guix system reconfigure ~/.config/guix/config.scm
+	doas guix system reconfigure ~/.config/guix/config.scm
 
 # Pull latest Guix
 guix-pull:
 	guix pull
+
+# Free Space by deleting old Guix generations
+guix-clean:
+	guix package --delete-generations=1m & \
+	doas guix system delete-generations 1m && \
+	guix gc && \
+	exit 0
 
 # Run a Borg Backup to StorageBox
 backup-ssh:
