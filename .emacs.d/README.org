@@ -546,6 +546,7 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
      '((dot . t)
        (emacs-lisp .t)
        (java .t)
+       (plantuml .t)
        (shell . t)
        (sqlite . t)
        (latex . t))))
@@ -843,9 +844,21 @@ Two modes:
   (use-package yaml-mode)
 #+end_src
 
-** Platform.io
+** plantuml-mode
+
 #+begin_src emacs-lisp
-  (use-package platformio-mode)
+  (use-package plantuml-mode
+    :config
+    (setq org-plantuml-jar-path "~/Applications/plantuml.jar")
+    (setq plantuml-default-exec-mode 'jar)
+    (setq plantuml-output-type "svg"))
+#+end_src
+
+** COMMENT Platform.io
+CLOSED: [2024-04-30 Tue 22:41]
+Currently not in use, but pulls projectile as dependency. Therefore, I deactivated it
+#+begin_src emacs-lisp
+  ;; (use-package platformio-mode)
 #+end_src
 
 ** GUIX
