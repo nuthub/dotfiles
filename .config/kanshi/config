@@ -11,5 +11,6 @@ profile homey {
 	exec swaymsg workspace "2:web", move workspace to output '"Samsung Electric Company S27F350 H4ZH401164"'
 	exec swaymsg workspace "3:phd", move workspace to output '"Samsung Electric Company S27F350 H4ZH401164"'
 	exec swaymsg workspace "0:org"
+#	exec swaymsg reload
 }
 
