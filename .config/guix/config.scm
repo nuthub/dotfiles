@@ -259,8 +259,11 @@ guest only = yes\n"))))
 	   (service mcron-service-type
                     (mcron-configuration
                      (jobs (list
-			    #~(job "*\\15 * * * *"
+			    #~(job "0 * * * *"
 				   "/home/flake/.local/bin/sync-calendars.sh"
+				   #:user "flake")
+			    #~(job "30 * * * *"
+				   "/home/flake/.local/bin/mbsync-all.sh"
 				   #:user "flake")))))
 	   (service bluetooth-service-type)
 	   (service cups-service-type

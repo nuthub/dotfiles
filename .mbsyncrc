@@ -8,13 +8,10 @@ Expunge Both
 
 # private Mail
 
-IMAPAccount nuthost-imap
+IMAPStore private-remote
 Host nuthost.de
 User julian@flake.de
 PassCmd "grep nuthost.de ~/.authinfo | awk 'FNR == 1 {print $6}'"
-
-IMAPStore private-remote
-Account nuthost-imap
 
 MaildirStore private-local
 Path ~/Mail/private/
@@ -25,19 +22,17 @@ SubFolders Verbatim
 Channel private
 Far :private-remote:
 Near :private-local:
-Patterns * "!dovecot/*"
+# Patterns * "!dovecot/*" # this pattern did not work anymore (2024-09-02), see also https://sourceforge.net/p/isync/bugs/77/?limit=25 
+Patterns * "INBOX/*" "!dovecot/*"
 
 ######################
 ### Uni Koblenz
 
-IMAPAccount work-imap
+IMAPStore work-remote
 Host imap.uni-koblenz.de
-SSLType IMAPS
+TLSType IMAPS
 User flake
 PassCmd "grep uni-koblenz.de ~/.authinfo | awk 'FNR == 1 {print $6}'"
-
-IMAPStore work-remote
-Account work-imap
 
 MaildirStore work-local
 Path ~/Mail/work/
@@ -50,18 +45,14 @@ Far :work-remote:
 Near :work-local:
 Patterns * "!Shared Folders/*" "!Other Users/*"
 
-
 ######################
 ### TU Dortmund
 
-IMAPAccount tudo-imap
+IMAPStore tudo-remote
 Host unimail.tu-dortmund.de
-SSLType IMAPS
+TLSType IMAPS
 User smjuflak
 PassCmd "grep tu-dortmund.de ~/.authinfo | awk 'FNR == 1 {print $6}'"
-
-IMAPStore tudo-remote
-Account tudo-imap
 
 MaildirStore tudo-local
 Path ~/Mail/tudo/
@@ -73,3 +64,14 @@ Channel tudo
 Far :tudo-remote:
 Near :tudo-local:
 Patterns *
+
+#######################
+## Groups
+
+Group inboxes-only
+Channel private:INBOX work:INBOX
+
+Group all
+Channel private
+Channel work
+Channel tudo
