@@ -1544,7 +1544,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                                        "\\|^User-Agent:"))
 
     ;; receiving mails
-    (setq mu4e-get-mail-command "mbsync -a")
+    (setq mu4e-get-mail-command "mbsync inboxes-only")
     (setq mu4e-update-interval(* 5 60))
     (setq mu4e-maildir "~/Mail")
 
@@ -1580,6 +1580,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
             (:name "Sent" :query "maildir:/private/Sent OR maildir:/work/Sent" :key ?s)
             (:name "Archives" :query "maildir:/private/Archives/2024 OR maildir:/work/Archives/2024" :key ?a)
             (:name "Drafts" :query "maildir:/private/Drafts OR maildir:/work/Drafts" :key ?d)
+            (:name "Junk" :query "maildir:/private/Junk OR maildir:/work/Junk" :key ?j)
   	  (:name "Mailing-Lists" :query "maildir:/private/INBOX/*" :key ?m)
             (:name "Today's messages" :query "date:today..now" :key ?n)
             (:name "Last 7 days" :query "date:7d..now" :hide-unread t :key ?7)
@@ -1590,7 +1591,6 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
             ("/private/Archives/2024" . ?P)
   	  ("/private/autolearn/ham" . ?h)
   	  ("/private/autolearn/spam" . ?s)
-  	  ("/private/Junk" . ?j)
   	  ("/work/INBOX" . ?w)
             ("/work/Archives/2024" . ?W)
   	  ("/tudo/INBOX" . ?d)))

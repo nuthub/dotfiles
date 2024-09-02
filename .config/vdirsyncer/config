@@ -10,6 +10,7 @@ status_path = "~/.vdirsyncer/status/"
 
 # Uni -> nuthouse
 #
+## !! Currently necessary as Hetzner VM can't access Uni SOGo
 [pair rgse_nuthouse_calendar]
 a = "uniko_calendar_remote"
 b = "nuthouse_calendar_remote"
@@ -29,7 +30,8 @@ conflict_resolution = "a wins"
 [pair nuthouse_contacts]
 a = "nuthouse_contacts_remote"
 b = "nuthouse_contacts_local"
-collections = ["from a", "from b"]
+#collections = ["from a", "from b"]
+collections = ["Kontakte"]
 metadata = ["displayname"]
 conflict_resolution = "a wins"
 
