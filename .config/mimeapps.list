@@ -5,10 +5,14 @@ x-scheme-handler/https=chromium.desktop
 x-scheme-handler/about=chromium.desktop
 x-scheme-handler/unknown=chromium.desktop
 x-scheme-handler/text/xml=emacsclient.desktop
+x-scheme-handler/mailto=emacsclient-my-mail.desktop
 application/pdf=emacsclient.desktop
+text/plain=emacsclient.desktop
 image/jpeg=imv.desktop
 image/png=imv.desktop
-text/plain=emacsclient.desktop
+video/x-matroska=mpv.desktop
+video/mp4=mpv.desktop
+video/mpeg=mpv.desktop
 
 [Added Associations]
 image/jpeg=imv.desktop;emacsclient.desktop;
@@ -16,3 +20,6 @@ image/png=imv.desktop;emacsclient.desktop;
 inode/symlink=emacsclient.desktop;
 text/x-java=emacsclient.desktop;
 text/plain=emacsclient.desktop;
+video/x-matroska=mpv.desktop;
+video/mp4=mpv.desktop;
+video/mpeg=mpv.desktop;
