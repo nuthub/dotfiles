@@ -1,13 +1,5 @@
-;; This is an operating system configuration generated
-;; by the graphical installer.
-;;
-;; Once installation is complete, you can learn and modify
-;; this file to tweak the system configuration, and pass it
-;; to the 'guix system reconfigure' command to effect your
-;; changes.
+;; This is my operating system configuration
 
-;; Indicate which modules to import to access the variables
-;; used in this configuration.
 (use-modules (gnu)
 	     (guix channels)
 	     (nongnu packages fonts)
@@ -45,8 +37,7 @@
       (make-channel-introduction
        "1fe9a666b2e6c3398a5057f861986d3183bdab2a"
        (openpgp-fingerprint
-	"99A2 CE39 CD81 BD0A 0423  3B9D A998 EA3B DF45 39EF")))))
-   
+	"99A2 CE39 CD81 BD0A 0423  3B9D A998 EA3B DF45 39EF")))))   
    %default-channels))
 
 ;;;
@@ -192,7 +183,8 @@
 			  "lxappearance" "qt5ct"
 			  ;; my desktop apps
 			  "nemo" "file-roller" "baobab" "gvfs"
-			  "firefox" "icedove" "ungoogled-chromium-wayland"
+			  "ungoogled-chromium-wayland" "firefox-esr-wayland"
+			  "icedove-wayland" ; thunderbird
 			   ;;; "aqbanking" "gnucash"
 			  "libreoffice"
 			  ;; Office, LaTeX, PDF & Co
