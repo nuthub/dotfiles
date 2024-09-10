@@ -100,7 +100,7 @@
 			  "intel-vaapi-driver"
 			  "intel-media-driver-nonfree" "libva-utils"
 			  ;; basics
-			  "git" "git:send-email" "git:gui"
+			  "git" "git:send-email" "git:gui" "mumi"
 			  "bash"
 			  "gnupg"
 			  "opendoas" ; install it additionally to make man pages available
