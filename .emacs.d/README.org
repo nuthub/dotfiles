@@ -692,7 +692,7 @@ Build a second brain with org-roam.
     (setq org-roam-dailies-capture-templates '(
                                                ("d" "default" entry "* %?"
                                                 :target
-                                                (file+head "%<%Y-%m-%d_%A>.org" "#+title: %<%Y-%m-%d (%A)>\n#+filetags: daily\n\n- Links: [[id:b3cb74b2-a385-4132-a55e-8cf561eed9fc][Journaling]]\n* Träume\n* Daily Planing\n- [ ] Journal [[elisp:(org-roam-dailies-goto-yesterday 1)][yesterday]]\n- [ ] Process [[file:~/Syncthing/org/inbox.org][inbox]]\n- [ ] Check [[elisp:(mu4e)][mails]]\n- [ ] Check [[elisp:(org-agenda-list)][agenda]]\n* Emotionen\n")))) ; org-roam-dailies-capture-templaes
+                                                (file+head "%<%Y-%m-%d_%A>.org" "#+title: %<%Y-%m-%d (%A)>\n#+filetags: daily\n\n- Links: [[id:b3cb74b2-a385-4132-a55e-8cf561eed9fc][Journaling]]\n* Träume\n* Daily Planing\n- [ ] Journal [[elisp:(org-roam-dailies-goto-yesterday 1)][yesterday]]\n- [ ] Process [[file:~/Syncthing/org/inbox.org][inbox]]\n- [ ] Check [[elisp:(mu4e)][mails]]\n- [ ] Check [[elisp:(org-agenda-list)][agenda]]\n* Emotionen\n** Drei Dinge, für die ich dankbar bin\n1. \n2. \n3. ")))) ; org-roam-dailies-capture-templaes
     ) ; org-roam
 #+end_src
 
