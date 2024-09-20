@@ -443,15 +443,10 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
   	'(
     	  ("t" "Todo" entry (file "~/org/inbox.org")
              "* TODO %?\n  %i")
-  	  
-    	  ("T" "Todo from Mail" entry (file "~/org/inbox.org")
-             "* TODO %?\nSCHEDULED: %t\nMail von %:fromname: %a")
-  	  
-    	  ("e" "Event" entry (file+headline "~/org/events-personal.org" "Inbox")
-  	   "* %^{Event Title}\n\n%^{Date and Time}T\nLocation: %^{Location}\n\n%i%?" :time-prompt t)
-  	  
-    	  ("E" "Event from Mail" entry (file+headline "~/org/events-personal.org" "Inbox")
-  	   "* %^{Event Title|%:subject}\n\n%^{Date and Time}T\n- Location: %^{Location}\n- Invitation: %a\n\n%i%?" :time-prompt t))))
+    	  ("m" "Todo from Mail" entry (file "~/org/inbox.org")
+             "* TODO %?\nSCHEDULED: %t\nMail from %:fromname: %a")
+    	  ("l" "Todo with Link" entry (file "~/org/inbox.org")
+             "* TODO %?\nSCHEDULED: %t\nLink: %a"))))
 #+end_src
 
 *** LaTeX export classes + beamer support
