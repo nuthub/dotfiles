@@ -644,6 +644,13 @@ For syntax highlighted source code blocks, I use the font-locking mode of emacs.
   (use-package engrave-faces)
 #+end_src
 
+** Org mode scratch buffer
+
+#+begin_src emacs-lisp
+  (setq initial-scratch-message "* Org Mode Scratch Buffer\n\n")
+  (setq initial-major-mode 'org-mode)
+#+end_src
+
 ** org-roam
 Build a second brain with org-roam.
 #+begin_src emacs-lisp
