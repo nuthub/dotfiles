@@ -271,6 +271,7 @@ guest only = yes\n"))))
 		     (web-interface? #t)
 		     (default-paper-size "A4")))
 	   (service tlp-service-type)
+	   (service containerd-service-type)
 	   (service docker-service-type)
 	   (service gnome-keyring-service-type)
 	   (service screen-locker-service-type
@@ -284,10 +285,11 @@ guest only = yes\n"))))
 		    (libvirt-configuration
 		     (unix-sock-group  "libvirt")))
 	   (service kernel-module-loader-service-type '("v4l2loopback"))
-	   (udev-rules-service 'logitech-unify
-			       (file->udev-rule
-				"42-logitech-unify-permissions.rules"
-				(file-append solaar "/share/solaar/udev-rules.d/42-logitech-unify-permissions.rules")))
+	   (udev-rules-service 'solaar-udev-rules solaar)
+	   ;; (udev-rules-service 'logitech-unify
+	   ;; 		       (file->udev-rule
+	   ;; 			"42-logitech-unify-permissions.rules"
+	   ;; 			(file-append solaar "/share/solaar/udev-rules.d/42-logitech-unify-permissions.rules")))
 
 	   ;;(service geoclue-service-type) 
 	   ;; (simple-service 'geoclue-polkit-rule polkit-service-type 
