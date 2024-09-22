@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: cutstart
+# key: cutstart
+# --
+--8<---------------cut here---------------start------------->8---
+$0
