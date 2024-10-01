@@ -1,6 +1,7 @@
 ;; This is my operating system configuration
 
 (use-modules (gnu)
+	     (gnu system locale)
 	     (guix channels)
 	     (nongnu packages fonts)
 	     (nongnu packages linux)
@@ -47,8 +48,11 @@
  (kernel linux)
  (initrd microcode-initrd)
  (firmware (list linux-firmware))
- (kernel-loadable-modules (list v4l2loopback-linux-module))
+ (kernel-loadable-modules (list v4l2loopback-linux-module)) 
  (locale "en_US.utf8")
+ (locale-definitions (cons (locale-definition
+			    (name "de_DE.utf8") (source "de_DE"))
+			   %default-locale-definitions))
  (timezone "Europe/Berlin")
  (keyboard-layout (keyboard-layout "de" #:options '("ctrl:nocaps")))
  (host-name "nutbook")
