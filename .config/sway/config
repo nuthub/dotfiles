@@ -327,10 +327,11 @@ for_window [title="MGC"] floating enable # MazeGameClient
 
 # Autostart
 exec_always --no-startup-id "pkill kanshi; exec kanshi"
-
 exec --no-startup-id {
     dbus-update-activation-environment --all
     gnome-keyring-daemon
+    gsettings set org.gnome.desktop.interface icon-theme "Papirus-Dark"
+    gsettings set org.gnome.desktop.interface gtk-theme "Adwaita-Dark"
     lxqt-policykit-agent
     nm-applet
     blueman-applet
