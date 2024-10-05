@@ -16,6 +16,11 @@ export TERMINAL=alacritty
 export EDITOR="emacsclient -nc"
 export XDG_DATA_DIRS=$XDG_DATA_DIRS:/var/lib/flatpak/exports/share:/home/flake/.local/share/flatpak/exports/share
 
+# FCC unlock my WWAN module
+if [ -c /dev/wwan0mbim0 ]; then
+    mbimcli -p -d /dev/wwan0mbim0 --quectel-set-radio-state=on
+fi
+
 # If running from tty1 start sway
 if [ "$(tty)" = "/dev/tty1" ]; then
     ## set wayland relevant env variables

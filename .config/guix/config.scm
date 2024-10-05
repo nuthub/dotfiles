@@ -10,8 +10,8 @@
 	     (nongnu system linux-initrd))
 
 (use-system-modules setuid)
-(use-package-modules admin firmware gnome linux networking package-management shells wm)
-(use-service-modules cups dbus desktop docker linux networking pm samba ssh syncthing mcron virtualization xorg)
+(use-package-modules admin firmware gnome freedesktop linux networking package-management shells wm)
+(use-service-modules authentication cups dbus desktop docker linux networking pm samba ssh syncthing mcron virtualization xorg)
 
 ;;;
 ;;; My OS
@@ -19,7 +19,7 @@
 (operating-system
  (kernel linux)
  (initrd microcode-initrd)
- (firmware (list linux-firmware))
+ (firmware (list linux-firmware i915-firmware sof-firmware))
  (kernel-loadable-modules (list v4l2loopback-linux-module)) 
  (locale "en_US.utf8")
  (locale-definitions (cons (locale-definition
@@ -65,14 +65,17 @@
 	       %base-user-accounts))
  (setuid-programs
   (append (list (setuid-program
-		 (program (file-append opendoas "/bin/doas"))))
+		 (program (file-append opendoas "/bin/doas")))
+		(setuid-program
+		 (program (file-append kbd "/bin/chvt")))
+		(setuid-program
+		 (program (file-append libmbim "/bin/mbimcli"))))
 	  %setuid-programs))
 
  ;; Packages installed system-wide.
  (packages (append (map (compose list specification->package+output)
 			'(
 			  ;; hardware related
-			  "i915-firmware"
 			  "intel-vaapi-driver"
 			  "intel-media-driver-nonfree" "libva-utils"
 			  ;; basics
@@ -101,6 +104,7 @@
 			  "htop"
 			  "jq" ; needed by sway / zoom
 			  "just"
+			  "modem-manager" "libmbim"
 			  "neofetch"
 			  "net-tools" ; for ifconfig  netstat  route
 			  "nmap"

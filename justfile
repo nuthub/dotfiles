@@ -46,3 +46,11 @@ backup-hdd:
 # Deploy dotfiles
 stow-dotfiles:
 	cd ~/.dotfiles && stow .
+
+# FCC Unlock
+fcc-unlock:
+	mbimcli -p -d /dev/wwan0mbim0 --quectel-set-radio-state=on
+
+# FCC Status
+fcc-status:
+	mbimcli -p -d /dev/wwan0mbim0 --quectel-query-radio-state
