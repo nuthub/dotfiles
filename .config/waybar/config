@@ -7,10 +7,10 @@
     // Choose the order of the modules
     "modules-left": ["sway/workspaces", "sway/mode", "sway/scratchpad", "sway/window"],
     "modules-center": [],
-    "modules-right": ["network", "cpu", "memory", "temperature", "battery", "backlight", "wireplumber", "user", "clock", "tray", "idle_inhibitor", "custom/notification"],
+    "modules-right": ["network", "cpu", "memory", "temperature", "custom/platform-profile", "battery", "backlight", "wireplumber", "user", "clock", "tray", "idle_inhibitor", "custom/notifications"],
 
     "sway/mode": {
-        "format": "<span style=\"italic\">{}</span>"
+        "format": "<span color=\"#FF9999\">{}</span>"
     },
 
     "sway/scratchpad": {
@@ -39,7 +39,16 @@
         }
     },
 
-    "custom/notification": {
+    "custom/platform-profile" : {
+      "on-click"  : "~/.config/waybar/get_platform_profile.sh",
+      "exec"  : "~/.config/waybar/get_platform_profile.sh",
+      "interval" : 10,
+      "format" : "{}",
+      "tooltip": true,
+      "tooltip-format" : "Fn+L = low-power\nFn+M = balanced\nFn+H = performance"
+    },
+
+    "custom/notifications": {
       "tooltip": false,
       "format": "{icon} {}",
       "format-icons": {
@@ -52,6 +61,7 @@
 	"dnd-inhibited-notification": "<span foreground='red'><sup></sup></span>",
 	"dnd-inhibited-none": ""
       },
+      "class": "custom-notifications",
       "return-type": "json",
       "exec-if": "which swaync-client",
       "exec": "swaync-client -swb",
@@ -93,8 +103,9 @@
 
     "network": {
         "interval": 2,
-        "format": "↑{bandwidthUpBytes} ↓{bandwidthDownBytes}",
-        "tooltip-format": "{ifname}: ↑{bandwidthUpBytes} ↓{bandwidthDownBytes} ",
+	"format-disconnected": "offline", //An empty format will hide the module.
+        "tooltip-format": "{ifname} ↑{bandwidthUpBytes} ↓{bandwidthDownBytes}",
+        "format": "{ifname}  {essid}",
     },
 
     "cpu": {

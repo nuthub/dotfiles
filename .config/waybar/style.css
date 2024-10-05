@@ -8,6 +8,9 @@ window#waybar {
     color: #ffffff;
     transition-property: background-color;
     transition-duration: .5s;
+    /*background: @theme_base_color;*/
+    border-bottom: 1px solid @unfocused_borders;
+    color: @theme_text_color;
 }
 
 window#waybar.hidden {
@@ -81,6 +84,8 @@ button:hover {
 #network,
 #pulseaudio,
 #wireplumber,
+#custom-notifications,
+#custom-platform-profile,
 #custom-media,
 #tray,
 #mode,
