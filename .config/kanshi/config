@@ -7,9 +7,9 @@ profile homey {
 	output "Samsung Electric Company S27F350 H4ZH401164" position 1920,0
 	output eDP-1 disable
 	exec swaymsg workspace "0:org", move workspace to output '"Samsung Electric Company S27F350 H4ZH401164"'
-	exec swaymsg workspace "1:mail", move workspace to output '"Samsung Electric Company S27F350 H4ZH401164"'
-	exec swaymsg workspace "2:web", move workspace to output '"Samsung Electric Company S27F350 H4ZH401164"'
-	exec swaymsg workspace "3:phd", move workspace to output '"Samsung Electric Company S27F350 H4ZH401164"'
+	exec swaymsg workspace "1:cal", move workspace to output '"Samsung Electric Company S27F350 H4ZH401164"'
+	exec swaymsg workspace "2:mail", move workspace to output '"Samsung Electric Company S27F350 H4ZH401164"'
+	exec swaymsg workspace "3:web", move workspace to output '"Samsung Electric Company S27F350 H4ZH401164"'
 	exec swaymsg workspace "0:org"
 #	exec swaymsg reload
 }
