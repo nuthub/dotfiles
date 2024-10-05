@@ -26,8 +26,8 @@
         "format": "{shell}@@{app_id}@@{title}",
 	"rewrite": {
 	  "@@@@": "", // in case no window is focused
-	  "(xwayland)@@(.*)@@(.*)": "[<span color=\"#FF9999\">X: $2</span>] $3", // format app_id for X apps
-          "(xdg_shell)@@(.*)@@(.*)": "[<span color=\"#FF9999\">$2</span>] $3", // format app_id for wayland apps
+	  "(xwayland)@@(.*)@@(.*)": "[X:$2] $3", // format app_id for X apps
+          "(xdg_shell)@@(.*)@@(.*)": "[$2] $3", // format app_id for wayland apps
 	}
     },
 
