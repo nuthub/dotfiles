@@ -43,10 +43,6 @@ backup-ssh:
 backup-hdd:
 	borg-backup.sh hdd
 
-# Start lxappearance in wayland
-appearance:
-	GDK_BACKEND=x11 lxappearance
-
 # Deploy dotfiles
 stow-dotfiles:
 	cd ~/.dotfiles && stow .

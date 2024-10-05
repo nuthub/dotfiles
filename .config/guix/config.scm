@@ -156,7 +156,7 @@
 			  "pinentry" "pinentry-tty" "gnupg" "openssh" "password-store"
 			  "wireguard-tools" "openvpn" "network-manager-openvpn" "openfortivpn" "network-manager-fortisslvpn"
 			  "lxqt-policykit"
-			  "lxappearance" "qt5ct"
+			  "qt5ct"
 			  ;; my desktop apps
 			  "nemo" "file-roller" "baobab" "gvfs"
 			  "ungoogled-chromium-wayland" "firefox-esr-wayland"
