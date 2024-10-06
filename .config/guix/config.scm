@@ -199,10 +199,9 @@
 			  ;; themes
 			  "gnome-themes-extra"
 			  ;; icons
-			  "adwaita-icon-theme"
-			  "elementary-xfce-icon-theme" "hicolor-icon-theme" ; (gives nice icons in waybar also)
+			  "papirus-icon-theme"
 			  ;; from nutguix
-			  "wl-mirror" "gtklp" "astah-professional"
+			  "gtklp" "astah-professional"
 			  ))
 		   %base-packages))
 

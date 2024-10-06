@@ -165,8 +165,7 @@ Modus Themes
 #+begin_src emacs-lisp
   (use-package modus-themes
     :config
-    (load-theme 'modus-operandi t))
-;;  (load-theme 'modus-vivendi t))
+    (load-theme 'modus-vivendi t))
 #+end_src
 
 ** doom-modeline (a beautiful modeline)

@@ -1,3 +1,2 @@
-#TITLE: My dotfiles
-
+* My dotfiles
 I use [[https://www.gnu.org/software/stow/][GNU Stow]] to create links from my home directory into this repository. Quite convenient, I'm happy with that.

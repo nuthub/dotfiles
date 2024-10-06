@@ -16,6 +16,8 @@ export TERMINAL=alacritty
 export EDITOR="emacsclient -nc"
 export XDG_DATA_DIRS=$XDG_DATA_DIRS:/var/lib/flatpak/exports/share:/home/flake/.local/share/flatpak/exports/share
 
+export GTK_THEME=Adwaita:dark
+
 # FCC unlock my WWAN module
 if [ -c /dev/wwan0mbim0 ]; then
     mbimcli -p -d /dev/wwan0mbim0 --quectel-set-radio-state=on
