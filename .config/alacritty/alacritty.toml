@@ -1,5 +1,5 @@
-#import = ["/home/flake/.config/alacritty/alacritty-themes/themes/modus-vivendi.toml"]
-import = ["/home/flake/.config/alacritty/alacritty-themes/themes/modus-operandi.toml"]
+# import = ["~/.config/alacritty/lightmode.toml"]
+import = ["~/.config/alacritty/darkmode.toml"]
 
 [colors]
 draw_bold_text_with_bright_colors = true
