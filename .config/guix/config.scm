@@ -133,11 +133,12 @@
 			  ;; XDG
 			  "xdg-utils" "xdg-user-dirs"
 			  ;; I need all of these portals
-			  "xdg-desktop-portal" "xdg-desktop-portal-gtk" "xdg-desktop-portal-wlr"
+			  "xdg-desktop-portal-gtk" "xdg-desktop-portal-wlr" ; "xdg-desktop-portal" is propagated by xdg-desktop-portal-gtk
 			  ;; wayland, not sure what I really need
 			  "wlr-randr" "wdisplays" "slurp" ; "grim" "swappy" "grimshot" "egl-wayland" "xorg-server-xwayland" 
 			  ;; sway
 			  "sway" "waybar" "wofi" "swaylock" "swayidle" "swaynotificationcenter" "libnotify"
+			  "wl-mirror"
 			  "wl-clipboard" "clipman" "wtype" ; wofi-emoji needs wtype
 			  "wob" ; OSD overlay
 			  "alacritty"
@@ -181,7 +182,7 @@
 			  "flameshot" "qtwayland@5.15.10" ; flameshot needs qtwayland@5
 			  "ristretto" "gimp"
 			  "imagemagick" "optipng"
-			  "cheese" "ffmpeg" "obs" "handbrake" ; obs-wlrobs is not necessary, if pipewire is running
+			  "cheese" "obs" "handbrake" ; obs-wlrobs is not necessary, if pipewire is running
 			  "simple-scan" "xsane"
 			  ;; Virtualization
 			  "qemu" "virt-manager" "ovmf-x86-64"
