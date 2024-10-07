@@ -164,7 +164,7 @@
 			  "qt5ct"
 			  ;; my desktop apps
 			  "nemo" "file-roller" "baobab" "gvfs"
-			  "ungoogled-chromium-wayland" "firefox-esr-wayland"
+			  "librewolf" "ungoogled-chromium-wayland" "firefox-esr-wayland"
 			  "icedove-wayland" ; thunderbird
 			   ;;; "aqbanking" "gnucash"
 			  "libreoffice"
