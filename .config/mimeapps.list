@@ -1,11 +1,11 @@
 [Default Applications]
-text/html=chromium.desktop
-x-scheme-handler/http=chromium.desktop
-x-scheme-handler/https=chromium.desktop
-x-scheme-handler/about=chromium.desktop
-x-scheme-handler/unknown=chromium.desktop
+text/html=librewolf.desktop
+x-scheme-handler/http=librewolf.desktop
+x-scheme-handler/https=librewolf.desktop
+x-scheme-handler/about=librewolf.desktop
+x-scheme-handler/unknown=librewolf.desktop
 x-scheme-handler/text/xml=emacsclient.desktop
-x-scheme-handler/mailto=emacsclient-my-mail.desktop
+x-scheme-handler/mailto=my-emacsclient-mail.desktop
 application/pdf=emacsclient.desktop
 text/plain=emacsclient.desktop
 image/jpeg=imv.desktop
