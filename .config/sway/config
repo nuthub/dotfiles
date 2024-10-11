@@ -1,5 +1,9 @@
 # Read `man 5 sway` for a complete reference.
 
+
+# set cursor
+seat seat0 xcursor_theme Bibata-Original-Classic
+
 ### Variables
 #
 # Logo key. Use Mod1 for Alt.
@@ -16,33 +20,17 @@ set $menu wofi
 
 ### Output configuration
 #
-# Default wallpaper (more resolutions are available in /gnu/store/5078j30nj5p179qci5p46lvcyjja42qh-sway-1.8/share/backgrounds/sway/)
-#output * bg /gnu/store/5078j30nj5p179qci5p46lvcyjja42qh-sway-1.8/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 output * bg ~/.background-image fill
-
-#
-# Example configuration:
-#
-#   output HDMI-A-1 resolution 1920x1080 position 1920,0
-#
-# You can get the names of your outputs by running: swaymsg -t get_outputs
-#output eDP-1 position 3840 0
-#output "Samsung Electric Company S27F350 HNHHA04215" position 0 0
-#output "Samsung Electric Company S27F350 H4ZH401164" position 1920 0
-# exec swaymsg focus output <name-or-identifier> # focus on launch
-
-# font(s)
-# font pango: "NotoSans FiraCode FontAwesome" Regular 10
 
 # borders
 
 # avoid title bars
-default_border pixel 3
+default_border pixel 5
 hide_edge_borders smart
 default_floating_border pixel 3
 
 # gaps
-gaps inner 10px
+gaps inner 5px
 gaps outer 0px
 smart_gaps on
 
@@ -327,7 +315,6 @@ exec --no-startup-id {
     lxqt-policykit-agent
     nm-applet
     blueman-applet
-    nextcloud --background
     udiskie -s # -t or -s (show applet always or with actions available only
     solaar -w hide
     gammastep-indicator
@@ -335,4 +322,5 @@ exec --no-startup-id {
     pipewire-pulse
     wireplumber
     emacs --daemon
+    nextcloud --background
 }

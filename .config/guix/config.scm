@@ -197,10 +197,12 @@
 			  "font-google-noto-emoji" ; Emoji support
 			  "font-google-noto-serif-cjk" "font-google-noto-sans-cjk" ; chinese fonts
 			  "font-microsoft-arial" "font-microsoft-times-new-roman" "font-microsoft-courier-new" ; Microsoft fonts
-			  ;; themes
-			  "gnome-themes-extra"
-			  ;; icons
+			  ;; Themes
+			  "arc-theme" "materia-theme" "gnome-themes-extra" ; decide for one
+			  ;; Icons
 			  "papirus-icon-theme"
+			  ;; Cursors
+			  "xcursor-themes" "bibata-cursor-theme"
 			  ;; from nutguix
 			  "gtklp" "astah-professional"
 			  ))

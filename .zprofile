@@ -16,13 +16,6 @@ export TERMINAL=alacritty
 export EDITOR="emacsclient -nc"
 export XDG_DATA_DIRS=$XDG_DATA_DIRS:/var/lib/flatpak/exports/share:/home/flake/.local/share/flatpak/exports/share
 
-export GTK_THEME=Adwaita:dark
-
-# FCC unlock my WWAN module
-if [ -c /dev/wwan0mbim0 ]; then
-    mbimcli -p -d /dev/wwan0mbim0 --quectel-set-radio-state=on
-fi
-
 # If running from tty1 start sway
 if [ "$(tty)" = "/dev/tty1" ]; then
     ## set wayland relevant env variables
@@ -41,6 +34,10 @@ if [ "$(tty)" = "/dev/tty1" ]; then
     export JAVA_HOME=$(builtin cd $(dirname $(readlink $(which java)))"/.."; pwd)
     ## Fix some Java GUIs
     export export _JAVA_AWT_WM_NONREPARENTING=1
+
+    # Set some sway look&feel options
+    export GTK_THEME=Materia-dark
+
     ## actually start sway with a dbus user session
     exec dbus-run-session -- sway > .sway.log 2>&1
 fi

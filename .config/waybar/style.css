@@ -1,12 +1,9 @@
 * {
-    /* `otf-font-awesome` is required to be installed for icons */
     transition-property: background-color;
     transition-duration: .5s;
 }
 
 window#waybar {
-    transition-property: background-color;
-    transition-duration: .5s;
     background: @theme_base_color;
     border-bottom: 1px solid @unfocused_borders;
     color: @theme_text_color;
@@ -14,24 +11,6 @@ window#waybar {
 
 window#waybar.hidden {
     opacity: 0.2;
-}
-
-/*
-window#waybar.empty {
-    background-color: transparent;
-}
-window#waybar.solo {
-    background-color: #FFFFFF;
-}
-*/
-
-window#waybar.termite {
-    background-color: #3F3F3F;
-}
-
-window#waybar.chromium {
-    background-color: #000000;
-    border: none;
 }
 
 button {
@@ -48,15 +27,15 @@ button:hover {
 }
 
 #workspaces button {
-    padding: 0 5px;
+    padding: 0 2px;
 }
 
 #workspaces button:hover {
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.8);
 }
 
 #workspaces button.focused {
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.8);
 }
 
 #workspaces button.urgent {
@@ -68,25 +47,25 @@ button:hover {
     color: #ff0000;
 }
 
-#clock,
-#battery,
-#cpu,
-#memory,
-#disk,
-#temperature,
-#backlight,
-#network,
-#pulseaudio,
-#wireplumber,
-#custom-notifications,
-#custom-platform-profile,
-#tray,
-#mode,
-#idle_inhibitor,
-#scratchpad,
-#user {
-    padding: 0 10px;
-}
+/* #clock, */
+/* #battery, */
+/* #cpu, */
+/* #memory, */
+/* #disk, */
+/* #temperature, */
+/* #backlight, */
+/* #network, */
+/* #pulseaudio, */
+/* #wireplumber, */
+/* #custom-notifications, */
+/* #custom-platform-profile, */
+/* #tray, */
+/* #mode, */
+/* #idle_inhibitor, */
+/* #scratchpad, */
+/* #user { */
+/*     padding: 0 10px; */
+/* } */
 
 #window,
 #workspaces {
