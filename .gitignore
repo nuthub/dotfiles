@@ -12,3 +12,5 @@
 /.emacs.d/.dap-breakpoints
 /.emacs.d/nov-places
 /.local/bin/guix-shell-*.sh
+/.local/share/Trash/
+/.local/share/clipman.json
