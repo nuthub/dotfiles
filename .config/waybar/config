@@ -8,7 +8,7 @@
     // Choose the order of the modules
     "modules-left": ["sway/workspaces", "sway/mode", "sway/scratchpad", "sway/window"],
     "modules-center": [],
-    "modules-right": ["custom/connections", "battery", "temperature", "custom/platform-profile", "cpu", "memory", "backlight", "wireplumber", "user", "clock", "tray", "idle_inhibitor", "custom/notifications"],
+    "modules-right": ["custom/connections", "battery", "temperature", "custom/platform-profile", "cpu", "memory", "backlight", "wireplumber", "user", "clock", "custom/screenshot", "tray", "idle_inhibitor", "custom/notifications"],
 
     "sway/mode": {
         "format": "<span color=\"#FF9999\">{}</span>"
@@ -56,19 +56,12 @@
       "format" : "{icon} {}",
       "format-icons": ""
     },
+
     "network": {
 	"interface" : "wlp9s0f0",
         "interval": 2,
         "tooltip-format": "{ifname} ↑{bandwidthUpBytes} ↓{bandwidthDownBytes}",
         "format": "{essid}",
-	"format-disconnected": ""
-    },
-    "network#2": {
-	"interface" : "wwan0",
-        "interval": 2,
-	"format-disconnected": "offline", //An empty format will hide the module.
-        "tooltip-format": "{ifname} ↑{bandwidthUpBytes} ↓{bandwidthDownBytes}",
-	"format": "O2",
 	"format-disconnected": ""
     },
 
@@ -92,6 +85,14 @@
       "on-click": "swaync-client -d -sw",
       "on-click-right": "swaync-client -t -sw",
       "escape": true
+    },
+
+    "custom/screenshot": {
+      "on-click"  : "~/.local/bin/screenshot.sh",
+      "tooltip" : true,
+      "tooltip-format" : "Take Screenshot",
+      "format" : "{icon} {}",
+      "format-icons": ""
     },
 
     "tray": {

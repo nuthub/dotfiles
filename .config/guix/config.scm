@@ -135,7 +135,7 @@
 			  ;; I need all of these portals
 			  "xdg-desktop-portal-gtk" "xdg-desktop-portal-wlr" ; "xdg-desktop-portal" is propagated by xdg-desktop-portal-gtk
 			  ;; wayland, not sure what I really need
-			  "wlr-randr" "wdisplays" "slurp" ; "grim" "swappy" "grimshot" "egl-wayland" "xorg-server-xwayland" 
+			  "wlr-randr" "wdisplays" "slurp" "grim" "swappy" ; "grimshot" "egl-wayland" "xorg-server-xwayland" 
 			  ;; sway
 			  "sway" "waybar" "wofi" "swaylock" "swayidle" "swaynotificationcenter" "libnotify"
 			  "wl-mirror"
