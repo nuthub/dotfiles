@@ -1517,7 +1517,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
 
 #+begin_src emacs-lisp
   (use-package mu4e
-    :if (s-starts-with? "nutbook" (system-name))
+    :if (string-prefix-p "nutbook" (system-name))
     :ensure nil ;; use the system installed version (elpaca keyword)
     :config
     (define-key mu4e-view-mode-map (kbd "C--") nil t) ; remove key binding
