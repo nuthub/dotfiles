@@ -173,7 +173,7 @@
       ;; Look & Feel
       ;; fonts
       "font-fira-code" ; "font-hack" is also nice, but doesn't support ligatures
-      "font-awesome" ; some icons
+      "font-awesome6" ; some icons, unfortunately fontawesome is an outdated version: https://issues.guix.gnu.org/32916
       ;; Nerd-Fonts are installed by M-x nerd-icons-install-fonts
       ;; all-the-icons are installed by M-x all-the-icons-install-fonts
       "font-google-noto" ; broad range of 
@@ -184,7 +184,6 @@
       "arc-theme" "materia-theme" "gnome-themes-extra" ; decide for one
       ;; Icons
       "papirus-icon-theme" ; uses a lot of inodes: https://github.com/PapirusDevelopmentTeam/papirus-icon-theme/issues/3563 and https://issues.guix.gnu.org/68561
-      "lxde-icon-theme" "qogir-icon-theme"
       ;; Cursors
       "xcursor-themes" "bibata-cursor-theme"
       ;; from nutguix
