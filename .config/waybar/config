@@ -8,7 +8,7 @@
     // Choose the order of the modules
     "modules-left": ["sway/workspaces", "sway/mode", "sway/scratchpad", "sway/window"],
     "modules-center": [],
-    "modules-right": ["custom/connections", "battery", "temperature", "custom/platform-profile", "cpu", "memory", "backlight", "wireplumber", "user", "clock", "custom/screenshot", "tray", "idle_inhibitor", "custom/notifications"],
+    "modules-right": ["custom/connections", "battery", "temperature", "power-profiles-daemon", "cpu", "memory", "backlight", "wireplumber", "user", "clock", "custom/screenshot", "tray", "privacy", "idle_inhibitor", "custom/notifications"],
 
     "sway/mode": {
         "format": "<span color=\"#FF9999\">{}</span>"
@@ -40,13 +40,16 @@
         }
     },
 
-    "custom/platform-profile" : {
-      "on-click"  : "~/.config/waybar/get_platform_profile.sh",
-      "exec"  : "~/.config/waybar/get_platform_profile.sh",
-      "interval" : 10,
-      "format" : "{}",
+    "power-profiles-daemon": {
+      "format": "{icon}",
+      "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
       "tooltip": true,
-      "tooltip-format" : "Fn+L = low-power\nFn+M = balanced\nFn+H = performance"
+      "format-icons": {
+	"default": "",
+	"performance": "",
+	"balanced": "",
+	"power-saver": ""
+      }
     },
 
     "custom/connections": {
@@ -89,6 +92,7 @@
 
     "custom/screenshot": {
       "on-click"  : "~/.local/bin/screenshot.sh",
+      "on-click-right" : "nemo ~/Screenshots",
       "tooltip" : true,
       "tooltip-format" : "Take Screenshot",
       "format" : "{icon} {}",
@@ -104,7 +108,7 @@
     "clock": {
         "timezone": "Europe/Berlin",
 	"locale": "de_DE.utf8",
-	"format": "{: W%W – %Y-%m-%d – %H:%M}",
+	"format": "{: W%W  %d.%m.  %H:%M}",
 	// ugly hack because of https://github.com/Alexays/Waybar/issues/2240#issuecomment-2064237563
 	// Example:            10 11 12 13 14 15 16 W00   10 11 12 13 14 15 16 W00   10 11 12 13 14 15 16 W00 
 	"tooltip-format": "<tt>                                                                              \n{calendar}</tt>",
@@ -115,7 +119,7 @@
 		"format": {
 		  "months":     "<span color='#ffead3'><b>{}</b></span>",
 		  "days":       "<span color='#dddddd'><b>{}</b></span>",
-		  "weeks":      "<span color='#888888'>W{:%W}</span>",
+		  "weeks":      "<span color='#11BB11'>W{:%W}</span>",
 		  "weekdays":   "<span color='#ffcc66'><b>{}</b></span>",
 		  "today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
 		}
@@ -179,6 +183,12 @@
         "height": 30,
         "width": 30,
         "icon": false,
+    },
+    
+    "privacy": {
+	"icon-spacing": 4,
+	"icon-size": 18,
+	"transition-duration": 250
     }
 }
 
