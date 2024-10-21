@@ -1,7 +1,7 @@
 (define %my-host-name
   "nutbook9")
 (define %my-firmware
-  (list linux-firmware i915-firmware sof-firmware))
+  (list linux-firmware intel-microcode i915-firmware sof-firmware))
 (define %my-file-systems
   (cons* (file-system (mount-point "/boot/efi")
 		      (device (uuid "5ABD-915C"
