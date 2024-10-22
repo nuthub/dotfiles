@@ -30,9 +30,9 @@ guix-pull:
 
 # Free Space by deleting old Guix generations
 guix-clean:
+	doas guix system delete-generations 1m & \
 	guix package --delete-generations=1m & \
-	doas guix system delete-generations 1m && \
-	guix gc && \
+	guix gc & \
 	exit 0
 
 # Run a Borg Backup to StorageBox
