@@ -7,10 +7,17 @@
 	     (nongnu system linux-initrd))
 
 (use-system-modules setuid)
-(use-package-modules admin firmware gnome freedesktop linux networking package-management shells wm)
+(use-package-modules admin firmware gnome freedesktop linux networking package-management shells wm  fonts)
 (use-service-modules authentication cups dbus desktop docker linux networking pm samba ssh syncthing mcron virtualization xorg)
 
 (load "x1-carbon-gen12.scm")
+
+;; home services
+;; https://guix.gnu.org/manual/devel/en/html_node/Home-Services.html
+;; Home Environments
+;; pipewire
+;; mcron
+;; syncthing
 
 (operating-system
  ;; host specific definiitons
@@ -58,7 +65,7 @@
 	     '(
 	       ;; hardware related
 	       "intel-vaapi-driver" "intel-media-driver-nonfree"
-	       "libva-utils"
+	       "libva-utils" "mesa"
 	       ;; basics
 	       "git" "git:send-email" "git:gui" "mumi"
 	       "bash"
@@ -114,7 +121,7 @@
 	       ;; XDG
 	       "xdg-utils" "xdg-user-dirs"
 	       ;; I need all of these portals?
-	       "xdg-desktop-portal-gtk" "xdg-desktop-portal-wlr" "xdg-desktop-portal-gnome" ; "xdg-desktop-portal" is propagated by xdg-desktop-portal-gtk
+	       "xdg-desktop-portal-gtk" "xdg-desktop-portal-wlr" ; "xdg-desktop-portal" is propagated by xdg-desktop-portal-gtk
 	       ;; wayland, not sure what I really need
 	       "wlr-randr" "wdisplays" "slurp"
 	       "grim" "swappy"
@@ -136,20 +143,20 @@
 	       "udiskie"
 	       "solaar"
 	       ;; Desktop end
-	       "mosquitto" ;; for doorstatus in polybar
+	       "mosquitto" ;; for doorstatus in waybar
 	       ;; other sources / hubs
 	       "flatpak"; "flatpak-xdg-utils"
 	       "docker"
 	       ;; security
-	       "pinentry" "pinentry-tty" "gnupg" "openssh" "password-store"
-	       "wireguard-tools" "openvpn" "network-manager-openvpn" "openfortivpn" "network-manager-fortisslvpn"
+	       "pinentry" "pinentry-tty" "pinentry-emacs" "gnupg" "openssh"
+	       "wireguard-tools"
 	       "lxqt-policykit"
 	       "qt5ct"
 	       ;; my desktop apps
-	       "nemo" "file-roller" "baobab" "gvfs"
-	       "librewolf" "ungoogled-chromium-wayland" "firefox"
+	       "gvfs" "nemo" "file-roller" "baobab"
+	       "librewolf" "firefox" "icecat" "ungoogled-chromium-wayland" 
 	       "icedove-wayland" ; thunderbird
-			   ;;; "aqbanking" "gnucash"
+	       ;; "aqbanking" "gnucash"
 	       "libreoffice"
 	       ;; Office, LaTeX, PDF & Co
 	       "texlive" "texlive-biber" ;; JabRef is installed via flatpak
@@ -163,7 +170,7 @@
 	       "inkscape" "graphviz"
 	       "mpv" "imv"
 	       "flameshot" "qtwayland@5.15.10" ; flameshot needs qtwayland@5
-	       "ristretto" "gimp"
+	       "gimp"
 	       "imagemagick" "optipng"
 	       "cheese" "obs" "handbrake" ; obs-wlrobs is not necessary, if pipewire is running
 	       "simple-scan" "xsane"
@@ -180,8 +187,8 @@
 	       "font-google-noto-emoji" ; Emoji support
 	       "font-google-noto-serif-cjk" "font-google-noto-sans-cjk" ; chinese fonts
 	       "font-microsoft-arial" "font-microsoft-times-new-roman" "font-microsoft-courier-new" ; Microsoft fonts
-	       ;; Themes
-	       "arc-theme" "materia-theme" "gnome-themes-extra" ; decide for one
+	       ;; Theme
+	       "materia-theme"
 	       ;; Icons
 	       "papirus-icon-theme" ; uses a lot of inodes: https://github.com/PapirusDevelopmentTeam/papirus-icon-theme/issues/3563 and https://issues.guix.gnu.org/68561
 	       ;; Cursors
