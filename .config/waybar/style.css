@@ -78,6 +78,13 @@ button.urgent {
     margin-right: 0;
 }
 
+#red {
+    color: @red;
+}
+#green {
+    color: @green;
+}
+
 #battery.charging, #battery.plugged {
     color: @green;
 }
@@ -122,4 +129,8 @@ button.urgent {
 
 #scratchpad.empty {
     background-color: transparent;
+}
+
+#privacy {
+    /* background-color: @red; */
 }

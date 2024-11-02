@@ -8,7 +8,7 @@
     // Choose the order of the modules
     "modules-left": ["sway/workspaces", "sway/mode", "sway/scratchpad", "sway/window"],
     "modules-center": [],
-    "modules-right": ["custom/connections", "battery", "temperature", "power-profiles-daemon", "cpu", "memory", "backlight", "wireplumber", "user", "clock", "custom/screenshot", "tray", "privacy", "idle_inhibitor", "custom/notifications"],
+    "modules-right": ["custom/connections", "battery", "temperature", "power-profiles-daemon", "cpu", "memory", "backlight", "wireplumber", "user", "clock", "custom/doorstatus", "custom/screenshot", "tray", "privacy", "idle_inhibitor", "custom/notifications"],
 
     "sway/mode": {
         "format": "<span color=\"#FF9999\">{}</span>"
@@ -46,9 +46,9 @@
       "tooltip": true,
       "format-icons": {
 	"default": "",
-	"performance": "",
+	"performance": "<span color=\"#FF9999\"></span>",
 	"balanced": "",
-	"power-saver": ""
+	"power-saver": "<span color=\"#99FFFF\"></span>"
       }
     },
 
@@ -59,6 +59,13 @@
       "format" : "{icon} {}",
       "format-icons": ""
     },
+
+    "custom/doorstatus": {
+      "on-click"  : "~/.local/bin/doorstatus.sh",
+      "exec": "~/.local/bin/doorstatus.sh",
+      "interval": 60
+    },
+
 
     "network": {
 	"interface" : "wlp9s0f0",
