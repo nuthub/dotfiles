@@ -29,7 +29,7 @@ hide_edge_borders smart
 default_floating_border pixel 3
 
 # gaps
-gaps inner 5px
+gaps inner 0px
 gaps outer 0px
 smart_gaps on
 
@@ -278,9 +278,7 @@ bindsym $mod+Shift+o move workspace to output left
 # Screen lock
 bindsym Control+mod1+Delete exec $lockscreen
 
-
 # Clipboard
-set $clipboard "~/.local/share/clipman.json"
 exec wl-paste -t text --watch clipman store --max-items 32
 bindsym $mod+y exec clipman pick --tool="wofi" --max-items=32
 
