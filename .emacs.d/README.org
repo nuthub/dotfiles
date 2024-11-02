@@ -693,7 +693,7 @@ Build a second brain with org-roam.
     (setq org-roam-dailies-capture-templates '(
                                                ("d" "default" entry "* %?"
                                                 :target
-                                                (file+head "%<%Y-%m-%d_%A>.org" "#+title: %<%Y-%m-%d (%A)>\n#+filetags: daily\n\n- Links: [[id:b3cb74b2-a385-4132-a55e-8cf561eed9fc][Journaling]]\n* Träume\n* Daily Planing\n- [ ] Journal [[elisp:(org-roam-dailies-goto-yesterday 1)][yesterday]]\n- [ ] Process [[file:~/Syncthing/org/inbox.org][inbox]]\n- [ ] Check [[elisp:(mu4e)][mails]]\n- [ ] Check [[elisp:(org-agenda-list)][agenda]]\n* Emotionen\n** Drei Dinge, für die ich dankbar bin\n1. \n2. \n3. ")))) ; org-roam-dailies-capture-templaes
+                                                (file+head "%<%Y-%m-%d_%A>.org" "#+title: %<%Y-%m-%d (%A)>\n#+filetags: daily\n\n- Links: [[id:b3cb74b2-a385-4132-a55e-8cf561eed9fc][Journaling]]\n* Träume\n* Daily Planing\n- [ ] Journal [[elisp:(org-roam-dailies-goto-yesterday 1)][yesterday]]\n- [ ] Process [[file:~/Syncthing/org/inbox.org][inbox]]\n- [ ] Check [[elisp:(mu4e)][mails]]\n- [ ] Check [[elisp:(org-agenda-list)][agenda]]\n* Emotionen\n** Drei Dinge, für die ich dankbar bin\n1. \n2. \n3. ")))) ; org-roam-dailies-capture-template
     ) ; org-roam
 #+end_src
 
@@ -1533,19 +1533,21 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
     ;; appearance
     (setq mu4e-confirm-quit t)
     (setq mu4e-notification-support t)
+    (setq mu4e-headers-time-format "%H:%M")
+    (setq mu4e-headers-date-format "%F %H:%M")
     (setq mu4e-headers-fields
-          '((:human-date . 12)
-            (:flags . 6)
-            (:maildir . 23)
-            (:mailing-list . 10)
-            (:from . 22)
-            (:subject)))
+  	'((:human-date . 18)
+  	  (:flags . 6)
+  	  (:from-or-to . 25)
+  	  (:subject . 125)
+  	  (:maildir . 15)
+  	  (:mailing-list . 10)))
     (setq mu4e-use-fancy-chars t)
     (setq mu4e-view-show-images t)
     (setq mu4e-view-show-addresses t)
     (setq gnus-visible-headers (concat gnus-visible-headers
                                        "\\|^User-Agent:"))
-
+    
     ;; receiving mails
     (setq mu4e-get-mail-command "mbsync inboxes-only")
     (setq mu4e-update-interval(* 5 60))
@@ -1574,8 +1576,8 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
     ;; disable undo-tree for mail compose (why? I have a separate dir for )
     (add-hook 'mu4e-compose-mode-hook
               (lambda()
-  		(undo-tree-mode -1)))
-
+  	      (undo-tree-mode -1)))
+    
     ;; bookmarks and shortcuts
     (setq mu4e-bookmarks
           '((:name "Combined inbox" :query "maildir:/private/INBOX OR maildir:/work/INBOX OR maildir:/tudo/INBOX" :key ?i)
@@ -1584,7 +1586,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
             (:name "Archives" :query "maildir:/private/Archives/2024 OR maildir:/work/Archives/2024" :key ?a)
             (:name "Drafts" :query "maildir:/private/Drafts OR maildir:/work/Drafts" :key ?d)
             (:name "Junk" :query "maildir:/private/Junk OR maildir:/work/Junk" :key ?j)
-  	  (:name "Mailing-Lists" :query "maildir:/private/INBOX/*" :key ?m)
+    	  (:name "Mailing-Lists" :query "maildir:/private/INBOX/*" :key ?m)
             (:name "Today's messages" :query "date:today..now" :key ?n)
             (:name "Last 7 days" :query "date:7d..now" :hide-unread t :key ?7)
             (:name "Trashed mails" :query "flag:trashed" :hide-unread nil :key ?t)
@@ -1592,11 +1594,11 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
     (setq mu4e-maildir-shortcuts
           '(("/private/INBOX" . ?p)
             ("/private/Archives/2024" . ?P)
-  	  ("/private/autolearn/ham" . ?h)
-  	  ("/private/autolearn/spam" . ?s)
-  	  ("/work/INBOX" . ?w)
+    	  ("/private/autolearn/ham" . ?h)
+    	  ("/private/autolearn/spam" . ?s)
+    	  ("/work/INBOX" . ?w)
             ("/work/Archives/2024" . ?W)
-  	  ("/tudo/INBOX" . ?d)))
+    	  ("/tudo/INBOX" . ?d)))
     
     ;;
     ;; contexts
@@ -1629,7 +1631,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                 (string-prefix-p "/work" (mu4e-message-field msg :maildir))))
             :vars '((user-mail-address . "flake@uni-koblenz.de")
                     (user-full-name    . "Julian Flake")
-  		  (message-signature . "Dipl.-Inf. Julian Flake\n\nUniversity of Koblenz\nFaculty 4: Computer Science\nInstitute for Software Technology\nPB 20 16 02 | D-56016 Koblenz | Germany\n\nVoice: +49 261 287 2787\nEmail: flake@uni-koblenz.de\nhttps://www.uni-koblenz.de/~flake")
+    		  (message-signature . "Dipl.-Inf. Julian Flake\n\nUniversity of Koblenz\nFaculty 4: Computer Science\nInstitute for Software Technology\nPB 20 16 02 | D-56016 Koblenz | Germany\n\nVoice: +49 261 287 2787\nEmail: flake@uni-koblenz.de\nhttps://www.uni-koblenz.de/~flake")
                     (smtpmail-smtp-server . "smtp.uni-koblenz.de")
                     (smtpmail-stream-type . ssl)
                     (smtpmail-smtp-service . 465)
