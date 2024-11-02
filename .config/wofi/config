@@ -17,4 +17,3 @@ image_size=24
 allow_markup=true
 #matching=contains
 #location=top
-gtk_dark=true
