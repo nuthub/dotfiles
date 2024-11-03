@@ -81,7 +81,14 @@ Taken from /emacs from scratch/.
           (holiday-fixed 12 25 "1. Weihnachtstag")
           (holiday-fixed 12 26 "2. Weihnachtstag")))
 #+end_src
-* Keep folders clean
+* File handling
+** Make use of system's trash and use y-or-n-p instead of yes-or-no-p
+#+begin_src emacs-lisp
+  (setq delete-by-moving-to-trash t)
+  (setq dired-deletion-confirmer #'y-or-n-p)
+#+end_src
+
+** Keep folders clean
 
 #+begin_src emacs-lisp
   ;; backup files: file.ext~
