@@ -1,1 +1,0 @@
-/home/flake/.dotfiles/.config/guix/x1-carbon-gen12.scm
