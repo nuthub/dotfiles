@@ -14,3 +14,4 @@
 /.local/bin/guix-shell-*.sh
 /.local/share/Trash/
 /.local/share/clipman.json
+/.config/guix/configuration.scm
