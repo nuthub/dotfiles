@@ -886,6 +886,8 @@ Currently not in use, but pulls projectile as dependency. Therefore, I deactivat
     ;; Angenommen das Guix-Checkout ist in ~/git/guix.
     (with-eval-after-load 'geiser-guile
       (add-to-list 'geiser-guile-load-path "~/git/guix/master"))
+    (with-eval-after-load 'geiser-guile
+      (add-to-list 'geiser-guile-load-path "~/git/nonguix"))
     (with-eval-after-load 'yasnippet
       (add-to-list 'yas-snippet-dirs "~/git/guix/master/etc/snippets/yas"))
     (load-file "~/git/guix/master/etc/copyright.el"))

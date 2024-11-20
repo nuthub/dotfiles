@@ -1,0 +1,33 @@
+# -*- shell-script -*-
+
+# local binary scripts
+export PATH=$HOME/.local/bin:$PATH
+
+## Set JAVA_HOME to where java executable is available in the current profile
+export JAVA_HOME=$(builtin cd $(dirname $(readlink $(which java)))"/.."; pwd)
+
+# extend XDG_DATA_DIRS with flatpak locations
+export XDG_DATA_DIRS=$XDG_DATA_DIRS:/home/flake/.local/share:/var/lib/flatpak/exports/share:/home/flake/.local/share/flatpak/exports/share
+
+# If running from tty1 start sway
+if [ "$(tty)" = "/dev/tty1" ]; then
+
+    # This is used to let sway (more specifically: waybar) know, which gtk theme to use 
+    export GTK_THEME="Materia-dark"
+
+    ## some of the wayland env variables are explained here: https://discourse.ubuntu.com/t/environment-variables-for-wayland-hackers/12750
+    ## this is needed by desktop-portal-wlr, otherwise it doesn't feel responsible (see INFO output of `xdg-desktop-portal -v -l INFO`)
+    export XDG_CURRENT_DESKTOP=sway
+
+    ## ??
+    export XDG_BACKEND="wayland"
+
+    ## export XDG_SESSION_DESKTOP=sway # not sure, what this is exactly needed for
+    export QT_QPA_PLATFORM="wayland"
+    #    export QT_QPA_PLATFORM=wayland-egl
+
+    ## actually start sway with a dbus user session
+    exec dbus-run-session -- sway > .sway.log 2>&1
+    # sway > .sway.log 2>&1
+fi
+

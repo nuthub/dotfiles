@@ -18,34 +18,35 @@ help() {
 }
 
 switch() {
-    echo "gtk theme: $gtk_theme"
-    echo "icon theme: $icon_theme"
-    echo "cursor theme: $cursor_theme"
-    echo "modus theme: $modus_theme"
 
-    ## Sway
-    echo -n "Configuring sway" 
-    # cursor    
+    echo "Setting color scheme to: $preference"
+    gsettings set org.gnome.desktop.interface color-scheme $preference
+
+    echo "Setting GTK theme to: $gtk_theme"
+    gsettings set org.gnome.desktop.interface gtk-theme $gtk_theme
+    sed --in-place --follow-symlinks "s/(\"GTK_THEME\" \. \".*\"/(\"GTK_THEME\" \. \"$gtk_theme\"/g" ~/.config/guix/home/home-configuration.scm 
+    sed --in-place --follow-symlinks "s/GTK_THEME=\".*\"/GTK_THEME=\"$gtk_theme\"/g" ~/.config/guix/home/zsh/zprofile 
+
+    echo "Setting icon theme to: $icon_theme"
+    gsettings set org.gnome.desktop.interface icon-theme $icon_theme
+
+    echo "Setting cursor theme to: $cursor_theme"
+    gsettings set org.gnome.desktop.interface cursor-theme $cursor_theme
     swaymsg "seat seat0 xcursor_theme $cursor_theme"
     sed --in-place --follow-symlinks "s/seat seat0 xcursor_theme .*$/seat seat0 xcursor_theme $cursor_theme/g" ~/.config/sway/config
-    # gtk theme
-    sed --in-place --follow-symlinks "s/export GTK_THEME=.*/export GTK_THEME=$gtk_theme/g" ~/.zprofile
-
-    # gsettings
-    echo "Configuring GTK (gsettings)"
-    gsettings set org.gnome.desktop.interface color-scheme $preference
-    gsettings set org.gnome.desktop.interface gtk-theme $gtk_theme
-    gsettings set org.gnome.desktop.interface icon-theme $icon_theme
-    gsettings set org.gnome.desktop.interface cursor-theme $cursor_theme
 
     # alacritty
-    echo "Configuring Alacritty"
+    echo "Configuring Alacritty to use: $modus_theme"
     sed --in-place --follow-symlinks "s/import = \[\"~\/.config\/alacritty\/alacritty-themes\/.*\"\]/import = \[\"~\/.config\/alacritty\/alacritty-themes\/themes\/$modus_theme.toml\"\]/g" ~/.config/alacritty/alacritty.toml
 
     # emacs
-    echo "Configuring Emacs"
+    echo "Configuring Emacs to use: $modus_theme"
     sed --in-place --follow-symlinks "s/(load-theme '.* t)/(load-theme '$modus_theme t)/g" ~/.emacs.d/README.org 
-    emacsclient --suppress-output --eval '(load-theme '\''modus-vivendi t)'
+    emacsclient --suppress-output --eval "(load-theme '$modus_theme t)"
+
+    # reconfigure home
+    echo "Reconfiguring Home environment"
+    just guix-reconfigure-home
 }
 
 case $1 in
