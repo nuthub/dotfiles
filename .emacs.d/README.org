@@ -104,6 +104,12 @@ Taken from /emacs from scratch/.
   (setq undo-tree-history-directory-alist `(("." . ,(expand-file-name "tmp/undo-tree/" user-emacs-directory))))
 #+end_src
 
+** Auto revert unchanged files (PDF only for now)
+
+#+begin_src emacs-lisp
+  (setq revert-without-query '(".pdf"))
+#+end_src
+
 * Look & feel
 ** Font
 
@@ -494,43 +500,14 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
                                 	      "\\documentclass{moderncv}"
                                 	      ("\\section{%s}" . "\\section*{%s}")
         				      ("\\subsection{%s}" . "\\subsection{%s}"))))
-    (with-eval-after-load 'ox-latex
-      (add-to-list 'org-latex-classes '("my-beamer"
-                          	      "\\documentclass[presentation,aspectratio=169,allowframebreaks]{beamer}
-          \\usepackage{pdfpages}
-          \\institute[RGSE]{University of Koblenz, Research Group Software Engineering}
-          \\setbeamertemplate{caption}{\\raggedright\\insertcaption\\par}
-          \\beamertemplatenavigationsymbolsempty%
-          \\addtobeamertemplate{navigation symbols}{}{%
-              \\usebeamerfont{footline}%
-              \\usebeamercolor[fg]{footline}%
-              \\hspace{1em}%
-              \\insertframenumber % / \\inserttotalframenumber%
-          }
-          \\setbeamertemplate{section page}{%
-            \\begin{centering}%
-              \\begin{beamercolorbox}[sep=12pt,center]{section title}%
-                \\usebeamerfont{section title}\\insertsection\\par%
-              \\end{beamercolorbox}%
-            \\end{centering}%
-          }%
-          \\AtBeginSection[]{%
-           \\begin{frame}%
-             \\sectionpage%
-           \\end{frame}%
-          }%"
-                          	      ("\\section{%s}" . "\\section*{%s}")
-                          	      ("\\subsection{%s}" . "\\subsection*{%s}")
-                          	      ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
 
-    ;; add beamer to the export backends
+    ;; beamer export setup
     (add-to-list 'org-export-backends 'beamer)
     (setq org-beamer-environments-extra
   	'(("onlyenv" "O" "\\begin{onlyenv}%a" "\\end{onlyenv}")))
 
     ;; koma-letter
     (eval-after-load 'ox '(require 'ox-koma-letter))
-
     (eval-after-load 'ox-koma-letter
       '(progn
          (add-to-list 'org-latex-classes
@@ -744,6 +721,8 @@ htmlize is used by org to export to HTML.
                    :tag ("work" "teaching"))
   	  (:name "Promotion"
                    :tag "promotion")
+  	  (:name "Projects"
+  		 :tag ("projects"))
   	  (:name "Reading"
                    :category "reading")
   	  (:name "Personal"
@@ -869,6 +848,11 @@ Two modes:
     (setq plantuml-output-type "svg"))
 #+end_src
 
+** nov.el (eBook Reader)
+#+begin_src emacs-lisp
+  (use-package nov)
+#+end_src
+
 ** COMMENT Platform.io
 CLOSED: [2024-04-30 Tue 22:41]
 Currently not in use, but pulls projectile as dependency. Therefore, I deactivated it
@@ -893,11 +877,11 @@ Currently not in use, but pulls projectile as dependency. Therefore, I deactivat
     (load-file "~/git/guix/master/etc/copyright.el"))
 #+end_src
 
-** ChatGPT Shell
+** COMMENT ChatGPT Shell
 
 Store the API key in .authinfo. ChatGPT and Dall-E use the same API key.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package chatgpt-shell
    :after shell-maker
    :config (setq chatgpt-shell-openai-key
@@ -1471,7 +1455,7 @@ If there is more than one, let the user choose."
 - I use *khal* to edit the ics files in my home folder (not really, but khal is installed now)
 - *khalel* is a package that allows me to interact with khal from within emacs and to create a (read only :( ) ~calendar.org~ file for inclusion in my agenda.
 - I use *khard* for editing vcards outside of Nextcloud
-- *khardel*, analogously to *khardel*, allows me to edit contacts from within Emacs
+- *khardel*, analogously to *khalel*, allows me to edit contacts from within Emacs
 
 #+begin_src emacs-lisp
   (use-package khalel
