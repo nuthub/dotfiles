@@ -7,6 +7,7 @@ x-scheme-handler/unknown=librewolf.desktop
 x-scheme-handler/text/xml=emacsclient.desktop
 x-scheme-handler/mailto=my-emacsclient-mail.desktop
 application/pdf=emacsclient.desktop
+application/epub+zip=emacsclient.desktop
 text/plain=emacsclient.desktop
 image/jpeg=imv.desktop
 image/png=imv.desktop
@@ -15,6 +16,7 @@ video/mp4=mpv.desktop
 video/mpeg=mpv.desktop
 
 [Added Associations]
+application/epub+zip=emacsclient.desktop;
 image/jpeg=imv.desktop;emacsclient.desktop;
 image/png=imv.desktop;emacsclient.desktop;
 inode/symlink=emacsclient.desktop;
