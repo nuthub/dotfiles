@@ -1,6 +1,9 @@
 @define-color red #f53c3c;
+@define-color tr-red rgba(255,0,0,0.5);
 @define-color green #00dd00;
 @define-color white #ffffff;
+@define-color black #000000;
+@define-color tr-black rgba(0,0,0,0.8);
 
 * {
     transition-property: background-color;
@@ -56,16 +59,17 @@ button {
 /* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
 button:hover {
     box-shadow: inset 0 -3px @white;
-    background: rgba(0, 0, 0, 0.8);
+    background: @tr-black;
 }
 
 button.focused {
     box-shadow: inset 0 -3px @white;
-    background: rgba(0, 0, 0, 0.8);
+    background: @tr-black;
 }
 
-button.urgent {
-    background-color: @red;
+button.urgent,
+#mode {
+    background-color: @tr-red;
 }
 
 /* If workspaces is the leftmost module, omit left margin */
@@ -76,13 +80,6 @@ button.urgent {
 /* If workspaces is the rightmost module, omit right margin */
 .modules-right > widget:last-child > #workspaces {
     margin-right: 0;
-}
-
-#red {
-    color: @red;
-}
-#green {
-    color: @green;
 }
 
 #battery.charging, #battery.plugged {
@@ -98,16 +95,14 @@ button.urgent {
     animation-direction: alternate;
 }
 
-#mode {
-    background-color: @red;
-    color: @white;
-}
-
+#idle_inhibitor.activated,
 #network.disconnected,
 #pulseaudio.muted,
 #wireplumber.muted,
-#temperature.critical {
-    background-color: @red;
+#temperature.critical,
+#privacy {
+    background-color: @tr-red;
+    padding: 5px;
 }
 
 #tray > .passive {
@@ -116,21 +111,9 @@ button.urgent {
 
 #tray > .needs-attention {
     -gtk-icon-effect: highlight;
-    background-color: @red;
-}
-
-#idle_inhibitor.activated {
-    color: @red;
-}
-
-#scratchpad {
-    background: rgba(0, 0, 0, 0.2);
+    background-color: @tr-red;
 }
 
 #scratchpad.empty {
     background-color: transparent;
-}
-
-#privacy {
-    /* background-color: @red; */
 }

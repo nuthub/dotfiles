@@ -11,7 +11,7 @@
     "modules-right": ["custom/connections", "battery", "temperature", "power-profiles-daemon", "cpu", "memory", "backlight", "wireplumber", "user", "clock", "custom/doorstatus", "custom/screenshot", "tray", "privacy", "idle_inhibitor", "custom/notifications"],
 
     "sway/mode": {
-        "format": "<span color=\"#FF9999\">{}</span>"
+        "format": "{}"
     },
 
     "sway/scratchpad": {
