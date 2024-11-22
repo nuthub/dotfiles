@@ -158,7 +158,7 @@
 		 ;; media
 		 "inkscape" "graphviz"
 		 "mpv" "imv"
-		 "flameshot" "qtwayland@5.15.10" ; flameshot needs qtwayland@5
+		 "flameshot" "qtwayland@5.15.15" ; flameshot needs qtwayland@5
 		 "gimp"
 		 "imagemagick" "optipng"
 		 "cheese" "obs" "handbrake" ; obs-wlrobs is not necessary, if pipewire is running
