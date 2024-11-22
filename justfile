@@ -21,8 +21,12 @@ olat-umount:
 	gio mount -u davs://olat.vcrp.de/webdav
 
 # Reconfigure the system
-guix-reconfigure:
-	doas guix system reconfigure ~/.config/guix/config.scm
+guix-system-reconfigure:
+	doas guix system reconfigure ~/.config/guix/configuration.scm
+
+# Reconfigure the home environment
+guix-home-reconfigure:
+	guix home reconfigure ~/.config/guix/home/home-configuration.scm
 
 # Pull latest Guix
 guix-pull:
@@ -31,6 +35,7 @@ guix-pull:
 # Free Space by deleting old Guix generations
 guix-clean:
 	doas guix system delete-generations 1m & \
+	guix home delete-generations 1m & \
 	guix package --delete-generations=1m & \
 	guix gc & \
 	exit 0
