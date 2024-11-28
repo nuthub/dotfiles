@@ -1,5 +1,8 @@
 #!/bin/sh
 
+HOST="mqtt.c3re.de"
+TOPIC="c3re/hhdst" # Präsenz-Schalter
+TOPIC="c3re/hhdst-classic" # Door-Status
 SYMBOL=⚒
 
 help() {
