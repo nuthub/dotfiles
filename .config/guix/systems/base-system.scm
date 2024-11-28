@@ -78,20 +78,21 @@
 		 "htop"
 		 "jq" ; needed by sway / zoom
 		 "just"
-		 "modem-manager" "libmbim" "modem-manager-fcc-auto-unlock" ; package auto-unlock has no effect
 		 "neofetch"
 		 "net-tools" ; for ifconfig  netstat  route
 		 "nmap"
 		 "bc" "octave"
-		 "power-profiles-daemon" "powertop"
 		 "ripgrep"
 		 "stow"
 		 "trash-cli"
 		 "tree"
 		 "unzip"
 		 "usbutils"
+		 ;; notebook tools
+		 "power-profiles-daemon" "powertop"
 		 "acpi"
 		 "brightnessctl"
+		 "modem-manager" "libmbim" "modem-manager-fcc-auto-unlock" ; package auto-unlock has no effect
 		 ;; syncing and versioning
 		 "binutils" ;; for ar command
 		 "borg"
@@ -100,30 +101,30 @@
 		 "rsync"
 		 "subversion"
 		 "nextcloud-client"
-		 "yt-dlp"
 		 "zip"
 		 ;; Desktop start
 		 ;; XDG
 		 "xdg-utils" "xdg-user-dirs"
-		 ;; I need all of these portals?
+		 ;; I should not install both, portal-wlr and portal-gnome
 		 "xdg-desktop-portal-gtk" "xdg-desktop-portal-wlr" ; "xdg-desktop-portal" is propagated by xdg-desktop-portal-gtk
-		 ;; wayland, not sure what I really need
-		 "wlr-randr" "wdisplays" "slurp"
-		 "grim" "swappy"
-		 ;;"grimshot" "egl-wayland" "xorg-server-xwayland" 
 		 ;; sway
 		 "sway" "waybar" "wofi" "swaylock" "swayidle" "swaynotificationcenter" "libnotify"
-		 "wl-mirror"
+		 "qtwayland@5" ; at least flameshot and nextcloud-client need this (2024-11-28)
+		 "slurp" "grim" "swappy" ; screenshots
+		 "wl-recorder" ; screen recordings
+		 "wdisplays" 
+		 ;;"grimshot" "egl-wayland" "xorg-server-xwayland" 
+		 "wl-mirror" ; mirror the desktop, e.g. to a beamer
 		 "wl-clipboard" "clipman" "wtype" ; wofi-emoji needs wtype
 		 "wob" ; OSD overlay
 		 "alacritty"
 		 "kanshi" ; automatically switch displays
-		 "gammastep" "geoclue" ; could use geoclue, if geoclue was running
+		 "gammastep" ; could use geoclue, if geoclue was running
 		 ;; other desktop related
 		 "tumbler" ; D-BUS thumbnail service
 		 "gnome-keyring"
 		 ;; connectivity / media
-		 "pipewire" "pavucontrol" "wireplumber"
+		 "pipewire" "wireplumber" "pavucontrol"
 		 "bluez" "blueman"
 		 "udiskie"
 		 "solaar"
@@ -156,7 +157,6 @@
 		 ;; media
 		 "inkscape" "graphviz"
 		 "mpv" "imv"
-		 "flameshot" "qtwayland@5.15.15" ; flameshot needs qtwayland@5
 		 "gimp"
 		 "imagemagick" "optipng"
 		 "cheese" "obs" "handbrake" ; obs-wlrobs is not necessary, if pipewire is running
