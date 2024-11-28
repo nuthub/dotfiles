@@ -43,8 +43,6 @@
     (append (list (setuid-program
 		   (program (file-append opendoas "/bin/doas")))
 		  (setuid-program
-		   (program (file-append kbd "/bin/chvt")))
-		  (setuid-program
 		   (program (file-append libmbim "/bin/mbimcli"))))
 	    %setuid-programs))
    (packages (append
