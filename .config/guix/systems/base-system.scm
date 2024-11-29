@@ -111,7 +111,7 @@
 		 "sway" "waybar" "wofi" "swaylock" "swayidle" "swaynotificationcenter" "libnotify"
 		 "qtwayland@5" ; at least flameshot and nextcloud-client need this (2024-11-28)
 		 "slurp" "grim" "swappy" ; screenshots
-		 "wl-recorder" ; screen recordings
+		 "wf-recorder" ; screen recordings
 		 "wdisplays" 
 		 ;;"grimshot" "egl-wayland" "xorg-server-xwayland" 
 		 "wl-mirror" ; mirror the desktop, e.g. to a beamer
