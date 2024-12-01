@@ -20,9 +20,8 @@ help() {
     echo
 }
 
-
 # der neue MQTT-Server:
-value=$(mosquitto_sub -h mqtt.c3re.de -C 1 -t "c3re/hhdst")
+value=$(mosquitto_sub -h $HOST -C 1 -t $TOPIC)
 
 case "$1" in
     "--help"|"-h")
