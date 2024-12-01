@@ -56,6 +56,14 @@
       }
     },
 
+//    "custom/systeminfo": {
+//      "exec": "~/.local/bin/sysinfo.sh",
+//      "return-type": "json",
+//      "interval": 20
+//      "format": "text {text}",
+//      "tooltip-format": ""
+//    },
+
     "custom/connections": {
       "on-click"  : "~/.config/waybar/get_connections.sh",
       "exec": "~/.config/waybar/get_connections.sh",

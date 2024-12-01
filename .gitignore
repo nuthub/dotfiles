@@ -16,3 +16,4 @@
 /.emacs.d/.dap-breakpoints
 /.emacs.d/nov-places
 /.local/bin/guix-shell-*.sh
+/.config/shepherd/init.scm
