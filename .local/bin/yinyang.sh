@@ -39,13 +39,10 @@ switch() {
     echo "Configuring Alacritty to use: $modus_theme"
     sed --in-place --follow-symlinks "s/import = \[\"~\/.config\/alacritty\/alacritty-themes\/.*\"\]/import = \[\"~\/.config\/alacritty\/alacritty-themes\/themes\/$modus_theme.toml\"\]/g" ~/.config/alacritty/alacritty.toml
 
-    # emacs
-    echo "Configuring Emacs to use: $modus_theme"
-    sed --in-place --follow-symlinks "s/(load-theme '.* t)/(load-theme '$modus_theme t)/g" ~/.emacs.d/README.org 
-    emacsclient --suppress-output --eval "(load-theme '$modus_theme t)"
+    # emacs follows the color-scheme preference, thanks to auto-dark (https://github.com/LionyxML/auto-dark-emacs)
 
     # reconfigure home
-    echo "Reconfiguring Home environment"
+    echo "Reconfiguring Home environment (to enable new zprofile)"
     just guix-reconfigure-home
 }
 

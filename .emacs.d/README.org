@@ -174,11 +174,17 @@ I set my default fonts in ~~/.fonts.conf~. This is just an example:
 #+end_src
 
 ** Theme
-Modus Themes
+Modus Themes. To switch between light (operandi) and dark (vivendi) theme, auto-dark is used. Switching between light and dark is then possible by one the following commands:
+- ~gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark~ or 
+- ~gsettings set org.gnome.desktop.interface color-scheme 'prefer-light'~, respectively
+  
 #+begin_src emacs-lisp
-  (use-package modus-themes
+  (use-package modus-themes)
+  (use-package auto-dark
+    :after modus-themes
     :config
-    (load-theme 'modus-vivendi t))
+    (setq auto-dark-themes '((modus-vivendi) (modus-operandi)))
+    (auto-dark-mode 1))
 #+end_src
 
 ** doom-modeline (a beautiful modeline)
