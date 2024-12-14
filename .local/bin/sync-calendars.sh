@@ -25,6 +25,7 @@ case $1 in
     "-f")
 	vdirsyncer discover
 	vdirsyncer metasync
+	# no exit here: -l is also executed
 	;;
     "-l")
 	vdirsyncer sync
