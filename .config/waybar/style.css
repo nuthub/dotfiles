@@ -117,3 +117,7 @@ button.urgent,
 #scratchpad.empty {
     background-color: transparent;
 }
+
+#workspaces button {
+    padding: 4px;
+}
