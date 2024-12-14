@@ -1,5 +1,5 @@
 # (JF) the following line may be changed by some script (darkmode.sh / lightmode.sh)
-import = ["~/.config/alacritty/alacritty-themes/themes/modus-vivendi.toml"]
+general.import = ["~/.config/alacritty/alacritty-themes/themes/modus-vivendi.toml"]
 
 [colors]
 draw_bold_text_with_bright_colors = true
