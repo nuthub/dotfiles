@@ -1426,12 +1426,12 @@ I use this to trigger a reload of my generated calendar file after it has been r
 #+begin_src emacs-lisp
   (defun jf/revert-file-visiting-buffer (filename)
     "Reverts open buffer visiting FILENAME. If no buffer is visiting FILENAME, a buffer is created that visits FILENAME."
-    (save-excursion)
-    (or (find-buffer-visiting filename)
-        (find-file filename))
-    (set-buffer (find-buffer-visiting filename))
-    (revert-buffer nil t)
-    (message (concat filename " reverted")))
+    (save-excursion
+      (or (find-buffer-visiting filename)
+  	(find-file filename))
+      (set-buffer (find-buffer-visiting filename))
+      (revert-buffer nil t)
+      (message (concat filename " reverted"))))
 #+end_src
 
 ** Open automounted drives
