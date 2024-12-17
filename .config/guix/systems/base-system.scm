@@ -220,15 +220,6 @@ guest only = yes\n"))))
 						"v4l2loopback.conf"
 						"options v4l2loopback devices=1 exclusive_caps=1 card_label=\"v4l2loopback\""))))
 		      (service kernel-module-loader-service-type '("v4l2loopback"))
-		      ;; (service mcron-service-type
-		      ;; 	       (mcron-configuration
-		      ;; 		(jobs (list
-		      ;; 		       #~(job "0 * * * *"
-		      ;; 			      "/home/flake/.local/bin/sync-calendars.sh"
-		      ;; 			      #:user "flake")
-		      ;; 		       #~(job "30 * * * *"
-		      ;; 			      "/home/flake/.local/bin/mbsync-all.sh"
-		      ;; 			      #:user "flake")))))
 		      (service bluetooth-service-type)
 		      (service cups-service-type
 			       (cups-configuration
@@ -250,17 +241,6 @@ guest only = yes\n"))))
 			       (libvirt-configuration
 				(unix-sock-group  "libvirt")))
 		      (udev-rules-service 'solaar-udev-rules solaar)
-		      ;; (udev-rules-service 'logitech-unify
-		      ;; 		       (file->udev-rule
-		      ;; 			"42-logitech-unify-permissions.rules"
-		      ;; 			(file-append solaar "/share/solaar/udev-rules.d/42-logitech-unify-permissions.rules")))
-
-		      ;;(service geoclue-service-type) 
-		      ;; (simple-service 'geoclue-polkit-rule polkit-service-type 
-		      ;; 		    (list (file-union
-		      ;; 			   "polkit-geoclue"
-		      ;; 			   `(("share/polkit-1/rules.d/geoclue.rules"
-		      ;; 			      ,(file-append geoclue "/share/polkit-1/rules.d/org.freedesktop.GeoClue2.rules"))))))
 		      (simple-service 'dbus-extras
 				      dbus-root-service-type (list blueman)))
 		     ;; This is the (modified) default list of services we are appending to.
