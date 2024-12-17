@@ -8,7 +8,7 @@
 
 (use-system-modules setuid)
 (use-package-modules admin firmware gnome freedesktop linux networking package-management shells wm fonts)
-(use-service-modules authentication cups dbus desktop docker linux networking pm samba ssh mcron virtualization xorg)
+(use-service-modules authentication cups dbus desktop linux networking pm samba ssh mcron virtualization xorg)
 
 (define base-system
   (operating-system
@@ -36,7 +36,7 @@
 		  (home-directory "/home/flake")
 		  (shell (file-append zsh "/bin/zsh"))
 		  (supplementary-groups '("users" "wheel" "netdev" "audio" "video" "tty"
-					  "input" "disk" "kvm" "docker" "lp" "lpadmin"
+					  "input" "disk" "kvm" "lp" "lpadmin"
 					  "dialout" "libvirt"))) ;; lp is needed for bluetooth
 		 %base-user-accounts))
    (setuid-programs
@@ -133,7 +133,7 @@
 		 ;; other sources / hubs
 		 ;; Flatpak in home profile
 		 "flatpak" ; qtwebengine is required by Calibre flatpak to view ebooks (?)
-		 "docker"
+		 "podman" "podman-compose"
 		 ;; security
 		 "pinentry" "pinentry-tty" "pinentry-emacs" "gnupg" "openssh"
 		 "wireguard-tools"
@@ -219,6 +219,15 @@ guest only = yes\n"))))
 					      ,(plain-file
 						"v4l2loopback.conf"
 						"options v4l2loopback devices=1 exclusive_caps=1 card_label=\"v4l2loopback\""))))
+		      (simple-service- 'podman-subuid-subgid etc-service-type
+				       `(("subuid" ,(plain-file
+						     "subuid"
+						     (string-append "flake" ":100000:65536\n")))
+					 ("subgid" ,(plain-file
+						     "subgid"
+						     (string-append "flake" ":100000:65536\n")))))
+		      (service iptables-service-type
+                               (iptables-configuration))
 		      (service kernel-module-loader-service-type '("v4l2loopback"))
 		      (service bluetooth-service-type)
 		      (service cups-service-type
@@ -227,8 +236,6 @@ guest only = yes\n"))))
 				(default-shared? #f)
 				(default-paper-size "A4")))
 		      (service power-profiles-daemon-service-type)
-		      (service containerd-service-type)
-		      (service docker-service-type)
 		      (service gnome-keyring-service-type)
 		      (service screen-locker-service-type
 			       (screen-locker-configuration
