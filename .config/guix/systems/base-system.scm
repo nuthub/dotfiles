@@ -175,7 +175,7 @@
 		 "font-google-noto-serif-cjk" "font-google-noto-sans-cjk" ; chinese fonts
 		 "font-microsoft-arial" "font-microsoft-times-new-roman" "font-microsoft-courier-new" ; Microsoft fonts
 		 ;; Theme
-		 "materia-theme" "arc-theme" ; Arc theme is more actively maintained
+		 "materia-theme" ; "arc-theme" ; Arc theme is more actively maintained
 		 ;; Icons:
 		 ;; my primary icon theme is Papirus(-Dark)
 		 ;; "papirus-icon-theme" ; disabled in system profile (see below)
