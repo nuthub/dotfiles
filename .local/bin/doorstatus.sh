@@ -3,7 +3,8 @@
 HOST="mqtt.c3re.de"
 TOPIC="c3re/hhdst" # Präsenz-Schalter
 TOPIC="c3re/hhdst-classic" # Door-Status
-SYMBOL=⚒
+SYMBOL_OPEN="" # "" # "⚒"
+SYMBOL_CLOSED=""
 
 help() {
     # Display Help
@@ -40,7 +41,9 @@ case "$1" in
 	;;
     "")
 	if [ $value == 1 ]; then 
-	    echo $SYMBOL
+	    echo $SYMBOL_OPEN
+	else
+	    echo $SYMBOL_CLOSED
 	fi
 	;;
     *)
