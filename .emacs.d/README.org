@@ -772,11 +772,34 @@ This is needed to allow for not exporting to latex those org headings that are t
 #+end_src
 
 * Other major modes
-** magit: Git support
-
+** Transient
 #+begin_src emacs-lisp
-  (use-package transient)
+  (use-package transient
+    :config
+    (transient-define-prefix jf/my-menu ()
+      "Mein benutzerdefiniertes Menü."
+      ["Meine Tools\n"
+       ["Org"
+        ("a" "Agenda" org-agenda-list)
+        ("d" "Deadlines" (lambda () (interactive) (org-agenda nil "d")))
+        ("t" "GTD buffer" (lambda () (interactive) (find-file "~/org/gtd.org")))]
+       ["Mail"
+        ("m" "mu4e" mu4e)
+        ("n" "Compose" mu4e-compose-mail)
+        ("s" "Sync all" (lambda() (interactive) (shell-command "mbsync -a" nil nil)))]
+       ["Writing"
+        ("c" "Citar" citar-open)
+        ("b" "Biblio" biblio-lookup)]
+       ["Projects"
+        ("g" "Magit" magit-status)]
+       ["AI"
+        ("i" "gptel" gptel)
+        ("C-i" "gptel menu" gptel-menu)]
+       ])
+    )
 #+end_src
+
+** magit: Git support
 
 #+begin_src emacs-lisp
   (use-package magit
@@ -1807,3 +1830,8 @@ Best option would be to fix ~tramp-process-running-p~ upstream. An emacs lisp ve
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-c b") 'citar-open)
 #+end_src
+** Bind my transient menu
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c m") 'jf/my-menu)
+#+end_src
+
