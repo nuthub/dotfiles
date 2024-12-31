@@ -1574,12 +1574,12 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
     (setq mu4e-headers-time-format "%H:%M")
     (setq mu4e-headers-date-format "%F %H:%M")
     (setq mu4e-headers-fields
-  	'((:human-date . 18)
-  	  (:flags . 6)
-  	  (:from-or-to . 25)
-  	  (:subject . 125)
-  	  (:maildir . 15)
-  	  (:mailing-list . 10)))
+    	'((:human-date . 18)
+    	  (:flags . 6)
+    	  (:from-or-to . 25)
+    	  (:subject . 125)
+    	  (:maildir . 15)
+    	  (:mailing-list . 10)))
     (setq mu4e-use-fancy-chars t)
     (setq mu4e-view-show-images t)
     (setq mu4e-view-show-addresses t)
@@ -1606,6 +1606,9 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
     ;; (setq mu4e-compose-complete-only-after (format-time-string
     ;;                                     "%Y-%m-%d"
     ;;                                     (time-subtract (current-time) (days-to-time 365))))
+    ;; this lets correctly reply to message where a recipient address contains
+    ;; a comma, like in "Julian Flake (Softwaretechnik, Informatik) <flake@uni-koblenz.de>"
+    (setq rfc2047-quote-decoded-words-containing-tspecials t)
     (setq mu4e-compose-format-flowed t)
     (setq mu4e-compose-in-new-frame t)
     (setq message-cite-function 'message-cite-original) ;; alternative: 'message-cite-original-without-signature
@@ -1614,7 +1617,11 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
     ;; disable undo-tree for mail compose (why? I have a separate dir for )
     (add-hook 'mu4e-compose-mode-hook
               (lambda()
-  	      (undo-tree-mode -1)))
+    	      (undo-tree-mode -1)))
+    ;; gpg sign all mails when sending
+    (add-hook 'message-send-hook
+              (lambda()
+    	      (mml-secure-sign)))
     
     ;; bookmarks and shortcuts
     (setq mu4e-bookmarks
@@ -1630,13 +1637,13 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
             (:name "Trashed mails" :query "flag:trashed" :hide-unread nil :key ?t)
             (:name "Messages with PDFs" :query "mime:application/pdf" :key ?p)))
     (setq mu4e-maildir-shortcuts
-          '(("/private/INBOX" . ?p)
-            ("/private/Archives/2024" . ?P)
-    	  ("/private/autolearn/ham" . ?h)
-    	  ("/private/autolearn/spam" . ?s)
-    	  ("/work/INBOX" . ?w)
-            ("/work/Archives/2024" . ?W)
-    	  ("/tudo/INBOX" . ?d)))
+  	'(("/private/INBOX" . ?p)
+  	  ("/private/Archives/2024" . ?P)
+  	  ("/private/autolearn/ham" . ?h)
+  	  ("/private/autolearn/spam" . ?s)
+  	  ("/work/INBOX" . ?w)
+  	  ("/work/Archives/2024" . ?W)
+  	  ("/tudo/INBOX" . ?d)))
     
     ;;
     ;; contexts
@@ -1669,7 +1676,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                 (string-prefix-p "/work" (mu4e-message-field msg :maildir))))
             :vars '((user-mail-address . "flake@uni-koblenz.de")
                     (user-full-name    . "Julian Flake")
-    		  (message-signature . "Dipl.-Inf. Julian Flake\n\nUniversity of Koblenz\nFaculty 4: Computer Science\nInstitute for Software Technology\nPB 20 16 02 | D-56016 Koblenz | Germany\n\nVoice: +49 261 287 2787\nEmail: flake@uni-koblenz.de\nhttps://uni-ko.de/flake")
+      		  (message-signature . "Dipl.-Inf. Julian Flake\n\nUniversity of Koblenz\nFaculty 4: Computer Science\nInstitute for Software Technology\nPB 20 16 02 | D-56016 Koblenz | Germany\n\nVoice: +49 261 287 2787\nEmail: flake@uni-koblenz.de\nhttps://uni-ko.de/flake")
                     (smtpmail-smtp-server . "smtp.uni-koblenz.de")
                     (smtpmail-stream-type . ssl)
                     (smtpmail-smtp-service . 465)
