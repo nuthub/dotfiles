@@ -28,6 +28,5 @@ if [ "$(tty)" = "/dev/tty1" ]; then
 
     ## actually start sway with a dbus user session
     exec dbus-run-session -- sway > .sway.log 2>&1
-    # sway > .sway.log 2>&1
 fi
 

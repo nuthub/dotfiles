@@ -321,15 +321,15 @@ exec_always --no-startup-id "pkill kanshi; exec kanshi"
 exec --no-startup-id {
     dbus-update-activation-environment --all
     gnome-keyring-daemon
-    lxqt-policykit-agent
+    lxqt-policykit-agent # polkit-gnome does not install a bin/ file
     nm-applet
     blueman-applet
     gammastep-indicator
     udiskie -s # -t or -s (show applet always or with actions available only
     solaar -w hide
-    pipewire
-    wireplumber
-    pipewire-pulse
+#    pipewire
+#    wireplumber
+#    pipewire-pulse
     emacs --daemon
     sleep 10 && nextcloud --background
 }
