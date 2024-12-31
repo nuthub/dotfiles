@@ -1,10 +1,12 @@
 # I have two versions of some directories in .local, since after a backup restore on a new machine, my .local is linked to .dotfiles/.local
 /home/*/.dotfiles/.local/share/Trash/
-/home/*/.local/share/Trash/
 /home/*/.dotfiles/.local/share/images
-/home/*/.local/share/images
 /home/*/.dotfiles/.local/share/flatpak
+/home/*/.dotfiles/.local/share/containers
+/home/*/.local/share/Trash/
 /home/*/.local/share/flatpak
+/home/*/.local/share/images
+/home/*/.local/share/containers/
 /home/*/.cache
 /home/*/tmp/
 /home/*/.var/

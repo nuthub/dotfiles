@@ -219,7 +219,7 @@ guest only = yes\n"))))
 					      ,(plain-file
 						"v4l2loopback.conf"
 						"options v4l2loopback devices=1 exclusive_caps=1 card_label=\"v4l2loopback\""))))
-		      (simple-service- 'podman-subuid-subgid etc-service-type
+		      (simple-service 'podman-subuid-subgid etc-service-type
 				       `(("subuid" ,(plain-file
 						     "subuid"
 						     (string-append "flake" ":100000:65536\n")))
