@@ -1772,25 +1772,19 @@ Best option would be to fix ~tramp-process-running-p~ upstream. An emacs lisp ve
   (global-set-key (kbd "C--") 'text-scale-decrease)
   (global-set-key (kbd "C-+") 'text-scale-increase)
 #+end_src
-
 ** Comment / Uncomment Region
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-x C-,") 'comment-region)
   (global-set-key (kbd "C-x C-.") 'uncomment-region)
 #+end_src
-
 ** Revert buffer
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-c r") 'revert-buffer)
 #+end_src
 
-** Open GTD file
-#+begin_src emacs-lisp
-  (global-set-key (kbd "C-c t") (lambda () (interactive) (find-file "~/org/gtd.org")))
-#+end_src
-
-** Open the file under cursor
-#+begin_src emacs-lisp
+** COMMENT Open the file under cursor
+CLOSED: [2024-12-26 Thu 11:38]
+#+begin_src emacs-lisp :tangle no
   (global-set-key (kbd "C-x f") 'find-file-at-point)
 #+end_src
 
@@ -1802,6 +1796,11 @@ Best option would be to fix ~tramp-process-running-p~ upstream. An emacs lisp ve
 ** undo-tree
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-x u") 'undo-tree-visualize)
+#+end_src
+
+** Open GTD file
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c t") (lambda () (interactive) (find-file "~/org/gtd.org")))
 #+end_src
 
 ** Org mode
