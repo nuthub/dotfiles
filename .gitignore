@@ -1,6 +1,6 @@
 *~
-/.local/share/Trash/
-/.local/share/clipman.json
+/.local/state/
+/.local/share/
 /.config/guix/configuration.scm
 /.config/guix/current
 /.config/guix/files/astah_professional_license.xml
@@ -17,3 +17,5 @@
 /.emacs.d/nov-places
 /.local/bin/guix-shell-*.sh
 /.config/shepherd/init.scm
+/.config/chromium/
+/.config/calibre/

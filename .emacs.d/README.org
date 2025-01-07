@@ -921,6 +921,16 @@ Currently not in use, but pulls projectile as dependency. Therefore, I deactivat
     (load-file "~/git/guix/master/etc/copyright.el"))
 #+end_src
 
+** gptel
+
+#+begin_src emacs-lisp
+  (use-package gptel
+       :config
+       (setq gptel-default-mode 'org-mode)
+       (add-to-list 'gptel-directives
+  		  '(dreams . "I want you to act as a dream interpreter. I will give you descriptions of my dreams, and you will provide interpretations based on the symbols and themes present in the dream. Do not provide personal opinions or assumptions about the dreamer. Provide only factual interpretations based on the information given.")))
+#+end_src
+
 ** COMMENT ChatGPT Shell
 
 Store the API key in .authinfo. ChatGPT and Dall-E use the same API key.
@@ -1044,7 +1054,7 @@ Completion allows you to quickly select an item from a list of candidates.
   	 ("C-c h" . consult-history)
   	 ("C-c k" . consult-kmacro)
   	 ;; ("C-c m" . consult-man) ; I use it for mu4e
-  	 ("C-c i" . consult-info)
+  	 ;; ("C-c i" . consult-info) ; I use it for gptel
   	 ([remap Info-search] . consult-info)
   	 ;; C-x bindings (ctl-x-map)
   	 ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
@@ -1831,6 +1841,13 @@ Best option would be to fix ~tramp-process-running-p~ upstream. An emacs lisp ve
 #+begin_src emacs-lisp
   ;; in conflict with 'consult-man
   (global-set-key (kbd "C-c m") 'mu4e)
+#+end_src
+
+** gptel
+#+begin_src emacs-lisp
+  ;; in conflict with consult-info
+  (global-set-key (kbd "C-c C-i") 'gptel)
+  (global-set-key (kbd "C-c i") 'gptel-menu)
 #+end_src
 
 ** citar-open in non org/latex buffers
