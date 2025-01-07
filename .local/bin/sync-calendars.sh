@@ -25,12 +25,16 @@ case $1 in
     "-f")
 	vdirsyncer discover
 	vdirsyncer metasync
-	# no exit here: -l is also executed
+	vdirsyncer sync
+	emacs --init-directory=~/minimal-khalel  --batch --script minimal-khalel/init.el -e 'khalel-import-events'
+	emacsclient -e '(jf/revert-file-visiting-buffer "~/org/calendar.org")'
+	exit 0
 	;;
     "-l")
 	vdirsyncer sync
 	emacs --init-directory=~/minimal-khalel  --batch --script minimal-khalel/init.el -e 'khalel-import-events'
 	emacsclient -e '(jf/revert-file-visiting-buffer "~/org/calendar.org")'
+	exit 0
 	;;
     *)
 	help
