@@ -128,7 +128,7 @@
     "clock": {
         "timezone": "Europe/Berlin",
 	"locale": "de_DE.utf8",
-	"format": "{: W%W  %d.%m.  %H:%M}",
+	"format": "{: W%OV  %d.%m.  %H:%M}",
 	// ugly hack because of https://github.com/Alexays/Waybar/issues/2240#issuecomment-2064237563
 	// Example:            10 11 12 13 14 15 16 W00   10 11 12 13 14 15 16 W00   10 11 12 13 14 15 16 W00 
 	"tooltip-format": "<tt>                                                                              \n{calendar}</tt>",
@@ -139,7 +139,7 @@
 		"format": {
 		  "months":     "<span color='#ffead3'><b>{}</b></span>",
 		  "days":       "<span color='#dddddd'><b>{}</b></span>",
-		  "weeks":      "<span color='#11BB11'>W{:%W}</span>",
+		  "weeks":      "<span color='#11BB11'>W{:%OV}</span>",
 		  "weekdays":   "<span color='#ffcc66'><b>{}</b></span>",
 		  "today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
 		}
