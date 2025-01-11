@@ -67,11 +67,6 @@ button.focused {
     background: @tr-black;
 }
 
-button.urgent,
-#mode {
-    background-color: @tr-red;
-}
-
 /* If workspaces is the leftmost module, omit left margin */
 .modules-left > widget:first-child > #workspaces {
     margin-left: 0;
@@ -100,9 +95,11 @@ button.urgent,
 #pulseaudio.muted,
 #wireplumber.muted,
 #temperature.critical,
+button.urgent,
+#mode,
 #privacy {
     background-color: @tr-red;
-    padding: 5px;
+    padding: 0 5px;
 }
 
 #tray > .passive {
@@ -119,5 +116,5 @@ button.urgent,
 }
 
 #workspaces button {
-    padding: 4px;
+    padding: 0 4px;
 }
