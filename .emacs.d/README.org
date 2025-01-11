@@ -336,6 +336,7 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
   (defun jf/org-setup-look-and-feel ()
     (set-face-underline 'org-ellipsis nil)
     (setq org-ellipsis " …")
+    (setq org-clock-sound "~/Music/alarm.wav")
     (setq org-startup-indented t)
     (setq org-startup-truncated nil)
     (setq org-src-tab-acts-natively t)
@@ -770,6 +771,15 @@ This is needed to allow for not exporting to latex those org headings that are t
     :config
     (ox-extras-activate '(latex-header-blocks ignore-headlines)))
 #+end_src
+
+** org-pomodoro
+
+#+begin_src emacs-lisp
+  (use-package org-pomodoro
+    :config
+    (setq org-pomodoro-audio-player "/home/flake/.guix-profile/bin/aplay"))
+#+end_src
+
 
 * Other major modes
 ** Transient
