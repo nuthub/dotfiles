@@ -1,3 +1,5 @@
+// -*- mode: js-json; -*-
+
 {
     "ipc": true,
     "height": 36, // Waybar height (to be removed for auto height)
@@ -65,7 +67,7 @@
 //    },
 
     "custom/connections": {
-      "on-click"  : "~/.config/waybar/get_connections.sh",
+      "on-click" : "~/.config/waybar/get_connections.sh",
       "exec": "~/.config/waybar/get_connections.sh",
       "interval": 10,
       "format" : "{icon} {}",
@@ -73,7 +75,7 @@
     },
 
     "custom/doorstatus": {
-      "on-click"  : "~/.local/bin/doorstatus.sh",
+      "on-click" : "~/.local/bin/doorstatus.sh",
       "exec": "~/.local/bin/doorstatus.sh",
       "class": "custom-doorstatus",
       "interval": 60
