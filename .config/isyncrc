@@ -1,9 +1,12 @@
+# -*- mode: conf; -*-
+
 # Global configuration section
 #   Values here are used as defaults for any following Channel section that
 #   doesn't specify them.
 SyncState *
+Sync Full
 Create Both
-Remove None
+Remove Both
 # Expunge Both or run `mbsync --expunge all`
 
 # private Mail
@@ -16,7 +19,6 @@ PassCmd "grep nuthost.de ~/.authinfo | awk 'FNR == 1 {print $6}'"
 MaildirStore private-local
 Path ~/Mail/private/
 Inbox ~/Mail/private/INBOX
-Trash Trash
 SubFolders Verbatim
 
 Channel private
@@ -37,7 +39,6 @@ PassCmd "grep uni-koblenz.de ~/.authinfo | awk 'FNR == 1 {print $6}'"
 MaildirStore work-local
 Path ~/Mail/work/
 Inbox ~/Mail/work/INBOX
-Trash Trash
 SubFolders Verbatim
 
 Channel work
@@ -57,7 +58,6 @@ PassCmd "grep tu-dortmund.de ~/.authinfo | awk 'FNR == 1 {print $6}'"
 MaildirStore tudo-local
 Path ~/Mail/tudo/
 Inbox ~/Mail/tudo/INBOX
-Trash Trash
 SubFolders Verbatim
 
 Channel tudo
