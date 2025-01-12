@@ -153,7 +153,7 @@
 		 "pandoc"
 		 "pdfpc"
 		 "ghostscript" ;; for e.g. ps2pdf
-		 "stapler"
+		 "stapler" "mupdf"
 		 ;; media
 		 "inkscape" "graphviz"
 		 "mpv" "imv"
