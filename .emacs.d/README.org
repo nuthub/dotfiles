@@ -1624,13 +1624,24 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
     (add-hook 'message-send-hook
               (lambda()
     	      (mml-secure-sign)))
+
+    ;; mark trashed mails as trashed after marking them as read and moving to trash
+    (setf (alist-get 'trash mu4e-marks)
+  	'(:char ("d" . "▼")
+  		:prompt "dtrash"
+  		:dyn-target (lambda (target msg) (mu4e-get-trash-folder msg))
+  		:action (lambda (docid msg target)
+  			  ;; default is +T-N and that does not properly sync both, trash-flag plus move to trash to my dovecot IMAP server)
+  			  ;; see also https://www.reddit.com/r/emacs/comments/1hzlp1h/mu4e_isync_syncing_trashed_mails/
+  			  (mu4e--server-move docid
+  					     (mu4e--mark-check-target target) "+S-u-N+T")))) 
     
     ;; bookmarks and shortcuts
     (setq mu4e-bookmarks
           '((:name "Combined inbox" :query "maildir:/private/INBOX OR maildir:/work/INBOX OR maildir:/tudo/INBOX" :key ?i)
             (:name "Unread messages" :query "flag:unread AND NOT flag:trashed" :key ?u)
             (:name "Sent" :query "maildir:/private/Sent OR maildir:/work/Sent" :key ?s)
-            (:name "Archives" :query "maildir:/private/Archives/2024 OR maildir:/work/Archives/2024" :key ?a)
+            (:name "Archives" :query "maildir:/private/Archives/2025 OR maildir:/work/Archives/2025" :key ?a)
             (:name "Drafts" :query "maildir:/private/Drafts OR maildir:/work/Drafts" :key ?d)
             (:name "Junk" :query "maildir:/private/Junk OR maildir:/work/Junk" :key ?j)
     	  (:name "Mailing-Lists" :query "maildir:/private/INBOX/*" :key ?m)
