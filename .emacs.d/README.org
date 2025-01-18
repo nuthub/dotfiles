@@ -1651,11 +1651,11 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
             (:name "Messages with PDFs" :query "mime:application/pdf" :key ?p)))
     (setq mu4e-maildir-shortcuts
   	'(("/private/INBOX" . ?p)
-  	  ("/private/Archives/2024" . ?P)
+  	  ("/private/Archives/2025" . ?P)
   	  ("/private/autolearn/ham" . ?h)
   	  ("/private/autolearn/spam" . ?s)
   	  ("/work/INBOX" . ?w)
-  	  ("/work/Archives/2024" . ?W)
+  	  ("/work/Archives/2025" . ?W)
   	  ("/tudo/INBOX" . ?d)))
     
     ;;
@@ -1678,7 +1678,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                     (smtpmail-smtp-service . 587)
                     (mu4e-drafts-folder . "/private/Drafts")
                     (mu4e-sent-folder . "/private/Sent")
-                    (mu4e-refile-folder  . "/private/Archives/2024")
+                    (mu4e-refile-folder  . "/private/Archives/2025")
                     (mu4e-trash-folder . "/private/Trash")))
            ;; work account
            (make-mu4e-context
@@ -1688,14 +1688,14 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
               (when msg
                 (string-prefix-p "/work" (mu4e-message-field msg :maildir))))
             :vars '((user-mail-address . "flake@uni-koblenz.de")
-                    (user-full-name    . "Julian Flake")
-      		  (message-signature . "Dipl.-Inf. Julian Flake\n\nUniversity of Koblenz\nFaculty 4: Computer Science\nInstitute for Software Technology\nPB 20 16 02 | D-56016 Koblenz | Germany\n\nVoice: +49 261 287 2787\nEmail: flake@uni-koblenz.de\nhttps://uni-ko.de/flake")
+  		  (user-full-name . "Julian Flake")
+  		  (message-signature . "Dipl.-Inf. Julian Flake\n\nUniversity of Koblenz\nFaculty 4: Computer Science\nInstitute for Software Technology\nPB 20 16 02 | D-56016 Koblenz | Germany\n\nVoice: +49 261 287 2787\nEmail: flake@uni-koblenz.de\nhttps://uni-ko.de/flake")
                     (smtpmail-smtp-server . "smtp.uni-koblenz.de")
                     (smtpmail-stream-type . ssl)
                     (smtpmail-smtp-service . 465)
                     (mu4e-drafts-folder  . "/work/Drafts")
                     (mu4e-sent-folder  . "/work/Sent")
-                    (mu4e-refile-folder  . "/work/Archives/2024")
+                    (mu4e-refile-folder  . "/work/Archives/2025")
                     (mu4e-trash-folder  . "/work/Trash")))
            ;; TUDo account
            (make-mu4e-context
@@ -1712,7 +1712,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                     (smtpmail-smtp-service . 587)
                     (mu4e-drafts-folder . "/private/Drafts")
                     (mu4e-sent-folder . "/private/Sent")
-                    (mu4e-refile-folder  . "/private/Archives/2024")
+                    (mu4e-refile-folder  . "/private/Archives/2025")
                     (mu4e-trash-folder . "/private/Trash")))))
 
     ;; Calendar support
