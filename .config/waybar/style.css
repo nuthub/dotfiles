@@ -1,5 +1,6 @@
 @define-color red #f53c3c;
 @define-color tr-red rgba(255,0,0,0.5);
+@define-color tr-yellow rgba(255,128,0,0.9);
 @define-color green #00dd00;
 @define-color white #ffffff;
 @define-color black #000000;
@@ -88,6 +89,20 @@ button.focused {
     animation-timing-function: linear;
     animation-iteration-count: infinite;
     animation-direction: alternate;
+}
+
+
+#custom-pomodoro {
+    padding: 0 5px;
+}
+#custom-pomodoro.work {
+    color: @tr-yellow;
+}
+#custom-pomodoro.overtime,
+#custom-pomodoro.short-break,
+#custom-pomodoro.long-break
+{
+    background-color: @tr-red;
 }
 
 #idle_inhibitor.activated,

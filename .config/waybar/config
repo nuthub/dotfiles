@@ -1,4 +1,4 @@
-// -*- mode: js-json; -*-
+// -*- mode: js; -*-
 
 {
     "ipc": true,
@@ -10,201 +10,210 @@
     // Choose the order of the modules
     "modules-left": ["sway/workspaces", "sway/mode", "sway/scratchpad", "sway/window"],
     "modules-center": [],
-    "modules-right": ["custom/connections", "battery", "temperature", "power-profiles-daemon", "backlight", "wireplumber", "user", "clock", "custom/doorstatus", "tray", "custom/screenshot", "privacy", "idle_inhibitor", "custom/notifications"],
+    "modules-right": ["custom/connections", "battery", "temperature", "power-profiles-daemon", "backlight", "wireplumber", "user", "clock", "custom/pomodoro", "custom/doorstatus", "tray", "custom/screenshot", "privacy", "idle_inhibitor", "custom/notifications"],
 
     "sway/workspaces": {
-        "disable-scroll": true    
+	"disable-scroll": true    
     },
 
     "sway/mode": {
-        "format": "{}"
+	"format": "{}"
     },
 
     "sway/scratchpad": {
-        "format": "{icon} {count}",
-        "show-empty": false,
-        "format-icons": ["", ""],
-        "tooltip": true,
-        "tooltip-format": "{app}: {title}"
+	"format": "{icon} {count}",
+	"show-empty": false,
+	"format-icons": ["", ""],
+	"tooltip": true,
+	"tooltip-format": "{app}: {title}"
     },
 
     // see also https://github.com/Alexays/Waybar/issues/1712#issuecomment-1803911617
     "sway/window": {
-        "format": "{shell}@@{app_id}@@{title}",
+	"format": "{shell}@@{app_id}@@{title}",
 	"rewrite": {
-	  "@@@@": "", // in case no window is focused
-	  "(xwayland)@@(.*)@@(.*)": "[X:$2] $3", // format app_id for X apps
-          "(xdg_shell)@@(.*)@@(.*)": "[$2] $3", // format app_id for wayland apps
+	    "@@@@": "", // in case no window is focused
+	    "(xwayland)@@(.*)@@(.*)": "[X:$2] $3", // format app_id for X apps
+	    "(xdg_shell)@@(.*)@@(.*)": "[$2] $3", // format app_id for wayland apps
 	}
     },
 
     "idle_inhibitor": {
-        "format": "{icon}",
-        "format-icons": {
-            "activated": "",
-            "deactivated": ""
-        }
+	"format": "{icon}",
+	"format-icons": {
+	    "activated": "",
+	    "deactivated": ""
+	}
     },
 
     "power-profiles-daemon": {
-      "format": "{icon}",
-      "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
-      "tooltip": true,
-      "format-icons": {
-	"default": "",
-	"performance": "<span color=\"#FF9999\"></span>",
-	"balanced": "",
-	"power-saver": "<span color=\"#99FFFF\"></span>"
-      }
+	"format": "{icon}",
+	"tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+	"tooltip": true,
+	"format-icons": {
+	    "default": "",
+	    "performance": "<span color=\"#FF9999\"></span>",
+	    "balanced": "",
+	    "power-saver": "<span color=\"#99FFFF\"></span>"
+	}
     },
 
-//    "custom/systeminfo": {
-//      "exec": "~/.local/bin/sysinfo.sh",
-//      "return-type": "json",
-//      "interval": 20
-//      "format": "text {text}",
-//      "tooltip-format": ""
-//    },
+    //    "custom/systeminfo": {
+    //      "exec": "~/.local/bin/sysinfo.sh",
+    //      "return-type": "json",
+    //      "interval": 20
+    //      "format": "text {text}",
+    //      "tooltip-format": ""
+    //    },
 
     "custom/connections": {
-      "on-click" : "~/.config/waybar/get_connections.sh",
-      "exec": "~/.config/waybar/get_connections.sh",
-      "interval": 10,
-      "format" : "{icon} {}",
-      "format-icons": ""
+	"on-click" : "~/.config/waybar/get_connections.sh",
+	"exec": "~/.config/waybar/get_connections.sh",
+	"interval": 10,
+	"format" : "{icon} {}",
+	"format-icons": ""
     },
 
     "custom/doorstatus": {
-      "on-click" : "~/.local/bin/doorstatus.sh",
-      "exec": "~/.local/bin/doorstatus.sh",
-      "class": "custom-doorstatus",
-      "interval": 60
+	"on-click" : "~/.local/bin/doorstatus.sh",
+	"exec": "~/.local/bin/doorstatus.sh",
+	"class": "custom-doorstatus",
+	"interval": 60
     },
 
-
+    "custom/pomodoro": {
+	"exec" : "org-pomodoro-state.sh",
+	"return-type" : "json",
+	"interval" : 1,
+	"format" : "🍅 {}",
+	"hide-empty-text" : true,
+	"on-click" : "emacsclient -nc -e '(org-clock-goto)'",
+	"class" : "custom-pomodoro"
+    },
+    
     "network": {
 	"interface" : "wlp9s0f0",
-        "interval": 2,
-        "tooltip-format": "{ifname} ↑{bandwidthUpBytes} ↓{bandwidthDownBytes}",
-        "format": "{essid}",
+	"interval": 2,
+	"tooltip-format": "{ifname} ↑{bandwidthUpBytes} ↓{bandwidthDownBytes}",
+	"format": "{essid}",
 	"format-disconnected": ""
     },
 
     "custom/notifications": {
-      "tooltip": false,
-      "format": "{icon} {}",
-      "format-icons": {
-	"notification": "<span foreground='red'><sup></sup></span>",
-	"none": "",
-	"dnd-notification": "<span foreground='red'><sup></sup></span>",
-	"dnd-none": "",
-	"inhibited-notification": "<span foreground='red'><sup></sup></span>",
-	"inhibited-none": "",
-	"dnd-inhibited-notification": "<span foreground='red'><sup></sup></span>",
-	"dnd-inhibited-none": ""
-      },
-      "class": "custom-notifications",
-      "return-type": "json",
-      "exec-if": "which swaync-client",
-      "exec": "swaync-client -swb",
-      "on-click": "swaync-client -d -sw",
-      "on-click-right": "swaync-client -t -sw",
-      "escape": true
+	"tooltip": false,
+	"format": "{icon} {}",
+	"format-icons": {
+	    "notification": "<span foreground='red'><sup></sup></span>",
+	    "none": "",
+	    "dnd-notification": "<span foreground='red'><sup></sup></span>",
+	    "dnd-none": "",
+	    "inhibited-notification": "<span foreground='red'><sup></sup></span>",
+	    "inhibited-none": "",
+	    "dnd-inhibited-notification": "<span foreground='red'><sup></sup></span>",
+	    "dnd-inhibited-none": ""
+	},
+	"class": "custom-notifications",
+	"return-type": "json",
+	"exec-if": "which swaync-client",
+	"exec": "swaync-client -swb",
+	"on-click": "swaync-client -d -sw",
+	"on-click-right": "swaync-client -t -sw",
+	"escape": true
     },
 
     "custom/screenshot": {
-      "on-click"  : "~/.local/bin/screenshot.sh",
-      "on-click-right" : "nemo ~/Screenshots",
-      "tooltip" : true,
-      "tooltip-format" : "Take Screenshot",
-      "format" : "{icon} {}",
-      "format-icons": ""
+	"on-click"  : "~/.local/bin/screenshot.sh",
+	"on-click-right" : "nemo ~/Screenshots",
+	"tooltip" : true,
+	"tooltip-format" : "Take Screenshot",
+	"format" : "{icon} {}",
+	"format-icons": ""
     },
 
     "tray": {
-        "icon-size": 24,
-        "spacing": 4,
+	"icon-size": 24,
+	"spacing": 4,
 	"show-passive-items": true
     },
     
     "clock": {
-        "timezone": "Europe/Berlin",
+	"timezone": "Europe/Berlin",
 	"locale": "de_DE.utf8",
 	"format": "{: W%OV  %d.%m.  %H:%M}",
 	// ugly hack because of https://github.com/Alexays/Waybar/issues/2240#issuecomment-2064237563
 	// Example:            10 11 12 13 14 15 16 W00   10 11 12 13 14 15 16 W00   10 11 12 13 14 15 16 W00 
 	"tooltip-format": "<tt>                                                                              \n{calendar}</tt>",
 	"calendar" : {
-		"mode": "year",
-		"weeks-pos": "left",
-		"mode-mon-col": 3, // https://github.com/Alexays/Waybar/issues/2240
-		"format": {
-		  "months":     "<span color='#ffead3'><b>{}</b></span>",
-		  "days":       "<span color='#dddddd'><b>{}</b></span>",
-		  "weeks":      "<span color='#11BB11'>W{:%OV}</span>",
-		  "weekdays":   "<span color='#ffcc66'><b>{}</b></span>",
-		  "today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
-		}
-        },
+	    "mode": "year",
+	    "weeks-pos": "left",
+	    "mode-mon-col": 3, // https://github.com/Alexays/Waybar/issues/2240
+	    "format": {
+		"months":     "<span color='#ffead3'><b>{}</b></span>",
+		"days":       "<span color='#dddddd'><b>{}</b></span>",
+		"weeks":      "<span color='#11BB11'>W{:%OV}</span>",
+		"weekdays":   "<span color='#ffcc66'><b>{}</b></span>",
+		"today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
+	    }
+	},
 	"actions" : {
-	"on-click" : "mode"
+	    "on-click" : "mode"
 	}	
     },
 
     "cpu": {
-    	   "format": " {usage}% {icon}",
-       	   "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
-       	   "tooltip": true,
-       	   "on-click": "alacritty -e htop"
+	"format": " {usage}% {icon}",
+	"format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
+	"tooltip": true,
+	"on-click": "alacritty -e htop"
     },
 
     "memory": {
-        "format": " {}% {icon}",
+	"format": " {}% {icon}",
 	"format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
     },
 
     "temperature": {
-        // "thermal-zone": 2,
-        "critical-threshold": 95,
-        "format": "{icon} {temperatureC}°C",
-        "format-icons": ["", "", ""]
+	// "thermal-zone": 2,
+	"critical-threshold": 95,
+	"format": "{icon} {temperatureC}°C",
+	"format-icons": ["", "", ""]
     },
 
     "backlight": {
-        "device": "intel_backlight",
-        "format": "{icon} {percent}%",
-	    "format-icons": ["", ""]
+	"device": "intel_backlight",
+	"format": "{icon} {percent}%",
+	"format-icons": ["", ""]
     },
 
     "battery": {
-        "states": {
-            // "good": 95,
-            "warning": 15,
-            "critical": 10
-        },
-        "format": " {icon} {capacity}%",
-        "format-charging": "{capacity}% ",
-        "format-plugged": "{capacity}% ",
-        "format-alt": "{time} {icon}",
-        // "format-good": "", // An empty format will hide the module
-        // "format-full": "",
-        "format-icons": ["", "", "", "", ""]
+	"states": {
+	    // "good": 95,
+	    "warning": 15,
+	    "critical": 10
+	},
+	"format": " {icon} {capacity}%",
+	"format-charging": "{capacity}% ",
+	"format-plugged": "{capacity}% ",
+	"format-alt": "{time} {icon}",
+	// "format-good": "", // An empty format will hide the module
+	// "format-full": "",
+	"format-icons": ["", "", "", "", ""]
     },
 
     "wireplumber": {
-       "format": "{icon} {volume}%",
-       "format-muted": "",
-       "on-click": "pavucontrol",
-       "format-icons": ["", "", ""],
-       "format-muted": ""
+	"format": "{icon} {volume}%",
+	"format-muted": "",
+	"on-click": "pavucontrol",
+	"format-icons": ["", "", ""],
+	"format-muted": ""
     },
 
     "user": {
-        "format": " {work_d}d",
-        "interval": 60,
-        "height": 30,
-        "width": 30,
-        "icon": false,
+	"format": " {work_d}d",
+	"interval": 60,
+	"height": 30,
+	"width": 30,
+	"icon": false,
     },
     
     "privacy": {
