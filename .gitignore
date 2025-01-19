@@ -1,6 +1,8 @@
 *~
-/.local/share/Trash/
-/.local/share/clipman.json
+/.local/bin/guix-shell-*.sh
+/.local/share/*
+!/.local/share/sounds
+/.local/state/
 /.config/guix/configuration.scm
 /.config/guix/current
 /.config/guix/files/astah_professional_license.xml
@@ -10,10 +12,11 @@
 /.config/Nextcloud/*.db
 /.config/Nextcloud/logs/
 /.config/Nextcloud/nextcloud.cfg.backup_*git
+/.config/shepherd/init.scm
+/.config/chromium/
+/.config/calibre/
 /.emacs.d/recentf
 /.emacs.d/persist/
 /.emacs.d/abbrev_defs
 /.emacs.d/.dap-breakpoints
 /.emacs.d/nov-places
-/.local/bin/guix-shell-*.sh
-/.config/shepherd/init.scm
