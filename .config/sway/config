@@ -106,6 +106,8 @@ input type:touchpad {
 #
 bindgesture swipe:3:up move to scratchpad 
 bindgesture swipe:3:down scratchpad show
+bindgesture swipe:3:right workspace prev
+bindgesture swipe:3:left workspace next
 
 #
 # Workspaces:
