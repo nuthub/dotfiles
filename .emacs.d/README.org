@@ -254,7 +254,6 @@ This is to hide minor modes from mode line. You can use `:diminish foo-mode` the
    	    (visual-line-mode 1)))
 #+end_src
 
-
 ** Show search result counts in modeline
 
 #+begin_src emacs-lisp
@@ -777,9 +776,66 @@ This is needed to allow for not exporting to latex those org headings that are t
 #+begin_src emacs-lisp
   (use-package org-pomodoro
     :config
-    (setq org-pomodoro-audio-player "/home/flake/.guix-profile/bin/aplay"))
+    (setq org-pomodoro-audio-player "/run/current-system/profile/bin/paplay")
+    (setq org-pomodoro-start-sound "~/.local/share/sounds/Schachtglocke/4+3wav")
+    (setq org-pomodoro-finished-sound "~/.local/share/sounds/Schachtglocke/1.wav")
+    (setq org-pomodoro-overtime-sound "~/.local/share/sounds/Schachtglocke/1.wav")
+    (setq org-pomodoro-short-break-sound "~/.local/share/sounds/Schachtglocke/4+2.wav")
+    (setq org-pomodoro-long-break-sound "~/.local/share/sounds/Schachtglocke/4+1+2.wav")
+    ;; (org-pomodoro-play-sound :start)
+    ;; (org-pomodoro-play-sound :pomodoro)
+    ;; (org-pomodoro-play-sound :overtime)
+    ;; (org-pomodoro-play-sound :long-break)
+    ;; (org-pomodoro-play-sound :short-break)
+    ;; (org-pomodoro-play-sound :killed)
+    ;; (org-pomodoro-play-sound :tick)
+    (setq org-pomodoro-manual-break t)
+    (setq org-pomodoro-keep-killed-pomodoro-time t)
+    (setq org-pomodoro-clock-break t)
+    (defun jf/org-pomodoro-waybar-string (text tooltip class)
+      (format
+       "{\"text\": \"%s\", \"tooltip\": \"%s\", \"class\": \"%s\" }"
+       text tooltip class))
+    (defun jf/org-pomodoro-text-time ()
+      "Return status info about org-pomodoro and if org-pomodoro is not running, try to print info about org-clock.
+     If either org-pomodoro or org-clock aren't active, print \"No Active Task \" "
+      (interactive)
+      (cond ((equal :none org-pomodoro-state)
+             (if (org-clock-is-active)
+                 (format "Clocked task: %d minutes - %s"
+                         (org-clock-get-clocked-time)
+  		       (substring-no-properties org-clock-heading)
+                         "No Active task")
+  	     (jf/org-pomodoro-waybar-string
+  	      nil
+  	      nil
+  	      nil)))
+  	  ((equal :pomodoro org-pomodoro-state)
+  	   (jf/org-pomodoro-waybar-string (format "%s • %s (%d)"
+  						  (substring-no-properties org-clock-heading)
+  						  (org-pomodoro-format-seconds)
+  						  org-pomodoro-count)
+  					  (substring-no-properties org-clock-heading)
+  					  "work"))
+  	  ((equal :overtime org-pomodoro-state)
+  	   (jf/org-pomodoro-waybar-string (format "Overtime • %s (%d)"
+  						  (org-pomodoro-format-seconds)
+  						  org-pomodoro-count)
+  					  (substring-no-properties org-clock-heading)
+  					  "overtime"))
+  	  ((equal :short-break org-pomodoro-state)
+  	   (jf/org-pomodoro-waybar-string (format "Short Break • %s (%d)"
+  						  (org-pomodoro-format-seconds)
+  						  org-pomodoro-count)
+  					  (substring-no-properties org-clock-heading)
+  					  "short-break"))
+  	  ((equal :long-break org-pomodoro-state)
+  	   (jf/org-pomodoro-waybar-string (format "Long Break • %s (%d)"  
+  						  (org-pomodoro-format-seconds)
+  						  org-pomodoro-count)
+  					  (substring-no-properties org-clock-heading)
+  					  "long-break")))))
 #+end_src
-
 
 * Other major modes
 ** Transient
@@ -792,6 +848,7 @@ This is needed to allow for not exporting to latex those org headings that are t
        ["Org"
         ("a" "Agenda" org-agenda-list)
         ("d" "Deadlines" (lambda () (interactive) (org-agenda nil "d")))
+        ("p" "Start/Stop Pomodoro" (lambda () (interactive) (org-pomodoro)))
         ("t" "GTD buffer" (lambda () (interactive) (find-file "~/org/gtd.org")))]
        ["Mail"
         ("m" "mu4e" mu4e)
@@ -1053,7 +1110,7 @@ Completion allows you to quickly select an item from a list of candidates.
   	 ("C-c M-x" . consult-mode-command)
   	 ("C-c h" . consult-history)
   	 ("C-c k" . consult-kmacro)
-  	 ;; ("C-c m" . consult-man) ; I use it for mu4e
+  	 ;; ("C-c m" . consult-man) ; I use it for mu4e / my transient menu
   	 ("C-c i" . consult-info)
   	 ([remap Info-search] . consult-info)
   	 ;; C-x bindings (ctl-x-map)
@@ -1845,12 +1902,19 @@ CLOSED: [2024-12-26 Thu 11:38]
   (global-set-key (kbd "C-c m") 'mu4e)
 #+end_src
 
+** gptel
+#+begin_src emacs-lisp
+  (define-key org-mode-map (kbd "C-c RET") nil)
+  (global-set-key (kbd "C-c RET") 'gptel-send)
+#+end_src
+
+>>>>>>> c5e1973 (emacs: org-pomodoro added, key bindings + transient menu adjusted.)
 ** citar-open in non org/latex buffers
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-c b") 'citar-open)
 #+end_src
 ** Bind my transient menu
 #+begin_src emacs-lisp
-  (global-set-key (kbd "C-c m") 'jf/my-menu)
+  (global-set-key (kbd "<f12>") 'jf/my-menu)
 #+end_src
 
