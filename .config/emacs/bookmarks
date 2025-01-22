@@ -1,0 +1,75 @@
+;;;; Emacs Bookmark Format Version 1;;;; -*- coding: utf-8-emacs; mode: lisp-data -*-
+;;; This format is meant to be slightly human-readable;
+;;; nevertheless, you probably don't want to edit it.
+;;; -*- End Of Bookmark File Format Version Stamp -*-
+(("config-guix-system"
+ (filename . "~/.config/guix/systems/base-system.scm")
+ (front-context-string . ";; This is my op")
+ (rear-context-string)
+ (position . 1)
+ (last-modified 26416 35905 130594 47000))
+("config-guix-home"
+ (filename . "~/.config/guix/home/home-configuration.scm")
+ (front-context-string . ";; This \"home-en")
+ (rear-context-string)
+ (position . 1)
+ (last-modified 26416 35945 455344 194000))
+("config-guix"
+ (filename . "~/.config/guix/")
+ (front-context-string . ".\n  drwxr-xr-x 4")
+ (rear-context-string . "96 Nov  9 23:40 ")
+ (position . 75)
+ (last-modified 26416 29164 856203 690000))
+("config-waybar"
+ (filename . "~/.dotfiles/.config/waybar/config")
+ (front-context-string . "{\n    // \"layer\"")
+ (rear-context-string)
+ (position . 1)
+ (last-modified 26416 29204 647220 252000))
+("Promotion.org"
+ (filename . "~/Documents/Promotion/Promotion.org")
+ (front-context-string . "#+title: Privacy")
+ (rear-context-string . "t(n) ignore(i)\n\n")
+ (position . 72)
+ (last-modified 25940 42692 870767 263000))
+("config-sway"
+ (filename . "~/.config/sway/config")
+ (front-context-string . "# Default config")
+ (rear-context-string)
+ (position . 1)
+ (last-modified 26416 29196 690288 60000))
+("org-capture-last-stored-marker"
+ (filename . "~/org/gtd.org")
+ (front-context-string . "**** TODO [#A] Z")
+ (rear-context-string . "24\n- Paper FIT\n\n")
+ (position . 208361)
+ (last-modified 26457 15818 370266 224000))
+("org-gtd"
+ (filename . "~/org/gtd.org")
+ (front-context-string . "#+STARTUP: inden")
+ (rear-context-string)
+ (position . 1))
+("org-refile-last-stored"
+ (filename . "~/org/gtd.org")
+ (front-context-string . "** TODO terminpl")
+ (rear-context-string . "omotionsfeier]]\n")
+ (position . 84592)
+ (last-modified 26506 4516 250187 404000))
+("org-inbox"
+ (filename . "~/org/inbox.org")
+ (front-context-string . "#+STARTUP: conte")
+ (rear-context-string)
+ (position . 1))
+("config-emacs"
+ (filename . "~/.dotfiles/.config/emacs/README.org")
+ (front-context-string . "#+TITLE: Emacs C")
+ (rear-context-string)
+ (position . 1)
+ (last-modified 26416 29212 873333 863000))
+("org-capture-last-stored"
+ (filename . "~/org/inbox.org")
+ (front-context-string . "* TODO terminpla")
+ (rear-context-string . "iewers-comments\n")
+ (position . 1881)
+ (last-modified 26505 23335 688232 765000))
+)

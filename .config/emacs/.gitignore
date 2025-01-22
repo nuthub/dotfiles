@@ -4,7 +4,6 @@
 .last-package-update-day
 .org-id-locations
 auto-save-list/
-bookmarks
 custom.el
 README.el
 eln-cache/
@@ -14,7 +13,6 @@ eshell/
 history
 image-dired/
 network-security.data
-projects
 straight/
 tmp/
 tramp

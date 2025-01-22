@@ -624,12 +624,13 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
 
 *** Finally setup org
 #+begin_src emacs-lisp
-  (use-package org :ensure nil ; already loaded, otherwise this won't get tangled
+  (use-package org
+    :ensure nil ; already loaded, otherwise this won't get tangled
     ;; the bind may defer the package loading, see documentation (C-h f use-package RET)
     :bind (:map org-mode-map
-      	      ("C-c C-<left>" . org-promote-subtree)
-      	      ("C-c C-<right>" . org-demote-subtree)
-  	      ("C-c ," . org-timestamp-inactive))
+              ("C-c C-<left>" . org-promote-subtree)
+              ("C-c C-<right>" . org-demote-subtree)
+              ("C-c ," . org-timestamp-inactive))
     :config
     (jf/org-setup-look-and-feel)
     (jf/org-setup-task-management-and-agenda)
@@ -796,6 +797,11 @@ This is needed to allow for not exporting to latex those org headings that are t
       (format
        "{\"text\": \"%s\", \"tooltip\": \"%s\", \"class\": \"%s\" }"
        text tooltip class))
+    (defun jf/org-pomodoro-waybar-shortened-clock-heading ()
+      (substring-no-properties
+       org-clock-heading
+       0
+       (min (length org-clock-heading) 19)))
     (defun jf/org-pomodoro-text-time ()
       "Return status info about org-pomodoro and if org-pomodoro is not running, try to print info about org-clock.
      If either org-pomodoro or org-clock aren't active, print \"No Active Task \" "
@@ -804,7 +810,7 @@ This is needed to allow for not exporting to latex those org headings that are t
              (if (org-clock-is-active)
                  (format "Clocked task: %d minutes - %s"
                          (org-clock-get-clocked-time)
-  		       (substring-no-properties org-clock-heading)
+  		       (jf/org-pomodoro-waybar-shortened-clock-heading)
                          "No Active task")
   	     (jf/org-pomodoro-waybar-string
   	      nil
@@ -812,28 +818,27 @@ This is needed to allow for not exporting to latex those org headings that are t
   	      nil)))
   	  ((equal :pomodoro org-pomodoro-state)
   	   (jf/org-pomodoro-waybar-string (format "%s • %s (%d)"
-  						  (substring-no-properties org-clock-heading)
+  						  (jf/org-pomodoro-waybar-shortened-clock-heading)
   						  (org-pomodoro-format-seconds)
   						  org-pomodoro-count)
-  					  (substring-no-properties org-clock-heading)
+  					  (jf/org-pomodoro-waybar-shortened-clock-heading)
   					  "work"))
   	  ((equal :overtime org-pomodoro-state)
   	   (jf/org-pomodoro-waybar-string (format "Overtime • %s (%d)"
   						  (org-pomodoro-format-seconds)
   						  org-pomodoro-count)
-  					  (substring-no-properties org-clock-heading)
+  					  (jf/org-pomodoro-waybar-shortened-clock-heading)
   					  "overtime"))
   	  ((equal :short-break org-pomodoro-state)
   	   (jf/org-pomodoro-waybar-string (format "Short Break • %s (%d)"
   						  (org-pomodoro-format-seconds)
   						  org-pomodoro-count)
-  					  (substring-no-properties org-clock-heading)
+  					  (jf/org-pomodoro-waybar-shortened-clock-heading)
   					  "short-break"))
   	  ((equal :long-break org-pomodoro-state)
-  	   (jf/org-pomodoro-waybar-string (format "Long Break • %s (%d)"  
-  						  (org-pomodoro-format-seconds)
-  						  org-pomodoro-count)
-  					  (substring-no-properties org-clock-heading)
+  	   (jf/org-pomodoro-waybar-string (format "Long Break • %s"  
+  						  (org-pomodoro-format-seconds))
+  					  (jf/org-pomodoro-waybar-shortened-clock-heading)
   					  "long-break")))))
 #+end_src
 
@@ -844,7 +849,8 @@ This is needed to allow for not exporting to latex those org headings that are t
     :config
     (transient-define-prefix jf/my-menu ()
       "Mein benutzerdefiniertes Menü."
-      ["Meine Tools\n"
+      ["Tools\n"
+       ["Vterm" ("v" "vterm" vterm)]
        ["Org"
         ("a" "Agenda" org-agenda-list)
         ("d" "Deadlines" (lambda () (interactive) (org-agenda nil "d")))
@@ -870,9 +876,11 @@ This is needed to allow for not exporting to latex those org headings that are t
 
 #+begin_src emacs-lisp
   (use-package magit
+    :ensure nil
     :config
     ;; gpg signing is at transient level 5, default was to show up to level 4
-    (setq transient-default-level 5))
+    (setq transient-default-level 5)
+    (setq magit-diff-refine-hunk 'all))
 #+end_src
 
 ** pdf-tools
@@ -885,6 +893,15 @@ This is needed to allow for not exporting to latex those org headings that are t
     (pdf-tools-install)
     :init
     (setq-default pdf-view-display-size 'fit-page))
+#+end_src
+
+** vterm
+
+#+begin_src emacs-lisp
+  (use-package vterm
+    :ensure nil
+    :config
+    (setq vterm-max-scrollback 100000))
 #+end_src
 
 ** Biblio
@@ -1000,9 +1017,19 @@ Store the API key in .authinfo. ChatGPT and Dall-E use the same API key.
   				 :host "api.openai.com")))
 #+end_src
 
-** COMMENT ement.el
+** cypher mode
 
-#+begin_src emacs-lisp :tangle no
+- Keywords from https://neo4j.com/docs/cypher-manual/current/syntax/keywords/
+#+begin_src emacs-lisp
+  (use-package cypher-mode
+    :config
+    (setq cypher-keywords
+  	(regexp-opt '("ACCESS" "ACTIVE" "ADMIN" "ADMINISTRATOR" "ALIAS" "ALIASES" "ALL" "ALL_SHORTEST_PATHS" "ALTER" "AND" "ANY" "ARRAY" "AS" "ASC" "ASCENDING" "ASSIGN" "AT" "AUTH" "BINDINGS" "BOOL" "BOOLEAN" "BOOSTED" "BOTH" "BREAK" "BUILT" "BY" "CALL" "CASCADE" "CASE" "CHANGE" "CIDR" "COLLECT" "COMMAND" "COMMANDS" "COMPOSITE" "CONCURRENT" "CONSTRAINT" "CONSTRAINTS" "CONTAINS" "CONTINUE" "COPY" "COUNT" "CREATE" "CSV" "CURRENT" "DATA" "DATABASE" "DATABASES" "DATE" "DATETIME" "DBMS" "DEALLOCATE" "DEFAULT" "DEFINED" "DELETE" "DENY" "DESC" "DESCENDING" "DESTROY" "DETACH" "DIFFERENT" "DISTINCT" "DRIVER" "DROP" "DRYRUN" "DUMP" "DURATION" "EACH" "EDGE" "ELEMENT" "ELEMENTS" "ELSE" "ENABLE" "ENCRYPTED" "END" "ENDS" "ERROR" "EXECUTABLE" "EXECUTE" "EXIST" "EXISTENCE" "EXISTS" "FAIL" "FALSE" "FIELDTERMINATOR" "FINISH" "FLOAT" "FOR" "FOREACH" "FROM" "FULLTEXT" "FUNCTION" "FUNCTIONS" "GRANT" "GRAPH" "GRAPHS" "GROUP" "GROUPS" "HEADERS" "HOME" "ID" "IF" "IMMUTABLE" "IMPERSONATE" "IN" "INDEX" "INDEXES" "INF" "INFINITY" "INSERT" "INT" "INTEGER" "IS" "JOIN" "KEY" "LABEL" "LABELS" "LEADING" "LIMITROWS" "LIST" "LOAD" "LOCAL" "LOOKUP" "MANAGEMENT" "MAP" "MATCH" "MERGE" "NAME" "NAMES" "NAN" "NEW" "NFC" "NFD" "NFKC" "NFKD" "NODE" "NODES" "NODETACH" "NONE" "NORMALIZE" "NORMALIZED" "NOT" "NOTHING" "NOWAIT" "NULL" "OF" "OFFSET" "ON" "ONLY" "OPTION" "OPTIONAL" "OPTIONS" "OR" "ORDER" "PASSWORD" "PASSWORDS" "PATH" "PATHS" "PLAINTEXT" "POINT" "POPULATED" "PRIMARIES" "PRIMARY" "PRIVILEGE" "PRIVILEGES" "PROCEDURE" "PROCEDURES" "PROPERTIES" "PROPERTY" "PROVIDER" "PROVIDERS" "RANGE" "READ" "REALLOCATE" "REDUCE" "REL" "RELATIONSHIP" "RELATIONSHIPS" "REMOVE" "RENAME" "REPEATABLE" "REPLACE" "REPORT" "REQUIRE" "REQUIRED" "RESTRICT" "RETURN" "REVOKE" "ROLE" "ROLES" "ROW" "ROWS" "SCAN" "SEC" "SECOND" "SECONDARIES" "SECONDARY" "SECONDS" "SEEK" "SERVER" "SERVERS" "SET" "SETTING" "SETTINGS" "SHORTEST" "SHORTEST_PATH" "SHOW" "SIGNED" "SINGLE" "SKIPROWS" "START" "STARTS" "STATUS" "STOP" "STRING" "SUPPORTED" "SUSPENDED" "TARGET" "TERMINATE" "TEXT" "THEN" "TIME" "TIMESTAMP" "TIMEZONE" "TO" "TOPOLOGY" "TRAILING" "TRANSACTION" "TRANSACTIONS" "TRAVERSE" "TRIM" "TRUE" "TYPE" "TYPED" "TYPES" "UNION" "UNIQUE" "UNIQUENESS" "UNWIND" "URL" "USE" "USER" "USERS" "USING" "VALUE" "VARCHAR" "VECTOR" "VERTEX" "WAIT" "WHEN" "WHERE" "WITH" "WITHOUT" "WRITE" "XOR" "YIELD" "ZONE" "ZONED"))))
+#+end_src
+
+** ement.el
+
+#+begin_src emacs-lisp
   (use-package ement)
 #+end_src
 
@@ -1889,6 +1916,12 @@ CLOSED: [2024-12-26 Thu 11:38]
   (global-set-key (kbd "C-c o") 'org-switchb)
   (global-set-key (kbd "C-c n u") 'org-roam-ui-open)
   (global-set-key (kbd "C-c j") 'consult-org-heading)
+#+end_src
+
+** vterm
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c v") 'vterm)
 #+end_src
 
 ** Magit
