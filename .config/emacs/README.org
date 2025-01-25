@@ -1005,6 +1005,30 @@ Currently not in use, but pulls projectile as dependency. Therefore, I deactivat
     (load-file "~/git/guix/master/etc/copyright.el"))
 #+end_src
 
+** gptel
+
+#+begin_src emacs-lisp
+  (use-package gptel
+    :config
+    (setq gptel-default-mode 'org-mode)
+    (add-to-list 'gptel-directives
+                 '(dreams . "I want you to act as a dream interpreter. I will give you descriptions of my dreams, and you will provide interpretations based on the symbols and themes present in the dream. Do not provide personal opinions or assumptions about the dreamer. Provide only factual interpretations based on the information given.")))
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package posframe)
+  (use-package gptel-quick
+    :after gptel postframe
+    :ensure (gptel-quick
+  	   :type git
+  	   :host github
+  	   :repo "karthink/gptel-quick")
+    :config
+    (setq gptel-quick-display 'postframe)
+    ;(keymap-set embark-general-map "?" #'gptel-quick)
+    )
+#+end_src
+
 ** COMMENT ChatGPT Shell
 
 Store the API key in .authinfo. ChatGPT and Dall-E use the same API key.
@@ -1943,7 +1967,6 @@ CLOSED: [2024-12-26 Thu 11:38]
   (global-set-key (kbd "C-c RET") 'gptel-send)
 #+end_src
 
->>>>>>> c5e1973 (emacs: org-pomodoro added, key bindings + transient menu adjusted.)
 ** citar-open in non org/latex buffers
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-c b") 'citar-open)
