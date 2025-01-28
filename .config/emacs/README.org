@@ -891,8 +891,8 @@ This is needed to allow for not exporting to latex those org headings that are t
     :config
     (require 'pdf-occur) ;; if I don't require pdf-occur before pdf-tools-install, I get a warning at startup
     (pdf-tools-install)
-    :init
-    (setq-default pdf-view-display-size 'fit-page))
+    (define-key pdf-view-mode-map (kbd "s a") 'pdf-view-auto-slice-minor-mode)
+        (setq-default pdf-view-display-size 'fit-page))
 #+end_src
 
 ** vterm
