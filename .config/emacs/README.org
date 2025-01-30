@@ -876,11 +876,13 @@ This is needed to allow for not exporting to latex those org headings that are t
 
 #+begin_src emacs-lisp
   (use-package magit
-    :ensure nil
     :config
     ;; gpg signing is at transient level 5, default was to show up to level 4
     (setq transient-default-level 5)
-    (setq magit-diff-refine-hunk 'all))
+    (setq magit-diff-refine-hunk 'all)
+    (with-eval-after-load 'project
+      (define-key project-prefix-map "m" #'magit-project-status)
+      (add-to-list 'project-switch-commands '(magit-project-status "Magit") t)))
 #+end_src
 
 ** pdf-tools
