@@ -43,7 +43,7 @@ switch() {
 
     # reconfigure home
     echo "Reconfiguring Home environment (to enable new zprofile)"
-    just guix-reconfigure-home
+    just guix-home-reconfigure
 }
 
 case $1 in
