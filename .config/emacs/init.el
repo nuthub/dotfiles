@@ -58,7 +58,7 @@
   (setq use-package-always-ensure t))
 
 ;; load recent org version
-;;(elpaca org)
+(elpaca org)
 (elpaca-wait)
 
 ;; Load my literate config
