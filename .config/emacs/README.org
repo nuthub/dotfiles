@@ -1498,6 +1498,17 @@ The global keybinding 'C-x u' is set below.
     (openwith-mode 1))
 #+end_src
 
+** frames-only-mode
+
+#+begin_src emacs-lisp
+  (use-package frames-only-mode
+    :config
+    (frames-only-mode-remap-common-window-split-keybindings)
+    (setq frames-only-mode-use-window-functions '(calendar report-emacs-bug checkdoc-show-diagnostics checkdoc org-compile-file corfu-popupinfo--show))
+    (frames-only-mode))
+#+end_src
+
+
 ** COMMENT sway (needs shackle?)
 
 #+begin_src emacs-lisp :tangle no
