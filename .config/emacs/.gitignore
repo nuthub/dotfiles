@@ -16,6 +16,6 @@ network-security.data
 straight/
 tmp/
 tramp
-transient/
+transient/history.el
 url/
 var/
