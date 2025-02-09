@@ -1508,6 +1508,16 @@ The global keybinding 'C-x u' is set below.
     (frames-only-mode))
 #+end_src
 
+** terminal-here
+Opens a terminal in the directory that matches the active buffer. Even works over tramp (e.g. ssh).
+
+#+begin_src emacs-lisp
+  (use-package terminal-here
+    :config
+    (setq terminal-here-linux-terminal-command 'alacritty)
+    (global-set-key (kbd "C-<f5>") #'terminal-here-launch)
+    (global-set-key (kbd "C-<f6>") #'terminal-here-project-launch))
+#+end_src
 
 ** COMMENT sway (needs shackle?)
 
