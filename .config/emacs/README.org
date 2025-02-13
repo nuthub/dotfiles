@@ -1653,7 +1653,7 @@ If there is more than one, let the user choose."
       ;; (setq khalel-khal-command "khal")
       ;; (setq khalel-vdirsyncer-command "vdirsyncer")
       (setq khalel-capture-key "k")
-      (setq khalel-default-calendar "Persönlich")
+      (setq khalel-default-calendar "personal")
       (setq khalel-import-org-file (concat org-directory "/" "calendar.org"))
       (setq khalel-import-start-date "-2m")
       (setq khalel-import-end-date "+12m")
