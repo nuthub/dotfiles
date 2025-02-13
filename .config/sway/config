@@ -11,11 +11,12 @@ set $alt Mod1
 
 # Your preferred terminal emulator
 set $term alacritty
+
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
 #set $menu dmenu_path | dmenu | xargs swaymsg exec --
-set $menu wofi
+set $menu rofi -show combi
 
 ### Output configuration
 #
@@ -61,45 +62,46 @@ input type:touchpad {
 #
 # Basics:
 #
-    # Start a terminal
-    bindsym $mod+Return exec $term
-    # Start an emacs terminal
-    bindsym $mod+Ctrl+Return exec emacsclient -c -a "" -e '(vterm)'
-    # create new emacs frame
-    bindsym $mod+Shift+Return exec emacsclient -c -a ""
+# Start a terminal
+bindsym $mod+Return exec $term
+# Start an emacs terminal
+bindsym $mod+Ctrl+Return exec emacsclient -c -a "" -e '(vterm)'
+# create new emacs frame
+bindsym $mod+Shift+Return exec emacsclient -c -a "" -e '(switch-to-buffer nil)'
 
-    # Kill focused window
-    bindsym $mod+Shift+q kill
+# Kill focused window
+bindsym $mod+Shift+q kill
 
-    # Start your launcher
-    bindsym $mod+d exec $menu
+# Start your launcher
+bindsym $mod+d exec $menu
+bindsym $mod+Shift+d exec rofi -show run
 
-    # Drag floating windows by holding down $mod and left mouse button.
-    # Resize them with right mouse button + $mod.
-    # Despite the name, also works for non-floating windows.
-    # Change normal to inverse to use left mouse button for resizing and right
-    # mouse button for dragging.
-    floating_modifier $mod normal
+# Drag floating windows by holding down $mod and left mouse button.
+# Resize them with right mouse button + $mod.
+# Despite the name, also works for non-floating windows.
+# Change normal to inverse to use left mouse button for resizing and right
+# mouse button for dragging.
+floating_modifier $mod normal
 
-    # Reload the configuration file
-    bindsym $mod+Shift+c reload
+# Reload the configuration file
+bindsym $mod+Shift+c reload
 
-    # Exit sway (logs you out of your Wayland session)
-    bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
-#
+# Exit sway (logs you out of your Wayland session)
+bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+
 # Moving around:
 #
-    # Or use $mod+[up|down|left|right]
-    bindsym $mod+Left focus left
-    bindsym $mod+Down focus down
-    bindsym $mod+Up focus up
-    bindsym $mod+Right focus right
+# Or use $mod+[up|down|left|right]
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
 
-    # Ditto, with arrow keys
-    bindsym $mod+Shift+Left move left
-    bindsym $mod+Shift+Down move down
-    bindsym $mod+Shift+Up move up
-    bindsym $mod+Shift+Right move right
+# Ditto, with arrow keys
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
 
 #
 # Gestures
@@ -288,14 +290,11 @@ bindsym $mod+Shift+o move workspace to output left
 bindsym Control+mod1+Delete exec $lockscreen
 
 # Clipboard
-exec wl-paste -t text --watch clipman store --max-items 32
-bindsym $mod+y exec clipman pick --tool="wofi" --max-items=32
+exec wl-paste -t text --watch clipman store --max-items 32 --unix
+bindsym $mod+y exec clipman pick --tool="rofi" --max-items=32
 
 # Emoji chooser
-bindsym $mod+i exec wofi-emoji
-
-# Just chooser
-#bindsym $mod+j exec just --choose --chooser "wofi -d"
+bindsym $mod+i exec rofi-emoji
 
 # window rules
 # to get app_ids use $ swaymsg -t get_tree | grep app_id

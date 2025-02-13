@@ -108,7 +108,7 @@
 		 ;; I should not install both, portal-wlr and portal-gnome
 		 "xdg-desktop-portal-gtk" "xdg-desktop-portal-wlr" ; "xdg-desktop-portal" is propagated by xdg-desktop-portal-gtk
 		 ;; sway
-		 "sway" "waybar" "wofi" "swaylock" "swayidle" "swaynotificationcenter" "libnotify"
+		 "sway" "waybar" "rofi-wayland" "swaylock" "swayidle" "swaynotificationcenter" "libnotify"
 		 "qtwayland@5" ; at least flameshot and nextcloud-client need this (2024-11-28)
 		 "slurp" "grim" "swappy" ; screenshots
 		 "wf-recorder" ; screen recordings
