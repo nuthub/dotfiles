@@ -57,10 +57,6 @@
   ;; make :ensure t the default
   (setq use-package-always-ensure t))
 
-;; load recent org version
-(elpaca org)
-(elpaca-wait)
-
 ;; Load my literate config
 (org-babel-load-file (expand-file-name
 		      "README.org"
