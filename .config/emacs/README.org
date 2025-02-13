@@ -194,7 +194,7 @@ Modus Themes. To switch between light (operandi) and dark (vivendi) theme, auto-
     :config
     ;;(setq doom-modeline-height 18)
     (setq doom-modeline-total-line-number t)
-    (setq doom-modeline-mu4e t)
+    (setq doom-modeline-mu4e nil)
     (doom-modeline-mode 1))
 #+end_src
 
