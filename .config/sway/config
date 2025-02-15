@@ -16,7 +16,7 @@ set $term alacritty
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
 #set $menu dmenu_path | dmenu | xargs swaymsg exec --
-set $menu rofi -show combi
+# set $menu rofi -show combi
 
 ### Output configuration
 #
@@ -74,8 +74,8 @@ bindsym $mod+Shift+Return exec emacsclient -c -a "" -e '(switch-to-buffer nil)'
 bindsym $mod+Shift+q kill
 
 # Start your launcher
-bindsym $mod+d exec $menu
-bindsym $mod+Shift+d exec rofi -show run
+bindsym $mod+x exec rofi -show combi
+bindsym $mod+Shift+x exec rofi -show run
 
 # Drag floating windows by holding down $mod and left mouse button.
 # Resize them with right mouse button + $mod.
