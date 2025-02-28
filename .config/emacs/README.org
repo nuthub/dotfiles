@@ -1,5 +1,5 @@
 #+TITLE: Emacs Configuration
-#+STARTUP: content
+#+STARTUP: overview
 #+PROPERTY: header-args :tangle yes
 #+TODO: TODO COMMENT
 
@@ -649,6 +649,39 @@ For syntax highlighted source code blocks, I use the font-locking mode of emacs.
   (use-package engrave-faces)
 #+end_src
 
+** org-super-agenda
+
+#+begin_src emacs-lisp
+  (use-package org-super-agenda
+    :config
+    (setq org-super-agenda-groups
+  	'(;; Each group has an implicit boolean OR operator between its selectors.
+   	  (:name ""  ; Optionally specify section name
+                   :time-grid t)  ; Items that appear on the time grid
+  	  (:name "Direct Actions"
+  		 :tag ("direct"))
+  	  (:name "Work"
+                   :tag ("work" "teaching"))
+  	  (:name "Promotion"
+                   :tag "promotion")
+  	  (:name "Projects"
+  		 :tag ("projects"))
+  	  (:name "Reading"
+                   :category "reading")
+  	  (:name "Personal"
+                   :tag ("personal"))
+  	  (:name "House Routines"
+                   :tag "house")
+  	  (:name "Sailing"
+                   :tag "sail")
+  	  ;; Groups supply their own section names when none are given
+  	  (:todo "WAIT" :order 8)  ; Set order of this section
+  	  ;; After the last group, the agenda will display items that didn't
+  	  ;; match any of these groups, with the default order position of 99
+  	  ))
+    (org-super-agenda-mode))
+#+end_src
+
 ** Org mode scratch buffer
 
 #+begin_src emacs-lisp
@@ -656,7 +689,7 @@ For syntax highlighted source code blocks, I use the font-locking mode of emacs.
   (setq initial-major-mode 'org-mode)
 #+end_src
 
-** org-roam
+** Org roam
 Build a second brain with org-roam.
 #+begin_src emacs-lisp
   (use-package org-roam
@@ -714,51 +747,12 @@ Visualize the org roam graph in browser.
   	org-roam-ui-open-on-start t))
 #+end_src
 
-** ox-hugo
-
-#+begin_src emacs-lisp
-  (use-package ox-hugo)
-#+end_src
-
 ** HTML Export
 
 htmlize is used by org to export to HTML.
   
 #+begin_src emacs-lisp
   (use-package htmlize)
-#+end_src
-
-** org-super-agenda
-
-#+begin_src emacs-lisp
-  (use-package org-super-agenda
-    :config
-    (setq org-super-agenda-groups
-  	'(;; Each group has an implicit boolean OR operator between its selectors.
-   	  (:name ""  ; Optionally specify section name
-                   :time-grid t)  ; Items that appear on the time grid
-  	  (:name "Direct Actions"
-  		 :tag ("direct"))
-  	  (:name "Work"
-                   :tag ("work" "teaching"))
-  	  (:name "Promotion"
-                   :tag "promotion")
-  	  (:name "Projects"
-  		 :tag ("projects"))
-  	  (:name "Reading"
-                   :category "reading")
-  	  (:name "Personal"
-                   :tag ("personal"))
-  	  (:name "House Routines"
-                   :tag "house")
-  	  (:name "Sailing"
-                   :tag "sail")
-  	  ;; Groups supply their own section names when none are given
-  	  (:todo "WAIT" :order 8)  ; Set order of this section
-  	  ;; After the last group, the agenda will display items that didn't
-  	  ;; match any of these groups, with the default order position of 99
-  	  ))
-    (org-super-agenda-mode))
 #+end_src
 
 ** ox-extra (from org-contrib)
@@ -770,6 +764,12 @@ This is needed to allow for not exporting to latex those org headings that are t
     :after org
     :config
     (ox-extras-activate '(latex-header-blocks ignore-headlines)))
+#+end_src
+
+** ox-hugo
+
+#+begin_src emacs-lisp
+  (use-package ox-hugo)
 #+end_src
 
 ** org-pomodoro
