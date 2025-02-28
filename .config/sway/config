@@ -69,6 +69,8 @@ bindsym $mod+Return exec $term
 bindsym $mod+Ctrl+Return exec emacsclient -c -a "" -e '(vterm)'
 # create new emacs frame
 bindsym $mod+Shift+Return exec emacsclient -c -a "" -e '(switch-to-buffer nil)'
+# open browser
+bindsym $mod+b exec librewolf
 
 # Kill focused window
 bindsym $mod+Shift+q kill
