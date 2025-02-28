@@ -1848,10 +1848,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                     (mu4e-trash-folder . "/private/Trash")))))
 
     ;; Calendar support
-    (require 'mu4e-icalendar)
-
-    ;; start mu4e (in background)
-    (mu4e t)) ; end of use-package mu4e
+    (require 'mu4e-icalendar)) ; end of use-package mu4e
 #+end_src
 
 When signing mails with openpgp (or gnupg), use the key associated with the sender address.
