@@ -60,9 +60,9 @@
 		     '(match (edit (@ (mode "assign") (name "antialias"))
 				   (bool "true")))
 		     '(match (edit (@ (mode "assign") (name "hinting"))
-				   (bool "false")))
+				   (bool "true"))) ; false to disable
 		     '(match (edit (@ (mode "assign") (name "hintstyle"))
-				   (const "hintnone")))
+				   (const "hintslight"))) ; was hintnone 
 		     '(alias (family "monospace")
 			     (prefer (family "Fira Code")
 				     (family "Font Awesome 6 Free")
