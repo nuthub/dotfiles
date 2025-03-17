@@ -622,15 +622,19 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
                       (push ov org-inline-image-overlays)))))))))))
 #+end_src
 
-*** Finally setup org
+*** Finally setup org / org-mode-map key bindings
 #+begin_src emacs-lisp
+  (defun jf/org-timestamp-inactive ()
+    (interactive)
+    (org-time-stamp nil t))
+
   (use-package org
     :ensure nil ; already loaded, otherwise this won't get tangled
     ;; the bind may defer the package loading, see documentation (C-h f use-package RET)
     :bind (:map org-mode-map
-              ("C-c C-<left>" . org-promote-subtree)
-              ("C-c C-<right>" . org-demote-subtree)
-              ("C-c ," . org-timestamp-inactive))
+                ("C-c C-<left>" . org-promote-subtree)
+                ("C-c C-<right>" . org-demote-subtree)
+                ("C-c ," . jf/org-timestamp-inactive))
     :config
     (jf/org-setup-look-and-feel)
     (jf/org-setup-task-management-and-agenda)
