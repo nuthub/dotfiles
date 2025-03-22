@@ -854,12 +854,13 @@ This is needed to allow for not exporting to latex those org headings that are t
     (transient-define-prefix jf/my-menu ()
       "Mein benutzerdefiniertes Menü."
       ["Tools\n"
-       ["Vterm" ("v" "vterm" vterm)]
+       ["Vterm"
+        ("v" "vterm" vterm)
+        ("t" "terminal here" terminal-here)]
        ["Org"
         ("a" "Agenda" org-agenda-list)
         ("d" "Deadlines" (lambda () (interactive) (org-agenda nil "d")))
-        ("p" "Start/Stop Pomodoro" (lambda () (interactive) (org-pomodoro)))
-        ("t" "GTD buffer" (lambda () (interactive) (find-file "~/org/gtd.org")))]
+        ("p" "Start/Stop Pomodoro" (lambda () (interactive) (org-pomodoro)))]
        ["Mail"
         ("m" "mu4e" mu4e)
         ("n" "Compose" mu4e-compose-mail)
