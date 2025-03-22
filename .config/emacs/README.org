@@ -1751,9 +1751,9 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
     (setq message-send-mail-function 'smtpmail-send-it)
     (setq message-kill-buffer-on-exit t)
     ;; show only mail addresses of the last 365 days in completion buffer
-    ;; (setq mu4e-compose-complete-only-after (format-time-string
-    ;;                                     "%Y-%m-%d"
-    ;;                                     (time-subtract (current-time) (days-to-time 365))))
+    (setq mu4e-compose-complete-only-after (format-time-string
+                                        "%Y-%m-%d"
+                                        (time-subtract (current-time) (days-to-time 365))))
     ;; this lets correctly reply to message where a recipient address contains
     ;; a comma, like in "Julian Flake (Softwaretechnik, Informatik) <flake@uni-koblenz.de>"
     (setq rfc2047-quote-decoded-words-containing-tspecials t)
