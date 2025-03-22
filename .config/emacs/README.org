@@ -412,7 +412,6 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
           (quote
            ((buffer-read-only . 1))))
 
-    (setq org-agenda-window-setup 'current-window)
     (setq org-agenda-span 1)
     (setq org-agenda-time-grid
           '((daily today require-timed remove-match)
@@ -1512,8 +1511,10 @@ The global keybinding 'C-x u' is set below.
   (use-package frames-only-mode
     :config
     (frames-only-mode-remap-common-window-split-keybindings)
-    (setq frames-only-mode-use-window-functions '(calendar report-emacs-bug checkdoc-show-diagnostics checkdoc org-compile-file corfu-popupinfo--show))
-    (frames-only-mode))
+    (setq frames-only-mode-use-window-functions
+          '(calendar report-emacs-bug checkdoc-show-diagnostics checkdoc org-compile-file corfu-popupinfo--show org-agenda))
+    (frames-only-mode)
+    (setq org-agenda-window-setup 'current-window))
 #+end_src
 
 ** terminal-here
