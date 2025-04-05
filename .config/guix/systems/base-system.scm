@@ -167,7 +167,7 @@
 		 ;; Look & Feel
 		 ;; fonts
 		 "font-fira-code" ; "font-hack" is also nice, but doesn't support ligatures
-		 "font-awesome6" ; some icons, unfortunately fontawesome is an outdated version: https://issues.guix.gnu.org/32916
+		 "font-awesome-nonfree" ; some icons, from nonguix, fontawesome in guix is an outdated version: https://issues.guix.gnu.org/32916
 		 ;; Nerd-Fonts are installed by M-x nerd-icons-install-fonts into .local/share/fonts
 		 ;; all-the-icons are installed by M-x all-the-icons-install-fonts into .local/share/fonts
 		 "font-google-noto" ; broad range of 
