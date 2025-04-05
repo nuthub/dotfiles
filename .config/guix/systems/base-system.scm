@@ -141,9 +141,9 @@
 		 "qt5ct"
 		 ;; my desktop apps
 		 "gvfs" "nemo" "file-roller" "baobab"
-		 "librewolf" "ungoogled-chromium-wayland" "firefox" 
+		 "librewolf" "icecat" "ungoogled-chromium-wayland" "firefox"
 		 "icedove-wayland" ; thunderbird
-		 ;; "aqbanking" "gnucash"
+		 "aqbanking" "gnucash"
 		 "libreoffice"
 		 ;; Office, LaTeX, PDF & Co
 		 "texlive" "texlive-biber" ;; JabRef is installed via flatpak
