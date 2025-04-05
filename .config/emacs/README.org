@@ -1359,6 +1359,17 @@ enchant uses aspell or hunspell or whatever it can find. ~enchant-lsmod-2~ tells
     (add-hook 'prog-mode-hook 'flyspell-prog-mode))
 #+end_src
 
+** DeepL
+#+begin_src emacs-lisp
+  (use-package txl
+    :config
+    (setq txl-languages '(DE . EN-US))
+    (setq txl-deepl-api-key (auth-info-password
+            (nth 0 (auth-source-search
+                    :host "deepl.com"))))
+    (setq txl-deepl-api-url "https://api-free.deepl.com/v2/translate"))
+#+end_src
+
 ** embark & embark-consult
 #+begin_src emacs-lisp
   (use-package embark
