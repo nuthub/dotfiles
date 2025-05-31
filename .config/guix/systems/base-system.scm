@@ -66,7 +66,7 @@
 		 "isync" "mu"
 		 "vdirsyncer" "khal" "khard"
 		 ;; Programming languages
-		 "openjdk@21:jdk" ; java-lsp wants this, otherwise I'd just use it in guix shells only
+		 "openjdk@23:jdk" ; java-lsp wants this, otherwise I'd just use it in guix shells only
 		 "python" ; treemacs wants python3
 		 ;; my shell and shell tools
 		 "zsh" "zsh-autosuggestions" "zsh-syntax-highlighting"
