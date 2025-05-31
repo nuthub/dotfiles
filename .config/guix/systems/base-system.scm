@@ -246,6 +246,7 @@ guest only = yes\n"))))
 		      (service libvirt-service-type
 			       (libvirt-configuration
 				(unix-sock-group  "libvirt")))
+		      (service virtlog-service-type)
 		      (udev-rules-service 'solaar-udev-rules solaar)
 		      (simple-service 'dbus-extras
 				      dbus-root-service-type (list blueman)))
