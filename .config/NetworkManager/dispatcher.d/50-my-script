@@ -1,0 +1,47 @@
+#!/bin/sh
+
+# The following script needs to be placed in /etc/NetworkManager/dispatcher.d/
+# 
+# #!/bin/sh
+# #
+# #   Run NeworkManager dispatcher scripts from user home directories
+# #   for logged in users
+# #   See: https://developer.gnome.org/NetworkManager/stable/NetworkManager.html
+# #   See: https://unix.stackexchange.com/q/405242
+# #
+# PATH=/run/current-system/profile/bin/
+
+# for user in $(who | awk '{print $1}' | sort | uniq); do
+#     scripts_dir="/home/${user}/.config/NetworkManager/dispatcher.d"
+#     [ ! -d "$scripts_dir" ] && continue
+#     find "$scripts_dir" -type f -executable -user "$user" -perm -u+rwx ! -perm /go+w ! -perm /+s | 
+# 	while read -r script; do
+# 	    sudo -u "$user" --set-home --preserve-env -- "$script" "$1" "$2"
+# 	done
+# done
+
+PATH=/home/flake/.local/bin:/home/flake/.guix-home/profile/bin:/run/privileged/bin:/home/flake/.config/guix/current/bin:/home/flake/.guix-profile/bin:/run/current-system/profile/bin:
+DEVICES="wwan0 wlp9s0f0"
+
+device=$1
+status=$2
+
+prog="$(basename "${BASH_SOURCE[0]}")"
+
+if echo "$DEVICES" | grep -w -q "$device"; then
+    case $status in
+	"up")
+	    logger -t $prog -p user.notice "Running ${BASH_SOURCE[0]} $@"
+	    mbsync -a
+	    emacsclient -e "(mu4e-update-index)"
+	    herd start goimapnotify
+	    ;;
+	"down")
+	    logger -t $prog -p user.notice "Running ${BASH_SOURCE[0]} $@"
+	    herd stop goimapnotify
+	    ;;
+	*)
+	    ;;
+    esac
+fi
+

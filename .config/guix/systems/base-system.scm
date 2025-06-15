@@ -63,7 +63,7 @@
 		 ;; emacs & related
 		 "emacs-pgtk-xwidgets" "emacs-pdf-tools" "emacs-vterm"
 		 "make" "perl" "texinfo" ; building auctex for elpaca needs these
-		 "isync" "mu"
+		 "isync" "mu" "goimapnotify"
 		 "vdirsyncer" "khal" "khard"
 		 ;; Programming languages
 		 "openjdk@23:jdk" ; java-lsp wants this, otherwise I'd just use it in guix shells only
