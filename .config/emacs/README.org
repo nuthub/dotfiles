@@ -111,6 +111,11 @@ Taken from /emacs from scratch/.
 #+end_src
 
 * Look & feel
+** System Clipboard to kill ring
+#+begin_src emacs-lisp
+  (setq save-interprogram-paste-before-kill t)
+#+end_src
+
 ** Font
 
 I set my default fonts in ~~/.fonts.conf~. This is just an example:
