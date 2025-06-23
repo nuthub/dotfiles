@@ -4,6 +4,7 @@
                          ("melpa" . "https://melpa.org/packages/")))
 (package-initialize)
 
+(package-refresh-contents)
 (package-install 'khalel)
 (require 'khalel)
 (setq khalel-default-calendar "Persönlich")
