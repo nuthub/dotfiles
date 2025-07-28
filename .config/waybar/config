@@ -139,7 +139,7 @@
     "clock": {
 	"timezone": "Europe/Berlin",
 	"locale": "de_DE.utf8",
-	"format": "{: W%OV  %d.%m.  %H:%M}",
+	"format": " W{:%OV  %d.%m.  %H:%M}",
 	// ugly hack because of https://github.com/Alexays/Waybar/issues/2240#issuecomment-2064237563
 	// Example:            10 11 12 13 14 15 16 W00   10 11 12 13 14 15 16 W00   10 11 12 13 14 15 16 W00 
 	"tooltip-format": "<tt>                                                                              \n{calendar}</tt>",
