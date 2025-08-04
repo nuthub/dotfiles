@@ -881,6 +881,14 @@ This is needed to allow for not exporting to latex those org headings that are t
       (add-to-list 'project-switch-commands '(magit-project-status "Magit") t)))
 #+end_src
 
+** git-gutter
+This shows modified/added/deleted lines directly in the editor.
+#+begin_src emacs-lisp
+  (use-package git-gutter
+    :config
+    (global-git-gutter-mode 1))
+#+end_src
+
 ** pdf-tools
 
 #+begin_src emacs-lisp
