@@ -107,6 +107,12 @@ Taken from /emacs from scratch/.
   (setq revert-without-query '(".pdf"))
 #+end_src
 
+** Don't ask to open symlinks to version controlled files
+
+#+begin_src emacs-lisp
+  (setq vc-follow-symlinks t)
+#+end_src
+
 * Look & feel
 ** System Clipboard to kill ring
 #+begin_src emacs-lisp
