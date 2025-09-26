@@ -40,7 +40,7 @@ case "$1" in
 	fi
 	;;
     "")
-	if [ $value == 1 ]; then 
+	if [ "$value" == "1" ]; then 
 	    echo $SYMBOL_OPEN
 	else
 	    echo $SYMBOL_CLOSED
