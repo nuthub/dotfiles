@@ -35,7 +35,8 @@
                            (documentation "Run the goimapservice daemon.")
 			   (provision '(goimapnotify))
                            (auto-start? #f)
-			   (respawn? #f)
+			   (respawn? #t)
+			   (respawn-delay 60)
 			   (start #~(make-forkexec-constructor
 				     '("goimapnotify")))
 			   (stop #~(make-kill-destructor)))))
