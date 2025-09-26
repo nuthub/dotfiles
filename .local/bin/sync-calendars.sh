@@ -25,16 +25,16 @@ help() {
 
 case $1 in
     "-f")
-	vdirsyncer discover
-	vdirsyncer metasync
-	vdirsyncer sync
+	vdirsyncer -v WARNING discover
+	vdirsyncer -v WARNING metasync
+	vdirsyncer -v WARNING sync
 	#	emacs --init-directory=~/.config/emacs.minimal-khalel --batch  -e 'khalel-import-events'
 	emacs --init-directory=$initdir --batch --script $initdir/init.el -e 'khalel-import-events'
 	emacsclient -e '(jf/revert-file-visiting-buffer "~/org/calendar.org")'
 	exit 0
 	;;
     "-l")
-	vdirsyncer sync
+	vdirsyncer -v WARNING sync
 	emacs --init-directory=$initdir --batch --script $initdir/init.el -e 'khalel-import-events'
 	emacsclient -e '(jf/revert-file-visiting-buffer "~/org/calendar.org")'
 	exit 0
