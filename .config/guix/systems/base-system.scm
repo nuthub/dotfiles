@@ -141,7 +141,7 @@
 		 "qt5ct"
 		 ;; my desktop apps
 		 "gvfs" "nemo" "file-roller" "baobab"
-		 "librewolf" "icecat" "ungoogled-chromium-wayland" "firefox"
+		 "firefox" "librewolf" "icecat" "ungoogled-chromium-wayland" ; https://codeberg.org/guix/guix/issues/1465#issuecomment-5928124
 		 "icedove-wayland" ; thunderbird
 		 "aqbanking" "gnucash"
 		 "libreoffice"
