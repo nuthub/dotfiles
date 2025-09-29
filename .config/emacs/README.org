@@ -902,10 +902,24 @@ This shows modified/added/deleted lines directly in the editor.
     :ensure nil ;; use the system installed version (elpaca keyword)
     :config
     (require 'pdf-occur) ;; if I don't require pdf-occur before pdf-tools-install, I get a warning at startup
-    (pdf-tools-install)
-    (define-key pdf-view-mode-map (kbd "s a") 'pdf-view-auto-slice-minor-mode)
-        (setq-default pdf-view-display-size 'fit-page))
+    (pdf-loader-install)
+    (setq-default pdf-view-display-size 'fit-page)
+    (setopt pdf-view-continuous nil)
+    ;; (define-key pdf-view-mode-map (kbd "g") nil)
+    ;; (define-key pdf-view-mode-map (kbd "g g") 'pdf-view-first-page)
+    (define-key pdf-view-mode-map (kbd "G") 'pdf-view-last-page)
+    (define-key pdf-view-mode-map (kbd "e") 'pdf-view-goto-page)
+    ;; (define-key pdf-view-mode-map (kbd "r") 'pdf-view-revert-buffer)
+    (define-key pdf-view-mode-map (kbd "a") 'pdf-annot-add-text-annotation)
+    (define-key pdf-view-mode-map (kbd "d") 'pdf-annot-delete)
+    (define-key pdf-view-mode-map (kbd "h") 'pdf-annot-add-highlight-markup-annotation)
+    (define-key pdf-view-mode-map (kbd "~") 'pdf-annot-add-squiggly-markup-annotation)
+    (define-key pdf-view-mode-map (kbd "u") 'pdf-annot-add-underline-markup-annotation)
+    (define-key pdf-view-mode-map (kbd "o") 'pdf-annot-add-strikeout-markup-annotation)
+    (define-key pdf-view-mode-map (kbd "s a") 'pdf-view-auto-slice-minor-mode))
 #+end_src
+
+Parts of this configuration (e.g. key bindings) are from https://emacselements.com/pdf-tools-settings.html.
 
 ** vterm
 
