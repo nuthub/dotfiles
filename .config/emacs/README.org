@@ -1735,155 +1735,177 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
    #+end_src
 
 #+begin_src emacs-lisp
-    (use-package mu4e
-      :if (string-prefix-p "nutbook" (system-name))
-      :ensure nil ;; use the system installed version (elpaca keyword)
-      :config
-      (define-key mu4e-view-mode-map (kbd "C--") nil t) ; remove key binding
-      (define-key mu4e-view-mode-map (kbd "C-+") nil t) ; remove key binding
-      (define-key mu4e-headers-mode-map (kbd "C--") nil t) ; remove key binding
-      (define-key mu4e-headers-mode-map (kbd "C-+") nil t) ; remove key binding
-      (setq mu4e-read-option-use-builtin nil)
-      (setq mu4e-completing-read-function 'completing-read)
-      (setq mu4e-change-filenames-when-moving t)
+  (use-package mu4e
+    :if (string-prefix-p "nutbook" (system-name))
+    :ensure nil ;; use the system installed version (elpaca keyword)
+    :config
+    (define-key mu4e-view-mode-map (kbd "C--") nil t) ; remove key binding
+    (define-key mu4e-view-mode-map (kbd "C-+") nil t) ; remove key binding
+    (define-key mu4e-headers-mode-map (kbd "C--") nil t) ; remove key binding
+    (define-key mu4e-headers-mode-map (kbd "C-+") nil t) ; remove key binding
+    (setq mu4e-read-option-use-builtin nil)
+    (setq mu4e-completing-read-function 'completing-read)
+    (setq mu4e-change-filenames-when-moving t)
 
-      ;; appearance
-      (setq mu4e-confirm-quit t)
-      (setq mu4e-notification-support t)
-      (setq mu4e-headers-time-format "%H:%M")
-      (setq mu4e-headers-date-format "%F %H:%M")
-      (setq mu4e-headers-fields
-            '((:human-date . 18)
-              (:flags . 6)
-              (:from-or-to . 25)
-              (:subject . 125)
-              (:maildir . 15)
-              (:mailing-list . 10)))
-      (setq mu4e-use-fancy-chars t)
-      (setq mu4e-view-show-images t)
-      (setq mu4e-view-show-addresses t)
-      (setq gnus-visible-headers (concat gnus-visible-headers
-                                         "\\|^User-Agent:"))
+    ;; appearance
+    (setq mu4e-confirm-quit t)
+    (setq mu4e-notification-support t)
+    (setq mu4e-headers-time-format "%H:%M")
+    (setq mu4e-headers-date-format "%F %H:%M")
+    (setq mu4e-headers-fields
+          '((:human-date . 18)
+            (:flags . 6)
+            (:from-or-to . 25)
+            (:subject . 125)
+            (:maildir . 15)
+            (:mailing-list . 10)))
+    (setq mu4e-use-fancy-chars t)
+    (setq mu4e-view-show-images t)
+    (setq mu4e-view-show-addresses t)
+    (setq gnus-visible-headers (concat gnus-visible-headers
+                                       "\\|^User-Agent:"))
 
-      ;; receiving mails
-      (setq mu4e-get-mail-command "mbsync inboxes-only")
-      (setq mu4e-update-interval(* 5 60))
-      (setq mu4e-maildir "~/Mail")
-      ;; https://mu-discuss.narkive.com/jiDf9Swa/mu-index-on-macos-sometimes-very-fast-sometimes-very-slow#
-  ;;    (setq mu4e-index-cleanup nil) ;; attempt to avoid slow reindexing
-  ;;    (setq mu4e-index-lazy-check nil) ;; attempt to avoid slow reindexing
+    ;; receiving mails
+    (setq mu4e-get-mail-command "mbsync inboxes-only")
+    (setq mu4e-update-interval(* 5 60))
+    (setq mu4e-maildir "~/Mail")
+    ;; https://mu-discuss.narkive.com/jiDf9Swa/mu-index-on-macos-sometimes-very-fast-sometimes-very-slow#
+    ;;    (setq mu4e-index-cleanup nil) ;; attempt to avoid slow reindexing
+    ;;    (setq mu4e-index-lazy-check nil) ;; attempt to avoid slow reindexing
 
-      ;; headers view
-      (setq mu4e-org-link-query-in-headers-mode t)
-      (setq mu4e-headers-include-related nil)
+    ;; headers view
+    (setq mu4e-org-link-query-in-headers-mode t)
+    (setq mu4e-headers-include-related nil)
 
-      ;; Composing mails
-      (require 'smtpmail)
-      (setq smtpmail-queue-mail nil)  ;; start in direct mode
-      (setq smtpmail-queue-dir "~/Mail/queue/cur")
-      (setq mail-user-agent 'mu4e-user-agent)
-      (setq message-send-mail-function 'smtpmail-send-it)
-      (setq message-kill-buffer-on-exit t)
-      ;; show only mail addresses of the last 365 days in completion buffer
-      (setq mu4e-compose-complete-only-after (format-time-string
-                                          "%Y-%m-%d"
-                                          (time-subtract (current-time) (days-to-time 365))))
-      ;; this lets correctly reply to message where a recipient address contains
-      ;; a comma, like in "Julian Flake (Softwaretechnik, Informatik) <flake@uni-koblenz.de>"
-      (setq rfc2047-quote-decoded-words-containing-tspecials t)
-      (setq mu4e-compose-format-flowed t)
-      (setq mu4e-compose-in-new-frame t)
-      (setq message-cite-function 'message-cite-original) ;; alternative: 'message-cite-original-without-signature
-      ;; this adds the date of a cited mail:
-      (setq message-citation-line-function 'message-insert-formatted-citation-line)
-      ;; enable gnus dired mode, which allows to add multiple files a message buffer
-      (add-hook 'dired-mode-hook 'turn-on-gnus-dired-mode)
-      ;; gpg sign all mails when sending
-      (add-hook 'message-send-hook
-                (lambda()
-                  (mml-secure-sign)))
+    ;; Composing mails
+    (require 'smtpmail)
+    (setq smtpmail-queue-mail nil)  ;; start in direct mode
+    (setq smtpmail-queue-dir "~/Mail/queue/cur")
+    (setq mail-user-agent 'mu4e-user-agent)
+    (setq message-send-mail-function 'smtpmail-send-it)
+    (setq message-kill-buffer-on-exit t)
+    ;; show only mail addresses of the last 365 days in completion buffer
+    (setq mu4e-compose-complete-only-after (format-time-string
+                                            "%Y-%m-%d"
+                                            (time-subtract (current-time) (days-to-time 365))))
+    ;; this lets correctly reply to message where a recipient address contains
+    ;; a comma, like in "Julian Flake (Softwaretechnik, Informatik) <flake@uni-koblenz.de>"
+    (setq rfc2047-quote-decoded-words-containing-tspecials t)
+    (setq mu4e-compose-format-flowed t)
+    (setq mu4e-compose-in-new-frame t)
+    (setq message-cite-function 'message-cite-original) ;; alternative: 'message-cite-original-without-signature
+    ;; this adds the date of a cited mail:
+    (setq message-citation-line-function 'message-insert-formatted-citation-line)
+    ;; enable gnus dired mode, which allows to add multiple files a message buffer
+    (add-hook 'dired-mode-hook 'turn-on-gnus-dired-mode)
+    ;; gpg sign all mails when sending
+    (add-hook 'message-send-hook
+              (lambda()
+                (mml-secure-sign)))
 
-      ;; bookmarks and shortcuts
-      (setq mu4e-bookmarks
-            '((:name "Combined inbox" :query "maildir:/private/INBOX OR maildir:/work/INBOX OR maildir:/tudo/INBOX" :key ?i)
-              (:name "Unread messages" :query "flag:unread AND NOT flag:trashed" :key ?u)
-              (:name "Sent" :query "maildir:/private/Sent OR maildir:/work/Sent" :key ?s)
-              (:name "Archives" :query "maildir:/private/Archives/2025 OR maildir:/work/Archives/2025" :key ?a)
-              (:name "Drafts" :query "maildir:/private/Drafts OR maildir:/work/Drafts" :key ?d)
-              (:name "Junk" :query "maildir:/private/Junk OR maildir:/work/Junk" :key ?j)
-              (:name "Mailing-Lists" :query "maildir:/private/INBOX/*" :key ?m)
-              (:name "Today's messages" :query "date:today..now" :key ?n)
-              (:name "Last 7 days" :query "date:7d..now" :hide-unread t :key ?7)
-              (:name "Trashed mails" :query "flag:trashed" :hide-unread nil :key ?t)
-              (:name "Messages with PDFs" :query "mime:application/pdf" :key ?p)))
-      (setq mu4e-maildir-shortcuts
-            '(("/private/INBOX" . ?p)
-              ("/private/Archives/2025" . ?P)
-              ("/private/autolearn/ham" . ?h)
-              ("/private/autolearn/spam" . ?s)
-              ("/work/INBOX" . ?w)
-              ("/work/Archives/2025" . ?W)
-              ("/tudo/INBOX" . ?d)))
+    ;; bookmarks and shortcuts
+    (setq mu4e-bookmarks
+          '((:name "Combined inbox" :query "maildir:/private/INBOX OR maildir:/work/INBOX OR maildir:/tudo/INBOX" :key ?i)
+            (:name "Unread messages" :query "flag:unread AND NOT flag:trashed" :key ?u)
+            (:name "Sent" :query "maildir:/private/Sent OR maildir:/work/Sent" :key ?s)
+            (:name "Archives" :query "maildir:/private/Archives/2025 OR maildir:/work/Archives/2025" :key ?a)
+            (:name "Drafts" :query "maildir:/private/Drafts OR maildir:/work/Drafts" :key ?d)
+            (:name "Junk" :query "maildir:/private/Junk OR maildir:/work/Junk" :key ?j)
+            (:name "Mailing-Lists" :query "maildir:/private/INBOX/*" :key ?m)
+            (:name "Today's messages" :query "date:today..now" :key ?n)
+            (:name "Last 7 days" :query "date:7d..now" :hide-unread t :key ?7)
+            (:name "Trashed mails" :query "flag:trashed" :hide-unread nil :key ?t)
+            (:name "Messages with PDFs" :query "mime:application/pdf" :key ?p)))
+    (setq mu4e-maildir-shortcuts
+          '(("/private/INBOX" . ?p)
+            ("/private/Archives/2025" . ?P)
+            ("/private/autolearn/ham" . ?h)
+            ("/private/autolearn/spam" . ?s)
+            ("/work/INBOX" . ?w)
+            ("/work/Archives/2025" . ?W)
+            ("/tudo/INBOX" . ?d)))
 
-      ;;
-      ;; contexts
-      (setq mu4e-context-policy 'pick-first)
-      (setq mu4e-contexts
-            (list
-             ;; private account
-             (make-mu4e-context
-              :name "Private"
-              :match-func
-              (lambda (msg)
-                (when msg
-                  (string-prefix-p "/private" (mu4e-message-field msg :maildir))))
-              :vars '((user-mail-address . "julian@flake.de")
-                      (user-full-name . "Julian Flake")
-                      (message-signature . nil)
-                      (smtpmail-smtp-server . "nuthost.de")
-                      (smtpmail-stream-type . starttls)
-                      (smtpmail-smtp-service . 587)
-                      (mu4e-drafts-folder . "/private/Drafts")
-                      (mu4e-sent-folder . "/private/Sent")
-                      (mu4e-refile-folder  . "/private/Archives/2025")
-                      (mu4e-trash-folder . "/private/Trash")))
-             ;; work account
-             (make-mu4e-context
-              :name "Work"
-              :match-func
-              (lambda (msg)
-                (when msg
-                  (string-prefix-p "/work" (mu4e-message-field msg :maildir))))
-              :vars '((user-mail-address . "flake@uni-koblenz.de")
-                      (user-full-name . "Julian Flake")
-                      (message-signature . "Dipl.-Inf. Julian Flake\n\nUniversity of Koblenz\nFaculty 4: Computer Science\nInstitute for Software Technology\nPB 20 16 02 | D-56016 Koblenz | Germany\n\nVoice: +49 261 287 2787\nEmail: flake@uni-koblenz.de\nhttps://uni-ko.de/flake")
-                      (smtpmail-smtp-server . "smtp.uni-koblenz.de")
-                      (smtpmail-stream-type . ssl)
-                      (smtpmail-smtp-service . 465)
-                      (mu4e-drafts-folder  . "/work/Drafts")
-                      (mu4e-sent-folder  . "/work/Sent")
-                      (mu4e-refile-folder  . "/work/Archives/2025")
-                      (mu4e-trash-folder  . "/work/Trash")))
-             ;; TUDo account
-             (make-mu4e-context
-              :name "TUDo"
-              :match-func
-              (lambda (msg)
-                (when msg
-                  (string-prefix-p "/tudo" (mu4e-message-field msg :maildir))))
-              :vars '((user-mail-address . "julian.flake@tu-dortmund.de")
-                      (user-full-name . "Julian Flake")
-                      (message-signature . nil)
-                      (smtpmail-smtp-server . "unimail.tu-dortmund.de")
-                      (smtpmail-stream-type . starttls)
-                      (smtpmail-smtp-service . 587)
-                      (mu4e-drafts-folder . "/private/Drafts")
-                      (mu4e-sent-folder . "/private/Sent")
-                      (mu4e-refile-folder  . "/private/Archives/2025")
-                      (mu4e-trash-folder . "/private/Trash")))))
+    ;;
+    ;; contexts
+    (setq mu4e-context-policy 'pick-first)
+    (setq mu4e-contexts
+          (list
+           ;; private account
+           (make-mu4e-context
+            :name "Private"
+            :match-func
+            (lambda (msg)
+              (when msg
+                (string-prefix-p "/private" (mu4e-message-field msg :maildir))))
+            :vars '((user-mail-address . "julian@flake.de")
+                    (user-full-name . "Julian Flake")
+                    (message-signature . nil)
+                    (smtpmail-smtp-server . "nuthost.de")
+                    (smtpmail-stream-type . starttls)
+                    (smtpmail-smtp-service . 587)
+                    (mu4e-drafts-folder . "/private/Drafts")
+                    (mu4e-sent-folder . "/private/Sent")
+                    (mu4e-refile-folder  . "/private/Archives/2025")
+                    (mu4e-trash-folder . "/private/Trash")))
+           ;; work account
+           (make-mu4e-context
+            :name "Work"
+            :match-func
+            (lambda (msg)
+              (when msg
+                (string-prefix-p "/work" (mu4e-message-field msg :maildir))))
+            :vars '((user-mail-address . "flake@uni-koblenz.de")
+                    (user-full-name . "Julian Flake")
+                    (message-signature . "Dipl.-Inf. Julian Flake\n\nUniversity of Koblenz\nFaculty 4: Computer Science\nInstitute for Software Technology\nPB 20 16 02 | D-56016 Koblenz | Germany\n\nVoice: +49 261 287 2787\nEmail: flake@uni-koblenz.de\nhttps://uni-ko.de/flake")
+                    (smtpmail-smtp-server . "smtp.uni-koblenz.de")
+                    (smtpmail-stream-type . ssl)
+                    (smtpmail-smtp-service . 465)
+                    (mu4e-drafts-folder  . "/work/Drafts")
+                    (mu4e-sent-folder  . "/work/Sent")
+                    (mu4e-refile-folder  . "/work/Archives/2025")
+                    (mu4e-trash-folder  . "/work/Trash")))
+           ;; TUDo account
+           (make-mu4e-context
+            :name "TUDo"
+            :match-func
+            (lambda (msg)
+              (when msg
+                (string-prefix-p "/tudo" (mu4e-message-field msg :maildir))))
+            :vars '((user-mail-address . "julian.flake@tu-dortmund.de")
+                    (user-full-name . "Julian Flake")
+                    (message-signature . nil)
+                    (smtpmail-smtp-server . "unimail.tu-dortmund.de")
+                    (smtpmail-stream-type . starttls)
+                    (smtpmail-smtp-service . 587)
+                    (mu4e-drafts-folder . "/private/Drafts")
+                    (mu4e-sent-folder . "/private/Sent")
+                    (mu4e-refile-folder  . "/private/Archives/2025")
+                    (mu4e-trash-folder . "/private/Trash")))))
 
-      ;; Calendar support
-      (require 'mu4e-icalendar)) ; end of use-package mu4e
+    ;; Mail address blacklist
+    ;; Load my mail blacklist
+    (defun jf/load-mail-blacklist ()
+      (interactive)
+      (setq jf-mail-blacklist
+  	  (split-string
+  	   (with-temp-buffer
+  	     (insert-file-contents  "~/.config/emacs/mail-blacklist.txt")
+  	     (buffer-substring-no-properties
+  	      (point-min)
+  	      (point-max))))))
+    (jf/load-mail-blacklist)
+
+    ;; define my contact process function
+    (defun jf/my-contact-processor (contact)
+      (message contact)
+      (cond
+       ((cl-some (lambda (str) (string-match str contact)) jf-mail-blacklist) nil)
+       (t contact)))
+    ;; register the function with mu4e
+    (setq mu4e-contact-process-function 'jf/my-contact-processor)
+    
+    ;; Calendar support
+    (require 'mu4e-icalendar)) ; end of use-package mu4e
 #+end_src
 
 When signing mails with openpgp (or gnupg), use the key associated with the sender address.

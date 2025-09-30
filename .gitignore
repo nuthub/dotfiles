@@ -25,3 +25,4 @@
 /.local/lib/python3.10/site-packages/
 /.config/alsa/
 /.config/emacs.minimal-khalel/elpa/
+/.config/emacs/mail-blacklist.txt
