@@ -115,7 +115,7 @@
 		 "wdisplays" 
 		 ;;"grimshot" "egl-wayland" "xorg-server-xwayland" 
 		 "wl-mirror" ; mirror the desktop, e.g. to a beamer
-		 "wl-clipboard" "clipman" "wtype" ; wofi-emoji needs wtype
+		 "wl-clipboard" "cliphist" "wtype" ; wofi-emoji needs wtype
 		 "wob" ; OSD overlay
 		 "alacritty"
 		 "kanshi" ; automatically switch displays

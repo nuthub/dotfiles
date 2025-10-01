@@ -293,8 +293,8 @@ bindsym $mod+Shift+o move workspace to output left
 bindsym Control+mod1+Delete exec $lockscreen
 
 # Clipboard
-exec wl-paste -t text --watch clipman store --max-items 32 --unix
-bindsym $mod+y exec clipman pick --tool="rofi" --max-items=32
+exec wl-paste --watch cliphist store
+bindsym $mod+y exec cliphist list | rofi -dmenu -display-columns 2 | cliphist decode | wl-copy
 
 # Emoji chooser
 bindsym $mod+i exec rofi-emoji
