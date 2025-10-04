@@ -420,7 +420,8 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
     (setq org-todo-repeat-to-state t)
     (setq org-log-done 'time)
     (setq org-log-into-drawer t)
-
+    (setq org-M-RET-may-split-line '((default . nil)))
+    (setq org-insert-heading-respect-content t)
     ;; Agenda
     (setq org-agenda-files '("~/org/gtd.org"
                              "~/org/tickler.org"
