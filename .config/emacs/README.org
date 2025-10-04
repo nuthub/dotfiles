@@ -277,6 +277,32 @@ This is to hide minor modes from mode line. You can use `:diminish foo-mode` the
   		     (display-line-numbers-mode 1))))
 #+end_src
 
+** which-key (included in emacs 30)
+This helps to figure out the next keystrokes
+#+begin_src emacs-lisp
+  (use-package which-key :ensure nil
+    :after diminish
+    :diminish which-key-mode
+    :config
+    (setq which-key-idle-delay 1)
+    (which-key-mode))
+#+end_src
+
+** savehist (included in emacs)
+Persist history over Emacs restarts. E.g. Vertico sorts by history position.
+#+begin_src emacs-lisp
+  (use-package emacs :ensure nil
+    :config
+    (savehist-mode))
+#+end_src
+** editorconfig (included in emacs 30)
+
+#+begin_src emacs-lisp
+  (use-package editorconfig :ensure nil
+    :config
+    (editorconfig-mode))
+#+end_src
+
 ** Smart paranthesis & Highlight (rainbowishly) parenthesis
 
 An alternative to /smartparens/ is /paren/.
@@ -413,14 +439,30 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
             " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄"))
     (setq org-agenda-include-diary nil)
     (setq org-agenda-custom-commands
-          '(
-            ("w" "Weekly cleanup" todo "CNCL|DONE")
-  	  ("d" "Deadlines" agenda "Show deadlines"
-  	   ((org-agenda-span 'year)
-  	    (org-agenda-time-grid nil)
-  	    (org-agenda-show-all-dates nil)
-  	    (org-agenda-entry-types '(:deadline)) ;; this entry excludes :scheduled
-  	    (org-deadline-warning-days 0)))
+          '(("p" "Planning"
+    	   ((agenda "" ((org-agenda-overriding-header "Deadlines")
+    			(org-agenda-span 'year)
+    			(org-agenda-time-grid nil)
+    			(org-agenda-show-all-dates nil)
+    			(org-agenda-entry-types '(:deadline))
+    			(org-deadline-warning-days 0)))
+    	    (todo "" ((org-agenda-overriding-header "Inbox Items")
+    		      (org-agenda-files '("~/org/inbox.org"))))
+    	    (todo "CNCL|DONE" ((org-agenda-overriding-header "Archivable Items")))
+    	    (todo "WAIT" ((org-agenda-overriding-header "Waiting Items")))
+  	    (tags-todo "-{.*}//-PROJ-WAIT" ((org-agenda-overriding-header "Unscheduled & Untagged TODOs")
+  					    (org-agenda-skip-function '(org-agenda-skip-entry-if 'timestamp))))))
+  	  ("u" "Tag and Schedule"
+  	   ((todo "PROJ" ((org-agenda-overriding-header "Projects")))
+  	   (todo "TODO|FREQ" ((org-agenda-overriding-header "Unscheduled TODOs")
+  			       (org-agenda-skip-function '(org-agenda-skip-entry-if 'timestamp))))
+  	    (tags-todo "-{.*}//-PROJ-WAIT" ((org-agenda-overriding-header "Untagged Items")))))
+    	  ("d" "Deadlines" agenda "Show deadlines"
+    	   ((org-agenda-span 'year)
+    	    (org-agenda-time-grid nil)
+    	    (org-agenda-show-all-dates nil)
+    	    (org-agenda-entry-types '(:deadline)) ;; this entry excludes :scheduled
+    	    (org-deadline-warning-days 0)))
             ("c" "Important events" agenda* nil
              ((org-agenda-files '("~/org/calendar.org"))
               (org-agenda-span 7)
@@ -646,36 +688,30 @@ For syntax highlighted source code blocks, I use the font-locking mode of emacs.
   (use-package engrave-faces)
 #+end_src
 
-** org-super-agenda
+** COMMENT org-super-agenda
+CLOSED: [2025-09-28 Sun 00:23]
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package org-super-agenda
     :config
     (setq org-super-agenda-groups
-  	'(;; Each group has an implicit boolean OR operator between its selectors.
-   	  (:name ""  ; Optionally specify section name
-                   :time-grid t)  ; Items that appear on the time grid
-  	  (:name "Direct Actions"
-  		 :tag ("direct"))
-  	  (:name "Work"
-                   :tag ("work" "teaching"))
-  	  (:name "Promotion"
-                   :tag "promotion")
-  	  (:name "Projects"
-  		 :tag ("projects"))
-  	  (:name "Reading"
-                   :category "reading")
-  	  (:name "Personal"
-                   :tag ("personal"))
-  	  (:name "House Routines"
-                   :tag "house")
-  	  (:name "Sailing"
-                   :tag "sail")
-  	  ;; Groups supply their own section names when none are given
-  	  (:todo "WAIT" :order 8)  ; Set order of this section
-  	  ;; After the last group, the agenda will display items that didn't
-  	  ;; match any of these groups, with the default order position of 99
-  	  ))
+    	'( ; Each group has an implicit boolean OR operator between its selectors.
+     	  (:name "" :time-grid t)
+    	  (:name "Work"           :category ("Work" "Teaching"))
+    	  (:name "Promotion"      :category ("Promotion"))
+    	  (:name "Projects"       :category ("Projects"))
+    	  (:name "Personal"       :category ("Personal"))
+    	  (:name "IT"             :category ("IT"))
+  					;  	  (:name "House Routines" :category (""))
+    	  (:name "Sailing"        :category ("Sailing"))
+    	  ;; Groups supply their own section names when none are given
+    	  (:todo "TODO" :order 1)
+    	  (:todo "PROJ" :order 2)
+    	  (:todo "FREQ" :order 3)
+    	  (:todo "WAIT" :order 4)
+      	  ;; After the last group, the agenda will display items that didn't
+    	  ;; match any of these groups, with the default order position of 99
+    	  ))
     (org-super-agenda-mode))
 #+end_src
 
@@ -1476,14 +1512,6 @@ Snippets aren't included in the base package. Therefore, they need to be loaded 
   (use-package yasnippet-snippets)
 #+end_src
 
-** which-key
-This helps to figure out the next keystrokes
-#+begin_src emacs-lisp
-  (use-package which-key
-    :config
-    (setq which-key-idle-delay 1)
-    (which-key-mode))
-#+end_src
 ** vundo (vs. undo-tree)
 The package /undo-tree/ contains more features than vundo, e.g. timestamps, diffs, etc. I never used those features. vundo seems more lightweight and uses emacs's built-in undo history.
 
@@ -1499,14 +1527,6 @@ The global keybinding 'C-x u' is set below.
     :config
     (aggressive-indent-global-mode 1)
     (add-to-list 'aggressive-indent-excluded-modes 'scheme-mode))
-#+end_src
-
-** editorconfig
-
-#+begin_src emacs-lisp
-  (use-package editorconfig
-    :config
-    (editorconfig-mode 1))
 #+end_src
 
 ** openwith
