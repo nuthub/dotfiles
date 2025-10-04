@@ -3,28 +3,6 @@
 #+PROPERTY: header-args :tangle yes
 #+TODO: TODO COMMENT
 
-* Startup time
-
-Taken from /emacs from scratch/.
-#+begin_src emacs-lisp
-
-  ;; The default is 800 kilobytes.  Measured in bytes.
-  (setq gc-cons-threshold (* 50 1000 1000))
-
-  (defun efs/display-startup-time ()
-    (message "Emacs loaded in %s with %d garbage collections."
-             (format "%.2f seconds"
-                     (float-time
-                      (time-subtract after-init-time before-init-time)))
-             gcs-done))
-
-  (add-hook 'emacs-startup-hook #'efs/display-startup-time)
-
-#+end_src
-
-#+RESULTS:
-| efs/display-startup-time |
-
 * Basic personal information
   
 ** This is used to identify myself, and to find my own GnuPG key
