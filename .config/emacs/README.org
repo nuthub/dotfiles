@@ -407,16 +407,16 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
     ;; Task management
     (setq org-directory "~/org")
     (setq org-default-notes-file (concat org-directory "/inbox.org"))
-    (setq org-tag-alist '(("direct" . ?d)
-                          ("personal" . ?p)
-                          ("house" . ?h)
-                          ("promotion" . ?P)
-                          ("reading" . ?r)
-                          ("work" . ?w)
-                          ("teaching" . ?t)
-                          ("sail" . ?S)
-                          ("nerdism" . ?n)))
-    (setq org-todo-keywords '((sequence "TODO(t)" "FREQ(f)" "EVNT(e)" "PROJ(p)" "WAIT(w/!)" "|" "SKIP(s!)" "DONE(d!)" "CNCL(c/!)")))
+    (setq org-tag-alist '(("@nutbook" . ?n)
+  			("@home" . ?h)
+  			("@work" . ?w)
+  			("@office" . ?o)
+  			("@koblenz" . ?k)
+  			("@bus" . ?b)
+  			("@zeche" . ?z)
+  			("@city" . ?c)
+  			("@shop" . ?s)))
+    (setq org-todo-keywords '((sequence "TODO(t)" "FREQ(f)" "PROJ(p)" "WAIT(w/!)" "|" "DONE(d!)" "CNCL(c/!)")))
     (setq org-todo-repeat-to-state t)
     (setq org-log-done 'time)
     (setq org-log-into-drawer t)
@@ -454,7 +454,7 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
   					    (org-agenda-skip-function '(org-agenda-skip-entry-if 'timestamp))))))
   	  ("u" "Tag and Schedule"
   	   ((todo "PROJ" ((org-agenda-overriding-header "Projects")))
-  	   (todo "TODO|FREQ" ((org-agenda-overriding-header "Unscheduled TODOs")
+  	    (todo "TODO|FREQ" ((org-agenda-overriding-header "Unscheduled TODOs")
   			       (org-agenda-skip-function '(org-agenda-skip-entry-if 'timestamp))))
   	    (tags-todo "-{.*}//-PROJ-WAIT" ((org-agenda-overriding-header "Untagged Items")))))
     	  ("d" "Deadlines" agenda "Show deadlines"
@@ -471,10 +471,10 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
             ("C" "All events" agenda* nil
              ((org-agenda-files '("~/org/calendar.org"))
               (org-agenda-span 7)))))
-
+    
     (setq org-stuck-projects '("-noproject+LEVEL=2/-DONE-FREQ"
-                               ("TODO" "NEXT")
-                               nil ""))
+  			     ("TODO" "NEXT")
+  			     nil ""))
     (setq org-deadline-warning-days 7)
     ;; Refiling
     (setq org-refile-targets (quote (("~/org/gtd.org" :maxlevel . 4)
