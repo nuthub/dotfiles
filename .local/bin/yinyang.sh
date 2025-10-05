@@ -25,7 +25,8 @@ switch() {
     echo "Setting GTK theme to: $gtk_theme"
     gsettings set org.gnome.desktop.interface gtk-theme $gtk_theme
     sed --in-place --follow-symlinks "s/(\"GTK_THEME\" \. \".*\"/(\"GTK_THEME\" \. \"$gtk_theme\"/g" ~/.config/guix/home/home-configuration.scm 
-    sed --in-place --follow-symlinks "s/GTK_THEME=\".*\"/GTK_THEME=\"$gtk_theme\"/g" ~/.config/guix/home/zsh/zprofile 
+    sed --in-place --follow-symlinks "s/GTK_THEME=\".*\"/GTK_THEME=\"$gtk_theme\"/g" ~/.config/guix/home/zprofile
+    sed --in-place --follow-symlinks "s/gtk-theme-name=.*/gtk-theme-name=$gtk_theme/g" ~/.config/gtk-3.0/settings.ini 
 
     echo "Setting icon theme to: $icon_theme"
     gsettings set org.gnome.desktop.interface icon-theme $icon_theme
