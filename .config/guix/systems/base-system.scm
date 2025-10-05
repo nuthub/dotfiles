@@ -55,11 +55,11 @@
 		 ;; basics
 		 "git" "git:send-email" "git:gui" "mumi"
 		 "bash"
+		 "stow"
 		 "gnupg"
 		 "opendoas" ; install it additionally to make man pages available
 		 "mailutils" ; rottlog seems to need this
 		 ;; TLS root certificates
-		 ;;"nss-certs" ; is part of %base-packages now (2024-04-21)
 		 ;; emacs & related
 		 "emacs-pgtk-xwidgets" "emacs-pdf-tools" "emacs-vterm"
 		 "make" "perl" "texinfo" ; building auctex for elpaca needs these
@@ -67,14 +67,13 @@
 		 "vdirsyncer" "khal" "khard"
 		 ;; Programming languages
 		 "openjdk@23:jdk" ; java-lsp wants this, otherwise I'd just use it in guix shells only
-		 "python" ; treemacs wants python3
 		 ;; my shell and shell tools
-		 "zsh" "zsh-autosuggestions" "zsh-syntax-highlighting"
+		 "zsh" "zsh-autosuggestions" "zsh-syntax-highlighting" "zsh-completions" "zsh-autopair"
 		 "efibootmgr"
 		 "bind:utils" ; for dig
 		 "cups" ; for lpq
 		 "file"
-		 "fzf"
+		 "hugo" ; for nuthouse, from nonguix
 		 "htop"
 		 "jq" ; needed by sway / zoom
 		 "just"
@@ -83,7 +82,6 @@
 		 "nmap"
 		 "bc" "octave"
 		 "ripgrep"
-		 "stow"
 		 "trash-cli"
 		 "tree"
 		 "unzip"
@@ -94,7 +92,7 @@
 		 "brightnessctl"
 		 "modem-manager" "libmbim" "modem-manager-fcc-auto-unlock" ; package auto-unlock has no effect
 		 ;; syncing and versioning
-		 "binutils" ;; for ar command
+		 "binutils" ; for ar command
 		 "borg"
 		 "curl"
 		 "glib:bin" ; has gio which allows to mount davfs as user
@@ -108,7 +106,7 @@
 		 ;; I should not install both, portal-wlr and portal-gnome
 		 "xdg-desktop-portal-gtk" "xdg-desktop-portal-wlr" ; "xdg-desktop-portal" is propagated by xdg-desktop-portal-gtk
 		 ;; sway
-		 "sway" "waybar" "rofi-wayland" "swaylock" "swayidle" "swaynotificationcenter" "libnotify"
+		 "sway" "waybar" "rofi" "swaylock" "swayidle" "swaynotificationcenter" "libnotify"
 		 "qtwayland@5" ; at least flameshot and nextcloud-client need this (2024-11-28)
 		 "slurp" "grim" "swappy" ; screenshots
 		 "wf-recorder" ; screen recordings
@@ -179,7 +177,7 @@
 		 ;; my primary icon theme is Papirus(-Dark)
 		 ;; "papirus-icon-theme" ; disabled in system profile (see below)
 		 ;; I manually installed papirus-icon-theme in my $HOME/.icons directory for two reasons:
-		 ;;   1. flatpak apps take ages to start with Papirus-Icon-Theme in system's prof
+		 ;;   1. flatpak apps take ages to start with Papirus-Icon-Theme in system's profile
 		 ;;   2. it uses a lot of inodes: https://github.com/PapirusDevelopmentTeam/papirus-icon-theme/issues/3563 and https://issues.guix.gnu.org/68561 This becomes an issue with frequently reconfigured profiles
 		 "hicolor-icon-theme" ; waybar/privacy uses icons from here
 		 ;; Cursors
