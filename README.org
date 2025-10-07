@@ -1,2 +1,14 @@
 * My dotfiles
+#+COMMENT: #+ATTR_HTML: :alt an artistic image of a garden with digital components. Use muted, pastel colors.
+#+COMMENT: #+ATTR_HTML: :title Prompt was 'Create an artistic image of a garden with digital components. Use muted, pastel colors.', Model ChatGPT 4o
+#+COMMENT: [[./img/garden.png]]
+
+#+ATTR_HTML: :alt a picture of a garden with digital components in the style of Friedensreich Hundertwasser.
+#+ATTR_HTML: :title Prompt was 'Create a picture of a garden with digital components in the style of Friedensreich Hundertwasser.', Model ChatGPT 4o
+[[./img/garden-hundertwasser.png]]
+
+#+COMMENT: #+ATTR_HTML: :alt a picture of a garden with digital components in the style of van Gogh.
+#+COMMENT: #+ATTR_HTML: :title Prompt was 'Create a picture of a garden with digital components in the style of van Gogh.', Model ChatGPT 4o
+#+COMMENT: [[./img/garden-vangogh.png]]
+
 I use [[https://www.gnu.org/software/stow/][GNU Stow]] to create links from my home directory into this repository. Quite convenient, I'm happy with that.
