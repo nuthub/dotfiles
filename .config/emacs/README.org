@@ -82,25 +82,35 @@
 ** Auto revert unchanged files (PDF only for now)
 
 #+begin_src emacs-lisp
-  (setq revert-without-query '(".pdf"))
+  (use-package emacs :ensure nil
+    :after diminish
+    :diminish auto-revert-mode
+    :config
+    (setq revert-without-query '(".pdf")))
 #+end_src
 
 ** Don't ask to open symlinks to version controlled files
 
 #+begin_src emacs-lisp
-  (setq vc-follow-symlinks t)
+  (use-package emacs :ensure nil
+    :config
+    (setq vc-follow-symlinks t))
+#+end_src
+
+** Don't ask whether a large file should really be opened
+Confirmation dialog is annoying, when files are opened externally, e.g. via dired. 
+
+#+begin_src emacs-lisp
+  (use-package emacs :ensure nil
+    :config
+    (setq large-file-warning-threshold nil))
 #+end_src
 
 * Look & feel
-** System Clipboard to kill ring
-#+begin_src emacs-lisp
-  (setq save-interprogram-paste-before-kill t)
-#+end_src
 
 ** Font
 
-I set my default fonts in ~~/.fonts.conf~. This is just an example:
-
++I set my default fonts in ~~/.fonts.conf~. This is just an example:+ I set my default fonts via guix home.
 #+begin_src xml :tangle no
   <?xml version="1.0"?>
   <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
