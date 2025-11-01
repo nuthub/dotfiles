@@ -68,7 +68,7 @@ bindsym $mod+Return exec $term
 # Start an emacs terminal
 bindsym $mod+Ctrl+Return exec emacsclient -c -a "" -e '(vterm)'
 # create new emacs frame
-bindsym $mod+Shift+Return exec emacsclient -c -a "" -e '(switch-to-buffer nil)'
+bindsym $mod+Shift+Return exec emacsclient -c -a "" -e '(jf/show-welcome-buffer)'
 # open browser
 bindsym $mod+b exec firefox
 

@@ -107,6 +107,52 @@ Confirmation dialog is annoying, when files are opened externally, e.g. via dire
 #+end_src
 
 * Look & feel
+** Startup / Welcome buffer
+This is from https://xenodium.com/bending-emacs-episode-2
+#+begin_src emacs-lisp
+  (setq jf/welcome-image "~/.nuts.png")
+
+  (defun jf/show-welcome-buffer ()
+    "Show *Welcome* buffer."
+    (with-current-buffer (get-buffer-create "*Welcome*")
+      (setq truncate-lines t)
+      (setq cursor-type nil)
+      (read-only-mode +1)
+      (jf/refresh-welcome-buffer)
+      (local-set-key (kbd "q") 'kill-current-buffer)
+      (add-hook 'window-size-change-functions
+                (lambda (_frame)
+                  (jf/refresh-welcome-buffer)) nil t)
+      (add-hook 'window-configuration-change-hook
+                #'jf/refresh-welcome-buffer nil t)
+      (switch-to-buffer (current-buffer))))
+
+  (defun jf/refresh-welcome-buffer ()
+    "Refresh *Welcome* buffer content for WINDOW."
+    (when-let* ((inhibit-read-only t)
+                (welcome-buffer (get-buffer "*Welcome*"))
+                (window (get-buffer-window welcome-buffer))
+                (image-path jf/welcome-image)
+                (image (create-image image-path nil nil :max-height 300))
+                (image-height (cdr (image-size image)))
+                (image-width (car (image-size image)))
+                (top-margin (floor (/ (- (window-height window) image-height) 2)))
+                (left-margin (floor (/ (- (window-width window) image-width) 2)))
+                (title "Glück Auf!")
+  		(proper-title (propertize title 'face '(:height 1.2))))
+      (with-current-buffer welcome-buffer
+        (erase-buffer)
+        (setq mode-line-format nil)
+        (goto-char (point-min))
+        (insert (make-string top-margin ?\n))
+        (insert (make-string left-margin ?\ ))
+        (insert-image image)
+        (insert "\n\n\n")
+        (insert (make-string (- (floor (/ (- (window-width window) (string-width proper-title)) 2)) 1) ?\ ))
+        (insert proper-title))))
+
+  (jf/show-welcome-buffer)
+#+end_src
 
 ** Font
 
