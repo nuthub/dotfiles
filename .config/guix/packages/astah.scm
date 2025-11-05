@@ -1,4 +1,4 @@
-;;; Copyright © 2023,2024 Julian Flake <flake@uni-koblenz.de
+;;; Copyright © 2023-2025 Julian Flake <flake@uni-koblenz.de
 
 (define-module (astah)
   #:use-module (nutguix packages astah)
@@ -22,7 +22,7 @@
 (define-public astah-professional-license
   (package
    (name "astah-professional-license")
-   (version "2024-11")
+   (version "2025-11")
    (source
     (local-file "../files/astah_professional_license.xml"))
    (build-system copy-build-system)
@@ -37,28 +37,28 @@
 ;; It's not sufficient to just install the license into $GUIX_PROFILE/lib/astah_professional. Astah does not recognize the file, probably because it links to another directory in the store.
 ;; Therefore, I create a new package that takes the license file as build input and copies the license file in the resulting package, which effectively is astah-professional + astah-professional-license
 (define-public astah-professional-licensed
-(package
-(inherit astah-professional)
-(name "astah-professional-licensed")
-(version "10.1.0.9ceee1")
-(inputs `(("gcc:lib" ,gcc "lib")
-	  ("astah-professional-license" ,astah-professional-license)))
-(arguments
- `(#:patchelf-plan
-   '(("usr/lib/astah_professional/lib/rlm/librlm1601.so" ("gcc:lib"))
-     ("usr/lib/astah_professional/lib/rlm/x64/librlm1601.so" ("gcc:lib")))
-   #:install-plan
-   '(("usr/lib/" "lib")
-     ("usr/bin/" "bin")
-     ("usr/share/" "share"))
-   #:phases (modify-phases
-	     %standard-phases
-	     (add-after 'install 'add-license
-			(lambda* (#:key inputs #:allow-other-keys)
-			  (let* ((lic-file "astah_professional_license.xml")
-				 (lib-dir "/lib/astah_professional/"))
-			    (copy-file
-			     (string-append (assoc-ref inputs "astah-professional-license") lib-dir lic-file)
-			     (string-append (assoc-ref %outputs "out") lib-dir lic-file)))
-			  #t)))))
-(synopsis "Astah Professional (with license file), an Easy-to-use UML2.x modeler")))
+  (package
+   (inherit astah-professional)
+   (name "astah-professional-licensed")
+   (version "10.1.0.9ceee1")
+   (inputs `(("gcc:lib" ,gcc "lib")
+	     ("astah-professional-license" ,astah-professional-license)))
+   (arguments
+    `(#:patchelf-plan
+      '(("usr/lib/astah_professional/lib/rlm/librlm1601.so" ("gcc:lib"))
+	("usr/lib/astah_professional/lib/rlm/x64/librlm1601.so" ("gcc:lib")))
+      #:install-plan
+      '(("usr/lib/" "lib")
+	("usr/bin/" "bin")
+	("usr/share/" "share"))
+      #:phases (modify-phases
+		%standard-phases
+		(add-after 'install 'add-license
+			   (lambda* (#:key inputs #:allow-other-keys)
+			     (let* ((lic-file "astah_professional_license.xml")
+				    (lib-dir "/lib/astah_professional/"))
+			       (copy-file
+				(string-append (assoc-ref inputs "astah-professional-license") lib-dir lic-file)
+				(string-append (assoc-ref %outputs "out") lib-dir lic-file)))
+			     #t)))))
+   (synopsis "Astah Professional (with license file), an Easy-to-use UML2.x modeler")))
