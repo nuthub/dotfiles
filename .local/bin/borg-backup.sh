@@ -38,7 +38,7 @@ echo "Lösche alte Backups ..."
 borg prune -v --list \
      --keep-daily 14 \
      --keep-monthly 6 \
-     --keep-yearly 2
+     --keep-yearly 5
 
 echo "Stats ..."
 borg info
