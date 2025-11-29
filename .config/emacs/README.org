@@ -66,6 +66,14 @@
   (setq dired-deletion-confirmer #'y-or-n-p)
 #+end_src
 
+** dired-open-with: open a file with a registered application (from mimeapps.list)
+#+begin_src emacs-lisp
+  (use-package dired-open-with
+    :after dired
+  :config
+  (define-key dired-mode-map "o" #'dired-open-with))
+#+end_src
+
 ** Keep folders clean
 
 #+begin_src emacs-lisp
