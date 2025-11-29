@@ -1,5 +1,5 @@
 #!/bin/sh
-cd ~/Applications/tor-browser
+cd ~/opt/tor-browser
 guix shell \
     --container --emulate-fhs --network \
     --share=$HOME \

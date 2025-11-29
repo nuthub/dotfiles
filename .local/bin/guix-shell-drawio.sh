@@ -6,4 +6,4 @@ guix shell --container --network --emulate-fhs \
      --development ungoogled-chromium \
      -e '(list (@@ (gnu packages commencement) gcc) "lib")' \
      zlib coreutils \
-     -- ~/Applications/drawio/AppRun $@
+     -- ~/opt/drawio/AppRun $@
