@@ -26,3 +26,4 @@
 /.config/alsa/
 /.config/emacs.minimal-khalel/elpa/
 /.config/emacs/mail-blacklist.txt
+/.config/Nextcloud/*sync.log*
