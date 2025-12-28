@@ -294,6 +294,12 @@ This minor mode allows to switch windows in a frame by M-x, while x is a number 
     (window-numbering-mode))
 #+end_src
 
+** Use Short Answers
+Emacs 28+ supports to globally default to ~y-or-n-p~ instead of ~yes-or-no-p~.
+#+begin_src emacs-lisp
+  (setq use-short-answers t)
+#+end_src
+
 ** Diminish
 
 This is to hide minor modes from mode line. You can use `:diminish foo-mode` then in use-package(...)
