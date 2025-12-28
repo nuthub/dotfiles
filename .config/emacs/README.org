@@ -958,26 +958,28 @@ htmlize is used by org to export to HTML.
     :config
     (transient-define-prefix jf/my-menu ()
       "Mein benutzerdefiniertes Menü."
-      ["Tools\n"
-       ["Vterm"
-        ("v" "vterm" vterm)
-        ("t" "terminal here" terminal-here)]
-       ["Org"
-        ("a" "Agenda" org-agenda-list)
-        ("d" "Deadlines" (lambda () (interactive) (org-agenda nil "d")))
-        ("p" "Start/Stop Pomodoro" (lambda () (interactive) (org-pomodoro)))]
+      [["Org"
+        ("o a" "Agenda" org-agenda-list)
+        ("o d" "Deadlines" (lambda () (interactive) (org-agenda nil "d")))
+        ("o p" "Start/Stop Pomodoro" (lambda () (interactive) (org-pomodoro)))]
+       ["Pomodoro"
+        ("p s" "Start/Stop Pomodoro" (lambda () (interactive) (org-pomodoro)))
+        ("p g" "Go to current item" org-clock-goto)]
        ["Mail"
-        ("m" "mu4e" mu4e)
-        ("n" "Compose" mu4e-compose-mail)
-        ("s" "Sync all" (lambda() (interactive) (shell-command "mbsync -a" nil nil)))]
+        ("m m" "mu4e" mu4e)
+        ("m c" "Compose" mu4e-compose-mail)
+        ("m s" "Sync all" (lambda() (interactive) (shell-command "mbsync -a" nil nil)))]]
+      [["Matrix"
+        ("e c" "Connect" ement-connect)
+        ("e r" "List Rooms" ement-room-list)]
        ["Writing"
-        ("c" "Citar" citar-open)
-        ("b" "Biblio" biblio-lookup)]
+        ("w c" "Citar" citar-open)
+        ("w b" "Biblio" biblio-lookup)]
        ["Projects"
-        ("g" "Magit" magit-status)]
+        ("g g" "Magit" magit-status)]
        ["AI"
-        ("i" "gptel" gptel)
-        ("C-i" "gptel menu" gptel-menu)]
+        ("a i" "gptel" gptel)
+        ("a m" "gptel menu" gptel-menu)]
        ]))
 #+end_src
 
