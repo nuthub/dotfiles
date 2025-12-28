@@ -491,7 +491,9 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
     (setq org-agenda-files '("~/org/gtd.org"
                              "~/org/tickler.org"
                              "~/org/inbox.org"
-                             "~/org/calendar.org"))
+                             "~/org/calendar.org"
+  			   "~/org/someday.org"))
+    (setq org-agenda-window-setup 'current-window)
     ;; the file calendar.org is read-only, allow this file-local-variable to be set.
     ;; See Troubleshooting section in README.org at https://gitlab.com/hperrey/khalel/
     (setq safe-local-variable-values
@@ -1611,15 +1613,24 @@ The global keybinding 'C-x u' is set below.
 #+end_src
 
 ** frames-only-mode
+- Alternative approach for i3: https://sqrtminusone.xyz/posts/2021-10-04-emacs-i3/
 
 #+begin_src emacs-lisp
   (use-package frames-only-mode
     :config
-    (frames-only-mode-remap-common-window-split-keybindings)
-    (setq frames-only-mode-use-window-functions
-          '(calendar report-emacs-bug checkdoc-show-diagnostics checkdoc org-compile-file corfu-popupinfo--show org-agenda))
-    (frames-only-mode)
-    (setq org-agenda-window-setup 'current-window))
+   (frames-only-mode-remap-common-window-split-keybindings)
+        (setq frames-only-mode-use-window-functions
+          '(calendar
+  	  report-emacs-bug
+  	  checkdoc-show-diagnostics
+  	  checkdoc org-compile-file
+  	  corfu-popupinfo--show
+  	  embark-act
+  	  org-capture
+  	  org-roam-dailies-goto-date org-roam-dailies-goto-today org-roam-dailies-goto-tomorrow org-roam-dailies-goto-next-note org-roam-dailies-goto-yesterday org-roam-dailies-goto-previous-note))
+        (frames-only-mode)
+        ;; for some reason, frames-only-mode overrides what I set earlier.
+        (setq org-agenda-window-setup 'current-window))
 #+end_src
 
 ** terminal-here
