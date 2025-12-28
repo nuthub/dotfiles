@@ -1178,7 +1178,9 @@ Currently not in use, but pulls projectile as dependency. Therefore, I deactivat
 ** ement.el
 
 #+begin_src emacs-lisp
-  (use-package ement)
+  (use-package ement
+    :config
+    (setq ement-save-sessions t))
 #+end_src
 
 ** COMMENT JAVA LSP
