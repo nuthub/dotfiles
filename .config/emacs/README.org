@@ -860,14 +860,16 @@ htmlize is used by org to export to HTML.
   (use-package htmlize)
 #+end_src
 
-** ox-extra (from org-contrib)
-
-This is needed to allow for not exporting to latex those org headings that are tagged :ignore:.
+** org-contrib extras
 
 #+begin_src emacs-lisp
-  (use-package ox-extra :ensure org-contrib
+  (use-package org-contrib
     :after org
     :config
+    ;; org-checklist allows me to reset checklists in TODO entries once they are set to DONE
+    (require 'org-checklist)
+    ;; This is needed to allow for not exporting to latex those org headings that are tagged :ignore:
+    (require 'ox-extra)
     (ox-extras-activate '(latex-header-blocks ignore-headlines)))
 #+end_src
 
