@@ -1015,7 +1015,7 @@ This shows modified/added/deleted lines directly in the editor.
     (define-key pdf-view-mode-map (kbd "h") 'pdf-annot-add-highlight-markup-annotation)
     (define-key pdf-view-mode-map (kbd "~") 'pdf-annot-add-squiggly-markup-annotation)
     (define-key pdf-view-mode-map (kbd "u") 'pdf-annot-add-underline-markup-annotation)
-    (define-key pdf-view-mode-map (kbd "o") 'pdf-annot-add-strikeout-markup-annotation)
+    (define-key pdf-view-mode-map (kbd "O") 'pdf-annot-add-strikeout-markup-annotation)
     (define-key pdf-view-mode-map (kbd "s a") 'pdf-view-auto-slice-minor-mode))
 #+end_src
 
