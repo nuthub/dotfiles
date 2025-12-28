@@ -274,6 +274,11 @@ I use the Modus Themes. To switch between light (operandi) and dark (vivendi) th
    	    (visual-line-mode 1)))
 #+end_src
 
+** System Clipboard to kill ring
+#+begin_src emacs-lisp
+  (setq save-interprogram-paste-before-kill t)
+#+end_src
+
 ** Kill dired buffers instead of quitting them
 - https://www.emacswiki.org/emacs/DiredReuseDirectoryBuffer says:
   Starting with Emacs 28.1, you can customize option ‘dired-kill-when-opening-new-dired-buffer’ to non-`nil`, to kill the current Dired buffer when you create a new one.
