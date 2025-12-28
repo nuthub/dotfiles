@@ -1471,10 +1471,11 @@ Enriches selection lists (and completion minibuffers, e.g. consult) with additio
   (use-package txl
     :config
     (setq txl-languages '(DE . EN-US))
+    (setq txl-deepl-api-url "https://api-free.deepl.com/v2/translate") ; free plan
+    ;; (setq txl-deepl-api-url "https://api.deepl.com/v2/translate") ; default
     (setq txl-deepl-api-key (auth-info-password
-            (nth 0 (auth-source-search
-                    :host "deepl.com"))))
-    (setq txl-deepl-api-url "https://api-free.deepl.com/v2/translate"))
+                             (nth 0 (auth-source-search
+                                     :host "deepl.com")))))
 #+end_src
 
 ** embark & embark-consult
@@ -2052,7 +2053,9 @@ CLOSED: [2024-12-26 Thu 11:38]
   (global-set-key (kbd "C-x f") 'find-file-at-point)
 #+end_src
 
+** Translate with deepl
 #+begin_src emacs-lisp
+  (global-set-key (kbd "C-x C-t") 'txl-translate-region-or-paragraph)
 #+end_src
 
 
