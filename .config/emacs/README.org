@@ -501,6 +501,7 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
            ((buffer-read-only . 1))))
 
     (setq org-agenda-span 1)
+    (setq org-deadline-warning-days 30)
     (setq org-agenda-time-grid
           '((daily today require-timed remove-match)
             (800 1000 1200 1400 1600 1800 2000)
