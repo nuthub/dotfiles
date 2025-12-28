@@ -218,7 +218,7 @@ This is from https://xenodium.com/bending-emacs-episode-2
     (tool-bar-mode -1) ; switch off tool bar
     (scroll-bar-mode -1) ; switch off scroll bar
     (column-number-mode t) ; show column number next to line number
-    (global-hl-line-mode t) ; highlight the current line
+    (global-hl-line-mode -1) ; highlight the current line
     (setq visible-bell t)
     (setq inhibit-startup-screen t)) ;; don't show splash
 #+end_src
