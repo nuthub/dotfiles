@@ -230,20 +230,6 @@ This is from https://xenodium.com/bending-emacs-episode-2
   (setq pixel-scroll-precision-large-scroll-height 40.0)
 #+end_src
 
-** Spacious Padding
-#+begin_src emacs-lisp
-  (use-package spacious-padding
-    :config
-    (setq spacious-padding-widths
-  	'( :internal-border-width 15
-  	   :header-line-width 4
-  	   :mode-line-width 6
-  	   :tab-width 4
-  	   :right-divider-width 30
-  	   :scroll-bar-width 8))
-    (spacious-padding-mode 1))
-#+end_src
-
 ** Theme
 I use the Modus Themes. To switch between light (operandi) and dark (vivendi) theme, auto-dark is used. Switching between light and dark is then possible by one of the following commands:
 - ~gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark~ or 
@@ -267,15 +253,18 @@ I use the Modus Themes. To switch between light (operandi) and dark (vivendi) th
 
 #+end_src
 
-** doom-modeline (a beautiful modeline)
-
+** Spacious Padding
 #+begin_src emacs-lisp
-  (use-package doom-modeline
+  (use-package spacious-padding
     :config
-    ;;(setq doom-modeline-height 18)
-    (setq doom-modeline-total-line-number t)
-    (setq doom-modeline-mu4e nil)
-    (doom-modeline-mode 1))
+    (setq spacious-padding-widths
+  	'( :internal-border-width 15
+  	   :header-line-width 4
+  	   :mode-line-width 6
+  	   :tab-width 4
+  	   :right-divider-width 30
+  	   :scroll-bar-width 8))
+    (spacious-padding-mode 1))
 #+end_src
 
 ** Visual line mode in text-mode
