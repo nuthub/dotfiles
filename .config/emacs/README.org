@@ -1751,14 +1751,6 @@ If there is more than one, let the user choose."
                    (completing-read "Open in dired: " dirs nil t)))))))
 #+end_src
 
-* Printing
-
-#+begin_src emacs-lisp
-  (when (display-graphic-p)
-    (setq lpr-command "gtklp")
-    (setq ps-lpr-command "gtklp"))
-#+end_src
-
 * Calendar & Contact syncing
 
 - I use *vdirsyncer* to synchronize all my remote Calendars and Contacts with my home folder
