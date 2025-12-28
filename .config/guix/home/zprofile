@@ -10,7 +10,7 @@ export JAVA_HOME=$(builtin cd $(dirname $(readlink $(which java)))"/.."; pwd)
 export XDG_DATA_DIRS=$XDG_DATA_DIRS:/home/flake/.local/share:/var/lib/flatpak/exports/share:/home/flake/.local/share/flatpak/exports/share
 
 # If running from tty1 start sway
-if [ "$(tty)" = "/dev/tty1" ]; then
+if [ -z "$WAYLAND_DISPLAY" ] && [ -n "$XDG_VTNR" ] && [ "$XDG_VTNR" -eq 1 ] ; then
 
     # This is used to let sway (more specifically: waybar) know, which gtk theme to use 
     export GTK_THEME="Materia-dark"
