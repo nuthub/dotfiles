@@ -302,14 +302,13 @@ Emacs 28+ supports to globally default to ~y-or-n-p~ instead of ~yes-or-no-p~.
 
 ** Diminish
 
-This is to hide minor modes from mode line. You can use `:diminish foo-mode` then in use-package(...)
+- This is to hide minor modes from mode line. You can use `:diminish foo-mode` then in use-package(...)
+- An alternative is delight, see https://www.gnu.org/software/emacs/manual/html_node/use-package/Delight.html
 
 #+begin_src emacs-lisp
-  (use-package diminish
+  (use-package diminish :ensure t
     :config
-    (diminish 'smartparens-mode)
-    (diminish 'flycheck-mode)
-    (diminish 'which-key-mode))
+    (diminish 'buffer-face-mode))
 #+end_src
    
 ** Show search result counts in modeline
@@ -373,6 +372,8 @@ An alternative to /smartparens/ is /paren/.
 
 #+begin_src emacs-lisp
   (use-package smartparens
+    :after diminish
+    :diminish smartparens-mode
     :config
     (progn
       (require 'smartparens-config)
@@ -974,6 +975,7 @@ This is needed to allow for not exporting to latex those org headings that are t
 
 #+begin_src emacs-lisp
   (use-package magit
+;;    :after llama
     :config
     ;; gpg signing is at transient level 5, default was to show up to level 4
     (setq transient-default-level 5)
@@ -987,6 +989,8 @@ This is needed to allow for not exporting to latex those org headings that are t
 This shows modified/added/deleted lines directly in the editor.
 #+begin_src emacs-lisp
   (use-package git-gutter
+    :after diminish
+    :diminish git-gutter-mode
     :config
     (global-git-gutter-mode 1))
 #+end_src
@@ -1456,6 +1460,8 @@ Enriches selection lists (and completion minibuffers, e.g. consult) with additio
 
 #+begin_src emacs-lisp
   (use-package flycheck
+    :after diminish
+    :diminish flycheck-mode
     :config
     (setq flycheck-emacs-lisp-load-path 'inherit)
     (add-hook 'elpaca-after-init-hook #'global-flycheck-mode)
@@ -1544,7 +1550,8 @@ Allows to browse bibtex file(s), insert citations, open files, links and notes. 
 Embark integration is provided by /citar-embark/. Press C-. (or RET in org buffers) on any citation key to see possible actions.
 #+begin_src emacs-lisp
   (use-package citar-embark
-    :after citar embark
+    :after citar embark diminish
+    :diminish citar-embark-mode
     :no-require
     :config
     (citar-embark-mode))
@@ -1553,7 +1560,8 @@ Embark integration is provided by /citar-embark/. Press C-. (or RET in org buffe
 The package /citar-org-roam/ provides usage of org roam to take bibliographical notes. When enabled, the "old" or "usual" notes in my notes directory are not available anymore.
 #+begin_src emacs-lisp
   (use-package citar-org-roam
-    :after (citar org-roam)
+    :after (citar org-roam diminish)
+    :diminish citar-org-roam-mode
     :config
     (setq citar-org-roam-capture-template-key "n")
     (setq citar-org-roam-subdir "bib")
@@ -1568,6 +1576,8 @@ Snippet expansion
 
 #+begin_src emacs-lisp
   (use-package yasnippet
+    :after diminish
+    :diminish yas-minor-mode
     :config
     (yas-global-mode))
 #+end_src
