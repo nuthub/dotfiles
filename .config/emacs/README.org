@@ -880,10 +880,12 @@ htmlize is used by org to export to HTML.
 #+end_src
 
 ** org-pomodoro
-
 #+begin_src emacs-lisp
   (use-package org-pomodoro
     :config
+    (setq org-pomodoro-length 50)
+    (setq org-pomodoro-short-break-length 10)
+    (setq org-pomodoro-long-break-length 30)
     (setq org-pomodoro-audio-player "/run/current-system/profile/bin/paplay")
     (setq org-pomodoro-start-sound "~/.local/share/sounds/Schachtglocke/4+3wav")
     (setq org-pomodoro-finished-sound "~/.local/share/sounds/Schachtglocke/1.wav")
