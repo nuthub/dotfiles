@@ -1538,6 +1538,7 @@ Allows to browse bibtex file(s), insert citations, open files, links and notes. 
     ;; (setq org-cite-export-processors '((latex biblatex) (t basic)))
     (setq citar-bibliography org-cite-global-bibliography)
     (setq citar-library-paths '("~/Documents/Literatur/bibtex-pdfs"))
+    (setq citar-notes-paths '("~/org/roam/bib"))
     (setq citar-at-point-function 'embark-act))
 #+end_src
 
