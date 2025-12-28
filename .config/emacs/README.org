@@ -1858,7 +1858,21 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
     (add-hook 'message-send-hook
               (lambda()
                 (mml-secure-sign)))
-
+    ;; don't colorize HTML mails, since they are hard to read sometimes
+    (setq shr-use-colors nil)
+    ;; use variable pitch mode in article view
+    (add-hook 'mu4e-view-mode-hook 'variable-pitch-mode)
+    ;; switch between text and HTML view (from https://www.topbug.net/blog/2024/12/28/quickly-switch-between-html-and-plain-text-in-mu4e/)
+    (keymap-set mu4e-view-mode-map (kbd "K")
+  	      (lambda ()
+  		(interactive)
+  		(gnus-article-jump-to-part 1)
+  		(gnus-article-press-button)
+  		(gnus-article-press-button)))
+    ;; prefer to read text mails (from https://github.com/doomemacs/doomemacs/issues/4820#issuecomment-892736800)
+    (with-eval-after-load "mm-decode"
+      (add-to-list 'mm-discouraged-alternatives "text/html")
+      (add-to-list 'mm-discouraged-alternatives "text/richtext"))
     ;; bookmarks and shortcuts
     (setq mu4e-bookmarks
           '((:name "Combined inbox" :query "maildir:/private/INBOX OR maildir:/work/INBOX OR maildir:/tudo/INBOX" :key ?i)
