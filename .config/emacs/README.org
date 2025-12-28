@@ -1165,18 +1165,6 @@ Currently not in use, but pulls projectile as dependency. Therefore, I deactivat
     )
 #+end_src
 
-** COMMENT ChatGPT Shell
-
-Store the API key in .authinfo. ChatGPT and Dall-E use the same API key.
-
-#+begin_src emacs-lisp :tangle no
-  (use-package chatgpt-shell
-   :after shell-maker
-   :config (setq chatgpt-shell-openai-key
-  	       (auth-source-pick-first-password
-  				 :host "api.openai.com")))
-#+end_src
-
 ** cypher mode
 
 - Keywords from https://neo4j.com/docs/cypher-manual/current/syntax/keywords/
