@@ -91,8 +91,6 @@
 
 #+begin_src emacs-lisp
   (use-package emacs :ensure nil
-    :after diminish
-    :diminish auto-revert-mode
     :config
     (setq revert-without-query '(".pdf")))
 #+end_src
@@ -237,7 +235,6 @@ I use the Modus Themes. To switch between light (operandi) and dark (vivendi) th
 - This is a somewhat weird package loading. For the reason see https://github.com/LionyxML/auto-dark-emacs/issues/71#issuecomment-3363091706
   
 #+begin_src emacs-lisp
-  
   (defun jf/server-auto-dark (frame)
     (with-selected-frame frame
       (when (display-graphic-p)
@@ -245,8 +242,6 @@ I use the Modus Themes. To switch between light (operandi) and dark (vivendi) th
         (remove-hook 'after-make-frame-functions #'jf/server-auto-dark))))
 
   (use-package auto-dark
-    :after diminish
-    :diminish auto-dark-mode
     :config
     (setq auto-dark-themes '((modus-operandi) (modus-vivendi)))
     (add-hook 'after-make-frame-functions #'jf/server-auto-dark))
@@ -300,17 +295,15 @@ Emacs 28+ supports to globally default to ~y-or-n-p~ instead of ~yes-or-no-p~.
   (setq use-short-answers t)
 #+end_src
 
-** Diminish
-
-- This is to hide minor modes from mode line. You can use `:diminish foo-mode` then in use-package(...)
-- An alternative is delight, see https://www.gnu.org/software/emacs/manual/html_node/use-package/Delight.html
-
+** Minions
+This minor mode hides all minor mode indicators from mode line and provides a menu instead.
+In emacs 31 there is an alternative: https://www.reddit.com/r/emacs/comments/1k7zxjv/fyi_modelinecollapseminormodes/
 #+begin_src emacs-lisp
-  (use-package diminish :ensure t
+  (use-package minions
     :config
-    (diminish 'buffer-face-mode))
+    (add-hook 'emacs-startup-hook #'minions-mode))
 #+end_src
-   
+
 ** Show search result counts in modeline
 
 #+begin_src emacs-lisp
@@ -344,8 +337,6 @@ Emacs 28+ supports to globally default to ~y-or-n-p~ instead of ~yes-or-no-p~.
 This helps to figure out the next keystrokes
 #+begin_src emacs-lisp
   (use-package which-key :ensure nil
-    :after diminish
-    :diminish which-key-mode
     :config
     (setq which-key-idle-delay 1)
     (which-key-mode))
@@ -372,8 +363,6 @@ An alternative to /smartparens/ is /paren/.
 
 #+begin_src emacs-lisp
   (use-package smartparens
-    :after diminish
-    :diminish smartparens-mode
     :config
     (progn
       (require 'smartparens-config)
@@ -1001,8 +990,6 @@ htmlize is used by org to export to HTML.
 This shows modified/added/deleted lines directly in the editor.
 #+begin_src emacs-lisp
   (use-package git-gutter
-    :after diminish
-    :diminish git-gutter-mode
     :config
     (global-git-gutter-mode 1))
 #+end_src
@@ -1457,8 +1444,6 @@ Enriches selection lists (and completion minibuffers, e.g. consult) with additio
 
 #+begin_src emacs-lisp
   (use-package flycheck
-    :after diminish
-    :diminish flycheck-mode
     :config
     (setq flycheck-emacs-lisp-load-path 'inherit)
     (add-hook 'elpaca-after-init-hook #'global-flycheck-mode)
@@ -1547,8 +1532,7 @@ Allows to browse bibtex file(s), insert citations, open files, links and notes. 
 Embark integration is provided by /citar-embark/. Press C-. (or RET in org buffers) on any citation key to see possible actions.
 #+begin_src emacs-lisp
   (use-package citar-embark
-    :after citar embark diminish
-    :diminish citar-embark-mode
+    :after citar embark
     :no-require
     :config
     (citar-embark-mode))
@@ -1557,8 +1541,7 @@ Embark integration is provided by /citar-embark/. Press C-. (or RET in org buffe
 The package /citar-org-roam/ provides usage of org roam to take bibliographical notes. When enabled, the "old" or "usual" notes in my notes directory are not available anymore.
 #+begin_src emacs-lisp
   (use-package citar-org-roam
-    :after (citar org-roam diminish)
-    :diminish citar-org-roam-mode
+    :after (citar org-roam)
     :config
     (setq citar-org-roam-capture-template-key "n")
     (setq citar-org-roam-subdir "bib")
@@ -1573,8 +1556,6 @@ Snippet expansion
 
 #+begin_src emacs-lisp
   (use-package yasnippet
-    :after diminish
-    :diminish yas-minor-mode
     :config
     (yas-global-mode))
 #+end_src
