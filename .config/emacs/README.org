@@ -1861,7 +1861,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
           '((:name "Combined inbox" :query "maildir:/private/INBOX OR maildir:/work/INBOX OR maildir:/tudo/INBOX" :key ?i)
             (:name "Unread messages" :query "flag:unread AND NOT flag:trashed" :key ?u)
             (:name "Sent" :query "maildir:/private/Sent OR maildir:/work/Sent" :key ?s)
-            (:name "Archives" :query "maildir:/private/Archives/2025 OR maildir:/work/Archives/2025" :key ?a)
+            (:name "Archives" :query "maildir:/private/Archives OR maildir:/work/Archives" :key ?a)
             (:name "Drafts" :query "maildir:/private/Drafts OR maildir:/work/Drafts" :key ?d)
             (:name "Junk" :query "maildir:/private/Junk OR maildir:/work/Junk" :key ?j)
             (:name "Guix Mailing Lists" :query "maildir:/private/INBOX/Guix-Lists" :key ?g)
@@ -1873,11 +1873,11 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
             (:name "Messages with PDFs" :query "mime:application/pdf" :key ?p)))
     (setq mu4e-maildir-shortcuts
           '(("/private/INBOX" . ?p)
-            ("/private/Archives/2025" . ?P)
+            ("/private/Archives" . ?P)
             ("/private/autolearn/ham" . ?h)
             ("/private/autolearn/spam" . ?s)
             ("/work/INBOX" . ?w)
-            ("/work/Archives/2025" . ?W)
+            ("/work/Archives" . ?W)
             ("/tudo/INBOX" . ?d)))
 
     ;;
@@ -1900,7 +1900,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                     (smtpmail-smtp-service . 587)
                     (mu4e-drafts-folder . "/private/Drafts")
                     (mu4e-sent-folder . "/private/Sent")
-                    (mu4e-refile-folder  . "/private/Archives/2025")
+                    (mu4e-refile-folder  . "/private/Archives")
                     (mu4e-trash-folder . "/private/Trash")))
            ;; work account
            (make-mu4e-context
@@ -1917,7 +1917,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                     (smtpmail-smtp-service . 465)
                     (mu4e-drafts-folder  . "/work/Drafts")
                     (mu4e-sent-folder  . "/work/Sent")
-                    (mu4e-refile-folder  . "/work/Archives/2025")
+                    (mu4e-refile-folder  . "/work/Archives")
                     (mu4e-trash-folder  . "/work/Trash")))
            ;; TUDo account
            (make-mu4e-context
@@ -1934,7 +1934,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                     (smtpmail-smtp-service . 587)
                     (mu4e-drafts-folder . "/private/Drafts")
                     (mu4e-sent-folder . "/private/Sent")
-                    (mu4e-refile-folder  . "/private/Archives/2025")
+                    (mu4e-refile-folder  . "/private/Archives")
                     (mu4e-trash-folder . "/private/Trash")))))
 
     ;; Mail address blacklist
