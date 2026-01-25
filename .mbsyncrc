@@ -19,8 +19,8 @@ PassCmd "grep nuthost.de ~/.authinfo | awk 'FNR == 1 {print $6}'"
 Trash Trash
 
 MaildirStore private-local
-Path ~/Mail/private/
-Inbox ~/Mail/private/INBOX
+Path ~/Mail/p/
+Inbox ~/Mail/p/INBOX
 Trash Trash
 SubFolders Verbatim
 
@@ -41,8 +41,8 @@ PassCmd "grep uni-koblenz.de ~/.authinfo | awk 'FNR == 1 {print $6}'"
 Trash Trash
 
 MaildirStore work-local
-Path ~/Mail/work/
-Inbox ~/Mail/work/INBOX
+Path ~/Mail/w/
+Inbox ~/Mail/w/INBOX
 Trash Trash
 SubFolders Verbatim
 
@@ -62,8 +62,8 @@ PassCmd "grep tu-dortmund.de ~/.authinfo | awk 'FNR == 1 {print $6}'"
 Trash Trash
 
 MaildirStore tudo-local
-Path ~/Mail/tudo/
-Inbox ~/Mail/tudo/INBOX
+Path ~/Mail/d/
+Inbox ~/Mail/d/INBOX
 Trash Trash
 SubFolders Verbatim
 
