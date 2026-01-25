@@ -747,33 +747,6 @@ For syntax highlighted source code blocks, I use the font-locking mode of emacs.
   (use-package engrave-faces)
 #+end_src
 
-** COMMENT org-super-agenda
-CLOSED: [2025-09-28 Sun 00:23]
-
-#+begin_src emacs-lisp :tangle no
-  (use-package org-super-agenda
-    :config
-    (setq org-super-agenda-groups
-    	'( ; Each group has an implicit boolean OR operator between its selectors.
-     	  (:name "" :time-grid t)
-    	  (:name "Work"           :category ("Work" "Teaching"))
-    	  (:name "Promotion"      :category ("Promotion"))
-    	  (:name "Projects"       :category ("Projects"))
-    	  (:name "Personal"       :category ("Personal"))
-    	  (:name "IT"             :category ("IT"))
-  					;  	  (:name "House Routines" :category (""))
-    	  (:name "Sailing"        :category ("Sailing"))
-    	  ;; Groups supply their own section names when none are given
-    	  (:todo "TODO" :order 1)
-    	  (:todo "PROJ" :order 2)
-    	  (:todo "FREQ" :order 3)
-    	  (:todo "WAIT" :order 4)
-      	  ;; After the last group, the agenda will display items that didn't
-    	  ;; match any of these groups, with the default order position of 99
-    	  ))
-    (org-super-agenda-mode))
-#+end_src
-
 ** Org roam
 Build a second brain with org-roam.
 #+begin_src emacs-lisp
