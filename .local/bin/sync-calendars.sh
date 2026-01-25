@@ -9,7 +9,7 @@
 # export XDG_RUNTIME_DIR=/run/user/1000
 
 initdir=~/.config/emacs.minimal-khalel
-
+calendarfile=
 help() {
     # Display Help
     echo "Sync calendars and contacts."
@@ -30,13 +30,13 @@ case $1 in
 	vdirsyncer -v WARNING sync
 	#	emacs --init-directory=~/.config/emacs.minimal-khalel --batch  -e 'khalel-import-events'
 	emacs --init-directory=$initdir --batch --script $initdir/init.el -e 'khalel-import-events'
-	emacsclient -e '(jf/revert-file-visiting-buffer "~/org/calendar.org")'
+	emacsclient -e '(jf/revert-file-visiting-buffer "~/org/agenda/calendar.org")'
 	exit 0
 	;;
     "-l")
 	vdirsyncer -v WARNING sync
 	emacs --init-directory=$initdir --batch --script $initdir/init.el -e 'khalel-import-events'
-	emacsclient -e '(jf/revert-file-visiting-buffer "~/org/calendar.org")'
+	emacsclient -e '(jf/revert-file-visiting-buffer "~/org/agenda/calendar.org")'
 	exit 0
 	;;
     *)
