@@ -2074,17 +2074,10 @@ Best option would be to fix ~tramp-process-running-p~ upstream. An emacs lisp ve
   (global-set-key (kbd "C-c r") 'revert-buffer)
 #+end_src
 
-** COMMENT Open the file under cursor
-CLOSED: [2024-12-26 Thu 11:38]
-#+begin_src emacs-lisp :tangle no
-  (global-set-key (kbd "C-x f") 'find-file-at-point)
-#+end_src
-
 ** Translate with deepl
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-x C-t") 'txl-translate-region-or-paragraph)
 #+end_src
-
 
 **  vundo
 #+begin_src emacs-lisp
