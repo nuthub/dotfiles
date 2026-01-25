@@ -1103,6 +1103,16 @@ Currently not in use, but pulls projectile as dependency. Therefore, I deactivat
   (use-package gptel
     :config
     (setq gptel-default-mode 'org-mode)
+    (setq gptel-model 'mistral-large-2512
+  	gptel-backend
+  	(gptel-make-openai "MistralLeChat"  ;Any name you want
+  	  :host "api.mistral.ai"
+  	  :endpoint "/v1/chat/completions"
+  	  :protocol "https"
+  	  :key (auth-info-password
+  		(nth 0 (auth-source-search
+  			:host "api.mistral.ai")))
+  	  :models '("mistral-large-2512"))) ; see https://docs.mistral.ai/getting-started/models
     (gptel-make-gemini "Gemini"
       :stream t
       :key (auth-info-password
