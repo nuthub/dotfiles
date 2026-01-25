@@ -1006,6 +1006,7 @@ This shows modified/added/deleted lines directly in the editor.
     (setopt pdf-view-continuous nil)
     ;; (define-key pdf-view-mode-map (kbd "g") nil)
     ;; (define-key pdf-view-mode-map (kbd "g g") 'pdf-view-first-page)
+    (define-key pdf-view-mode-map (kbd "z") 'jf/open-current-buffer-in-pdfpc)
     (define-key pdf-view-mode-map (kbd "G") 'pdf-view-last-page)
     (define-key pdf-view-mode-map (kbd "e") 'pdf-view-goto-page)
     ;; (define-key pdf-view-mode-map (kbd "r") 'pdf-view-revert-buffer)
@@ -1689,6 +1690,27 @@ I use this to trigger a reload of my generated calendar file after it has been r
       (set-buffer (find-buffer-visiting filename))
       (revert-buffer nil t)
       (message (concat filename " reverted"))))
+#+end_src
+
+** Open PDF file in pdfpc
+#+begin_src emacs-lisp
+  (defun jf/open-current-buffer-in-pdfpc (no-close)
+    "Open current buffer's file in pdfpc.
+
+  Return nil if current buffer doesn't visit a PDF file.
+  With prefix argument NO-CLOSE, don't kill buffer or delete frame."
+    (interactive "P")
+    (let* ((pdfpc (executable-find "pdfpc"))
+           (file-name (buffer-file-name))
+           (extension (file-name-extension file-name)))
+      (unless (string= extension "pdf")
+        (user-error "Buffer does not visit a PDF file."))
+      (unless pdfpc
+        (user-error "Could not find pdfpc executable."))
+      (start-process "pdfpc-process" nil pdfpc file-name)
+      (unless no-close
+        (kill-buffer)
+        (delete-frame))))
 #+end_src
 
 ** Open automounted drives
