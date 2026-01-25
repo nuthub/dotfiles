@@ -805,13 +805,6 @@ Visualize the org roam graph in browser.
   	org-roam-ui-open-on-start t))
 #+end_src
 
-** Org mode scratch buffer
-
-#+begin_src emacs-lisp
-  (setq initial-scratch-message "* Org Mode Scratch Buffer\n\n")
-  (setq initial-major-mode 'org-mode)
-#+end_src
-
 ** HTML Export
 
 htmlize is used by org to export to HTML.
