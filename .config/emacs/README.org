@@ -477,11 +477,11 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
     ;; (setq org-M-RET-may-split-line '((default . t)))
     ;; (setq org-insert-heading-respect-content t)
     ;; Agenda
-    (setq org-agenda-files '("~/org/gtd.org"
-                             "~/org/tickler.org"
-                             "~/org/inbox.org"
-                             "~/org/calendar.org"
-  			   "~/org/someday.org"))
+    (setq org-agenda-files '("~/org/agenda/gtd.org"
+                             "~/org/agenda/tickler.org"
+                             "~/org/agenda/inbox.org"
+                             "~/org/agenda/calendar.org"
+  			   "~/org/agenda/someday.org"))
     (setq org-agenda-window-setup 'current-window)
     ;; the file calendar.org is read-only, allow this file-local-variable to be set.
     ;; See Troubleshooting section in README.org at https://gitlab.com/hperrey/khalel/
@@ -505,11 +505,9 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
     			(org-agenda-entry-types '(:deadline))
     			(org-deadline-warning-days 0)))
     	    (todo "" ((org-agenda-overriding-header "Inbox Items")
-    		      (org-agenda-files '("~/org/inbox.org"))))
+    		      (org-agenda-files '("~/org/agenda/inbox.org"))))
     	    (todo "CNCL|DONE" ((org-agenda-overriding-header "Archivable Items")))
-    	    (todo "WAIT" ((org-agenda-overriding-header "Waiting Items")))
-  	    (tags-todo "-{.*}//-PROJ-WAIT" ((org-agenda-overriding-header "Unscheduled & Untagged TODOs")
-  					    (org-agenda-skip-function '(org-agenda-skip-entry-if 'timestamp))))))
+    	    (todo "WAIT" ((org-agenda-overriding-header "Waiting Items")))))
   	  ("u" "Tag and Schedule"
   	   ((todo "PROJ" ((org-agenda-overriding-header "Projects")))
   	    (todo "TODO|FREQ" ((org-agenda-overriding-header "Unscheduled TODOs")
@@ -522,12 +520,12 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
     	    (org-agenda-entry-types '(:deadline)) ;; this entry excludes :scheduled
     	    (org-deadline-warning-days 0)))
             ("c" "Important events" agenda* nil
-             ((org-agenda-files '("~/org/calendar.org"))
+             ((org-agenda-files '("~/org/agenda/calendar.org"))
               (org-agenda-span 7)
               (org-agenda-skip-function '(org-agenda-skip-entry-if
                                           'regexp ":C3RE:\\|:AfH:\\|:Mond:"))))
             ("C" "All events" agenda* nil
-             ((org-agenda-files '("~/org/calendar.org"))
+             ((org-agenda-files '("~/org/agenda/calendar.org"))
               (org-agenda-span 7)))))
     
     (setq org-stuck-projects '("-noproject+LEVEL=2/-DONE-FREQ"
@@ -535,9 +533,9 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
   			     nil ""))
     (setq org-deadline-warning-days 7)
     ;; Refiling
-    (setq org-refile-targets (quote (("~/org/gtd.org" :maxlevel . 4)
-  				   ("~/org/someday.org" :maxlevel . 1)
-  				   ("~/org/tickler.org" :maxlevel . 1))))
+    (setq org-refile-targets (quote (("~/org/agenda/gtd.org" :maxlevel . 4)
+  				   ("~/org/agenda/someday.org" :maxlevel . 1)
+  				   ("~/org/agenda/tickler.org" :maxlevel . 1))))
     (setq org-refile-use-outline-path 'file)
     (setq org-refile-allow-creating-parent-nodes 'confirm)
     (setq org-outline-path-complete-in-steps nil)
@@ -567,14 +565,14 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
     (defun jf/org-setup-capture-templates ()
       (setq org-capture-templates
     	'(
-      	  ("t" "Todo" entry (file "~/org/inbox.org")
+      	  ("t" "Todo" entry (file "~/org/agenda/inbox.org")
                "* TODO %?\n  %i")
-      	  ("m" "Todo from Mail" entry (file "~/org/inbox.org")
+      	  ("m" "Todo from Mail" entry (file "~/org/agenda/inbox.org")
                "* TODO %?\n- Mail from %:fromname: %a")
       	  ("l" "Meeting notes (here)" entry (here)
                "* %u %^{title}\nParticipants: %?\n- "
   	     :jump-to-captured t)
-      	  ("L" "Todo with Link" entry (file "~/org/inbox.org")
+      	  ("L" "Todo with Link" entry (file "~/org/agenda/inbox.org")
                "* TODO %?\n- Link: %a"))))
 #+end_src
 
@@ -2096,7 +2094,7 @@ CLOSED: [2024-12-26 Thu 11:38]
 
 ** Open GTD file
 #+begin_src emacs-lisp
-  (global-set-key (kbd "C-c t") (lambda () (interactive) (find-file "~/org/gtd.org")))
+  (global-set-key (kbd "C-c t") (lambda () (interactive) (find-file "~/org/agenda/gtd.org")))
 #+end_src
 
 ** Org mode
