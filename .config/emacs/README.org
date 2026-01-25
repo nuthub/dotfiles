@@ -1780,8 +1780,6 @@ If there is more than one, let the user choose."
     (require 'khardel-org))
 #+end_src
 
-* Contact syncing
-
 * Mail configuration
 
 mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
@@ -1808,6 +1806,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
     (setq mu4e-completing-read-function 'completing-read)
     (setq mu4e-change-filenames-when-moving t)
 
+    ;;
     ;; appearance
     (setq mu4e-confirm-quit t)
     (setq mu4e-notification-support t)
@@ -1826,19 +1825,26 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
     (setq gnus-visible-headers (concat gnus-visible-headers
                                        "\\|^User-Agent:"))
 
+    ;;
     ;; receiving mails
-    (setq mu4e-get-mail-command "mbsync inboxes-only")
+    
+    ;;    (setq mu4e-get-mail-command "mbsync inboxes-only")
+    (setq mu4e-get-mail-command "true")
     (setq mu4e-update-interval(* 5 60))
     (setq mu4e-maildir "~/Mail")
     ;; https://mu-discuss.narkive.com/jiDf9Swa/mu-index-on-macos-sometimes-very-fast-sometimes-very-slow#
-    ;;    (setq mu4e-index-cleanup nil) ;; attempt to avoid slow reindexing
-    ;;    (setq mu4e-index-lazy-check nil) ;; attempt to avoid slow reindexing
+    ;;    (setq mu4e-index-cleanup nil) ;; attempt to avoid slow reindexing, same as --nocleanup
+    ;;    (setq mu4e-index-lazy-check t) ;; attempt to avoid slow reindexing
 
+    ;;
     ;; headers view
+    
     (setq mu4e-org-link-query-in-headers-mode nil)
     (setq mu4e-headers-include-related nil)
 
+    ;;
     ;; Composing mails
+    
     (require 'smtpmail)
     (setq smtpmail-queue-mail nil)  ;; start in direct mode
     (setq smtpmail-queue-dir "~/Mail/queue/cur")
@@ -1863,44 +1869,56 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
     (add-hook 'message-send-hook
               (lambda()
                 (mml-secure-sign)))
+
+    ;;
+    ;; viewing mails
+    
     ;; don't colorize HTML mails, since they are hard to read sometimes
     (setq shr-use-colors nil)
     ;; use variable pitch mode in article view
     (add-hook 'mu4e-view-mode-hook 'variable-pitch-mode)
     ;; switch between text and HTML view (from https://www.topbug.net/blog/2024/12/28/quickly-switch-between-html-and-plain-text-in-mu4e/)
     (keymap-set mu4e-view-mode-map (kbd "K")
-  	      (lambda ()
-  		(interactive)
-  		(gnus-article-jump-to-part 1)
-  		(gnus-article-press-button)
-  		(gnus-article-press-button)))
+    	      (lambda ()
+    		(interactive)
+    		(gnus-article-jump-to-part 1)
+    		(gnus-article-press-button)
+    		(gnus-article-press-button)))
     ;; prefer to read text mails (from https://github.com/doomemacs/doomemacs/issues/4820#issuecomment-892736800)
     (with-eval-after-load "mm-decode"
       (add-to-list 'mm-discouraged-alternatives "text/html")
       (add-to-list 'mm-discouraged-alternatives "text/richtext"))
-    ;; bookmarks and shortcuts
+
+    ;;
+    ;; Trashing mails
+    
+    (setq mu4e-trash-without-flag t) ; see https://github.com/djcb/mu/issues/1136
+    
+    ;;
+    ;; Bookmarks and shortcuts
+    
     (setq mu4e-bookmarks
-          '((:name "Combined inbox" :query "maildir:/private/INBOX OR maildir:/work/INBOX OR maildir:/tudo/INBOX" :key ?i)
-            (:name "Unread messages" :query "flag:unread AND NOT flag:trashed" :key ?u)
-            (:name "Sent" :query "maildir:/private/Sent OR maildir:/work/Sent" :key ?s)
-            (:name "Archives" :query "maildir:/private/Archives OR maildir:/work/Archives" :key ?a)
-            (:name "Drafts" :query "maildir:/private/Drafts OR maildir:/work/Drafts" :key ?d)
-            (:name "Junk" :query "maildir:/private/Junk OR maildir:/work/Junk" :key ?j)
-            (:name "Guix Mailing Lists" :query "maildir:/private/INBOX/Guix-Lists" :key ?g)
-            (:name "Emacs Mailing Lists" :query "maildir:/private/INBOX/Emacs-Lists" :key ?e)
-            (:name "FSInfo Mailing Lists" :query "maildir:/private/INBOX/FSInfo" :key ?f)
+          '((:name "Combined inbox" :query "maildir:/p/INBOX OR maildir:/w/INBOX OR maildir:/d/INBOX" :key ?i)
+            (:name "Unread messages" :query "flag:unread AND NOT flag:trashed AND NOT (maildir:/p/Trash OR maildir:/w/Trash OR maildir:d/Trash)" :key ?u)
+            (:name "Sent" :query "maildir:/p/Sent OR maildir:/w/Sent" :key ?s)
+            (:name "Archives" :query "maildir:/p/Archives OR maildir:/w/Archives" :key ?a)
+            (:name "Drafts" :query "maildir:/p/Drafts OR maildir:/w/Drafts" :key ?d)
+            (:name "Junk" :query "maildir:/p/Junk OR maildir:/w/Junk" :key ?j)
+            (:name "Guix Mailing Lists" :query "maildir:/p/INBOX/Guix-Lists" :key ?g)
+            (:name "Emacs Mailing Lists" :query "maildir:/p/INBOX/Emacs-Lists" :key ?e)
+            (:name "FSInfo Mailing Lists" :query "maildir:/p/INBOX/FSInfo" :key ?f)
             (:name "Today's messages" :query "date:today..now" :key ?n)
             (:name "Last 7 days" :query "date:7d..now" :hide-unread t :key ?7)
-            (:name "Trashed mails" :query "flag:trashed" :hide-unread nil :key ?t)
+            (:name "Trashed mails" :query "maildir:/p/Trash OR maildir:/w/Trash OR maildir:d/Trash" :hide-unread nil :key ?t)
             (:name "Messages with PDFs" :query "mime:application/pdf" :key ?p)))
     (setq mu4e-maildir-shortcuts
-          '(("/private/INBOX" . ?p)
-            ("/private/Archives" . ?P)
-            ("/private/autolearn/ham" . ?h)
-            ("/private/autolearn/spam" . ?s)
-            ("/work/INBOX" . ?w)
-            ("/work/Archives" . ?W)
-            ("/tudo/INBOX" . ?d)))
+          '(("/p/INBOX" . ?p)
+            ("/p/Archives" . ?P)
+            ("/p/autolearn/ham" . ?h)
+            ("/p/autolearn/spam" . ?s)
+            ("/w/INBOX" . ?w)
+            ("/w/Archives" . ?W)
+            ("/d/INBOX" . ?d)))
 
     ;;
     ;; contexts
@@ -1920,10 +1938,10 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                     (smtpmail-smtp-server . "nuthost.de")
                     (smtpmail-stream-type . starttls)
                     (smtpmail-smtp-service . 587)
-                    (mu4e-drafts-folder . "/private/Drafts")
-                    (mu4e-sent-folder . "/private/Sent")
-                    (mu4e-refile-folder  . "/private/Archives")
-                    (mu4e-trash-folder . "/private/Trash")))
+                    (mu4e-drafts-folder . "/p/Drafts")
+                    (mu4e-sent-folder . "/p/Sent")
+                    (mu4e-refile-folder  . "/p/Archives")
+                    (mu4e-trash-folder . "/p/Trash")))
            ;; work account
            (make-mu4e-context
             :name "Work"
@@ -1937,10 +1955,10 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                     (smtpmail-smtp-server . "smtp.uni-koblenz.de")
                     (smtpmail-stream-type . ssl)
                     (smtpmail-smtp-service . 465)
-                    (mu4e-drafts-folder  . "/work/Drafts")
-                    (mu4e-sent-folder  . "/work/Sent")
-                    (mu4e-refile-folder  . "/work/Archives")
-                    (mu4e-trash-folder  . "/work/Trash")))
+                    (mu4e-drafts-folder  . "/w/Drafts")
+                    (mu4e-sent-folder  . "/w/Sent")
+                    (mu4e-refile-folder  . "/w/Archives")
+                    (mu4e-trash-folder  . "/w/Trash")))
            ;; TUDo account
            (make-mu4e-context
             :name "TUDo"
@@ -1954,35 +1972,37 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                     (smtpmail-smtp-server . "unimail.tu-dortmund.de")
                     (smtpmail-stream-type . starttls)
                     (smtpmail-smtp-service . 587)
-                    (mu4e-drafts-folder . "/private/Drafts")
-                    (mu4e-sent-folder . "/private/Sent")
-                    (mu4e-refile-folder  . "/private/Archives")
-                    (mu4e-trash-folder . "/private/Trash")))))
+                    (mu4e-drafts-folder . "/p/Drafts")
+                    (mu4e-sent-folder . "/p/Sent")
+                    (mu4e-refile-folder  . "/p/Archives")
+                    (mu4e-trash-folder . "/p/Trash")))))
 
-    ;; Mail address blacklist
-    ;; Load my mail blacklist
-    (defun jf/load-mail-blacklist ()
-      (interactive)
-      (setq jf-mail-blacklist
-  	  (split-string
-  	   (with-temp-buffer
-  	     (insert-file-contents  "~/.config/emacs/mail-blacklist.txt")
-  	     (buffer-substring-no-properties
-  	      (point-min)
-  	      (point-max))))))
-    (jf/load-mail-blacklist)
-
-    ;; define my contact process function
-    (defun jf/my-contact-processor (contact)
-      (message contact)
-      (cond
-       ((cl-some (lambda (str) (string-match str contact)) jf-mail-blacklist) nil)
-       (t contact)))
-    ;; register the function with mu4e
-    (setq mu4e-contact-process-function 'jf/my-contact-processor)
-    
+    ;;
     ;; Calendar support
     (require 'mu4e-icalendar)) ; end of use-package mu4e
+#+end_src
+
+Contacts handling (blacklist for now):
+#+begin_src emacs-lisp
+  ;; Load my mail blacklist
+  (defun jf/load-mail-blacklist ()
+    (interactive)
+    (setq jf-mail-blacklist
+  	(split-string
+  	 (with-temp-buffer
+  	   (insert-file-contents  "~/.config/emacs/mail-blacklist.txt")
+  	   (buffer-substring-no-properties
+  	    (point-min)
+  	    (point-max))))))
+  (jf/load-mail-blacklist)
+
+  ;; define my contact process function
+  (defun jf/my-contact-processor (contact)
+    (cond
+     ((cl-some (lambda (str) (string-match str contact)) jf-mail-blacklist) nil)
+     (t contact)))
+  ;; register the function with mu4e
+  (setq mu4e-contact-process-function 'jf/my-contact-processor)
 #+end_src
 
 When signing mails with openpgp (or gnupg), use the key associated with the sender address.
@@ -2016,6 +2036,7 @@ Before sending an email, I'd like to check some things.
         (regexp-opt '("we send"
                       "i send"
                       "attach"
+                      "anbei"
                       "angehängt"
                       "anhang")))
 
@@ -2140,4 +2161,3 @@ CLOSED: [2024-12-26 Thu 11:38]
 #+begin_src emacs-lisp
   (global-set-key (kbd "<f12>") 'jf/my-menu)
 #+end_src
-
