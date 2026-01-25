@@ -4,24 +4,6 @@
 # A folder where vdirsyncer can store some metadata about each pair.
 status_path = "~/.vdirsyncer/status/"
 
-# Uni -> nuthouse
-#
-## !! Currently necessary as Hetzner VM can't access Uni SOGo
-## My donut2 syncer now uses VPN to connect to university's SOGo
-# [pair rgse_nuthouse_calendar]
-# a = "uniko_calendar_remote"
-# b = "nuthouse_calendar_remote"
-# collections = ["2EF1A4-63163180-17F-77541380", "312BB5-63163180-97-5010D400", "313D3E-63163180-5F-2183C9C0"]
-# metadata = ["displayname", "color"]
-# conflict_resolution = "a wins"
-
-# [storage uniko_calendar_remote]
-# type = "caldav"
-# url = "https://sogo.uni-koblenz.de/SOGo/dav/rgse/Calendar/"
-# username = "flake@uni-koblenz.de"
-# password.fetch = ["shell", "grep sogo.uni-koblenz.de ~/.authinfo | awk 'FNR == 1 {print $8}'" ]
-# read_only = true
-
 # Calendars: nuthouse -> local
 #
 [pair nuthouse_calendar]
