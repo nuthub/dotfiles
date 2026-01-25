@@ -1074,7 +1074,9 @@ Two modes:
 ** web-mode & php-mode
 
 #+begin_src emacs-lisp
-  (use-package web-mode)
+  (use-package web-mode
+    :config
+    (add-to-list 'auto-mode-alist '("\\.jinja2\\'" . web-mode)))
   (use-package php-mode)
 #+end_src
 
