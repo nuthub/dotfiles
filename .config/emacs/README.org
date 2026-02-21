@@ -940,7 +940,6 @@ htmlize is used by org to export to HTML.
 
 #+begin_src emacs-lisp
   (use-package magit
-;;    :after llama
     :config
     ;; gpg signing is at transient level 5, default was to show up to level 4
     (setq transient-default-level 5)
@@ -955,7 +954,22 @@ This shows modified/added/deleted lines directly in the editor.
 #+begin_src emacs-lisp
   (use-package git-gutter
     :config
-    (global-git-gutter-mode 1))
+    (global-git-gutter-mode 1)
+    ;; useful key bindings (not set yet):
+    :bind
+    ("C-x v t" . git-gutter-mode) ; enabled by default?
+    ("C-x v s" . git-gutter:stage-hunk)
+    ("C-x v n" . git-gutter:next-hunk)
+    ("C-x v p" . git-gutter:previous-hunk)
+    ("C-x v T" . git-timemachine)
+    ("C-x v R" . browse-at-remote))
+#+end_src
+
+** Forge support
+
+#+begin_src emacs-lisp
+  (use-package forge
+    :after magit)
 #+end_src
 
 ** pdf-tools
