@@ -60,20 +60,31 @@
           (holiday-fixed 12 26 "2. Weihnachtstag")))
 #+end_src
 * File handling
-** Make use of system's trash and use y-or-n-p instead of yes-or-no-p
+** yes-or-no => y-or-n
+Make use of system's trash and use y-or-n-p instead of yes-or-no-p
 #+begin_src emacs-lisp
   (setq delete-by-moving-to-trash t)
   (setq dired-deletion-confirmer #'y-or-n-p)
 #+end_src
 
-** dired-open-with: open a file with a registered application (from mimeapps.list)
+** xdg-open-with / dired-open-with
+Open a file with a registered application (from mimeapps.list)
 #+begin_src emacs-lisp
   (use-package dired-open-with
     :after dired
-  :config
-  (define-key dired-mode-map "o" #'dired-open-with))
+    :config
+    (define-key dired-mode-map "o" #'dired-open-with)
+    
+    (defun jf/xdg-open-with ()
+      "Open the current buffer's file with an XDG app."
+      (interactive)
+      (let* ((path (file-truename (buffer-file-name)))
+  	   (apps (dired-open-with--applications-for-file path))
+  	   (app (dired-open-with--completing-read apps))
+  	   (cmd (dired-open-with--xdg-format-exec (gethash "Exec" app) path)))
+        (dired-open-with--start-process cmd))))
+;    (global-set-key (kbd "z") 'jf/xdg-open-with))
 #+end_src
-
 ** Keep folders clean
 
 #+begin_src emacs-lisp
@@ -87,7 +98,7 @@
   (setq auto-save-file-name-transforms `((".*" ,(expand-file-name "tmp/auto-saves/" user-emacs-directory) t)))
 #+end_src
 
-** Auto revert unchanged files (PDF only for now)
+** Auto revert changed files (PDF only for now)
 
 #+begin_src emacs-lisp
   (use-package emacs :ensure nil
