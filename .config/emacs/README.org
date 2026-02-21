@@ -1762,12 +1762,12 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
 
 1. run mbsync -a
 2. initialize mu
-   #+begin_src bash :tanlge no
-     mu init \
-        --my-address=foo@example.com \
-        --my-address=bar@example.com \
-        -m ~/Mail
-   #+end_src
+#+begin_src bash :tanlge no
+  mu init \
+     --my-address=foo@example.com \
+     --my-address=bar@example.com \
+     -m ~/Mail
+#+end_src
 
 #+begin_src emacs-lisp
   (use-package mu4e
@@ -1804,8 +1804,8 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
     ;;
     ;; receiving mails
     
-    ;;    (setq mu4e-get-mail-command "mbsync inboxes-only")
-    (setq mu4e-get-mail-command "true")
+    (setq mu4e-get-mail-command "mbsync inboxes-only")
+    ;; (setq mu4e-get-mail-command "true")
     (setq mu4e-update-interval(* 5 60))
     (setq mu4e-maildir "~/Mail")
     ;; https://mu-discuss.narkive.com/jiDf9Swa/mu-index-on-macos-sometimes-very-fast-sometimes-very-slow#
@@ -1907,7 +1907,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
             :match-func
             (lambda (msg)
               (when msg
-                (string-prefix-p "/private" (mu4e-message-field msg :maildir))))
+                (string-prefix-p "/p/" (mu4e-message-field msg :maildir))))
             :vars '((user-mail-address . "julian@flake.de")
                     (user-full-name . "Julian Flake")
                     (message-signature . nil)
@@ -1924,7 +1924,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
             :match-func
             (lambda (msg)
               (when msg
-                (string-prefix-p "/work" (mu4e-message-field msg :maildir))))
+                (string-prefix-p "/w/" (mu4e-message-field msg :maildir))))
             :vars '((user-mail-address . "flake@uni-koblenz.de")
                     (user-full-name . "Julian Flake")
                     (message-signature . "Dipl.-Inf. Julian Flake\n\nUniversity of Koblenz\nFaculty 4: Computer Science\nInstitute for Software Technology\nPB 20 16 02 | D-56016 Koblenz | Germany\n\nVoice: +49 261 287 2787\nEmail: flake@uni-koblenz.de\nhttps://uni-ko.de/flake")
@@ -1941,7 +1941,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
             :match-func
             (lambda (msg)
               (when msg
-                (string-prefix-p "/tudo" (mu4e-message-field msg :maildir))))
+                (string-prefix-p "/d/" (mu4e-message-field msg :maildir))))
             :vars '((user-mail-address . "julian.flake@tu-dortmund.de")
                     (user-full-name . "Julian Flake")
                     (message-signature . nil)
