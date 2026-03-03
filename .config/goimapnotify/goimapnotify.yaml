@@ -13,7 +13,7 @@ configurations:
    boxes:
      -
        mailbox: INBOX
-       onNewMail: "mbsync private:INBOX"
+       onNewMail: "mbsync private"
        onDeletedMail: "mbsync private"
  -
    alias: work
@@ -29,6 +29,6 @@ configurations:
    boxes:
      -
        mailbox: INBOX
-       onNewMail: "mbsync work:INBOX"
+       onNewMail: "mbsync work"
        onDeletedMail: "mbsync work"
 
