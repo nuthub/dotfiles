@@ -233,6 +233,19 @@ bindsym $mod+Ctrl+Down resize grow height 10 px or 10 ppt
 bindsym $mod+Ctrl+Up resize shrink height 10 px or 10 ppt
 bindsym $mod+Ctrl+Right resize grow width 10 px or 10 ppt
 
+# screenshots
+# inspiration: https://www.reddit.com/r/swaywm/comments/ghnlea/comment/fqnzxkx/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
+set $satty flatpak run org.satty.Satty -f -
+set $printscreen_mode 'printscreen (r:region, f:full, w:window)'
+mode $printscreen_mode {
+    bindsym r exec swaymsg 'mode "default"' && grim -t ppm -g "$(slurp -d)" - | $satty
+    bindsym f exec swaymsg 'mode "default"' && grim -t ppm - | $satty
+    bindsym w exec swaymsg 'mode "default"' && swaymsg -t get_tree | jq -r '.. | select(.focused?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"' | grim -t ppm -g - - | $satty
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+Bindsym $mod+p mode $printscreen_mode
 #
 # Status Bar:
 #
@@ -331,9 +344,7 @@ exec --no-startup-id {
     gammastep-indicator
     udiskie -s # -t or -s (show applet always or with actions available only
     solaar -w hide
-#    pipewire
-#    wireplumber
-#    pipewire-pulse
+    espanso start --unmanaged
     emacs --daemon
     sleep 10 && nextcloud --background
 }
