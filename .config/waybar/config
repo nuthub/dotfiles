@@ -70,7 +70,7 @@
 	"on-click" : "~/.config/waybar/get_connections.sh",
 	"exec": "~/.config/waybar/get_connections.sh",
 	"interval": 10,
-	"format" : "{icon} {}",
+	"format" : "{icon} {text}",
 	"format-icons": ""
     },
 
@@ -101,7 +101,7 @@
 
     "custom/notifications": {
 	"tooltip": false,
-	"format": "{icon} {}",
+	"format": "{icon} {text}",
 	"format-icons": {
 	    "notification": "<span foreground='red'><sup></sup></span>",
 	    "none": "",
@@ -123,10 +123,10 @@
 
     "custom/screenshot": {
 	"on-click"  : "screenshot.sh",
-	"on-click-right" : "nemo ~/Screenshots",
+	"on-click-right" : "emacsclient -nc ~/Pictures/Screenshots",
 	"tooltip" : true,
 	"tooltip-format" : "Take Screenshot",
-	"format" : "{icon} {}",
+	"format" : "{icon} {text}",
 	"format-icons": ""
     },
 
