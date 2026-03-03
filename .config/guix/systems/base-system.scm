@@ -154,21 +154,27 @@
 		 ; "icedove-wayland" ; thunderbird
 		 "aqbanking" "gnucash"
 		 ;; Office, LaTeX, PDF & Co
-		 "texlive" "texlive-biber" ;; JabRef is installed via flatpak
-		 "enchant"
-		 ;; "hunspell" "hunspell-dict-de" "hunspell-dict-en"
 		 "libreoffice"
 		 "aspell" "aspell-dict-de" "aspell-dict-en" ; aspell or hunspell? Good question
+		 ;; "texlive-scheme-full"
+		 "texlive-scheme-medium"
+		 "emacs-org-texlive-collection"
+		 "texlive-biber"
+		 "texlive-latexmk" ; should be in emacs-org-texlive-collection
+		 "texlive-collection-latexextra"
+		 "texlive-collection-fontsextra" ;; beamer theme koblenz needs opensans
+		 "texlive-collection-pictures"
 		 "pandoc"
-		 "pdfpc"
+		 "pdfpc" "gstreamer" "gst-plugins-base" "gst-plugins-good" "gst-plugins-bad" "gst-plugins-ugly" "texlive-pdfpc"
 		 "ghostscript" ;; for e.g. ps2pdf
-		 "stapler" "mupdf"
+		 ;; "stapler"
+		 "mupdf" "poppler"
 		 ;; media
 		 "inkscape" "graphviz"
 		 "mpv" "imv"
 		 "gimp"
 		 "imagemagick" "optipng"
-		 "cheese" "obs" "handbrake" ; obs-wlrobs is not necessary, if pipewire is running
+		 "wf-recorder" "obs" "handbrake" "cheese" ; obs-wlrobs is not necessary, if pipewire is running
 		 ;; Virtualization
 		 "qemu" "virt-manager" "ovmf-x86-64"
 		 ;;
@@ -193,8 +199,6 @@
 		 "hicolor-icon-theme" ; waybar/privacy uses icons from here
 		 ;; Cursors
 		 "xcursor-themes" "bibata-cursor-theme"
-		 ;; from nutguix
-		 "gtklp" ;"astah-professional"
 		 ))
 	      %base-packages))
    (services (append (list
