@@ -1,19 +1,21 @@
 ;; This is my operating system configuration
 (use-modules (gnu)
+	     (gnu system accounts)
 	     (gnu system locale)
+	     (gnu system privilege)
 	     (nongnu packages fonts)
 	     (nongnu packages linux)
 	     (nongnu packages mozilla)
 	     (nongnu system linux-initrd))
 
 (use-system-modules setuid)
-(use-package-modules admin firmware gnome freedesktop linux networking package-management shells wm fonts)
-(use-service-modules authentication cups dbus desktop linux networking pm samba ssh mcron virtualization xorg)
+(use-package-modules admin firmware gnome file-systems freedesktop linux networking package-management rust-apps shells wm fonts)
+(use-service-modules authentication containers cups dbus desktop linux mcron networking pm samba ssh virtualization xorg)
 
 (define base-system
   (operating-system
-   (host-name #f)
-   (file-systems #f)
+   (host-name #f) ; is set in an inheritance
+   (file-systems #f) ; is set in an inheritance
    (kernel linux)
    (kernel-loadable-modules (list v4l2loopback-linux-module)) 
    (initrd microcode-initrd)
@@ -45,6 +47,11 @@
 		  (setuid-program
 		   (program (file-append libmbim "/bin/mbimcli"))))
 	    %setuid-programs))
+   (privileged-programs
+    (append (list (privileged-program
+                    (program (file-append espanso-wayland "/bin/espanso"))
+                    (capabilities "cap_dac_override+p")))
+            %default-privileged-programs))
    (packages (append
 	      (map
 	       (compose list specification->package+output)
@@ -52,8 +59,10 @@
 		 ;; hardware related
 		 "intel-vaapi-driver" "intel-media-driver-nonfree"
 		 "libva-utils" "mesa"
+		 ;; my shell and shell tools
+		 "zsh" "zsh-autosuggestions" "zsh-syntax-highlighting" "zsh-completions" "zsh-autopair"
 		 ;; basics
-		 "git" "git:send-email" "git:gui" "mumi"
+		 "git" "git:send-email" "git:gui" "git-delta"
 		 "bash"
 		 "stow"
 		 "gnupg"
@@ -61,22 +70,21 @@
 		 "mailutils" ; rottlog seems to need this
 		 ;; TLS root certificates
 		 ;; emacs & related
-		 "emacs-pgtk-xwidgets" "emacs-pdf-tools" "emacs-vterm"
+		 "emacs-pgtk" "emacs-pdf-tools" "emacs-vterm" "emacs-jinx" "enchant" "python-proselint" "gnuplot" ; enchant is needed by jinx; "emacs-pgtk-xwidgets"
 		 "make" "perl" "texinfo" ; building auctex for elpaca needs these
 		 "isync" "mu" "goimapnotify"
 		 "vdirsyncer" "khal" "khard"
 		 ;; Programming languages
-		 "openjdk@23:jdk" ; java-lsp wants this, otherwise I'd just use it in guix shells only
-		 ;; my shell and shell tools
-		 "zsh" "zsh-autosuggestions" "zsh-syntax-highlighting" "zsh-completions" "zsh-autopair"
+		 "openjdk@25:jdk" ; java-lsp wants this, otherwise I'd just use it in guix shells only
 		 "efibootmgr"
+		 "bat"
 		 "bind:utils" ; for dig
 		 "cups" ; for lpq
 		 "file"
 		 "hugo" ; for nuthouse, from nonguix
-		 "htop"
+		 "btop" "htop" "s-tui"
 		 "jq" ; needed by sway / zoom
-		 "just"
+		 "just" "fzf"
 		 "neofetch"
 		 "net-tools" ; for ifconfig  netstat  route
 		 "nmap"
@@ -85,7 +93,9 @@
 		 "trash-cli"
 		 "tree"
 		 "unzip"
+		 "7zip"
 		 "usbutils"
+		 "watchexec"
 		 ;; notebook tools
 		 "power-profiles-daemon" "powertop"
 		 "acpi"
@@ -109,8 +119,8 @@
 		 "sway" "waybar" "rofi" "swaylock" "swayidle" "swaynotificationcenter" "libnotify"
 		 "qtwayland@5" ; at least flameshot and nextcloud-client need this (2024-11-28)
 		 "slurp" "grim" "swappy" ; screenshots
-		 "wf-recorder" ; screen recordings
-		 "wdisplays" 
+		 "wdisplays"
+		 "xorg-server-xwayland"
 		 ;;"grimshot" "egl-wayland" "xorg-server-xwayland" 
 		 "wl-mirror" ; mirror the desktop, e.g. to a beamer
 		 "wl-clipboard" "cliphist" "wtype" ; wofi-emoji needs wtype
@@ -118,6 +128,7 @@
 		 "alacritty"
 		 "kanshi" ; automatically switch displays
 		 "gammastep" ; could use geoclue, if geoclue was running
+		 "espanso-wayland"
 		 ;; other desktop related
 		 "tumbler" ; D-BUS thumbnail service
 		 "gnome-keyring"
@@ -139,14 +150,14 @@
 		 "qt5ct"
 		 ;; my desktop apps
 		 "gvfs" "nemo" "file-roller" "baobab"
-		 "firefox" "librewolf" "icecat" "ungoogled-chromium-wayland" ; https://codeberg.org/guix/guix/issues/1465#issuecomment-5928124
-		 "icedove-wayland" ; thunderbird
+		 "firefox" "librewolf" "icecat" ; "ungoogled-chromium-wayland" ; https://codeberg.org/guix/guix/issues/1465#issuecomment-5928124
+		 ; "icedove-wayland" ; thunderbird
 		 "aqbanking" "gnucash"
-		 "libreoffice"
 		 ;; Office, LaTeX, PDF & Co
 		 "texlive" "texlive-biber" ;; JabRef is installed via flatpak
 		 "enchant"
 		 ;; "hunspell" "hunspell-dict-de" "hunspell-dict-en"
+		 "libreoffice"
 		 "aspell" "aspell-dict-de" "aspell-dict-en" ; aspell or hunspell? Good question
 		 "pandoc"
 		 "pdfpc"
