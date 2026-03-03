@@ -231,13 +231,12 @@ guest only = yes\n"))))
 					      ,(plain-file
 						"v4l2loopback.conf"
 						"options v4l2loopback devices=1 exclusive_caps=1 card_label=\"v4l2loopback\""))))
-		      (simple-service 'podman-subuid-subgid etc-service-type
-				       `(("subuid" ,(plain-file
-						     "subuid"
-						     (string-append "flake" ":100000:65536\n")))
-					 ("subgid" ,(plain-file
-						     "subgid"
-						     (string-append "flake" ":100000:65536\n")))))
+		      (service rootless-podman-service-type
+			       (rootless-podman-configuration
+				(subgids
+				 (list (subid-range (name "flake"))))
+				(subuids
+				 (list (subid-range (name "flake"))))))
 		      (service iptables-service-type
                                (iptables-configuration))
 		      (service kernel-module-loader-service-type '("v4l2loopback"))
