@@ -5,6 +5,7 @@
 /home/*/.dotfiles/.local/share/containers
 /home/*/.local/share/Trash/
 /home/*/.local/share/flatpak
+/home/*/.local/share/PrismLauncher/
 /home/*/.local/share/images
 /home/*/.local/share/containers/
 /home/*/.cache
