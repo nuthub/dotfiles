@@ -2,7 +2,25 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("config-guix-system"
+(("gtd.org"
+ (filename . "~/org/agenda/gtd.org")
+ (front-context-string . "#+STARTUP: inden")
+ (rear-context-string)
+ (position . 1)
+ (last-modified 27071 55354 407979 439000))
+("donut2-docker"
+ (filename . "/ssh:donut2:/opt/docker/")
+ (front-context-string . "  /ssh:donut2:/o")
+ (rear-context-string)
+ (position . 1)
+ (last-modified 27071 55278 889669 407000))
+("donut1-kunden"
+ (filename . "/ssh:donut1:~/kunden/")
+ (front-context-string . "  /ssh:donut1:/r")
+ (rear-context-string)
+ (position . 1)
+ (last-modified 27071 55294 420180 728000))
+("config-guix-system"
  (filename . "~/.config/guix/systems/base-system.scm")
  (front-context-string . ";; This is my op")
  (rear-context-string)
