@@ -1622,8 +1622,8 @@ Opens a terminal in the directory that matches the active buffer. Even works ove
   (use-package terminal-here
     :config
     (setq terminal-here-linux-terminal-command 'alacritty)
-    (global-set-key (kbd "C-<f5>") #'terminal-here-launch)
-    (global-set-key (kbd "C-<f6>") #'terminal-here-project-launch))
+    ;; (global-set-key (kbd "C-<f6>") #'terminal-here-project-launch) ; I use C-<f6> for open-with
+    (global-set-key (kbd "C-<f5>") #'terminal-here-launch))
 #+end_src
 
 ** COMMENT sway (needs shackle?)
