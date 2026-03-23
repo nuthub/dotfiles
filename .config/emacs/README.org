@@ -1094,7 +1094,7 @@ Two modes:
 #+begin_src emacs-lisp
   (use-package plantuml-mode
     :config
-    (setq org-plantuml-jar-path "~/Applications/plantuml.jar")
+    (setq org-plantuml-jar-path "~/opt/plantuml.jar")
     (setq plantuml-default-exec-mode 'jar)
     (setq plantuml-output-type "svg"))
 #+end_src
