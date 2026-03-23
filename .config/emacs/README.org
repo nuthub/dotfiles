@@ -254,7 +254,7 @@ I use the Modus Themes. To switch between light (operandi) and dark (vivendi) th
 
   (use-package auto-dark
     :config
-    (setq auto-dark-themes '((modus-operandi) (modus-vivendi)))
+    (setq auto-dark-themes '((modus-vivendi) (modus-operandi)))
     (add-hook 'after-make-frame-functions #'jf/server-auto-dark))
 
 #+end_src
