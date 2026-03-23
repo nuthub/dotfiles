@@ -739,7 +739,8 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
     :bind (:map org-mode-map
                 ("C-c C-<left>" . org-promote-subtree)
                 ("C-c C-<right>" . org-demote-subtree)
-                ("C-c ," . jf/org-timestamp-inactive))
+                ("C-c ," . jf/org-timestamp-inactive)
+  	      ("C-<f6>" . jf/narrow-to-subtree-in-indirect-buffer))
     :config
     (jf/org-setup-look-and-feel)
     (jf/org-setup-task-management-and-agenda)
