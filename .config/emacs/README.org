@@ -1052,6 +1052,11 @@ Search for literature in literature databases like arxiv and dblp
     (setq TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view))))
 #+end_src
 
+** gnuplot
+#+begin_src emacs-lisp
+  (use-package gnuplot)
+#+end_src
+
 ** JustFile mode
 
 Two modes:
