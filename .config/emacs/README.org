@@ -2090,11 +2090,20 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
   (advice-add 'mu4e-view-detach :after #'jf/detach-mu4e-article-view-advice)
 #+end_src
 
+** mu4e-walk (move mail addresses in compose buffer)
+
+#+begin_src elisp
+  (use-package mu4e-walk
+    :after mu4e
+    :config
+    (add-hook 'mu4e-compose-mode-hook 'mu4e-walk-add-keybindings-compose-mode))
+#+end_src
+
 * Guix fixes
 ** tramp / sftpd / gvfsd-fuse
 On my Guix system, the process for ~gvfsd-fuse~ is running as ~.gvfsd-fuse-real~. Therefore, the function ~tramp-process-running-p~ does not detect the running process. A similar problem exists with flathub package of emacs: https://github.com/flathub/org.gnu.emacs/issues/27 . Adding the advice from the issue helps, although it could be more elegant.
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp
   (defun tramp-process-running-p--mock (process-name)
     "gvfs* is always running."
     (when (string-match "gvfs.*" process-name)
