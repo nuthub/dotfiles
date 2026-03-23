@@ -473,7 +473,7 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
     (setq org-directory "~/org")
     (setq org-default-notes-file (concat org-directory "/inbox.org"))
     (setq org-tag-alist '(("@nutbook" . ?n)
-  			("@home" . ?h)
+  			("@house" . ?h)
   			("@work" . ?w)
   			("@office" . ?o)
   			("@koblenz" . ?k)
