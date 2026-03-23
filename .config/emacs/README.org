@@ -1805,18 +1805,19 @@ If there is more than one, let the user choose."
 #+end_src
 
 * Mail configuration
-
+** Initialize mu
 mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
 
 1. run mbsync -a
 2. initialize mu
-#+begin_src bash :tanlge no
+#+begin_src bash :tangle no
   mu init \
      --my-address=foo@example.com \
      --my-address=bar@example.com \
      -m ~/Mail
 #+end_src
 
+** Setup mu4e itself
 #+begin_src emacs-lisp
   (use-package mu4e
     :if (string-prefix-p "nutbook" (system-name))
@@ -2006,7 +2007,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
     (require 'mu4e-icalendar)) ; end of use-package mu4e
 #+end_src
 
-Contacts handling (blacklist for now):
+** Contacts handling (blacklist for now)
 #+begin_src emacs-lisp
   ;; Load my mail blacklist
   (defun jf/load-mail-blacklist ()
@@ -2029,12 +2030,12 @@ Contacts handling (blacklist for now):
   (setq mu4e-contact-process-function 'jf/my-contact-processor)
 #+end_src
 
-When signing mails with openpgp (or gnupg), use the key associated with the sender address.
+** When signing mails with openpgp (or gnupg), use the key associated with the sender address
 #+begin_src emacs-lisp
   (setq mml-secure-openpgp-sign-with-sender t)
 #+end_src
 
-Before sending an email, I'd like to check some things.
+** Before sending an email, I'd like to check some things
 #+begin_src emacs-lisp
   ;; 1. let me confirm every message
   (setq message-confirm-send t)
