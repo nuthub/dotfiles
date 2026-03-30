@@ -30,3 +30,23 @@ if [ -z "$WAYLAND_DISPLAY" ] && [ -n "$XDG_VTNR" ] && [ "$XDG_VTNR" -eq 1 ] ; th
     exec dbus-run-session -- sway > .sway.log 2>&1
 fi
 
+# If running from tty2 start niri
+if [ -z "$WAYLAND_DISPLAY" ] && [ -n "$XDG_VTNR" ] && [ "$XDG_VTNR" -eq 2 ] ; then
+
+    # This is used to let waybar know, which gtk theme to use 
+    export GTK_THEME="Materia-dark"
+
+    ## some of the wayland env variables are explained here: https://discourse.ubuntu.com/t/environment-variables-for-wayland-hackers/12750
+    ## this is needed by desktop-portal-wlr, otherwise it doesn't feel responsible (see INFO output of `xdg-desktop-portal -v -l INFO`)
+    export XDG_CURRENT_DESKTOP=niri
+
+    ## ??
+    export XDG_BACKEND="wayland"
+
+    export QT_QPA_PLATFORM="wayland"
+    #    export QT_QPA_PLATFORM=wayland-egl
+
+    ## actually start niri with a dbus user session
+    exec dbus-run-session -- niri > .niri.log 2>&1
+fi
+

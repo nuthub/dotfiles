@@ -8,7 +8,7 @@
     "position": "top", // Waybar position (top|bottom|left|right)
     // "width": 1280, // Waybar width
     // Choose the order of the modules
-    "modules-left": ["sway/workspaces", "sway/mode", "sway/scratchpad", "sway/window"],
+    "modules-left": ["sway/workspaces", "sway/mode", "sway/scratchpad", "sway/window", "niri/workspaces", "niri/window"],
     "modules-center": [],
     "modules-right": ["custom/connections", "battery", "temperature", "power-profiles-daemon", "backlight", "wireplumber", "user", "clock", "custom/pomodoro", "custom/doorstatus", "tray", "custom/screenshot", "privacy", "idle_inhibitor", "custom/notifications"],
 
