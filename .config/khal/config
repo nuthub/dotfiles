@@ -13,5 +13,5 @@ blank_line_before_day = True
 [calendars]
 
 [[nuthouse]]
-path = ~/.calendars/nuthouse/*
+path = ~/.calendars/*
 type = discover
