@@ -263,21 +263,12 @@ bindsym XF86AudioMicMute     exec --no-startup-id wpctl set-mute @DEFAULT_AUDIO_
 bindsym XF86MonBrightnessUp exec brightnessctl set 5%+ | sed -En 's/.*\(([0-9]+)%\).*/\1/p' > $WOBSOCK
 bindsym XF86MonBrightnessDown exec brightnessctl set 5%- | sed -En 's/.*\(([0-9]+)%\).*/\1/p' > $WOBSOCK
 
+# System menu
+bindsym $mod+Delete exec rofi-system-menu.sh
+# Screenlock
+bindsym Control+mod1+Delete exec ~/.local/bin/lockscreen.sh
 # Screenshots
 bindsym Print exec screenshot.sh
-
-# My system menu mode
-set $mode_system System: (l) lock, (e) logout, (s) suspend, (Shift+r) reboot, (Shift+s) shutdown
-mode "$mode_system" {
-    bindsym l exec --no-startup-id $lockscreen, mode "default"
-    bindsym e exec --no-startup-id swaymsg exit, mode "default"
-    bindsym s exec --no-startup-id loginctl suspend, mode "default"
-    bindsym Shift+r exec --no-startup-id loginctl reboot, mode "default"
-    bindsym Shift+s exec --no-startup-id loginctl poweroff, mode "default"
-    # back to normal: Enter or Escape or $mod+Delete
-    bindsym Escape mode "default"
-}
-bindsym $mod+Delete mode "$mode_system"
 
 # additional key bindings of workspace management
 bindsym $mod+Tab workspace next_on_output
