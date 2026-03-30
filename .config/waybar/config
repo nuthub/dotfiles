@@ -122,7 +122,7 @@
     },
 
     "custom/screenshot": {
-	"on-click"  : "screenshot.sh",
+	"on-click"  : "screenshot.sh -r",
 	"on-click-right" : "emacsclient -nc ~/Pictures/Screenshots",
 	"tooltip" : true,
 	"tooltip-format" : "Take Screenshot",
