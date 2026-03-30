@@ -1,0 +1,4 @@
+[Desktop Entry]
+Exec=swaybg -i /home/flake/.background-image
+Name=swaybg
+Type=Application

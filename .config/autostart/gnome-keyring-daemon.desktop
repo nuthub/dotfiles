@@ -1,0 +1,4 @@
+[Desktop Entry]
+Exec=gnome-keyring-daemon
+Name=gnome-keyring-daemon
+Type=Application

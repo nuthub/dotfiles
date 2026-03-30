@@ -1,0 +1,4 @@
+[Desktop Entry]
+Exec=dbus-update-activation-environment --all
+Name=dbus-update-activation-environment
+Type=Application

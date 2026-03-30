@@ -19,10 +19,7 @@ set $term alacritty
 # set $menu rofi -show combi
 
 ### Output configuration
-#
-output * bg ~/.background-image fill
-
-# borders
+# Background set via swaybg / dex
 
 # avoid title bars
 default_border pixel 5
@@ -35,17 +32,7 @@ gaps outer 0px
 smart_gaps on
 
 ### Idle configuration
-#
-set $lockscreen 'swaylock -f -e -F --indicator-radius 100 -t -i ~/.lockscreen.png -s center -c 000000'
-# This will lock your screen after 300 seconds of inactivity, then turn off
-# your displays after another 300 seconds, and turn your screens back on when
-# resumed. It will also lock your screen before your computer goes to sleep.
-# I use six minutes before locking, because a pomodoro break takes 5 minutes and I often don't need to lock my screen during a pomodoro break.
-exec swayidle -w \
-         timeout 360 $lockscreen \
-         timeout 600 'swaymsg "output * power off"' \
-	 resume 'swaymsg "output * power on"' \
-	 before-sleep $lockscreen
+# swayidle started via dex
 
 ### Input configuration
 # You can get the names of your inputs by running: swaymsg -t get_inputs
@@ -118,116 +105,116 @@ bindgesture swipe:3:left workspace next
 # Workspaces:
 #
 
-    # Define workspaces and names
-    set $ws0 0: 
-    set $ws1 1: 
-    set $ws2 2: 
-    set $ws3 3: 
-    set $ws4 4
-    set $ws5 5
-    set $ws6 6
-    set $ws7 7
-    set $ws8 8
-    set $ws9 9
-    set $ws10 10
-    set $ws11 11
-      
-    # Move workspace to current output and switch to it
-    # bindsym $mod+dead_circumflex [workspace=$ws0] move workspace to output current; workspace $ws0
-    # bindsym $mod+1 [workspace=$ws1] move workspace to output current; workspace $ws1
-    # bindsym $mod+2 [workspace=$ws2] move workspace to output current; workspace $ws2
-    # bindsym $mod+3 [workspace=$ws3] move workspace to output current; workspace $ws3
-    # bindsym $mod+4 [workspace=$ws4] move workspace to output current; workspace $ws4
-    # bindsym $mod+5 [workspace=$ws5] move workspace to output current; workspace $ws5
-    # bindsym $mod+6 [workspace=$ws6] move workspace to output current; workspace $ws6
-    # bindsym $mod+7 [workspace=$ws7] move workspace to output current; workspace $ws7
-    # bindsym $mod+8 [workspace=$ws8] move workspace to output current; workspace $ws8
-    # bindsym $mod+9 [workspace=$ws9] move workspace to output current; workspace $ws9
-    # bindsym $mod+0 [workspace=$ws10] move workspace to output current; workspace $ws10
-    # bindsym $mod+ssharp [workspace=$ws11] move workspace to output current; workspace $ws11
+# Define workspaces and names
+set $ws0 0: 
+set $ws1 1: 
+set $ws2 2: 
+set $ws3 3: 
+set $ws4 4
+set $ws5 5
+set $ws6 6
+set $ws7 7
+set $ws8 8
+set $ws9 9
+set $ws10 10
+set $ws11 11
 
-    # switch to workspace
-    bindsym $mod+dead_circumflex workspace $ws0
-    bindsym $mod+1 workspace $ws1
-    bindsym $mod+2 workspace $ws2
-    bindsym $mod+3 workspace $ws3
-    bindsym $mod+4 workspace $ws4
-    bindsym $mod+5 workspace $ws5
-    bindsym $mod+6 workspace $ws6
-    bindsym $mod+7 workspace $ws7
-    bindsym $mod+8 workspace $ws8
-    bindsym $mod+9 workspace $ws9
-    bindsym $mod+0 workspace $ws10
-    bindsym $mod+ssharp workspace $ws11
+# Move workspace to current output and switch to it
+# bindsym $mod+dead_circumflex [workspace=$ws0] move workspace to output current; workspace $ws0
+# bindsym $mod+1 [workspace=$ws1] move workspace to output current; workspace $ws1
+# bindsym $mod+2 [workspace=$ws2] move workspace to output current; workspace $ws2
+# bindsym $mod+3 [workspace=$ws3] move workspace to output current; workspace $ws3
+# bindsym $mod+4 [workspace=$ws4] move workspace to output current; workspace $ws4
+# bindsym $mod+5 [workspace=$ws5] move workspace to output current; workspace $ws5
+# bindsym $mod+6 [workspace=$ws6] move workspace to output current; workspace $ws6
+# bindsym $mod+7 [workspace=$ws7] move workspace to output current; workspace $ws7
+# bindsym $mod+8 [workspace=$ws8] move workspace to output current; workspace $ws8
+# bindsym $mod+9 [workspace=$ws9] move workspace to output current; workspace $ws9
+# bindsym $mod+0 [workspace=$ws10] move workspace to output current; workspace $ws10
+# bindsym $mod+ssharp [workspace=$ws11] move workspace to output current; workspace $ws11
 
-    # Move focused container to workspace
-    bindsym $mod+Shift+dead_circumflex move container to workspace $ws0
-    bindsym $mod+Shift+1 move container to workspace $ws1
-    bindsym $mod+Shift+2 move container to workspace $ws2
-    bindsym $mod+Shift+3 move container to workspace $ws3
-    bindsym $mod+Shift+4 move container to workspace $ws4
-    bindsym $mod+Shift+5 move container to workspace $ws5
-    bindsym $mod+Shift+6 move container to workspace $ws6
-    bindsym $mod+Shift+7 move container to workspace $ws7
-    bindsym $mod+Shift+8 move container to workspace $ws8
-    bindsym $mod+Shift+9 move container to workspace $ws9
-    bindsym $mod+Shift+0 move container to workspace $ws10
-    bindsym $mod+Shift+ssharp move container to workspace $ws11
+# switch to workspace
+bindsym $mod+dead_circumflex workspace $ws0
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+bindsym $mod+0 workspace $ws10
+bindsym $mod+ssharp workspace $ws11
+
+# Move focused container to workspace
+bindsym $mod+Shift+dead_circumflex move container to workspace $ws0
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws10
+bindsym $mod+Shift+ssharp move container to workspace $ws11
 #
 # Layout stuff:
 #
-    # You can "split" the current object of your focus with
-    # $mod+b or $mod+v, for horizontal and vertical splits
-    # respectively.
-    bindsym $mod+h splith
-    bindsym $mod+v splitv
+# You can "split" the current object of your focus with
+# $mod+b or $mod+v, for horizontal and vertical splits
+# respectively.
+bindsym $mod+h splith
+bindsym $mod+v splitv
 
-    # Switch the current container between different layout styles
-    bindsym $mod+s layout stacking
-    bindsym $mod+w layout tabbed
-    bindsym $mod+e layout toggle split
+# Switch the current container between different layout styles
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
 
-    # Make the current focus fullscreen
-    bindsym $mod+f fullscreen
+# Make the current focus fullscreen
+bindsym $mod+f fullscreen
 
-    # Toggle the current focus between tiling and floating mode
-    bindsym $mod+Shift+space floating toggle
+# Toggle the current focus between tiling and floating mode
+bindsym $mod+Shift+space floating toggle
 
-    # Swap focus between the tiling area and the floating area
-    bindsym $mod+space focus mode_toggle
+# Swap focus between the tiling area and the floating area
+bindsym $mod+space focus mode_toggle
 
-    # Move focus to the parent container
-    bindsym $mod+a focus parent
+# Move focus to the parent container
+bindsym $mod+a focus parent
 #
 # Scratchpad:
 #
-    # Sway has a "scratchpad", which is a bag of holding for windows.
-    # You can send windows there and get them back later.
+# Sway has a "scratchpad", which is a bag of holding for windows.
+# You can send windows there and get them back later.
 
-    # Move the currently focused window to the scratchpad
-    bindsym $mod+Shift+minus move scratchpad
+# Move the currently focused window to the scratchpad
+bindsym $mod+Shift+minus move scratchpad
 
-    # Show the next scratchpad window or hide the focused scratchpad window.
-    # If there are multiple scratchpad windows, this command cycles through them.
-    bindsym $mod+minus scratchpad show
+# Show the next scratchpad window or hide the focused scratchpad window.
+# If there are multiple scratchpad windows, this command cycles through them.
+bindsym $mod+minus scratchpad show
 #
 # Resizing containers:
 #
-mode "resize" {
-    # left will shrink the containers width
-    # right will grow the containers width
-    # up will shrink the containers height
-    # down will grow the containers height
-    bindsym Left resize shrink width 10px
-    bindsym Down resize grow height 10px
-    bindsym Up resize shrink height 10px
-    bindsym Right resize grow width 10px
+# mode "resize" {
+#     # left will shrink the containers width
+#     # right will grow the containers width
+#     # up will shrink the containers height
+#     # down will grow the containers height
+#     bindsym Left resize shrink width 10px
+#     bindsym Down resize grow height 10px
+#     bindsym Up resize shrink height 10px
+#     bindsym Right resize grow width 10px
 
-    # Return to default mode
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
-bindsym $mod+r mode "resize"
+#     # Return to default mode
+#     bindsym Return mode "default"
+#     bindsym Escape mode "default"
+# }
+# bindsym $mod+r mode "resize"
 bindsym $mod+Ctrl+Left resize shrink width 10 px or 10 ppt
 bindsym $mod+Ctrl+Down resize grow height 10 px or 10 ppt
 bindsym $mod+Ctrl+Up resize shrink height 10 px or 10 ppt
@@ -235,31 +222,29 @@ bindsym $mod+Ctrl+Right resize grow width 10 px or 10 ppt
 
 # screenshots
 # inspiration: https://www.reddit.com/r/swaywm/comments/ghnlea/comment/fqnzxkx/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
-set $satty flatpak run org.satty.Satty -f -
-set $printscreen_mode 'printscreen (r:region, f:full, w:window)'
-mode $printscreen_mode {
-    bindsym r exec swaymsg 'mode "default"' && grim -t ppm -g "$(slurp -d)" - | $satty
-    bindsym f exec swaymsg 'mode "default"' && grim -t ppm - | $satty
-    bindsym w exec swaymsg 'mode "default"' && swaymsg -t get_tree | jq -r '.. | select(.focused?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"' | grim -t ppm -g - - | $satty
+# set $printscreen_mode 'printscreen (r:region, f:full, w:window)'
+# mode $printscreen_mode {
+#     bindsym r exec swaymsg 'mode "default"' && screenshot.sh -r
+#     bindsym f exec swaymsg 'mode "default"' && screenshot.sh -f
+#     bindsym w exec swaymsg 'mode "default"' && screenshot.sh -w
 
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
-Bindsym $mod+p mode $printscreen_mode
+#     bindsym Return mode "default"
+#     bindsym Escape mode "default"
+# }
+# Bindsym $mod+p mode $printscreen_mode
 #
 # Status Bar:
 #
 # Read `man 5 sway-bar` for more information about this section.
-bar {
-    position top
-    swaybar_command waybar
-}
+# bar {
+#     position top
+#     swaybar_command waybar
+# }
 
 #
 # Notifications
 #
 #
-exec swaync
 bindsym $mod+Shift+n exec swaync-client -t -sw
 
 #
@@ -302,11 +287,8 @@ bindsym $mod+Escape workspace back_and_forth
 bindsym $mod+o move workspace to output right
 bindsym $mod+Shift+o move workspace to output left
 
-# Screen lock
-bindsym Control+mod1+Delete exec $lockscreen
-
 # Clipboard
-exec wl-paste --watch cliphist store
+# exec wl-paste --watch cliphist store
 bindsym $mod+y exec cliphist list | rofi -dmenu -display-columns 2 -p "cliphist" | cliphist decode | wl-copy
 
 # Emoji chooser
@@ -334,17 +316,20 @@ for_window {
 }
 
 # Autostart
-exec_always --no-startup-id "pkill kanshi; exec kanshi"
-exec --no-startup-id {
-    dbus-update-activation-environment --all
-    gnome-keyring-daemon
-    lxqt-policykit-agent # polkit-gnome does not install a bin/ file
-    nm-applet
-    blueman-applet
-    gammastep-indicator
-    udiskie -s # -t or -s (show applet always or with actions available only
-    solaar -w hide
-    espanso start --unmanaged
-    emacs --daemon
-    sleep 10 && nextcloud --background
-}
+exec --no-startup-id dex -a
+
+# exec_always --no-startup-id "pkill kanshi; exec kanshi"
+# exec --no-startup-id {
+#     dbus-update-activation-environment --all
+#     gnome-keyring-daemon
+#     lxqt-policykit-agent # polkit-gnome does not install a bin/ file
+#     nm-applet
+#     blueman-applet
+#     gammastep-indicator
+#     udiskie -s # -t or -s (show applet always or with actions available only
+#     solaar -w hide
+#     espanso start --unmanaged
+#     emacs --daemon
+#     sleep 10 && nextcloud --background
+#     swaync
+# }

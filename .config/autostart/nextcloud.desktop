@@ -1,0 +1,4 @@
+[Desktop Entry]
+Exec=nextcloud --background
+Name=nextcloud
+Type=Application

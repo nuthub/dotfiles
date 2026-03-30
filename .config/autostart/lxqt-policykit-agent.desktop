@@ -1,0 +1,5 @@
+[Desktop Entry]
+Exec=lxqt-policykit-agent
+Name=lxqt-policykit-agent
+Comment=Polkit agent for the LXQt desktop environment
+Type=Application
