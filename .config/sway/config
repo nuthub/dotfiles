@@ -285,6 +285,8 @@ bindsym $mod+y exec cliphist list | rofi -dmenu -display-columns 2 -p "cliphist"
 # Emoji chooser
 bindsym $mod+i exec rofi-emoji
 
+bindsym $mod+t exec darkman toggle
+
 # window rules
 # to get app_ids use $ swaymsg -t get_tree | grep app_id
 

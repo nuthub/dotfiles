@@ -1,0 +1,9 @@
+@theme "default"
+* {
+    lightbg:    rgba ( 200, 200, 200, 100 % );
+    lightgg:    rgba ( 50, 50, 50, 100 % );
+    background: rgba ( 253, 246, 227, 100 % );
+    foreground: rgba ( 30, 30, 30, 100 % );
+    red:        rgba ( 220, 50, 47, 100 % );
+    blue:       rgba ( 38, 139, 210, 100 % );
+}

@@ -2,6 +2,8 @@
 /.local/bin/guix-shell-*.sh
 /.local/share/*
 !/.local/share/sounds
+!/.local/share/dark-mode.d
+!/.local/share/light-mode.d
 /.local/state/
 /.config/chromium/
 /.config/calibre/
