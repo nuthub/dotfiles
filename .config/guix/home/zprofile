@@ -44,10 +44,11 @@ if [ -z "$WAYLAND_DISPLAY" ] && [ -n "$XDG_VTNR" ] && [ "$XDG_VTNR" -eq 2 ] ; th
     ## ??
     export XDG_BACKEND="wayland"
 
-    export QT_QPA_PLATFORM="wayland"
+    #    export QT_QPA_PLATFORM="wayland"
     #    export QT_QPA_PLATFORM=wayland-egl
 
-    ## actually start niri with a dbus user session
-    exec dbus-run-session -- niri > .niri.log 2>&1
+    ## actually start niri (dbus -- session is started by a guix home shepherd service)
+    # exec dbus-run-session -- niri --session > .niri.log 2>&1
+    exec niri --session > .niri.log 2>&1
 fi
 
