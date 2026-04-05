@@ -5,6 +5,7 @@
 	     (gnu system privilege)
 	     (nongnu packages fonts)
 	     (nongnu packages linux)
+	     (nongnu packages firmware)
 	     (nongnu packages mozilla)
 	     (nongnu system linux-initrd))
 
@@ -261,7 +262,11 @@ guest only = yes\n"))))
 		      (service virtlog-service-type)
 		      (udev-rules-service 'solaar-udev-rules solaar)
 		      (simple-service 'dbus-extras
-				      dbus-root-service-type (list blueman)))
+				      dbus-root-service-type (list blueman))
+		      (simple-service 'fwupd-dbus dbus-root-service-type
+				      (list fwupd-nonfree))
+		      (simple-service 'fwupd-polkit polkit-service-type
+				      (list fwupd-nonfree))
 		     ;; This is the (modified) default list of services we are appending to.
 		     (modify-services %desktop-services
 				      (delete gdm-service-type)
