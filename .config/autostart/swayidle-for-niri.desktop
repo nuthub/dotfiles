@@ -1,5 +1,5 @@
 [Desktop Entry]
-Exec=swayidle -w timeout 360 ~/.local/bin/lockscreen.sh timeout 600 'niri output off' before-sleep ~/.local/bin/lockscreen.sh resume 'niri output on'
+Exec=swayidle -w timeout 360 ~/.local/bin/lockscreen.sh timeout 600 'niri output off' resume 'niri output on' before-sleep ~/.local/bin/lockscreen.sh
 OnlyShowIn=niri
 Name=swayidle for niri
 Type=Application
