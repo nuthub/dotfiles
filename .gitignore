@@ -29,3 +29,7 @@
 /.config/emacs.minimal-khalel/elpa/
 /.config/emacs/mail-blacklist.txt
 /.config/Nextcloud/*sync.log*
+/.config/darkman/
+/.config/dunst/dunstrc
+/.config/alacritty/current-theme.toml
+/.config/rofi/current-theme.rasi
