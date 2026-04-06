@@ -21,8 +21,9 @@
 	     "zsh-completions"
 	     "zsh-syntax-highlighting"
 	     "zsh-autopair"
-	     "bash-completion"
+	     "bash-completion"	    
 	     "python-pygments" ; zsh plugin colorize needs this. Alternative: go-chroma
+	     "screen"
 	     ;; notebook tools
 	     "power-profiles-daemon" "powertop"
 	     "acpi"
@@ -86,11 +87,10 @@
 	     "rofi"
 	     "swaylock"
 	     "swayidle"
-	     "swaynotificationcenter" ; "dunst"
-	     "libnotify"
-	     "wob" ; OSD overlay
+	     "dunst" ; alternatives: "mako" "swaynotificationcenter"
+	     "libnotify" ; for notify-send command
 	     ;; compatibility
-	     "qt5ct"
+	     "qt5ct" "qt6ct"
 	     "qtwayland@5" ; at least nextcloud-client needs this (2024-11-28)
 	     
 	     ;; output management
@@ -156,8 +156,10 @@
 	     "podman" "podman-compose"
 
 	     ;; Theme
-	     "orchis-theme" ; successor of materia-theme
-
+	     "gnome-themes-extra" ; (contains gtk2 and gtk3 variants of Adwaita)
+	     ;; "materia-theme"
+	     ;; "orchis-theme" ; successor of materia-theme
+	     
 	     ;; fonts
 	     ;; Nerd-Fonts are installed by M-x nerd-icons-install-fonts into .local/share/fonts
 	     ;; all-the-icons are installed by M-x all-the-icons-install-fonts into .local/share/fonts
@@ -210,10 +212,14 @@
 		   home-environment-variables-service-type
 		   `(("EDITOR" . "emacsclient -nc")
                      ("TERMINAL" . "alacritty")
+		     ;; I am on wayland and don't want back to X11
+		     ;; some of the wayland env variables are explained here:
+		     ;; https://discourse.ubuntu.com/t/environment-variables-for-wayland-hackers/12750
+		     ("XDG_BACKEND" . "wayland")
+		     ("QT_QPA_PLATFORM" . "wayland-egl")
+		     ("QT_QPA_PLATFORMTHEME" ."qt5ct")
 		     ("MOZ_ENABLE_WAYLAND" . "1")
-                     ("_JAVA_AWT_WM_NONREPARENTING" . "1")
-		     ;; ("GTK_THEME" . "Materia-dark")
-		     ))
+                     ("_JAVA_AWT_WM_NONREPARENTING" . "1")))
    (service home-zsh-service-type
 	    (home-zsh-configuration
 	     (zshrc (list (local-file "zshrc")))
@@ -263,7 +269,8 @@
    (service home-pipewire-service-type)
    ;; Guix home writes an own fonts.conf anyways to include fonts installed on home profile.
    ;; Therefore, I need to hook into that and can't use my own fonts.conf from dotfiles.
-   ;; Additionally, I set the same fonts via gsettings:
+   ;; Additionally, I set the same fonts via gsettings, emacs uses them:
+   ;; gsettings set org.gnome.desktop.interface document-font-name='Noto Serif 11'
    ;; gsettings set org.gnome.desktop.interface font-name 'Noto Sans 11'
    ;; gsettings set org.gnome.desktop.interface monospace-font-name 'Fira Code 11'
    (simple-service 'default-fonts
@@ -275,16 +282,16 @@
 				  (bool "true"))) ; false to disable
 		    '(match (edit (@ (mode "assign") (name "hintstyle"))
 				  (const "hintslight"))) ; was hintnone 
-		    '(alias (family "monospace")
-			    (prefer (family "Fira Code")
-				    (family "Font Awesome 6 Free")
-				    (family "Noto Color Emoji")))
 		    '(alias (family "sans-serif")
 			    (prefer (family "Noto Sans")
 				    (family "Font Awesome 6 Free")
 				    (family "Noto Color Emoji")))
 		    '(alias (family "serif")
 			    (prefer (family "Noto Serif")
+				    (family "Font Awesome 6 Free")
+				    (family "Noto Color Emoji")))
+		    '(alias (family "monospace")
+			    (prefer (family "Fira Code")
 				    (family "Font Awesome 6 Free")
 				    (family "Noto Color Emoji")))
 		    '(alias (family "icon")
