@@ -91,40 +91,13 @@
 	"format-disconnected": ""
     },
 
-    // "custom/notifications": {
-    // 	"tooltip": false,
-    // 	"format": "{icon} {text}",
-    // 	"format-icons": {
-    // 	    "notification": "<span foreground='red'><sup></sup></span>",
-    // 	    "none": "",
-    // 	    "dnd-notification": "<span foreground='red'><sup></sup></span>",
-    // 	    "dnd-none": "",
-    // 	    "inhibited-notification": "<span foreground='red'><sup></sup></span>",
-    // 	    "inhibited-none": "",
-    // 	    "dnd-inhibited-notification": "<span foreground='red'><sup></sup></span>",
-    // 	    "dnd-inhibited-none": ""
-    // 	},
-    // 	"class": "custom-notifications",
-    // 	"return-type": "json",
-    // 	"exec-if": "which swaync-client",
-    // 	"exec": "swaync-client -swb",
-    // 	"on-click": "swaync-client -d -sw",
-    // 	"on-click-right": "swaync-client -t -sw",
-    // 	"escape": true
-    // },
-
     "custom/dunst": {
 	"exec" : "case $(dunstctl is-paused) in \"false\") echo \"\";; \"true\") echo \"\";; esac",
 	"interval" : 10,
-	"format" : "{icon} {text}",
-	"format-icons": {
-	    "true": "",
-	    "false": ""
-	},
 	"tooltip": true,
 	"tooltip-format": "left click: pause / resume",
-	"on-click": "dunstctl set-paused toggle && notify-send \"toggled\"",
-	// "on-click-right": "rofi-dunst-manager.sh",
+	"on-click": "dunstctl set-paused toggle && notify-send -h string:x-dunst-stack-tag:dunst-dnd \" Notifications enabled.\"",
+	"on-click-right": "rofi-dunst-history.sh",
     },
     
     "custom/screenshot": {

@@ -6,10 +6,15 @@ profile homey {
 	output "Samsung Electric Company S27F350 HNHHA04215" position 0,0
 	output "Samsung Electric Company S27F350 H4ZH401164" position 1920,0
 	output eDP-1 disable
-	exec swaymsg workspace "0: ", move workspace to output '"Samsung Electric Company S27F350 H4ZH401164"'
-	exec swaymsg workspace "1: ", move workspace to output '"Samsung Electric Company S27F350 H4ZH401164"'
-	exec swaymsg workspace "2: ", move workspace to output '"Samsung Electric Company S27F350 H4ZH401164"'
-	exec swaymsg workspace "3: ", move workspace to output '"Samsung Electric Company S27F350 H4ZH401164"'
-	exec swaymsg workspace "0: "
+	exec swaymsg workspace "1: ", move workspace to output '"Samsung Electric Company S27F350 H4ZH401164"'
+	exec swaymsg workspace "2: ", move workspace to output '"Samsung Electric Company S27F350 H4ZH401164"'
+	exec swaymsg workspace "3: ", move workspace to output '"Samsung Electric Company S27F350 H4ZH401164"'
+	exec swaymsg workspace "4: ", move workspace to output '"Samsung Electric Company S27F350 H4ZH401164"'
+	exec swaymsg workspace "1: "
+}
+
+profile uni {
+	output eDP-1 position 0,0 enable
+	output "ASUSTek COMPUTER INC ASUS VA27A T1LMTF052219" position 1920,0 enable
 }
 
