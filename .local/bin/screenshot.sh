@@ -1,6 +1,7 @@
 #!/bin/sh
 
-satty="flatpak run org.satty.Satty -f -"
+# annotator="flatpak run org.satty.Satty -f -"
+annotator="swappy -f -"
 
 help() {
     # Display Help
@@ -18,15 +19,15 @@ help() {
 
 case $1 in
     "-r")
-	grim -g "$(slurp -d)" - | $satty
+	grim -g "$(slurp -d)" - | $annotator
 	exit 0
 	;;
     # "-w")
-    # 	swaymsg -t get_tree | jq -r '.. | select(.focused?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"' | grim -g - - | $satty
+    # 	swaymsg -t get_tree | jq -r '.. | select(.focused?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"' | grim -g - - | $annotator
     # 	exit 0
     # 	;;
     "-f")
-	grim - | $satty
+	grim - | $annotator
 	exit 0
 	;;
     *)
