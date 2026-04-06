@@ -46,14 +46,12 @@ button.focused {
     }
 }
 
-/* If workspaces is the leftmost module, omit left margin */
-.modules-left > widget:first-child > #workspaces {
-    margin-left: 0;
+.modules-left {
+    /* margin-left: 4px; */
 }
 
-/* If workspaces is the rightmost module, omit right margin */
-.modules-right > widget:last-child > #workspaces {
-    margin-right: 0;
+.modules-right {
+    margin-right: 4px;
 }
 
 #battery.charging, #battery.plugged {
@@ -71,7 +69,7 @@ button.focused {
 
 
 #custom-pomodoro {
-    padding: 0 5px;
+    padding: 0 4px;
 }
 #custom-pomodoro.work {
     color: @tr-yellow;
@@ -92,7 +90,7 @@ button.urgent,
 #mode,
 #privacy {
     background-color: @tr-red;
-    padding: 0 5px;
+    padding: 0 4px;
 }
 
 #tray > .passive {
@@ -109,5 +107,5 @@ button.urgent,
 }
 
 #workspaces button {
-    padding: 0 5px;
+    padding: 0px 8px;
 }

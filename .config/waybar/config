@@ -10,7 +10,7 @@
     // Choose the order of the modules
     "modules-left": ["sway/workspaces", "sway/mode", "sway/scratchpad", "sway/window", "niri/workspaces", "niri/window"],
     "modules-center": [],
-    "modules-right": ["custom/connections", "battery", "temperature", "power-profiles-daemon", "backlight", "wireplumber", "user", "clock", "custom/pomodoro", "custom/doorstatus", "tray", "custom/screenshot", "privacy", "idle_inhibitor", "custom/notifications"],
+    "modules-right": ["custom/connections", "battery", "temperature", "power-profiles-daemon", "backlight", "wireplumber", "user", "clock", "custom/pomodoro", "custom/doorstatus", "tray", "custom/screenshot", "privacy", "idle_inhibitor", "custom/dunst"],
 
     "sway/workspaces": {
 	"disable-scroll": true    
@@ -58,14 +58,6 @@
 	}
     },
 
-    //    "custom/systeminfo": {
-    //      "exec": "~/.local/bin/sysinfo.sh",
-    //      "return-type": "json",
-    //      "interval": 20
-    //      "format": "text {text}",
-    //      "tooltip-format": ""
-    //    },
-
     "custom/connections": {
 	"on-click" : "~/.config/waybar/get_connections.sh",
 	"exec": "~/.config/waybar/get_connections.sh",
@@ -99,28 +91,42 @@
 	"format-disconnected": ""
     },
 
-    "custom/notifications": {
-	"tooltip": false,
-	"format": "{icon} {text}",
-	"format-icons": {
-	    "notification": "<span foreground='red'><sup></sup></span>",
-	    "none": "",
-	    "dnd-notification": "<span foreground='red'><sup></sup></span>",
-	    "dnd-none": "",
-	    "inhibited-notification": "<span foreground='red'><sup></sup></span>",
-	    "inhibited-none": "",
-	    "dnd-inhibited-notification": "<span foreground='red'><sup></sup></span>",
-	    "dnd-inhibited-none": ""
-	},
-	"class": "custom-notifications",
-	"return-type": "json",
-	"exec-if": "which swaync-client",
-	"exec": "swaync-client -swb",
-	"on-click": "swaync-client -d -sw",
-	"on-click-right": "swaync-client -t -sw",
-	"escape": true
-    },
+    // "custom/notifications": {
+    // 	"tooltip": false,
+    // 	"format": "{icon} {text}",
+    // 	"format-icons": {
+    // 	    "notification": "<span foreground='red'><sup></sup></span>",
+    // 	    "none": "",
+    // 	    "dnd-notification": "<span foreground='red'><sup></sup></span>",
+    // 	    "dnd-none": "",
+    // 	    "inhibited-notification": "<span foreground='red'><sup></sup></span>",
+    // 	    "inhibited-none": "",
+    // 	    "dnd-inhibited-notification": "<span foreground='red'><sup></sup></span>",
+    // 	    "dnd-inhibited-none": ""
+    // 	},
+    // 	"class": "custom-notifications",
+    // 	"return-type": "json",
+    // 	"exec-if": "which swaync-client",
+    // 	"exec": "swaync-client -swb",
+    // 	"on-click": "swaync-client -d -sw",
+    // 	"on-click-right": "swaync-client -t -sw",
+    // 	"escape": true
+    // },
 
+    "custom/dunst": {
+	"exec" : "case $(dunstctl is-paused) in \"false\") echo \"\";; \"true\") echo \"\";; esac",
+	"interval" : 10,
+	"format" : "{icon} {text}",
+	"format-icons": {
+	    "true": "",
+	    "false": ""
+	},
+	"tooltip": true,
+	"tooltip-format": "left click: pause / resume",
+	"on-click": "dunstctl set-paused toggle && notify-send \"toggled\"",
+	// "on-click-right": "rofi-dunst-manager.sh",
+    },
+    
     "custom/screenshot": {
 	"on-click"  : "screenshot.sh -r",
 	"on-click-right" : "emacsclient -nc ~/Pictures/Screenshots",
