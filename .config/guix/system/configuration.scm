@@ -1,0 +1,1 @@
+/home/flake/.dotfiles/.config/guix/configuration.scm
