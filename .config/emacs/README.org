@@ -1468,8 +1468,9 @@ Enriches selection lists (and completion minibuffers, e.g. consult) with additio
     (keymap-global-set "C-M-$" #'jinx-languages))
 #+end_src
 
-** DeepL
-#+begin_src emacs-lisp
+** DeepL with txl
+
+#+begin_src emacs-lisp :tangle no
   (use-package txl
     :config
     (setq txl-languages '(DE . EN-US))
@@ -1479,6 +1480,32 @@ Enriches selection lists (and completion minibuffers, e.g. consult) with additio
                              (nth 0 (auth-source-search
                                      :host "deepl.com")))))
 #+end_src
+
+** DeepL with gt.el
+#+begin_src emacs-lisp
+  (use-package gt
+    :config
+    (setq gt-langs '(en de nl))
+    ;;(setq gt-taker-prompt nil)
+    (setq gt-default-translator
+  	(gt-translator
+  	 ;; :taker (gt-taker :text 'sentence :prompt t)
+  	 :engines (gt-deepl-engine)
+  	 ;; :render (gt-render)
+  	 ))
+    (setq gt-preset-translators
+    `((minibuffer . ,(gt-translator
+                :engines (gt-deepl-engine)
+                :render (gt-render)))
+      (insert . ,(gt-translator
+                :engines (gt-deepl-engine)
+                :render (gt-insert-render)))
+      (buffer . ,(gt-translator
+                :engines (gt-deepl-engine)
+                :render (gt-buffer-render))))))
+#+end_src
+
+Worth a try to use: EU translation service: https://translation.ec.europa.eu/tools-and-resources/ai-translation-and-language-tools_en
 
 ** embark & embark-consult
 #+begin_src emacs-lisp
@@ -2118,12 +2145,9 @@ Best option would be to fix ~tramp-process-running-p~ upstream. An emacs lisp ve
 * Global key bindings
 ** Increase / decrease text scale
 #+begin_src emacs-lisp
-  (use-package emacs
-    :ensure nil
-    :config
-    (setq text-scale-mode-step 1.1)
-    (global-set-key (kbd "C--") 'text-scale-decrease)
-    (global-set-key (kbd "C-+") 'text-scale-increase))
+  (setq text-scale-mode-step 1.1)
+  (global-set-key (kbd "C--") 'text-scale-decrease)
+  (global-set-key (kbd "C-+") 'text-scale-increase)
 #+end_src
 ** Comment / Uncomment Region
 #+begin_src emacs-lisp
@@ -2137,7 +2161,8 @@ Best option would be to fix ~tramp-process-running-p~ upstream. An emacs lisp ve
 
 ** Translate with deepl
 #+begin_src emacs-lisp
-  (global-set-key (kbd "C-x C-t") 'txl-translate-region-or-paragraph)
+  ;; (global-set-key (kbd "C-x C-t") 'txl-translate-region-or-paragraph)
+  (global-set-key (kbd "C-x C-t") 'gt-translate)
 #+end_src
 
 **  vundo
