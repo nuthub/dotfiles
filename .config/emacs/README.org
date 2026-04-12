@@ -449,7 +449,7 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
      '(org-target ((t (:inherit (fixed-pitch)))))
      '(org-todo ((t (:inherit (fixed-pitch)))))
      '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
-        
+    
     ;; beautiful bullets
     (use-package org-superstar
       :config
@@ -1078,6 +1078,24 @@ Two modes:
 
 #+begin_src emacs-lisp
   (use-package yaml-mode)
+#+end_src
+
+** ttl-mode
+
+turtle-mode not available in elpa(ca)
+#+begin_src emacs-lisp :tangle no
+  (use-package turtle-mode
+    :config
+    (add-to-list 'auto-mode-alist '("\\.n3"  . turtle-mode))
+    (add-to-list 'auto-mode-alist '("\\.ttl" . turtle-mode)))
+#+end_src
+
+ttl-mode is available in elpa(ca)
+#+begin_src emacs-lisp
+  (use-package ttl-mode
+    :config
+    (add-to-list 'auto-mode-alist '("\\.n3"  . ttl-mode))
+    (add-to-list 'auto-mode-alist '("\\.ttl" . ttl-mode)))
 #+end_src
 
 ** plantuml-mode
