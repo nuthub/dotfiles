@@ -1,7 +1,14 @@
 #+TITLE: Emacs Configuration
 #+STARTUP: overview
 #+PROPERTY: header-args :tangle yes
-#+TODO: TODO COMMENT
+#+TODO: TODO | COMMENT
+
+* File header
+#+begin_src elisp
+;;; README.el --- tangled emacs config  -*- lexical-binding: t; -*-
+;;; Commentary:
+;;; Code:
+#+end_src
 
 * Basic personal information
   
