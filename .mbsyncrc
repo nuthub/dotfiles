@@ -51,27 +51,6 @@ Far :work-remote:
 Near :work-local:
 Patterns * "!Shared Folders/*" "!Other Users/*"
 
-######################
-### TU Dortmund
-
-IMAPStore tudo-remote
-Host unimail.tu-dortmund.de
-TLSType IMAPS
-User smjuflak
-PassCmd "grep tu-dortmund.de ~/.authinfo | awk 'FNR == 1 {print $6}'"
-Trash Trash
-
-MaildirStore tudo-local
-Path ~/Mail/d/
-Inbox ~/Mail/d/INBOX
-Trash Trash
-SubFolders Verbatim
-
-Channel tudo
-Far :tudo-remote:
-Near :tudo-local:
-Patterns *
-
 #######################
 ## Groups
 
