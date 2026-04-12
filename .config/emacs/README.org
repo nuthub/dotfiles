@@ -1538,7 +1538,7 @@ Embark integration is provided by /citar-embark/. Press C-. (or RET in org buffe
     (citar-embark-mode))
 #+end_src
 
-The package /citar-org-roam/ provides usage of org roam to take bibliographical notes. When enabled, the "old" or "usual" notes in my notes directory are not available anymore.
+The package /citar-org-roam/ provides usage of org roam to take bibliographical notes.
 #+begin_src emacs-lisp
   (use-package citar-org-roam
     :after (citar org-roam)
