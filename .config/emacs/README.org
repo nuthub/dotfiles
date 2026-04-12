@@ -1653,9 +1653,9 @@ The global keybinding 'C-x u' is set below.
   	  embark-act
   	  org-capture
   	  org-roam-dailies-goto-date org-roam-dailies-goto-today org-roam-dailies-goto-tomorrow org-roam-dailies-goto-next-note org-roam-dailies-goto-yesterday org-roam-dailies-goto-previous-note))
-        (frames-only-mode)
-        ;; for some reason, frames-only-mode overrides what I set earlier.
-        (setq org-agenda-window-setup 'current-window))
+    (frames-only-mode)
+    ;; for some reason, frames-only-mode overrides what I set earlier.
+    (setq org-agenda-window-setup 'current-window))
 #+end_src
 
 ** terminal-here
@@ -1911,14 +1911,12 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
     ;;    (setq mu4e-index-lazy-check t) ;; attempt to avoid slow reindexing
 
     ;;
-    ;; headers view
-    
+    ;; headers view 
     (setq mu4e-org-link-query-in-headers-mode nil)
     (setq mu4e-headers-include-related nil)
 
     ;;
     ;; Composing mails
-    
     (require 'smtpmail)
     (setq smtpmail-queue-mail nil)  ;; start in direct mode
     (setq smtpmail-queue-dir "~/Mail/queue/cur")
@@ -1945,8 +1943,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                 (mml-secure-sign)))
 
     ;;
-    ;; viewing mails
-    
+    ;; viewing mails    
     ;; don't colorize HTML mails, since they are hard to read sometimes
     (setq shr-use-colors nil)
     ;; use variable pitch mode in article view
@@ -1965,15 +1962,13 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
 
     ;;
     ;; Trashing mails
-    
     (setq mu4e-trash-without-flag t) ; see https://github.com/djcb/mu/issues/1136
     
     ;;
-    ;; Bookmarks and shortcuts
-    
+    ;; Bookmarks and shortcut
     (setq mu4e-bookmarks
-          '((:name "Combined inbox" :query "maildir:/p/INBOX OR maildir:/w/INBOX OR maildir:/d/INBOX" :key ?i)
-            (:name "Unread messages" :query "flag:unread AND NOT flag:trashed AND NOT (maildir:/p/Trash OR maildir:/w/Trash OR maildir:d/Trash)" :key ?u)
+          '((:name "Combined inbox" :query "maildir:/p/INBOX OR maildir:/w/INBOX" :key ?i)
+            (:name "Unread messages" :query "flag:unread AND NOT flag:trashed AND NOT (maildir:/p/Trash OR maildir:/w/Trash)" :key ?u)
             (:name "Sent" :query "maildir:/p/Sent OR maildir:/w/Sent" :key ?s)
             (:name "Archives" :query "maildir:/p/Archives OR maildir:/w/Archives" :key ?a)
             (:name "Drafts" :query "maildir:/p/Drafts OR maildir:/w/Drafts" :key ?d)
@@ -1983,7 +1978,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
             (:name "FSInfo Mailing Lists" :query "maildir:/p/INBOX/FSInfo" :key ?f)
             (:name "Today's messages" :query "date:today..now" :key ?n)
             (:name "Last 7 days" :query "date:7d..now" :hide-unread t :key ?7)
-            (:name "Trashed mails" :query "maildir:/p/Trash OR maildir:/w/Trash OR maildir:d/Trash" :hide-unread nil :key ?t)
+            (:name "Trashed mails" :query "maildir:/p/Trash OR maildir:/w/Trash" :hide-unread nil :key ?t)
             (:name "Messages with PDFs" :query "mime:application/pdf" :key ?p)))
     (setq mu4e-maildir-shortcuts
           '(("/p/INBOX" . ?p)
@@ -1991,8 +1986,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
             ("/p/autolearn/ham" . ?h)
             ("/p/autolearn/spam" . ?s)
             ("/w/INBOX" . ?w)
-            ("/w/Archives" . ?W)
-            ("/d/INBOX" . ?d)))
+            ("/w/Archives" . ?W)))
 
     ;;
     ;; contexts
@@ -2008,7 +2002,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                 (string-prefix-p "/p/" (mu4e-message-field msg :maildir))))
             :vars '((user-mail-address . "julian@flake.de")
                     (user-full-name . "Julian Flake")
-                    (message-signature . nil)
+                    (message-signature . "Julian Flake")
                     (smtpmail-smtp-server . "nuthost.de")
                     (smtpmail-stream-type . starttls)
                     (smtpmail-smtp-service . 587)
@@ -2032,24 +2026,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                     (mu4e-drafts-folder  . "/w/Drafts")
                     (mu4e-sent-folder  . "/w/Sent")
                     (mu4e-refile-folder  . "/w/Archives")
-                    (mu4e-trash-folder  . "/w/Trash")))
-           ;; TUDo account
-           (make-mu4e-context
-            :name "TUDo"
-            :match-func
-            (lambda (msg)
-              (when msg
-                (string-prefix-p "/d/" (mu4e-message-field msg :maildir))))
-            :vars '((user-mail-address . "julian.flake@tu-dortmund.de")
-                    (user-full-name . "Julian Flake")
-                    (message-signature . nil)
-                    (smtpmail-smtp-server . "unimail.tu-dortmund.de")
-                    (smtpmail-stream-type . starttls)
-                    (smtpmail-smtp-service . 587)
-                    (mu4e-drafts-folder . "/p/Drafts")
-                    (mu4e-sent-folder . "/p/Sent")
-                    (mu4e-refile-folder  . "/p/Archives")
-                    (mu4e-trash-folder . "/p/Trash")))))
+                    (mu4e-trash-folder  . "/w/Trash")))))
 
     ;;
     ;; Calendar support
@@ -2168,9 +2145,12 @@ Best option would be to fix ~tramp-process-running-p~ upstream. An emacs lisp ve
 * Global key bindings
 ** Increase / decrease text scale
 #+begin_src emacs-lisp
-  (setq text-scale-mode-step 1.1)
-  (global-set-key (kbd "C--") 'text-scale-decrease)
-  (global-set-key (kbd "C-+") 'text-scale-increase)
+  (use-package emacs
+    :ensure nil
+    :config
+    (setq text-scale-mode-step 1.1)
+    (global-set-key (kbd "C--") 'text-scale-decrease)
+    (global-set-key (kbd "C-+") 'text-scale-increase))
 #+end_src
 ** Comment / Uncomment Region
 #+begin_src emacs-lisp
