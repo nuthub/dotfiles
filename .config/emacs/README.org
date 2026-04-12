@@ -173,24 +173,15 @@ This is from https://xenodium.com/bending-emacs-episode-2
 
 ** Font
 
-+I set my default fonts in ~~/.fonts.conf~. This is just an example:+ I set my default fonts via guix home.
-#+begin_src xml :tangle no
-  <?xml version="1.0"?>
-  <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
-  <fontconfig>
-    <alias>
-      <family>monospace</family>
-      <prefer>
-        <family>Fira Code</family>
-      </prefer>
-    </alias>
-    <alias>
-      <family>sans-serif</family>
-      <prefer>
-        <family>Noto Sans</family>
-      </prefer>
-    </alias>
-  </fontconfig>
+- I set my default fonts via guix home, which generates a ~~/.config/fontconfig/fonts.conf~.
+- Furthermore, I set the same fonts via ~gsettings~ / ~dconf~
+- To let emacs dynamically respect font changes in dconf, I set ~font-use-system-font~ to ~non-nil~:
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :ensure nil
+    :config
+    (setq font-use-system-font t))
 #+end_src
 
 ** Ligatures
