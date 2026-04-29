@@ -101,6 +101,7 @@
 	       (compose list specification->package+output)
 	       '(;; hardware related
 		 "intel-vaapi-driver" "intel-media-driver-nonfree"
+		 "fwupd-nonfree" "polkit"
 		 "libva-utils" "mesa"
 		 ;; shell and shell tools
 		 "bash"
