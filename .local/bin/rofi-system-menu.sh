@@ -36,7 +36,7 @@ case $command in
 		swaymsg exit
 		exit 0
 		;;
-	    *)
+	    "niri")
 		niri msg action quit -s
 		exit 0
 		;;

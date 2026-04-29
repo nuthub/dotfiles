@@ -96,7 +96,7 @@
 	"exec" : "case $(dunstctl is-paused) in \"false\") echo \"\";; \"true\") echo \"\";; esac",
 	"interval" : 10,
 	"tooltip": true,
-	"tooltip-format": "left click: pause / resume",
+	"tooltip-format": "L: Pause / Resume\nR: Show history",
 	"on-click": "dunstctl set-paused toggle && notify-send -h string:x-dunst-stack-tag:dunst-dnd \" Notifications enabled.\"",
 	"on-click-right": "rofi-dunst-history.sh",
     },
@@ -105,7 +105,7 @@
 	"on-click"  : "screenshot.sh -r",
 	"on-click-right" : "emacsclient -nc ~/Pictures/Screenshots",
 	"tooltip" : true,
-	"tooltip-format" : "Take Screenshot",
+	"tooltip-format" : "L: Take Screenshot\nR: Show Folder",
 	"format" : "{icon} {text}",
 	"format-icons": ""
     },
@@ -140,9 +140,7 @@
 		"today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
 	    }
 	},
-	"actions" : {
-	    "on-click" : "mode"
-	}	
+	"on-click" : "swaymsg workspace \"2: \""
     },
 
     "cpu": {
