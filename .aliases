@@ -1,11 +1,13 @@
-alias sudo="doas"
 alias ls="ls --color=auto"
 alias ll="ls -l"
+alias clear='printf "\033c"'
+alias sudo="doas"
+alias docker="podman"
 alias open="xdg-open"
 alias rm="trash"
+alias cat="ccat"
+alias less="cless"
 alias ec="emacsclient -nc"
+alias eclipse-modeling="guix-shell-eclipse-modeling-x11.sh"
+alias eclipse-java="guix-shell-eclipse-java-x11.sh"
 
-alias jabref="flatpak --user run org.jabref.jabref"
-alias spotify="flatpak --user run com.spotify.Client --command=spotify --enable-features=WaylandWindowDecorations --ozone-platform=wayland %u"
-alias drawio="flatpak --user run com.jgraph.drawio.desktop"
-alias docker="podman"
