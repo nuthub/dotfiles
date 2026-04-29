@@ -222,7 +222,7 @@ bindsym $mod+Delete exec rofi-system-menu.sh
 # Screenlock
 bindsym Control+mod1+Delete exec ~/.local/bin/lockscreen.sh
 # Screenshots
-bindsym Print exec screenshot.sh
+bindsym Print exec screenshot.sh -r
 
 # additional key bindings of workspace management
 bindsym $mod+Prior workspace prev_on_output
