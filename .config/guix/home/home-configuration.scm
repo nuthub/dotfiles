@@ -140,7 +140,7 @@
 	     "gvfs" "nemo" "file-roller" "baobab"
 	     "firefox" "librewolf"
 	     "icecat" "ungoogled-chromium-wayland" ; https://codeberg.org/guix/guix/issues/1465#issuecomment-5928124
-	     ;; "icedove-wayland" ; thunderbird
+	     "icedove-wayland" ; thunderbird
 	     "aqbanking" "gnucash"
 
 	     ;; media
