@@ -7,7 +7,6 @@
 (package-refresh-contents)
 (package-install 'khalel)
 (require 'khalel)
-(setq khalel-default-calendar "Persönlich")
 (setq khalel-import-org-file (concat org-directory "/agenda/calendar.org"))
 (setq khalel-import-start-date "-2m")
 (setq khalel-import-end-date "+12m")
