@@ -1953,9 +1953,9 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
     ;; enable gnus dired mode, which allows to add multiple files a message buffer
     (add-hook 'dired-mode-hook 'turn-on-gnus-dired-mode)
     ;; gpg sign all mails when sending
-    (add-hook 'message-send-hook
-              (lambda()
-                (mml-secure-sign)))
+    ;; (add-hook 'message-send-hook
+    ;;           (lambda()
+    ;;             (mml-secure-sign)))
 
     ;;
     ;; viewing mails    
