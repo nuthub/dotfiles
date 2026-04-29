@@ -1,9 +1,11 @@
 @theme "default"
+/* https://gnome.pages.gitlab.gnome.org/libadwaita/doc/1.2/css-variables.html#window-colors */
 * {
-    lightbg:    rgba ( 200, 200, 200, 100 % );
-    lightgg:    rgba ( 50, 50, 50, 100 % );
-    background: rgba ( 253, 246, 227, 100 % );
-    foreground: rgba ( 30, 30, 30, 100 % );
-    red:        rgba ( 220, 50, 47, 100 % );
-    blue:       rgba ( 38, 139, 210, 100 % );
+    foreground: rgb(0, 0, 6 , 80 %); /* Adwaita window color */
+    background: #fafafb;      	     /* Adwaita window color */
+    lightfg:    rgb(0, 0, 6 , 80 %); /* Adwaita view color */
+    lightbg:    #ffffff;      	     /* Adwaita view color */  
+    
+    red:        #c00023; /* Adwaita Accent Color Standalone */
+    blue:       #0461be; /* Adwaita Accent Color Standalone */
 }

@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
-ln -fs ~/.config/dunst/dunstrc-light ~/.config/dunst/dunstrc
+cat  ~/.config/dunst/dunstrc-common ~/.config/dunst/dunstrc-light > ~/.config/dunst/dunstrc
 dunstctl reload

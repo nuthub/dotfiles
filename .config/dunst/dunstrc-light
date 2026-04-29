@@ -1,23 +1,11 @@
+
+# https://gnome.pages.gitlab.gnome.org/libadwaita/doc/1.2/css-variables.html#window-colors
+
 [global]
-follow = mouse
-origin = top-right
-offset = (10, 10)
-
-# https://github.com/catppuccin/dunst
-[global]
-frame_color = "#1e66f5"
-separator_color= frame
-highlight = "#1e66f5"
-
-[urgency_low]
-background = "#eff1f5"
-foreground = "#4c4f69"
-
-[urgency_normal]
-background = "#eff1f5"
-foreground = "#4c4f69"
+  background = "#fafafb"
+  foreground = "#000006"
+  frame_color = "#000006"
+  highlight = "#1e1e1e"
 
 [urgency_critical]
-background = "#eff1f5"
-foreground = "#4c4f69"
-frame_color = "#fe640b"
+  frame_color = "#c00023"

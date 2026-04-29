@@ -1,0 +1,12 @@
+[global]
+  follow = mouse
+  origin = top-right
+  offset = (10, 10)
+  font = Sans 11
+  markup = full
+  separator_color= frame
+  timeout 10
+
+[urgency_critical]
+  timeout 0
+

@@ -90,9 +90,8 @@
 	     "dunst" ; alternatives: "mako" "swaynotificationcenter"
 	     "libnotify" ; for notify-send command
 	     ;; compatibility
-	     "qt5ct" "qt6ct"
-	     "qtwayland@5" ; at least nextcloud-client needs this (2024-11-28)
-	     
+	     "qt5ct" "qtwayland@5" ; at least nextcloud-client needs this (2024-11-28)
+	     "qt6ct"; "qtwayland@6"
 	     ;; output management
 	     "wdisplays"
 	     "kanshi" ; automatically switch displays
@@ -157,8 +156,6 @@
 
 	     ;; Theme
 	     "gnome-themes-extra" ; (contains gtk2 and gtk3 variants of Adwaita)
-	     ;; "materia-theme"
-	     ;; "orchis-theme" ; successor of materia-theme
 	     
 	     ;; fonts
 	     ;; Nerd-Fonts are installed by M-x nerd-icons-install-fonts into .local/share/fonts
@@ -216,8 +213,8 @@
 		     ;; some of the wayland env variables are explained here:
 		     ;; https://discourse.ubuntu.com/t/environment-variables-for-wayland-hackers/12750
 		     ("XDG_BACKEND" . "wayland")
-		     ("QT_QPA_PLATFORM" . "wayland-egl")
-		     ("QT_QPA_PLATFORMTHEME" ."qt5ct")
+		     ("QT_QPA_PLATFORM" . "wayland")
+		     ("QT_QPA_PLATFORMTHEME" ."qt6ct")
 		     ("MOZ_ENABLE_WAYLAND" . "1")
                      ("_JAVA_AWT_WM_NONREPARENTING" . "1")))
    (service home-zsh-service-type
