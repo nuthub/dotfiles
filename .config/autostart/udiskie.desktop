@@ -1,4 +1,4 @@
 [Desktop Entry]
-Exec=udiskie
+Exec=udiskie --appindicator -t
 Name=udiskie
 Type=Application
