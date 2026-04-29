@@ -22,11 +22,25 @@
 ** Some localizations for the calendar
 #+begin_src emacs-lisp
   (setq calendar-week-start-day 1
-        calendar-day-name-array ["Sonntag" "Montag" "Dienstag" "Mittwoch"
-                                 "Donnerstag" "Freitag" "Samstag"]
-        calendar-month-name-array ["Januar" "Februar" "März" "April" "Mai"
-                                   "Juni" "Juli" "August" "September"
-                                   "Oktober" "November" "Dezember"]
+        calendar-day-name-array ["Sonntag"
+  			       "Montag"
+  			       "Dienstag"
+  			       "Mittwoch"
+  			       "Donnerstag"
+  			       "Freitag"
+  			       "Samstag"]
+        calendar-month-name-array ["Januar"
+  				 "Februar"
+  				 "März"
+  				 "April"
+  				 "Mai"
+  				 "Juni"
+  				 "Juli"
+  				 "August"
+  				 "September"
+  				 "Oktober"
+  				 "November"
+  				 "Dezember"]
         calendar-intermonth-text
         '(propertize
   	(format "%2d"
@@ -163,7 +177,7 @@ This is from https://xenodium.com/bending-emacs-episode-2
                 (top-margin (floor (/ (- (window-height window) image-height) 2)))
                 (left-margin (floor (/ (- (window-width window) image-width) 2)))
                 (title "Glück Auf!")
-  		(proper-title (propertize title 'face '(:height 1.2))))
+  	      (proper-title (propertize title 'face '(:height 1.2))))
       (with-current-buffer welcome-buffer
         (erase-buffer)
         (setq mode-line-format nil)
@@ -1802,18 +1816,19 @@ If there is more than one, let the user choose."
 
 * Calendar & Contact syncing
 
-- I use *vdirsyncer* to synchronize all my remote Calendars and Contacts with my home folder
+- I use *pimsync* to synchronize all my remote Calendars and Contacts with my home folder
 - I use *khal* to edit the ics files in my home folder (not really, but khal is installed now)
 - *khalel* is a package that allows me to interact with khal from within emacs and to create a (read only :( ) ~calendar.org~ file for inclusion in my agenda.
 - I use *khard* for editing vcards outside of Nextcloud
 - *khardel*, analogously to *khalel*, allows me to edit contacts from within Emacs
+- The package *varuga* can be used to send ics invitations
 ** khalel
 #+begin_src emacs-lisp
   (use-package khalel
     :ensure t
     :after org
     :config
-    ;; (setq khalel-vdirsyncer-command "vdirsyncer")
+    (setq khalel-vdirsyncer-command "pimsync")
     (setq khalel-import-org-file (concat org-directory "/agenda/" "calendar.org"))
     (setq khalel-import-start-date "-2m")
     (setq khalel-import-end-date "+12m")
