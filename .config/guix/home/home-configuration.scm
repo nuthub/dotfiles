@@ -174,6 +174,9 @@
 	     ;; I manually installed papirus-icon-theme in my $HOME/.icons directory for two reasons:
 	     ;;   1. flatpak apps take ages to start with Papirus-Icon-Theme in system's profile
 	     ;;   2. it uses a lot of inodes: https://github.com/PapirusDevelopmentTeam/papirus-icon-theme/issues/3563 and https://issues.guix.gnu.org/68561 This becomes an issue with frequently reconfigured profiles
+	     ;; I installed (and updated) them via
+	     ;;    wget -qO- https://git.io/papirus-icon-theme-install | env DESTDIR="$HOME/.icons" sh
+	     "adwaita-icon-theme" ; Gimp (and probably others) use some icons that are missing from Papirus (e.g. bold, italic, underline icons in text tool)
 	     "hicolor-icon-theme" ; waybar/privacy uses icons from here
 	     ;; Cursors
 	     "xcursor-themes" "bibata-cursor-theme"
