@@ -21,6 +21,7 @@
 	     "zsh-completions"
 	     "zsh-syntax-highlighting"
 	     "zsh-autopair"
+	     "direnv"
 	     "bash-completion"	    
 	     "python-pygments" ; zsh plugin colorize needs this. Alternative: go-chroma
 	     "screen"
