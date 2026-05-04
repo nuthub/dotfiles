@@ -9,42 +9,27 @@
     // "width": 1280, // Waybar width
     "reload_style_on_change": true,
     // Choose the order of the modules
-    "modules-left": ["sway/workspaces", "sway/mode", "sway/scratchpad", "sway/window", "niri/workspaces", "niri/window"],
+    "modules-left": ["sway/workspaces", "sway/mode", "sway/scratchpad", "sway/window"],
+    // "modules-left": ["niri/workspaces", "niri/window"],
     "modules-center": [],
-    "modules-right": ["custom/connections", "battery", "temperature", "power-profiles-daemon", "backlight", "wireplumber", "user", "custom/pomodoro", "custom/doorstatus", "tray", "custom/screenshot", "privacy", "custom/modeswitch", "idle_inhibitor", "custom/dunst", "clock"],
+    "modules-right": ["network", "battery", "temperature", "power-profiles-daemon","wireplumber", "user", "custom/pomodoro", "tray", "custom/doorstatus", "group/display", "idle_inhibitor", "privacy", "custom/dunst", "clock"],
 
-    "sway/workspaces": {
-	"disable-scroll": true    
-    },
-
-    "sway/mode": {
-	"format": "{}"
-    },
-
-    "sway/scratchpad": {
-	"format": "{icon} {count}",
-	"show-empty": false,
-	"format-icons": ["", ""],
-	"tooltip": true,
-	"tooltip-format": "{app}: {title}"
-    },
-
-    // see also https://github.com/Alexays/Waybar/issues/1712#issuecomment-1803911617
-    "sway/window": {
-	"format": "{shell}@@{app_id}@@{title}",
-	"rewrite": {
-	    "@@@@": "", // in case no window is focused
-	    "(xwayland)@@(.*)@@(.*)": "[X:$2] $3", // format app_id for X apps
-	    "(xdg_shell)@@(.*)@@(.*)": "[$2] $3", // format app_id for wayland apps
-	}
-    },
-
-    "idle_inhibitor": {
-	"format": "{icon}",
-	"format-icons": {
-	    "activated": "",
-	    "deactivated": ""
-	}
+    // "custom/connections", 
+    
+    "group/display": {
+	"orientation": "inherit",
+	"drawer": {
+            //"transition-duration": 500,
+	    //            "children-class": "not-power",
+	    //          "transition-left-to-right": false,
+	},
+	"modules": [
+	    "custom/displays",
+	    "backlight",
+	    "custom/screenshot",
+	    "custom/modeswitch",
+	    "custom/wlsunset"
+	]
     },
 
     "power-profiles-daemon": {
@@ -60,7 +45,7 @@
     },
 
     "custom/connections": {
-	"on-click" : "~/.config/waybar/get_connections.sh",
+	"on-click": "alacritty -e nmtui",
 	"exec": "~/.config/waybar/get_connections.sh",
 	"interval": 10,
 	"format" : "{icon} {text}",
@@ -83,14 +68,6 @@
 	"on-click" : "emacsclient -nc -e '(org-clock-goto)'",
 	"class" : "custom-pomodoro"
     },
-    
-    "network": {
-	"interface" : "wlp9s0f0",
-	"interval": 2,
-	"tooltip-format": "{ifname} ↑{bandwidthUpBytes} ↓{bandwidthDownBytes}",
-	"format": "{essid}",
-	"format-disconnected": ""
-    },
 
     "custom/dunst": {
 	"exec" : "case $(dunstctl is-paused) in \"false\") echo \"\";; \"true\") echo \"\";; esac",
@@ -100,21 +77,58 @@
 	"on-click": "dunstctl set-paused toggle && notify-send -h string:x-dunst-stack-tag:dunst-dnd \" Notifications enabled.\"",
 	"on-click-right": "rofi-dunst-history.sh",
     },
+
+    "custom/displays": {
+	"on-click": "wdisplays",
+	"format": "󰍹",
+	"tooltip-format": "L: Launch WDisplay"
+    },
     
     "custom/screenshot": {
 	"on-click"  : "screenshot.sh -r",
 	"on-click-right" : "emacsclient -nc ~/Pictures/Screenshots",
 	"tooltip" : true,
 	"tooltip-format" : "L: Take Screenshot\nR: Show Folder",
-	"format" : "{icon} {text}",
+	"format" : "{icon}",
 	"format-icons": ""
     },
 
     "custom/modeswitch": {
 	"format" : "",
 	"on-click": "darkman toggle",
-	"tooltip": "L: Switch Dark / Light Mode"
+	"tooltip-format": "L: Switch Dark / Light Mode"
     },
+
+    "custom/wlsunset": {
+	// adapted from https://github.com/Alexays/Waybar/issues/4328#issuecomment-3172305288
+	"interval": "once",
+        "tooltip": true,
+        "return-type": "json",
+        "format": "{icon}",
+        "format-icons": {
+            "on": "",
+            "off": ""
+        },
+        "exec": "~/.config/waybar/sunset.sh",
+        "on-click": "~/.config/waybar/sunset.sh toggle",
+        //"exec-if": "~/.config/waybar/sunset.sh check",
+        // "signal": 6	
+    },
+    
+    // "custom/khal": {
+    // 	"format": "{}",
+    // 	"return-type": "json",
+    // 	"interval": 10,
+    // 	"exec": "~/.config/waybar/waybar-khal.py",
+    // 	"on-click": "swaymsg workspace \"2: \"",
+    // 	// "menu": "on-click-right",
+    // 	// "menu-file": "khal-menu.xml",
+    // 	// "menu-actions": {
+    // 	//     "khal": "alacritty -e khal interactive",
+    // 	//     "cloud": "swaymsg workspace \"2: \""
+    // 	// }
+    // },
+    
     "tray": {
 	"icon-size": 24,
 	"spacing": 4,
@@ -124,7 +138,7 @@
     "clock": {
 	"timezone": "Europe/Berlin",
 	"locale": "de_DE.utf8",
-	"format": " W{:%OV  %d.%m.  %H:%M}",
+	"format": "W{:%OV %d.%m. %H:%M}", //  
 	// ugly hack because of https://github.com/Alexays/Waybar/issues/2240#issuecomment-2064237563
 	// Example:            10 11 12 13 14 15 16 W00   10 11 12 13 14 15 16 W00   10 11 12 13 14 15 16 W00 
 	"tooltip-format": "<tt>                                                                              \n{calendar}</tt>",
@@ -168,6 +182,15 @@
 	"format-icons": ["", ""]
     },
 
+    "network": {
+	"interface" : "wlp9s0f0",
+	"interval": 2,
+	"tooltip-format": "{ifname} ↑{bandwidthUpBytes} ↓{bandwidthDownBytes}",
+	"format": " {essid}",
+	"format-disconnected": "",
+	"on-click": "alacritty -e nmtui",
+    },
+
     "battery": {
 	"states": {
 	    // "good": 95,
@@ -203,6 +226,41 @@
 	"icon-spacing": 4,
 	"icon-size": 18,
 	"transition-duration": 250
-    }
+    },
+
+    "idle_inhibitor": {
+	"format": "{icon}",
+	"format-icons": {
+	    "activated": "",
+	    "deactivated": ""
+	}
+    },
+
+    "sway/workspaces": {
+	"disable-scroll": true    
+    },
+
+    "sway/mode": {
+	"format": "{}"
+    },
+
+    "sway/scratchpad": {
+	"format": "{icon} {count}",
+	"show-empty": false,
+	"format-icons": ["", ""],
+	"tooltip": true,
+	"tooltip-format": "{app}: {title}"
+    },
+
+    // see also https://github.com/Alexays/Waybar/issues/1712#issuecomment-1803911617
+    "sway/window": {
+	"format": "{shell}@@{app_id}@@{title}",
+	"rewrite": {
+	    "@@@@": "", // in case no window is focused
+	    "(xwayland)@@(.*)@@(.*)": "[X:$2] $3", // format app_id for X apps
+	    "(xdg_shell)@@(.*)@@(.*)": "[$2] $3", // format app_id for wayland apps
+	}
+    },
+
 }
 

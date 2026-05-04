@@ -95,7 +95,8 @@
 	     ;; output management
 	     "wdisplays"
 	     "kanshi" ; automatically switch displays
-	     "gammastep" ; could use geoclue, if geoclue was running
+	     "wlsunset"
+	     ;;"gammastep" ; could use geoclue, if geoclue was running; Alternative: wlsunset
 	     "wl-mirror" ; mirror the desktop, e.g. to a beamer
 
 	     ;; screenshots & clipboard management

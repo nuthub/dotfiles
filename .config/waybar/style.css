@@ -52,6 +52,10 @@ button.focused {
     margin-right: 4px;
 }
 
+.drawer-child .module {
+    margin-left: 4px;
+}
+
 #battery.charging, #battery.plugged {
     color: @green;
 }
