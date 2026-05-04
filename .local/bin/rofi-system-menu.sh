@@ -2,9 +2,9 @@
 
 command=$(echo "l: lockscreen
 s: suspend
-P: poweroff
+e: logout
 R: reboot
-e: logout" | rofi \
+P: poweroff" | rofi \
 		 -dmenu \
 		 -matching regex \
 		 -no-tokenize \
