@@ -117,8 +117,13 @@
 		 "gnupg"
 		 "borg"
 		 "curl"
-		 "emacs-minimal"
-		 "rsync"))
+		 "rsync"
+		 ;; Connectivity (modem manager does not unlock the interface, if installed in home profile only)
+		 "modem-manager" "libmbim" ; "modem-manager-fcc-auto-unlock" ; package auto-unlock has no effect?
+		 ;; "my-modem-manager" "libmbim"
+		 "just" "fzf" ; just needs fzf, shell autocompletion does not work, if not installed along zsh
+
+))
 	      %base-packages))
    (services (append (list
 		      (service openssh-service-type)

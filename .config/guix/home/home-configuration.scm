@@ -29,9 +29,6 @@
 	     "power-profiles-daemon" "powertop"
 	     "acpi"
 	     "brightnessctl"
-	     "modem-manager" "libmbim" ; "modem-manager-fcc-auto-unlock" ; package auto-unlock has no effect?
-	     ;; "my-modem-manager" "libmbim"
-
 	     ;; basics
 	     "mailutils" ; rottlog seems to need this
 	     "git" "git:send-email" "git:gui" "git-delta"
