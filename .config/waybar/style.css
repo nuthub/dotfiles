@@ -49,11 +49,11 @@ button.focused {
 }
 
 .modules-right {
-    margin-right: 4px;
+    margin-right: 10px;
 }
 
 .drawer-child .module {
-    margin-left: 4px;
+    margin-right: 10px;
 }
 
 #battery.charging, #battery.plugged {

@@ -21,7 +21,7 @@
 	"drawer": {
             //"transition-duration": 500,
 	    //            "children-class": "not-power",
-	    //          "transition-left-to-right": false,
+	    "transition-left-to-right": false,
 	},
 	"modules": [
 	    "custom/displays",
@@ -109,7 +109,7 @@
             "on": "",
             "off": ""
         },
-        "exec": "~/.config/waybar/sunset.sh",
+	"exec": "~/.config/waybar/sunset.sh",
         "on-click": "~/.config/waybar/sunset.sh toggle",
         //"exec-if": "~/.config/waybar/sunset.sh check",
         // "signal": 6	
@@ -183,10 +183,9 @@
     },
 
     "network": {
-	"interface" : "wlp9s0f0",
 	"interval": 2,
 	"tooltip-format": "{ifname} ↑{bandwidthUpBytes} ↓{bandwidthDownBytes}",
-	"format": " {essid}",
+	"format": " {ifname} {essid}",
 	"format-disconnected": "",
 	"on-click": "alacritty -e nmtui",
     },
