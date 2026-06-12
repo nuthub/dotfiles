@@ -47,7 +47,6 @@
 	     "hugo" ; for nuthouse, from nonguix
 	     "btop" "htop" "s-tui"
 	     "jq" ; needed by sway / zoom
-	     "just"
 	     "neofetch"
 	     "net-tools" ; for ifconfig  netstat  route
 	     "nmap"
