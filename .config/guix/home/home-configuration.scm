@@ -131,7 +131,7 @@
 	     "khard"
 
 	     ;; security
-	     "pinentry" "pinentry-tty" "pinentry-emacs" "openssh"
+	     "pinentry" "pinentry-tty" "pinentry-emacs" "pinentry-gnome3" "openssh"
 	     "wireguard-tools"
 	     "lxqt-policykit"
 
