@@ -1694,18 +1694,6 @@ Opens a terminal in the directory that matches the active buffer. Even works ove
 #+end_src
 
 * Some convenience functions
-** A more distressless writing environment
-
-#+begin_src emacs-lisp
-  (defun jf/my-writing-mode()
-    "Switch to my distress less writing mode. An alternative is \"writeroom-mode\""
-    (interactive)
-    (olivetti-mode)
-    (variable-pitch-mode))
-#+end_src
-
-There is a package https://github.com/joostkremers/writeroom-mode?tab=readme-ov-file that does similar things.
-
 ** Focus on Subtree (clone + narrow)
 #+begin_src emacs-lisp
   (defun jf/narrow-to-subtree-in-indirect-buffer ()
@@ -1715,7 +1703,7 @@ There is a package https://github.com/joostkremers/writeroom-mode?tab=readme-ov-
      (concat "<org subtree> " (nth 4 (org-heading-components)))
      t)
     (org-narrow-to-subtree))
-  
+
 #+end_src
 
 ** TODO Synchronization between JabRef keywords and org-roam nodes
