@@ -752,7 +752,7 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
                 ("C-c C-<left>" . org-promote-subtree)
                 ("C-c C-<right>" . org-demote-subtree)
                 ("C-c ," . jf/org-timestamp-inactive)
-  	      ("C-<f6>" . jf/narrow-to-subtree-in-indirect-buffer))
+  	      ("C-<f6>" . jf/clone-indirect-buffer-and-narrow-to-subtree))
     :config
     (jf/org-setup-look-and-feel)
     (jf/org-setup-task-management-and-agenda)
@@ -1694,16 +1694,15 @@ Opens a terminal in the directory that matches the active buffer. Even works ove
 #+end_src
 
 * Some convenience functions
-** Focus on Subtree (clone + narrow)
+** Focus on Sub Tree (clone and narrow)
 #+begin_src emacs-lisp
-  (defun jf/narrow-to-subtree-in-indirect-buffer ()
+  (defun jf/clone-indirect-buffer-and-narrow-to-subtree ()
     "Create an indirect cloned buffer and narrow to org subtree in the clone."
     (interactive)
     (clone-indirect-buffer
      (concat "<org subtree> " (nth 4 (org-heading-components)))
      t)
     (org-narrow-to-subtree))
-
 #+end_src
 
 ** TODO Synchronization between JabRef keywords and org-roam nodes
