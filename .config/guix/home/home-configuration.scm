@@ -34,6 +34,7 @@
 	     "git" "git:send-email" "git:gui" "git-delta"
 	     ;; emacs & related
 	     "emacs-pgtk" "emacs-pdf-tools" "emacs-vterm" "emacs-jinx" "enchant" "python-proselint" "gnuplot" ; enchant is needed by jinx; "emacs-pgtk-xwidgets"
+	     "emacs-forgejo" "emacs-khalel"
 	     "make" "perl" "texinfo" ; building auctex for elpaca needs these
 	     "isync" "mu" "goimapnotify"
 

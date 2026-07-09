@@ -989,12 +989,20 @@ This shows modified/added/deleted lines directly in the editor.
     ("C-x v R" . browse-at-remote))
 #+end_src
 
-** Forge support
-
+** Forgejo support
 #+begin_src emacs-lisp
-  (use-package forge
-    :after magit)
+  (use-package forgejo
+    :ensure nil
+    :config
+    (setq forgejo-hosts '(("https://codeberg.org")))
+    ;; Example watch rules
+    (setq forgejo-watch-rules
+     '(("thanosapollo/emacs-forgejo")
+       ("guix/guix" . "state:open label:team-emacs")
+       ("*" . "author:nutcase")))
+    (setq forgejo-watch-filter-default "read:no"))
 #+end_src
+
 
 ** pdf-tools
 
