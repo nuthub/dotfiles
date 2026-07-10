@@ -122,7 +122,7 @@ Open a file with a registered application (from mimeapps.list)
 ** Auto revert changed files (PDF only for now)
 
 #+begin_src emacs-lisp
-  (use-package emacs :ensure nil
+  (use-package emacs
     :config
     (setq revert-without-query '(".pdf")))
 #+end_src
@@ -130,7 +130,7 @@ Open a file with a registered application (from mimeapps.list)
 ** Don't ask to open symlinks to version controlled files
 
 #+begin_src emacs-lisp
-  (use-package emacs :ensure nil
+  (use-package emacs
     :config
     (setq vc-follow-symlinks t))
 #+end_src
@@ -139,7 +139,7 @@ Open a file with a registered application (from mimeapps.list)
 Confirmation dialog is annoying, when files are opened externally, e.g. via dired. 
 
 #+begin_src emacs-lisp
-  (use-package emacs :ensure nil
+  (use-package emacs
     :config
     (setq large-file-warning-threshold nil))
 #+end_src
@@ -200,7 +200,6 @@ This is from https://xenodium.com/bending-emacs-episode-2
 
 #+begin_src emacs-lisp
   (use-package emacs
-    :ensure nil
     :config
     (setq font-use-system-font t))
 #+end_src
@@ -233,7 +232,7 @@ This is from https://xenodium.com/bending-emacs-episode-2
 ** General appearance
 
 #+begin_src emacs-lisp
-  (use-package emacs :ensure nil
+  (use-package emacs
     :config
     (menu-bar-mode -1) ; switch off menu bar
     (tool-bar-mode -1) ; switch off tool bar
@@ -307,7 +306,7 @@ I use the Modus Themes. To switch between light (operandi) and dark (vivendi) th
 ** Window numbering
 This minor mode allows to switch windows in a frame by M-x, while x is a number that is shown in the modeline of each window.
 #+begin_src emacs-lisp
-  (use-package window-numbering
+  (use-package window-numbering :ensure t
     :config
     (window-numbering-mode))
 #+end_src
@@ -359,7 +358,7 @@ In emacs 31 there is an alternative: https://www.reddit.com/r/emacs/comments/1k7
 ** which-key (included in emacs 30)
 This helps to figure out the next keystrokes
 #+begin_src emacs-lisp
-  (use-package which-key :ensure nil
+  (use-package which-key
     :config
     (setq which-key-idle-delay 1)
     (which-key-mode))
@@ -368,14 +367,14 @@ This helps to figure out the next keystrokes
 ** savehist (included in emacs)
 Persist history over Emacs restarts. E.g. Vertico sorts by history position.
 #+begin_src emacs-lisp
-  (use-package emacs :ensure nil
+  (use-package emacs
     :config
     (savehist-mode))
 #+end_src
 ** editorconfig (included in emacs 30)
 
 #+begin_src emacs-lisp
-  (use-package editorconfig :ensure nil
+  (use-package editorconfig
     :config
     (editorconfig-mode))
 #+end_src
@@ -746,7 +745,6 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
     (org-time-stamp nil t))
 
   (use-package org
-    :ensure nil ; already loaded, otherwise this won't get tangled
     ;; the bind may defer the package loading, see documentation (C-h f use-package RET)
     :bind (:map org-mode-map
                 ("C-c C-<left>" . org-promote-subtree)
@@ -992,7 +990,6 @@ This shows modified/added/deleted lines directly in the editor.
 ** Forgejo support
 #+begin_src emacs-lisp
   (use-package forgejo
-    :ensure nil
     :config
     (setq forgejo-hosts '(("https://codeberg.org")))
     ;; Example watch rules
@@ -1008,7 +1005,6 @@ This shows modified/added/deleted lines directly in the editor.
 
 #+begin_src emacs-lisp
   (use-package pdf-tools
-    :ensure nil ;; use the system installed version (elpaca keyword)
     :config
     (require 'pdf-occur) ;; if I don't require pdf-occur before pdf-tools-install, I get a warning at startup
     (pdf-loader-install)
@@ -1035,7 +1031,6 @@ Parts of this configuration (e.g. key bindings) are from https://emacselements.c
 
 #+begin_src emacs-lisp
   (use-package vterm
-    :ensure nil
     :config
     (setq vterm-max-scrollback 100000))
 #+end_src
@@ -1084,8 +1079,8 @@ Two modes:
 - justl.el to run just on justfiles
 
 #+begin_src emacs-lisp
-  (use-package just-mode)
-  (use-package justl)
+  (use-package just-mode :ensure t)
+  (use-package justl :ensure t)
 #+end_src
 
 ** web-mode & php-mode
@@ -1113,7 +1108,7 @@ Two modes:
 
 turtle-mode not available in elpa(ca)
 #+begin_src emacs-lisp :tangle no
-  (use-package turtle-mode
+  (use-package turtle-mode :ensure t
     :config
     (add-to-list 'auto-mode-alist '("\\.n3"  . turtle-mode))
     (add-to-list 'auto-mode-alist '("\\.ttl" . turtle-mode)))
@@ -1121,7 +1116,7 @@ turtle-mode not available in elpa(ca)
 
 ttl-mode is available in elpa(ca)
 #+begin_src emacs-lisp
-  (use-package ttl-mode
+  (use-package ttl-mode :ensure t
     :config
     (add-to-list 'auto-mode-alist '("\\.n3"  . ttl-mode))
     (add-to-list 'auto-mode-alist '("\\.ttl" . ttl-mode)))
@@ -1166,7 +1161,7 @@ Currently not in use, but pulls projectile as dependency. Therefore, I deactivat
     (load-file "~/git/guix/etc/copyright.el"))
 #+end_src
 
-** gptel
+** gptel + gptel-quick
 
 #+begin_src emacs-lisp
   (use-package gptel
@@ -1196,25 +1191,21 @@ Currently not in use, but pulls projectile as dependency. Therefore, I deactivat
                  '(dreams . "I want you to act as a dream interpreter. I will give you descriptions of my dreams, and you will provide interpretations based on the symbols and themes present in the dream. Do not provide personal opinions or assumptions about the dreamer. Provide only factual interpretations based on the information given. Provide your interpretation in German language.")))
 #+end_src
 
+gptel-quick for simple explanations in a popup.
 #+begin_src emacs-lisp
   (use-package posframe)
   (use-package gptel-quick
-    :after gptel postframe
-    :ensure (gptel-quick
-  	   :type git
-  	   :host github
-  	   :repo "karthink/gptel-quick")
+    :after gptel postframe embark
     :config
     (setq gptel-quick-display 'postframe)
-    ;(keymap-set embark-general-map "?" #'gptel-quick)
-    )
+    (keymap-set embark-general-map "?" #'gptel-quick))
 #+end_src
 
 ** cypher mode
 
 - Keywords from https://neo4j.com/docs/cypher-manual/current/syntax/keywords/
 #+begin_src emacs-lisp
-  (use-package cypher-mode
+  (use-package cypher-mode :ensure t
     :config
     (setq cypher-keywords
   	(regexp-opt '("ACCESS" "ACTIVE" "ADMIN" "ADMINISTRATOR" "ALIAS" "ALIASES" "ALL" "ALL_SHORTEST_PATHS" "ALTER" "AND" "ANY" "ARRAY" "AS" "ASC" "ASCENDING" "ASSIGN" "AT" "AUTH" "BINDINGS" "BOOL" "BOOLEAN" "BOOSTED" "BOTH" "BREAK" "BUILT" "BY" "CALL" "CASCADE" "CASE" "CHANGE" "CIDR" "COLLECT" "COMMAND" "COMMANDS" "COMPOSITE" "CONCURRENT" "CONSTRAINT" "CONSTRAINTS" "CONTAINS" "CONTINUE" "COPY" "COUNT" "CREATE" "CSV" "CURRENT" "DATA" "DATABASE" "DATABASES" "DATE" "DATETIME" "DBMS" "DEALLOCATE" "DEFAULT" "DEFINED" "DELETE" "DENY" "DESC" "DESCENDING" "DESTROY" "DETACH" "DIFFERENT" "DISTINCT" "DRIVER" "DROP" "DRYRUN" "DUMP" "DURATION" "EACH" "EDGE" "ELEMENT" "ELEMENTS" "ELSE" "ENABLE" "ENCRYPTED" "END" "ENDS" "ERROR" "EXECUTABLE" "EXECUTE" "EXIST" "EXISTENCE" "EXISTS" "FAIL" "FALSE" "FIELDTERMINATOR" "FINISH" "FLOAT" "FOR" "FOREACH" "FROM" "FULLTEXT" "FUNCTION" "FUNCTIONS" "GRANT" "GRAPH" "GRAPHS" "GROUP" "GROUPS" "HEADERS" "HOME" "ID" "IF" "IMMUTABLE" "IMPERSONATE" "IN" "INDEX" "INDEXES" "INF" "INFINITY" "INSERT" "INT" "INTEGER" "IS" "JOIN" "KEY" "LABEL" "LABELS" "LEADING" "LIMITROWS" "LIST" "LOAD" "LOCAL" "LOOKUP" "MANAGEMENT" "MAP" "MATCH" "MERGE" "NAME" "NAMES" "NAN" "NEW" "NFC" "NFD" "NFKC" "NFKD" "NODE" "NODES" "NODETACH" "NONE" "NORMALIZE" "NORMALIZED" "NOT" "NOTHING" "NOWAIT" "NULL" "OF" "OFFSET" "ON" "ONLY" "OPTION" "OPTIONAL" "OPTIONS" "OR" "ORDER" "PASSWORD" "PASSWORDS" "PATH" "PATHS" "PLAINTEXT" "POINT" "POPULATED" "PRIMARIES" "PRIMARY" "PRIVILEGE" "PRIVILEGES" "PROCEDURE" "PROCEDURES" "PROPERTIES" "PROPERTY" "PROVIDER" "PROVIDERS" "RANGE" "READ" "REALLOCATE" "REDUCE" "REL" "RELATIONSHIP" "RELATIONSHIPS" "REMOVE" "RENAME" "REPEATABLE" "REPLACE" "REPORT" "REQUIRE" "REQUIRED" "RESTRICT" "RETURN" "REVOKE" "ROLE" "ROLES" "ROW" "ROWS" "SCAN" "SEC" "SECOND" "SECONDARIES" "SECONDARY" "SECONDS" "SEEK" "SERVER" "SERVERS" "SET" "SETTING" "SETTINGS" "SHORTEST" "SHORTEST_PATH" "SHOW" "SIGNED" "SINGLE" "SKIPROWS" "START" "STARTS" "STATUS" "STOP" "STRING" "SUPPORTED" "SUSPENDED" "TARGET" "TERMINATE" "TEXT" "THEN" "TIME" "TIMESTAMP" "TIMEZONE" "TO" "TOPOLOGY" "TRAILING" "TRANSACTION" "TRANSACTIONS" "TRAVERSE" "TRIM" "TRUE" "TYPE" "TYPED" "TYPES" "UNION" "UNIQUE" "UNIQUENESS" "UNWIND" "URL" "USE" "USER" "USERS" "USING" "VALUE" "VARCHAR" "VECTOR" "VERTEX" "WAIT" "WHEN" "WHERE" "WITH" "WITHOUT" "WRITE" "XOR" "YIELD" "ZONE" "ZONED"))))
@@ -1252,7 +1243,7 @@ Currently not in use, but pulls projectile as dependency. Therefore, I deactivat
 The built-in LSP client
 
 #+begin_src emacs-lisp
-  (use-package eglot-java
+  (use-package eglot-java :ensure t
     :config
     (add-hook 'java-mode-hook 'eglot-java-mode)
     (with-eval-after-load 'eglot-java
@@ -1820,7 +1811,6 @@ If there is more than one, let the user choose."
 ** khalel
 #+begin_src emacs-lisp
   (use-package khalel
-    :ensure t
     :after org
     :config
     (setq khalel-vdirsyncer-command "pimsync")
@@ -1880,7 +1870,6 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
 #+begin_src emacs-lisp
   (use-package mu4e
     :if (string-prefix-p "nutbook" (system-name))
-    :ensure nil ;; use the system installed version (elpaca keyword)
     :config
     (define-key mu4e-view-mode-map (kbd "C--") nil t) ; remove key binding
     (define-key mu4e-view-mode-map (kbd "C-+") nil t) ; remove key binding
@@ -2156,7 +2145,6 @@ Best option would be to fix ~tramp-process-running-p~ upstream. An emacs lisp ve
 ** Increase / decrease text scale
 #+begin_src emacs-lisp
   (use-package emacs
-    :ensure nil
     :config
     (setq text-scale-mode-step 1.1)
     (global-set-key (kbd "C--") 'text-scale-decrease)
@@ -2178,7 +2166,7 @@ Best option would be to fix ~tramp-process-running-p~ upstream. An emacs lisp ve
   (global-set-key (kbd "C-x C-t") 'gt-translate)
 #+end_src
 
-**  vundo
+** vundo
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-x u") 'vundo)
 #+end_src

@@ -56,7 +56,7 @@
   ;; Enable use-package :ensure support for Elpaca.
   (elpaca-use-package-mode)
   ;; make :ensure t the default
-  (setq use-package-always-ensure t))
+  (setq use-package-always-ensure nil))
 
 ;; Load my literate config
 (org-babel-load-file (expand-file-name
