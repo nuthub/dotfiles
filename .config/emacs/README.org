@@ -15,108 +15,141 @@
 ** This is used to identify myself, and to find my own GnuPG key
   
 #+begin_src emacs-lisp
-  (setq user-full-name "Julian Flake")
-  (setq user-mail-address "julian@flake.de")
+  (use-package emacs
+    :config
+    (setq user-full-name "Julian Flake")
+    (setq user-mail-address "julian@flake.de"))
 #+end_src
 
 ** Some localizations for the calendar
 #+begin_src emacs-lisp
-  (setq calendar-week-start-day 1
-        calendar-day-name-array ["Sonntag"
-  			       "Montag"
-  			       "Dienstag"
-  			       "Mittwoch"
-  			       "Donnerstag"
-  			       "Freitag"
-  			       "Samstag"]
-        calendar-month-name-array ["Januar"
-  				 "Februar"
-  				 "März"
-  				 "April"
-  				 "Mai"
-  				 "Juni"
-  				 "Juli"
-  				 "August"
-  				 "September"
-  				 "Oktober"
-  				 "November"
-  				 "Dezember"]
-        calendar-intermonth-text
-        '(propertize
-  	(format "%2d"
-  		(car
-  		 (calendar-iso-from-absolute
-                    (calendar-absolute-from-gregorian (list month day year)))))
-  	'font-lock-face 'font-lock-function-name-face))
+  (use-package emacs
+    :config
+    (setq calendar-week-start-day 1
+  	calendar-day-name-array ["Sonntag"
+  				 "Montag"
+  				 "Dienstag"
+  				 "Mittwoch"
+  				 "Donnerstag"
+  				 "Freitag"
+  				 "Samstag"]
+  	calendar-month-name-array ["Januar"
+  				   "Februar"
+  				   "März"
+  				   "April"
+  				   "Mai"
+  				   "Juni"
+  				   "Juli"
+  				   "August"
+  				   "September"
+  				   "Oktober"
+  				   "November"
+  				   "Dezember"]
+  	calendar-intermonth-text
+  	'(propertize
+     	  (format "%2d"
+     		  (car
+     		   (calendar-iso-from-absolute
+                      (calendar-absolute-from-gregorian (list month day year)))))
+     	  'font-lock-face 'font-lock-function-name-face))
 
-  (setq solar-n-hemi-seasons
-        '("Frühlingsanfang" "Sommeranfang" "Herbstanfang" "Winteranfang"))
+    (setq solar-n-hemi-seasons
+  	'("Frühlingsanfang" "Sommeranfang" "Herbstanfang" "Winteranfang"))
 
-  (setq holiday-general-holidays
-        '((holiday-fixed 1 1 "Neujahr")
-          (holiday-fixed 5 1 "1. Mai / Tag der Arbeit")
-          (holiday-fixed 10 3 "Tag der Deutschen Einheit")))
+    ;; for M-x sunrise-sunset
+    (setq calendar-latitude 51.6)
+    (setq calendar-longitude 7.1)
 
-  ;; Feiertage für Bayern, weitere auskommentiert
-  (setq holiday-christian-holidays
-        '(;;(holiday-fixed 1 6 "Heilige Drei Könige")
-          (holiday-easter-etc -48 "Rosenmontag")
-          ;; (holiday-easter-etc -3 "Gründonnerstag")
-          (holiday-easter-etc  -2 "Karfreitag")
-          (holiday-easter-etc   0 "Ostersonntag")
-          (holiday-easter-etc  +1 "Ostermontag")
-          (holiday-easter-etc +39 "Christi Himmelfahrt")
-          (holiday-easter-etc +49 "Pfingstsonntag")
-          (holiday-easter-etc +50 "Pfingstmontag")
-          (holiday-easter-etc +60 "Fronleichnam")
-          ;;(holiday-fixed 8 15 "Mariae Himmelfahrt")
-          (holiday-fixed 11 1 "Allerheiligen")
-          ;; (holiday-float 11 3 1 "Buss- und Bettag" 16)
-    	(holiday-float 11 0 1 "Totensonntag" 20)
-    	(holiday-float 12 0 -4 "1. Advent" 24)
-          (holiday-float 12 0 -3 "2. Advent" 24)
-          (holiday-float 12 0 -2 "3. Advent" 24)
-          (holiday-float 12 0 -1 "4. Advent" 24)
-          (holiday-fixed 12 25 "1. Weihnachtstag")
-          (holiday-fixed 12 26 "2. Weihnachtstag")))
+    (setq holiday-general-holidays
+  	'((holiday-fixed 1 1 "Neujahr")
+            (holiday-fixed 5 1 "1. Mai / Tag der Arbeit")
+            (holiday-fixed 10 3 "Tag der Deutschen Einheit")))
+
+    ;; Feiertage für Bayern, weitere auskommentiert
+    (setq holiday-christian-holidays
+  	'(;;(holiday-fixed 1 6 "Heilige Drei Könige")
+            (holiday-easter-etc -48 "Rosenmontag")
+            ;; (holiday-easter-etc -3 "Gründonnerstag")
+            (holiday-easter-etc  -2 "Karfreitag")
+            (holiday-easter-etc   0 "Ostersonntag")
+            (holiday-easter-etc  +1 "Ostermontag")
+            (holiday-easter-etc +39 "Christi Himmelfahrt")
+            (holiday-easter-etc +49 "Pfingstsonntag")
+            (holiday-easter-etc +50 "Pfingstmontag")
+            (holiday-easter-etc +60 "Fronleichnam")
+            ;;(holiday-fixed 8 15 "Mariae Himmelfahrt")
+            (holiday-fixed 11 1 "Allerheiligen")
+            ;; (holiday-float 11 3 1 "Buss- und Bettag" 16)
+  	  (holiday-float 11 0 1 "Totensonntag" 20)
+  	  (holiday-float 12 0 -4 "1. Advent" 24)
+            (holiday-float 12 0 -3 "2. Advent" 24)
+            (holiday-float 12 0 -2 "3. Advent" 24)
+            (holiday-float 12 0 -1 "4. Advent" 24)
+            (holiday-fixed 12 25 "1. Weihnachtstag")
+            (holiday-fixed 12 26 "2. Weihnachtstag"))))
 #+end_src
 * File handling
-** yes-or-no => y-or-n
+** dired variables: trash, listings and dialogs
 Make use of system's trash and use y-or-n-p instead of yes-or-no-p
 #+begin_src emacs-lisp
-  (setq delete-by-moving-to-trash t)
-  (setq dired-deletion-confirmer #'y-or-n-p)
+  (use-package emacs
+    :config
+    (setq delete-by-moving-to-trash t)
+    (setq dired-deletion-confirmer #'y-or-n-p)
+    (setq dired-recursive-copies 'always)
+    (setq dired-listing-switches "-Dalh --group-directories-first --time-style=long-iso"))
 #+end_src
 
-** xdg-open-with / dired-open-with
+** nerd icons for dired
+#+begin_src emacs-lisp
+  (use-package nerd-icons-dired
+    :hook
+    (dired-mode . nerd-icons-dired-mode))
+#+end_src
+
+** TODO xdg-open-with / dired-open-with
 Open a file with a registered application (from mimeapps.list)
 #+begin_src emacs-lisp
-  (use-package dired-open-with
+  (use-package dired-open-with :ensure t
     :after dired
     :config
     (define-key dired-mode-map "o" #'dired-open-with)
-    
+
     (defun jf/xdg-open-with ()
+      ;; alternative: https://github.com/emacs-exwm/xdg-launcher        
       "Open the current buffer's file with an XDG app."
       (interactive)
+      (unless (buffer-file-name)
+        (error "Buffer does not visit a file."))
       (let* ((path (file-truename (buffer-file-name)))
-  	   (apps (dired-open-with--applications-for-file path))
-  	   (app (dired-open-with--completing-read apps))
-  	   (cmd (dired-open-with--xdg-format-exec (gethash "Exec" app) path)))
-        (dired-open-with--start-process cmd))))
-;    (global-set-key (kbd "z") 'jf/xdg-open-with))
+    	   (apps (dired-open-with--applications-for-file path))
+    	   (app (dired-open-with--completing-read apps))
+    	   (cmd (dired-open-with--xdg-format-exec (gethash "Exec" app) path)))
+        (dired-open-with--start-process cmd)))
+    (global-set-key (kbd "C-<f6>") 'jf/xdg-open-with))
 #+end_src
+
+#+begin_src elisp
+  (use-package xdg-launcher
+    :ensure (xdg-launcher
+  	   :type git
+  	   :host github
+  	   :repo "emacs-exwm/xdg-launcher"))
+#+end_src
+
 ** Keep folders clean
 
 #+begin_src emacs-lisp
-  ;; backup files: file.ext~
-  (setq backup-directory-alist `(("." . ,(expand-file-name "tmp/backups/" user-emacs-directory))))
+  (use-package emacs
+    :config
+    ;; backup files: file.ext~
+    (setq backup-directory-alist `(("." . ,(expand-file-name "tmp/backups/" user-emacs-directory))))
 
-  ;; auto-save files: #file.ext#
-  ;; auto-save-mode doesn't create the path automatically!
-  (make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)
-  (setq auto-save-list-file-prefix (expand-file-name "tmp/auto-saves/sessions/" user-emacs-directory))
-  (setq auto-save-file-name-transforms `((".*" ,(expand-file-name "tmp/auto-saves/" user-emacs-directory) t)))
+    ;; auto-save files: #file.ext#
+    ;; auto-save-mode doesn't create the path automatically!
+    (make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)
+    (setq auto-save-list-file-prefix (expand-file-name "tmp/auto-saves/sessions/" user-emacs-directory))
+    (setq auto-save-file-name-transforms `((".*" ,(expand-file-name "tmp/auto-saves/" user-emacs-directory) t))))
 #+end_src
 
 ** Auto revert changed files (PDF only for now)
@@ -246,8 +279,11 @@ This is from https://xenodium.com/bending-emacs-episode-2
 ** Smooth scrolling
 
 #+begin_src emacs-lisp
-  (pixel-scroll-precision-mode)
-  (setq pixel-scroll-precision-large-scroll-height 40.0)
+  (use-package emacs
+    :config
+    (pixel-scroll-precision-mode)
+    (setq pixel-scroll-precision-large-scroll-height 40.0)
+    (setq-default scroll-conservatively 100))
 #+end_src
 
 ** Theme
@@ -286,21 +322,25 @@ I use the Modus Themes. To switch between light (operandi) and dark (vivendi) th
 
 ** Visual line mode in text-mode
 #+begin_src emacs-lisp
-  (add-hook 'text-mode-hook
-  	  (lambda ()
-   	    (visual-line-mode 1)))
+  (use-package emacs
+    :config
+    (add-hook 'text-mode-hook (lambda () (visual-line-mode 1))))
 #+end_src
 
 ** System Clipboard to kill ring
 #+begin_src emacs-lisp
-  (setq save-interprogram-paste-before-kill t)
+  (use-package emacs
+    :config
+    (setq save-interprogram-paste-before-kill t))
 #+end_src
 
 ** Kill dired buffers instead of quitting them
 - https://www.emacswiki.org/emacs/DiredReuseDirectoryBuffer says:
   Starting with Emacs 28.1, you can customize option ‘dired-kill-when-opening-new-dired-buffer’ to non-`nil`, to kill the current Dired buffer when you create a new one.
 #+begin_src emacs-lisp
-  (setq dired-kill-when-opening-new-dired-buffer t)
+  (use-package emacs
+    :config
+    (setq dired-kill-when-opening-new-dired-buffer t))
 #+end_src
 
 ** Window numbering
@@ -314,7 +354,9 @@ This minor mode allows to switch windows in a frame by M-x, while x is a number 
 ** Use Short Answers
 Emacs 28+ supports to globally default to ~y-or-n-p~ instead of ~yes-or-no-p~.
 #+begin_src emacs-lisp
-  (setq use-short-answers t)
+  (use-package emacs
+    :config
+    (setq use-short-answers t))
 #+end_src
 
 ** Minions
@@ -329,8 +371,10 @@ In emacs 31 there is an alternative: https://www.reddit.com/r/emacs/comments/1k7
 ** Show search result counts in modeline
 
 #+begin_src emacs-lisp
-  (setq isearch-lazy-count t)
-  (setq isearch-lazy-highlight t)
+  (use-package emacs
+    :config
+    (setq isearch-lazy-count t)
+    (setq isearch-lazy-highlight t))
 #+end_src
 
 ** Line numbers on the left
@@ -338,21 +382,12 @@ In emacs 31 there is an alternative: https://www.reddit.com/r/emacs/comments/1k7
 =display-line-numbers-mode= is a built in minor mode
 
 #+begin_src emacs-lisp
-  (global-display-line-numbers-mode 0)
-  ;; Disable line numbers for some modes
-    ;; (dolist (mode '(org-mode-hook
-    ;; 		org-agenda-mode-hook
-    ;;                 vterm-mode-hook
-    ;;                 term-mode-hook
-    ;;                 shell-mode-hook
-    ;;                 eshell-mode-hook
-    ;;                 pdf-view-mode-hook
-    ;; 		nov-mode-hook))
-    ;;   (add-hook mode (lambda () (display-line-numbers-mode 0))))
-    ;; Enable line numbers for some modes
+  (use-package emacs
+    :config
+    (global-display-line-numbers-mode 0)
     (dolist (mode '(prog-mode-hook))
       (add-hook mode (lambda ()
-  		     (display-line-numbers-mode 1))))
+  		     (display-line-numbers-mode 1)))))
 #+end_src
 
 ** which-key (included in emacs 30)
@@ -830,7 +865,7 @@ Visualize the org roam graph in browser.
 ** HTML Export
 
 htmlize is used by org to export to HTML.
-  
+
 #+begin_src emacs-lisp
   (use-package htmlize)
 #+end_src
@@ -2014,91 +2049,101 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
 
 ** Contacts handling (blacklist for now)
 #+begin_src emacs-lisp
-  ;; Load my mail blacklist
-  (defun jf/load-mail-blacklist ()
-    (interactive)
-    (setq jf-mail-blacklist
-  	(split-string
-  	 (with-temp-buffer
-  	   (insert-file-contents  "~/.config/emacs/mail-blacklist.txt")
-  	   (buffer-substring-no-properties
-  	    (point-min)
-  	    (point-max))))))
-  (jf/load-mail-blacklist)
+  (use-package mu4e
+    :config
+    ;; Load my mail blacklist
+    (defun jf/load-mail-blacklist ()
+      (interactive)
+      (setq jf-mail-blacklist
+  	  (split-string
+  	   (with-temp-buffer
+  	     (insert-file-contents  "~/.config/emacs/mail-blacklist.txt")
+  	     (buffer-substring-no-properties
+  	      (point-min)
+  	      (point-max))))))
+    (jf/load-mail-blacklist)
 
-  ;; define my contact process function
-  (defun jf/my-contact-processor (contact)
-    (cond
-     ((cl-some (lambda (str) (string-match str contact)) jf-mail-blacklist) nil)
-     (t contact)))
-  ;; register the function with mu4e
-  (setq mu4e-contact-process-function 'jf/my-contact-processor)
+    ;; define my contact process function
+    (defun jf/my-contact-processor (contact)
+      (cond
+       ((cl-some (lambda (str) (string-match str contact)) jf-mail-blacklist) nil)
+       (t contact)))
+
+    ;; register the function with mu4e
+    (setq mu4e-contact-process-function 'jf/my-contact-processor))
 #+end_src
 
 ** When signing mails with openpgp (or gnupg), use the key associated with the sender address
 #+begin_src emacs-lisp
-  (setq mml-secure-openpgp-sign-with-sender t)
+  (use-package mu4e
+    :config
+    (setq mml-secure-openpgp-sign-with-sender t))
 #+end_src
 
 ** Before sending an email, I'd like to check some things
 #+begin_src emacs-lisp
-  ;; 1. let me confirm every message
-  (setq message-confirm-send t)
-  ;; 2. let me confirm/decline to send an email with empty subject
-  (defun jf/message-warn-if-no-subject() 
-    (or (message-field-value "Subject")
-        (yes-or-no-p "Really send without Subject? ")
-        (keyboard-quit)))
-  (add-hook 'message-send-hook #'jf/message-warn-if-no-subject)
-  ;; 3. warn if no attachment can be found, although there should be one.
-  ;; this is from https://github.com/munen/emacs.d/?tab=readme-ov-file#check-for-supposed-attachments-prior-to-sending-them
-  ;; I moved the functions in my own namespace and slightly modified them
-  (defun jf/message-attachment-present-p ()
-    "Return t if a non-gpg attachment is found in the current message."
-    (save-excursion
-      (save-restriction
-        (widen)
-        (goto-char (point-min))
-        (when (search-forward "<#part type" nil t) t))))
+  (use-package mu4e
+    :config
+    ;; 1. let me confirm every message
+    (setq message-confirm-send t)
+    ;; 2. let me confirm/decline to send an email with empty subject
+    (defun jf/message-warn-if-no-subject() 
+      (or (message-field-value "Subject")
+  	(yes-or-no-p "Really send without Subject? ")
+  	(keyboard-quit)))
+    (add-hook 'message-send-hook #'jf/message-warn-if-no-subject)
+    ;; 3. warn if no attachment can be found, although there should be one.
+    ;; this is from https://github.com/munen/emacs.d/?tab=readme-ov-file#check-for-supposed-attachments-prior-to-sending-them
+    ;; I moved the functions in my own namespace and slightly modified them
+    (defun jf/message-attachment-present-p ()
+      "Return t if a non-gpg attachment is found in the current message."
+      (save-excursion
+        (save-restriction
+  	(widen)
+  	(goto-char (point-min))
+  	(when (search-forward "<#part type" nil t) t))))
 
-  (setq jf/message-attachment-regexp
-        ;; if lower case letters are used, the search is case insensitive
-        (regexp-opt '("we send"
-                      "i send"
-                      "attach"
-                      "anbei"
-                      "angehängt"
-                      "anhang")))
+    (setq jf/message-attachment-regexp
+  	;; if lower case letters are used, the search is case insensitive
+  	(regexp-opt '("we send"
+                        "i send"
+                        "attach"
+                        "anbei"
+                        "angehängt"
+                        "anhang")))
 
-  (defun jf/message-warn-if-no-attachments ()
-    "Check if there is an attachment in the message if I claim it."
-    (when (and (save-excursion
-                 (save-restriction
-    		 (widen)
-    		 (goto-char (point-min))
-    		 (re-search-forward jf/message-attachment-regexp nil t)))
-    	     (not (jf/message-attachment-present-p)))
-      (unless (y-or-n-p "No attachment. Send the message?")
-        (keyboard-quit))))
+    (defun jf/message-warn-if-no-attachments ()
+      "Check if there is an attachment in the message if I claim it."
+      (when (and (save-excursion
+  		 (save-restriction
+    		   (widen)
+    		   (goto-char (point-min))
+    		   (re-search-forward jf/message-attachment-regexp nil t)))
+    	       (not (jf/message-attachment-present-p)))
+        (unless (y-or-n-p "No attachment. Send the message?")
+  	(keyboard-quit))))
 
-  (add-hook 'message-send-hook #'jf/message-warn-if-no-attachments)
+    (add-hook 'message-send-hook #'jf/message-warn-if-no-attachments))
 #+end_src
 
 ** Detach article advice
 
 #+begin_src emacs-lisp
-  (defun jf/detach-mu4e-article-view-advice ()
-    "This advice is used to open a detached article view in a new frame and to delete the original window. This improves my workflow."
-    (make-frame)
-    (delete-window))
-
-  (advice-add 'mu4e-view-detach :after #'jf/detach-mu4e-article-view-advice)
+  (use-package mu4e
+    :config
+    (defun jf/detach-mu4e-article-view-advice ()
+      "This advice is used to open a detached article view in a new frame and to delete the original window. This improves my workflow."
+      (make-frame)
+      (delete-window))
+    (advice-add 'mu4e-view-detach :after #'jf/detach-mu4e-article-view-advice)
+    (define-key mu4e-view-mode-map (kbd "C-<f6>") 'mu4e-view-detach))
 #+end_src
 
 ** mu4e-walk (move mail addresses in compose buffer)
 
 #+begin_src elisp
   (use-package mu4e-walk
+    :load-path "relative/path/to/mu4e-walk.el"
     :after mu4e
     :config
     (add-hook 'mu4e-compose-mode-hook 'mu4e-walk-add-keybindings-compose-mode))
@@ -2109,91 +2154,60 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
 On my Guix system, the process for ~gvfsd-fuse~ is running as ~.gvfsd-fuse-real~. Therefore, the function ~tramp-process-running-p~ does not detect the running process. A similar problem exists with flathub package of emacs: https://github.com/flathub/org.gnu.emacs/issues/27 . Adding the advice from the issue helps, although it could be more elegant.
 
 #+begin_src emacs-lisp
-  (defun tramp-process-running-p--mock (process-name)
-    "gvfs* is always running."
-    (when (string-match "gvfs.*" process-name)
-      t))
+  (use-package emacs
+    :config
+    (defun tramp-process-running-p--mock (process-name)
+      "gvfs* is always running."
+      (when (string-match "gvfs.*" process-name)
+        t))
 
-  (advice-add 'tramp-process-running-p
-  	    :before-until
-  	    #'tramp-process-running-p--mock)
+    (advice-add 'tramp-process-running-p
+  	      :before-until
+  	      #'tramp-process-running-p--mock))
 #+end_src
 
 Best option would be to fix ~tramp-process-running-p~ upstream. An emacs lisp version of ~pidof~ or ~pgrep~ would make it easier.
 
 * Global key bindings
-** Increase / decrease text scale
 #+begin_src emacs-lisp
   (use-package emacs
     :config
+    ;; Increase / decrease text scale
     (setq text-scale-mode-step 1.1)
     (global-set-key (kbd "C--") 'text-scale-decrease)
-    (global-set-key (kbd "C-+") 'text-scale-increase))
-#+end_src
-** Comment / Uncomment Region
-#+begin_src emacs-lisp
-  (global-set-key (kbd "C-x C-,") 'comment-region)
-  (global-set-key (kbd "C-x C-.") 'uncomment-region)
-#+end_src
-** Revert buffer
-#+begin_src emacs-lisp
-  (global-set-key (kbd "C-c r") 'revert-buffer)
-#+end_src
-
-** Translate with deepl
-#+begin_src emacs-lisp
-  ;; (global-set-key (kbd "C-x C-t") 'txl-translate-region-or-paragraph)
-  (global-set-key (kbd "C-x C-t") 'gt-translate)
-#+end_src
-
-** vundo
-#+begin_src emacs-lisp
-  (global-set-key (kbd "C-x u") 'vundo)
-#+end_src
-
-** Open GTD file
-#+begin_src emacs-lisp
-  (global-set-key (kbd "C-c t") (lambda () (interactive) (find-file "~/org/agenda/gtd.org")))
-#+end_src
-
-** Org mode
-#+begin_src emacs-lisp
-  (global-set-key (kbd "C-c a") 'org-agenda)
-  (global-set-key (kbd "C-c c") 'org-capture)
-  (global-set-key (kbd "C-c l") 'org-store-link)
-  (global-set-key (kbd "C-c o") 'org-switchb)
-  (global-set-key (kbd "C-c n u") 'org-roam-ui-open)
-  (global-set-key (kbd "C-c j") 'consult-org-heading)
-#+end_src
-
-** vterm
-
-#+begin_src emacs-lisp
-  (global-set-key (kbd "C-c v") 'vterm)
-#+end_src
-
-** Magit
-#+begin_src emacs-lisp
-  (global-set-key (kbd "C-c g") 'magit-status)
-#+end_src
-
-** Mu4e
-#+begin_src emacs-lisp
-  ;; in conflict with 'consult-man
-  (global-set-key (kbd "C-c m") 'mu4e)
-#+end_src
-
-** gptel
-#+begin_src emacs-lisp
-  (define-key org-mode-map (kbd "C-c RET") nil)
-  (global-set-key (kbd "C-c RET") 'gptel-send)
-#+end_src
-
-** citar-open in non org/latex buffers
-#+begin_src emacs-lisp
-  (global-set-key (kbd "C-c b") 'citar-open)
-#+end_src
-** Bind my transient menu
-#+begin_src emacs-lisp
-  (global-set-key (kbd "<f12>") 'jf/my-menu)
+    (global-set-key (kbd "C-+") 'text-scale-increase)
+    ;; Comment / Uncomment Region
+    (global-set-key (kbd "C-x C-,") 'comment-region)
+    (global-set-key (kbd "C-x C-.") 'uncomment-region)
+    ;; Revert buffer
+    (global-set-key (kbd "C-c r") 'revert-buffer)
+    ;; Translate with deepl
+    ;; (global-set-key (kbd "C-x C-t") 'txl-translate-region-or-paragraph)
+    (global-set-key (kbd "C-x C-t") 'gt-translate)
+    ;; vundo
+    (global-set-key (kbd "C-x u") 'vundo)
+    ;; Open GTD file
+    (global-set-key (kbd "C-c t")
+  		  (lambda ()
+  		    (interactive)
+  		    (find-file "~/org/agenda/gtd.org")))
+    ;; Org mode
+    (global-set-key (kbd "C-c a") 'org-agenda)
+    (global-set-key (kbd "C-c c") 'org-capture)
+    (global-set-key (kbd "C-c l") 'org-store-link)
+    (global-set-key (kbd "C-c o") 'org-switchb)
+    (global-set-key (kbd "C-c n u") 'org-roam-ui-open)
+    (global-set-key (kbd "C-c j") 'consult-org-heading)
+    ;; Magit
+    (global-set-key (kbd "C-c g") 'magit-status)
+    ;; Mu4e
+    ;; in conflict with 'consult-man
+    (global-set-key (kbd "C-c m") 'mu4e)
+    ;; gptel
+    (define-key org-mode-map (kbd "C-c RET") nil)
+    (global-set-key (kbd "C-c RET") 'gptel-send)
+    ;; citar-open in non org/latex buffers
+    (global-set-key (kbd "C-c b") 'citar-open)
+    ;; Bind my transient menu
+    (global-set-key (kbd "<f12>") 'jf/my-menu))
 #+end_src
