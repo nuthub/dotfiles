@@ -977,34 +977,6 @@ htmlize is used by org to export to HTML.
 
 * Other major modes
 
-** magit: Git support
-
-#+begin_src emacs-lisp
-  (use-package magit
-    :config
-    ;; gpg signing is at transient level 5, default was to show up to level 4
-    (setq transient-default-level 5)
-    (setq magit-diff-refine-hunk 'all)
-    (with-eval-after-load 'project
-      (define-key project-prefix-map "m" #'magit-project-status)
-      (add-to-list 'project-switch-commands '(magit-project-status "Magit") t)))
-#+end_src
-
-** git-gutter
-This shows modified/added/deleted lines directly in the editor.
-#+begin_src emacs-lisp
-  (use-package git-gutter
-    :config
-    (global-git-gutter-mode 1)
-    ;; useful key bindings (not set yet):
-    :bind
-    ("C-x v t" . git-gutter-mode) ; enabled by default?
-    ("C-x v s" . git-gutter:stage-hunk)
-    ("C-x v n" . git-gutter:next-hunk)
-    ("C-x v p" . git-gutter:previous-hunk)
-    ("C-x v T" . git-timemachine)
-    ("C-x v R" . browse-at-remote))
-#+end_src
 
 ** Forgejo support
 #+begin_src emacs-lisp
@@ -1491,6 +1463,7 @@ Enriches selection lists (and completion minibuffers, e.g. consult) with additio
 #+end_src
 
 ** Syntax check with flycheck
+** magit: Git support
 
 #+begin_src emacs-lisp
   (use-package flycheck
@@ -1501,17 +1474,32 @@ Enriches selection lists (and completion minibuffers, e.g. consult) with additio
 #+end_src
  
 ** Spell checking with jinx (using enchant)
+
+** git-gutter + fringe
+This shows modified/added/deleted lines directly in the editor.
 #+begin_src emacs-lisp
   (use-package jinx
     :ensure nil
+  (use-package git-gutter
     :config
     (setq jinx-languages "en_US de_DE")
     (add-hook 'emacs-startup-hook #'global-jinx-mode)
     (keymap-global-set "M-$" #'jinx-correct)
     (keymap-global-set "C-M-$" #'jinx-languages))
 #+end_src
+    (global-git-gutter-mode 1)
+    ;; useful key bindings (not set yet):
+    :bind
+    ("C-x v t" . git-gutter-mode) ; enabled by default?
+    ("C-x v s" . git-gutter:stage-hunk)
+    ("C-x v n" . git-gutter:next-hunk)
+    ("C-x v p" . git-gutter:previous-hunk)
+    ("C-x v T" . git-timemachine)
+    ("C-x v R" . browse-at-remote))
 
 ** DeepL with txl
+  (use-package git-gutter-fringe)
+#+end_src
 
 #+begin_src emacs-lisp :tangle no
   (use-package txl
