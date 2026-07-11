@@ -1016,6 +1016,14 @@ Search for literature in literature databases like arxiv and dblp
 ** AucTeX
 - https://github.com/progfolio/elpaca/issues/245
 - https://github.com/progfolio/elpaca/wiki/auctex
+** LanguageTool
+- Download is somewhat hidden: https://languagetool.org/download/
+- There are different Emacs integrations:
+  - https://github.com/emacs-languagetool/flymake-languagetool (Flymake is part of Emacs)
+  - https://github.com/emacs-languagetool/flycheck-languagetool (Flycheck is not Emacs built in)
+    - https://github.com/PillFall/languagetool.el
+  - https://github.com/mhayashi1120/Emacs-langtool
+  - any maybe more
 
 #+begin_src emacs-lisp
   (use-package tex
@@ -1025,6 +1033,12 @@ Search for literature in literature databases like arxiv and dblp
   	  :build (:not elpaca--compile-info) ;; Make will take care of this step
   	  :files ("*.el" "doc/*.info*" "etc" "images" "latex" "style")
   	  :version (lambda (_) (require 'tex-site) AUCTeX-version))
+  (use-package flymake-languagetool :ensure t
+    :hook ((text-mode       . flymake-languagetool-load)
+         (latex-mode      . flymake-languagetool-load)
+         (org-mode        . flymake-languagetool-load)
+         (markdown-mode   . flymake-languagetool-load)
+         (mu4e-compose-mode . flymake-languagetool-load))
     :config
     (setq TeX-auto-save t)
     (setq TeX-parse-self t)
@@ -1053,6 +1067,12 @@ Two modes:
 #+begin_src emacs-lisp
   (use-package just-mode :ensure t)
   (use-package justl :ensure t)
+    ;; Local Server Configuration
+    (setq flymake-languagetool-server-jar "/home/flake/.languagetool/languagetool-server.jar"))
+    ;; (setq flymake-languagetool-server-jar nil)
+    ;; (setq flymake-languagetool-language nil)
+    ;;(setq flymake-languagetool-url "https://api.languagetool.org")
+    ;; (setq flymake-languagetool-url "http://localhost:8081"))
 #+end_src
 
 ** web-mode & php-mode
