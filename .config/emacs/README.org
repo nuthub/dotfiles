@@ -1959,6 +1959,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
     ;; this lets correctly reply to message where a recipient address contains
     ;; a comma, like in "Julian Flake (Softwaretechnik, Informatik) <flake@uni-koblenz.de>"
     (setq rfc2047-quote-decoded-words-containing-tspecials t)
+    ;; It seems that not all MUAs do implement format=flowed (https://www.ietf.org/rfc/rfc2646.txt https://www.ietf.org/rfc/rfc3676.txt) .
     (setq mu4e-compose-format-flowed t)
     (setq mu4e-compose-in-new-frame t)
     (setq message-cite-function 'message-cite-original) ;; alternative: 'message-cite-original-without-signature
