@@ -976,36 +976,6 @@ htmlize is used by org to export to HTML.
 #+end_src
 
 * Other major modes
-** Transient
-#+begin_src emacs-lisp
-  (use-package transient
-    :config
-    (transient-define-prefix jf/my-menu ()
-      "Mein benutzerdefiniertes Menü."
-      [["Org"
-        ("o a" "Agenda" org-agenda-list)
-        ("o d" "Deadlines" (lambda () (interactive) (org-agenda nil "d")))
-        ("o p" "Start/Stop Pomodoro" (lambda () (interactive) (org-pomodoro)))]
-       ["Pomodoro"
-        ("p s" "Start/Stop Pomodoro" (lambda () (interactive) (org-pomodoro)))
-        ("p g" "Go to current item" org-clock-goto)]
-       ["Mail"
-        ("m m" "mu4e" mu4e)
-        ("m c" "Compose" mu4e-compose-mail)
-        ("m s" "Sync all" (lambda() (interactive) (shell-command "mbsync -a" nil nil)))]]
-      [["Matrix"
-        ("e c" "Connect" ement-connect)
-        ("e r" "List Rooms" ement-room-list)]
-       ["Writing"
-        ("w c" "Citar" citar-open)
-        ("w b" "Biblio" biblio-lookup)]
-       ["Projects"
-        ("g g" "Magit" magit-status)]
-       ["AI"
-        ("a i" "gptel" gptel)
-        ("a m" "gptel menu" gptel-menu)]
-       ]))
-#+end_src
 
 ** magit: Git support
 
@@ -1270,6 +1240,37 @@ gptel-quick for simple explanations in a popup.
 
 ** eglot + eglot-java
 +The built-in LSP client. It seems that more Java people are using lsp-java and not eglot+
+** Transient
+#+begin_src emacs-lisp
+  (use-package transient
+    ;; :ensure (:wait t) :demand t ; without this wait, I get errors by packages that depend on transient
+    :config
+    (transient-define-prefix jf/my-menu ()
+      "Mein benutzerdefiniertes Menü."
+      [["Org"
+        ("o a" "Agenda" org-agenda-list)
+        ("o d" "Deadlines" (lambda () (interactive) (org-agenda nil "d")))
+        ("o p" "Planning" (lambda () (interactive) (org-agenda nil "p")))]
+       ["Pomodoro"
+        ("p s" "Start/Stop Pomodoro" (lambda () (interactive) (org-pomodoro)))
+        ("p g" "Go to current item" org-clock-goto)]
+       ["Mail"
+        ("m" "mu4e" mu4e-transient-menu)]]
+      [["Matrix"
+        ("e c" "Connect" ement-connect)
+        ("e r" "List Rooms" ement-room-list)]
+       ["Writing"
+        ("w c" "Citar" citar-open)
+        ("w b" "Biblio" biblio-lookup)]
+       ["Projects"
+        ("g g" "Magit" magit-status)
+        ("f p" "Forgejo PR List" forgejo-pull-list)
+        ("f w" "Forgejo Watch List" forgejo-watch-list)]
+       ["AI"
+        ("a i" "gptel" gptel)
+        ("a m" "gptel menu" gptel-menu)]
+       ]))
+#+end_src
 
 #+begin_src emacs-lisp
   (use-package eglot-java :ensure t
