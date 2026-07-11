@@ -626,18 +626,18 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
 *** Org capture templates
 
 #+begin_src emacs-lisp
-    (defun jf/org-setup-capture-templates ()
-      (setq org-capture-templates
-    	'(
-      	  ("t" "Todo" entry (file "~/org/agenda/inbox.org")
-               "* TODO %?\n  %i")
-      	  ("m" "Todo from Mail" entry (file "~/org/agenda/inbox.org")
-               "* TODO %?\n- Mail from %:fromname: %a")
-      	  ("l" "Meeting notes (here)" entry (here)
-               "* %u %^{title}\nParticipants: %?\n- "
-  	     :jump-to-captured t)
-      	  ("L" "Todo with Link" entry (file "~/org/agenda/inbox.org")
-               "* TODO %?\n- Link: %a"))))
+  (defun jf/org-setup-capture-templates ()
+    (setq org-capture-templates
+  	'(
+  	  ("t" "Todo" entry (file "~/org/agenda/inbox.org")
+  	   "* TODO %?\n  %i")
+  	  ("m" "Todo from Mail" entry (file "~/org/agenda/inbox.org")
+  	   "* TODO %?\n- Mail from %:fromname: %a")
+  	  ("l" "Meeting notes (here)" entry (here)
+  	   "* %u %^{title}\nParticipants: %?\n- "
+  	   :jump-to-captured t)
+  	  ("L" "Todo with Link" entry (file "~/org/agenda/inbox.org")
+             "* TODO %?\n- Link: %a"))))
 #+end_src
 
 *** LaTeX export classes + beamer support
@@ -659,27 +659,26 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
     ;; ox-latex: Add KomaScript to the known classes
     (with-eval-after-load 'ox-latex
       (add-to-list 'org-latex-classes '("scrbook"
-                                	      "\\documentclass[11pt]{scrbook}"
-                                	      ("\\chapter{%s}" . "\\chapter*{%s}")
-                                	      ("\\section{%s}" . "\\section*{%s}")
-                                	      ("\\subsection{%s}" . "\\subsection*{%s}")
-                                	      ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                                	      ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                                	      ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+  				      "\\documentclass[11pt]{scrbook}"
+  				      ("\\chapter{%s}" . "\\chapter*{%s}")
+                                        ("\\section{%s}" . "\\section*{%s}")
+                                        ("\\subsection{%s}" . "\\subsection*{%s}")
+                                        ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                                        ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                                        ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
     (with-eval-after-load 'ox-latex
       (add-to-list 'org-latex-classes '("scrartcl"
-                                	      "\\documentclass[11pt]{scrartcl}"
-                                	      ("\\section{%s}" . "\\section*{%s}")
-                                	      ("\\subsection{%s}" . "\\subsection*{%s}")
-                                	      ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                                	      ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                                	      ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+                                        "\\documentclass[11pt]{scrartcl}"
+                                        ("\\section{%s}" . "\\section*{%s}")
+                                        ("\\subsection{%s}" . "\\subsection*{%s}")
+                                        ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                                        ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                                        ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
     (with-eval-after-load 'ox-latex
       (add-to-list 'org-latex-classes '("moderncv"
-                                	      "\\documentclass{moderncv}"
-                                	      ("\\section{%s}" . "\\section*{%s}")
-        				      ("\\subsection{%s}" . "\\subsection{%s}"))))
-
+    				      "\\documentclass{moderncv}"
+    				      ("\\section{%s}" . "\\section*{%s}")
+    				      ("\\subsection{%s}" . "\\subsection{%s}"))))
     ;; beamer export setup
     (add-to-list 'org-export-backends 'beamer)
     (setq org-beamer-environments-extra
