@@ -1046,6 +1046,30 @@ Opens a terminal in the directory that matches the active buffer. Even works ove
     				      "\\documentclass{moderncv}"
     				      ("\\section{%s}" . "\\section*{%s}")
     				      ("\\subsection{%s}" . "\\subsection{%s}"))))
+    (with-eval-after-load 'ox-latex
+      (add-to-list 'org-latex-classes '("ceurart"
+    				      "\\documentclass{ceurart}
+  \\sloppy
+  \\usepackage{listings}
+  \\lstset{breaklines=true}
+  % Default Packages
+  \[NO-DEFAULT-PACKAGES]
+  \\usepackage{amsmath}
+  \\usepackage{fontspec}
+  \\usepackage{graphicx}
+  \\usepackage{longtable}
+  \\usepackage{wrapfig}
+  \\usepackage{rotating}
+  \\usepackage[normalem]{ulem}
+  \\usepackage{hyperref}
+  % Packages
+  \[PACKAGES]
+  % Extra Packages
+  \[EXTRA]"
+  				      ("\\section{%s}" . "\\section*{%s}")
+    				      ("\\subsection{%s}" . "\\subsection{%s}")
+  				      ("\\subsubsection{%s}" . "\\subsubsection{%s}")
+  				      ("\\paragraph{%s}" . "\\paragraph{%s}"))))
     ;; beamer export setup
     (add-to-list 'org-export-backends 'beamer)
     (setq org-beamer-environments-extra
