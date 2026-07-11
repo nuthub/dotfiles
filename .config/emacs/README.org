@@ -297,8 +297,10 @@ I use the Modus Themes. To switch between light (operandi) and dark (vivendi) th
 
 #+end_src
 
-** Spacious Padding
-#+begin_src emacs-lisp
+** COMMENT Spacious Padding
+CLOSED: [2026-04-07 Tue 12:54]
+
+#+begin_src emacs-lisp :tangle no
   (use-package spacious-padding
     :config
     (setq spacious-padding-widths
