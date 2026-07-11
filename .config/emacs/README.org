@@ -868,6 +868,14 @@ Visualize the org roam graph in browser.
   	org-roam-ui-open-on-start t))
 #+end_src
 
+** Org habits
+#+begin_src emacs-lisp
+  (use-package org-habit
+    :config
+    (add-to-list 'org-modules 'org-habit t)
+    (setq org-habit-graph-column 60))
+#+end_src
+
 ** HTML Export
 
 htmlize is used by org to export to HTML.
