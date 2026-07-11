@@ -971,18 +971,6 @@ htmlize is used by org to export to HTML.
 * Other major modes
 
 
-** Forgejo support
-#+begin_src emacs-lisp
-  (use-package forgejo
-    :config
-    (setq forgejo-hosts '(("https://codeberg.org")))
-    ;; Example watch rules
-    (setq forgejo-watch-rules
-     '(("thanosapollo/emacs-forgejo")
-       ("guix/guix" . "state:open label:team-emacs")
-       ("*" . "author:nutcase")))
-    (setq forgejo-watch-filter-default "read:no"))
-#+end_src
 
 
 ** pdf-tools
@@ -1496,6 +1484,9 @@ This shows modified/added/deleted lines directly in the editor.
 
 #+begin_src emacs-lisp :tangle no
   (use-package txl
+** Forgejo support
+#+begin_src emacs-lisp
+  (use-package forgejo
     :config
     (setq txl-languages '(DE . EN-US))
     (setq txl-deepl-api-url "https://api-free.deepl.com/v2/translate") ; free plan
@@ -1503,9 +1494,15 @@ This shows modified/added/deleted lines directly in the editor.
     (setq txl-deepl-api-key (auth-info-password
                              (nth 0 (auth-source-search
                                      :host "deepl.com")))))
+    (setq forgejo-hosts '(("https://codeberg.org")))
+    (setq forgejo-watch-rules
+     '(("*" . "author:nutcase")))
+    (setq forgejo-watch-filter-default nil)); "read:no"))
 #+end_src
 
 ** DeepL with gt.el
+** Agitjo: AGit workflow with magit
+
 #+begin_src emacs-lisp
   (use-package gt
     :config
@@ -1527,6 +1524,8 @@ This shows modified/added/deleted lines directly in the editor.
       (buffer . ,(gt-translator
                 :engines (gt-deepl-engine)
                 :render (gt-buffer-render))))))
+  (use-package agitjo
+    :config (agitjo-setup "#"))
 #+end_src
 
 Worth a try to use: EU translation service: https://translation.ec.europa.eu/tools-and-resources/ai-translation-and-language-tools_en
