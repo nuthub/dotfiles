@@ -1949,7 +1949,8 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
     (require 'smtpmail)
     (setq smtpmail-queue-mail nil)  ;; start in direct mode
     (setq smtpmail-queue-dir "~/Mail/queue/cur")
-    (setq mail-user-agent 'mu4e-user-agent)
+    (setq mail-user-agent #'mu4e-user-agent)
+    (setq message-mail-user-agent t)
     (setq message-send-mail-function 'smtpmail-send-it)
     (setq message-kill-buffer-on-exit t)
     ;; show only mail addresses of the last 365 days in completion buffer
