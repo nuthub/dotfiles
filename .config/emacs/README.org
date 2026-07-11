@@ -116,7 +116,6 @@ Open a file with a registered application (from mimeapps.list)
     (define-key dired-mode-map "o" #'dired-open-with)
 
     (defun jf/xdg-open-with ()
-      ;; alternative: https://github.com/emacs-exwm/xdg-launcher        
       "Open the current buffer's file with an XDG app."
       (interactive)
       (unless (buffer-file-name)
@@ -127,14 +126,6 @@ Open a file with a registered application (from mimeapps.list)
     	   (cmd (dired-open-with--xdg-format-exec (gethash "Exec" app) path)))
         (dired-open-with--start-process cmd)))
     (global-set-key (kbd "C-<f6>") 'jf/xdg-open-with))
-#+end_src
-
-#+begin_src elisp
-  (use-package xdg-launcher
-    :ensure (xdg-launcher
-  	   :type git
-  	   :host github
-  	   :repo "emacs-exwm/xdg-launcher"))
 #+end_src
 
 ** Keep folders clean
