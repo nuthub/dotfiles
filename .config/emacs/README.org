@@ -110,7 +110,7 @@ Make use of system's trash and use y-or-n-p instead of yes-or-no-p
 ** TODO xdg-open-with / dired-open-with
 Open a file with a registered application (from mimeapps.list)
 #+begin_src emacs-lisp
-  (use-package dired-open-with :ensure t
+  (use-package dired-open-with
     :after dired
     :config
     (define-key dired-mode-map "o" #'dired-open-with)
@@ -1402,7 +1402,7 @@ htmlize is used by org to export to HTML.
   - any maybe more
 
 #+begin_src emacs-lisp
-  (use-package flymake-languagetool :ensure t
+  (use-package flymake-languagetool
     :hook ((text-mode       . flymake-languagetool-load)
          (latex-mode      . flymake-languagetool-load)
          (org-mode        . flymake-languagetool-load)
