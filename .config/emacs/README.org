@@ -421,25 +421,6 @@ Persist history over Emacs restarts. E.g. Vertico sorts by history position.
     (editorconfig-mode))
 #+end_src
 
-** Smart paranthesis & Highlight (rainbowishly) parenthesis
-
-An alternative to /smartparens/ is /paren/.
-
-#+begin_src emacs-lisp
-  (use-package smartparens
-    :config
-    (progn
-      (require 'smartparens-config)
-      (smartparens-global-mode t)
-      (show-paren-mode t)))
-#+end_src
-
-#+begin_src emacs-lisp
-  (use-package rainbow-delimiters
-    :config
-    (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
-#+end_src
-
 ** All-the-icons
 
 You must run 'M-x all-the-icons-install-fonts' to actually download the icons to '~/.local/share/fonts/'.
@@ -626,8 +607,19 @@ Enriches selection lists (and completion minibuffers, e.g. consult) with additio
     (marginalia-mode))
 #+end_src
 
-** Corfu (COmpletion in Region FUnction)
-*** Corfu itself
+** In buffer completion
+
+*** COMMENT Company
+CLOSED: [2026-07-13 Mon 23:19]
+#+begin_src emacs-lisp :tangle no
+  (use-package company
+    :config
+    (add-hook 'after-init-hook 'global-company-mode))
+#+end_src
+
+*** Corfu (COmpletion in Region FUnction)
+
+**** Corfu itself
 #+begin_src emacs-lisp
   (use-package corfu
     :config
@@ -656,7 +648,7 @@ Enriches selection lists (and completion minibuffers, e.g. consult) with additio
     (global-corfu-mode))
 #+end_src
 
-*** Nerd Icons for corfu
+**** Nerd Icons for corfu
 #+begin_src emacs-lisp
   (use-package nerd-icons-corfu
     :after corfu
@@ -688,14 +680,6 @@ CLOSED: [2026-04-29 Wed 15:23]
     (add-hook 'prog-mode-hook #'flymake-mode)
     (add-hook 'mu4e-compose-mode-hook #'flymake-mode)
     (add-hook 'org-mode-hook #'flymake-mode))
-#+end_src
-
-** Indentation guides
-#+begin_src emacs-lisp
-  (use-package highlight-indent-guides
-    :config
-    (setq highlight-indent-guides-method 'character)
-    (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
 #+end_src
 
 ** embark & embark-consult
@@ -775,6 +759,33 @@ The global keybinding 'C-x u' is set below.
     :config
     (aggressive-indent-global-mode 1)
     (add-to-list 'aggressive-indent-excluded-modes 'scheme-mode))
+#+end_src
+
+*** Indentation guides
+#+begin_src emacs-lisp
+  (use-package highlight-indent-guides
+    :config
+    (setq highlight-indent-guides-method 'character)
+    (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
+#+end_src
+
+*** Smart paranthesis & Highlight (rainbowishly) parenthesis
+
+An alternative to /smartparens/ is /paren/.
+
+#+begin_src emacs-lisp
+  (use-package smartparens
+    :config
+    (progn
+      (require 'smartparens-config)
+      (smartparens-global-mode t)
+      (show-paren-mode t)))
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package rainbow-delimiters
+    :config
+    (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 #+end_src
 
 ** openwith
