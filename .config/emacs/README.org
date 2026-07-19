@@ -2388,3 +2388,9 @@ Best option would be to fix ~tramp-process-running-p~ upstream. An emacs lisp ve
     ;; Bind my transient menu
     (global-set-key (kbd "<f12>") 'jf/my-menu))
 #+end_src
+
+* Epilog
+
+# Local Variables:
+# eval: (flymake-mode -1)
+# End:
