@@ -855,6 +855,31 @@ Opens a terminal in the directory that matches the active buffer. Even works ove
     (global-set-key (kbd "C-<f5>") #'terminal-here-launch))
 #+end_src
 
+** tree-sitter
+- Getting started: https://www.masteringemacs.org/article/how-to-get-started-tree-sitter
+- A lot tree-sitter-grammars are available as guix packages
+- to see, which ts-enabled major mode emacs knows, run ~C-h a "-ts-mode"$~
+
+#+begin_src  emacs-lisp
+  (use-package treesit
+    :config
+    (setq treesit-extra-load-path
+  	  (list
+  	   "/run/current-system/profile/lib/tree-sitter/"
+  	   "~/.guix-home/profile/lib/tree-sitter/"
+  	   "~/.guix-profile/lib/tree-sitter/")))
+#+end_src
+
+- treesit-auto tries to automatically load a tree-sitter major mode, when available:
+
+#+begin_src emacs-lisp
+  (use-package treesit-auto
+    :after treesit
+    :config
+    ;; (treesit-auto-install 'prompt) ; if I wouldn't use the guix packaged versions
+  (global-treesit-auto-mode))
+#+end_src
+
 * Org mode
 ** Org Mode basics: Look&Feel, task management, capture templates, LaTex export
 *** Org's basics & Look & Feel
