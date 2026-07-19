@@ -2320,7 +2320,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
 ** mu4e-walk (move mail addresses in compose buffer)
 
 #+begin_src elisp
-  (use-package mu4e-walk :ensure t
+  (use-package mu4e-walk
     :after mu4e
     :config
     (add-hook 'mu4e-compose-mode-hook 'mu4e-walk-add-keybindings-compose-mode))

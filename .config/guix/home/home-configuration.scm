@@ -34,6 +34,7 @@
 	     "git" "git:send-email" "git:gui" "git-delta"
 	     ;; emacs & related
 	     "emacs-pgtk" "emacs-pdf-tools" "emacs-vterm" "python-proselint" "gnuplot" ; enchant is needed by jinx; "emacs-pgtk-xwidgets"
+	     "isync" "mu" "goimapnotify" "emacs-mu4e-walk"
 	     "emacs-guix" "emacs-geiser" "emacs-geiser-guile"
 	     "emacs-org-superstar" "emacs-rainbow-delimiters"
 	     "emacs-vertico" "emacs-orderless" "emacs-consult" "emacs-corfu" "emacs-marginalia" "emacs-embark" "emacs-vundo" "emacs-aggressive-indent"
@@ -54,7 +55,6 @@
 	     "emacs-ement"
 	     "grip" ; needed for grip-mode (Markdown Preview by GitHub)
 	     "make" "perl" "texinfo" ; building auctex for elpaca needs these
-	     "isync" "mu" "goimapnotify"
 
 	     ;; Programming languages
 	     
