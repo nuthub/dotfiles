@@ -765,7 +765,8 @@ The global keybinding 'C-x u' is set below.
   (use-package vundo)
 #+end_src
 
-** Agressive Indent
+** Indentation and parenthesis
+*** Agressive Indent
 #+begin_src emacs-lisp
   (use-package aggressive-indent
     :config
