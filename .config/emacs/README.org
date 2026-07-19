@@ -1753,13 +1753,14 @@ see https://github.com/vedang/pdf-tools/issues/339
 
 ** JustFile mode
 
-Two modes:
-- just-mode to edit justfiles
-- justl.el to run just on justfiles
+There are three different packages:
+- just-mode is a major mode for editing justfiles.
+- just-ts-mode is like just-mode, but using a tree sitter grammar.
+- justl.el is a major mode to run just on justfiles
 
 #+begin_src emacs-lisp
-  (use-package just-mode :ensure t)
-  (use-package justl :ensure t)
+  (use-package just-ts-mode)
+  ;; (use-package justl :ensure t)
 #+end_src
 
 ** web-mode & php-mode
