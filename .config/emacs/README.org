@@ -171,6 +171,15 @@ Confirmation dialog is annoying, when files are opened externally, e.g. via dire
     (setq large-file-warning-threshold nil))
 #+end_src
 
+** Kill dired buffers instead of quitting them
+- https://www.emacswiki.org/emacs/DiredReuseDirectoryBuffer says:
+  Starting with Emacs 28.1, you can customize option ‘dired-kill-when-opening-new-dired-buffer’ to non-`nil`, to kill the current Dired buffer when you create a new one.
+#+begin_src emacs-lisp
+  (use-package emacs
+    :config
+    (setq dired-kill-when-opening-new-dired-buffer t))
+#+end_src
+
 * Look & feel
 ** Startup / Welcome buffer
 This is from https://xenodium.com/bending-emacs-episode-2
@@ -328,15 +337,6 @@ CLOSED: [2026-04-07 Tue 12:54]
   (use-package emacs
     :config
     (setq save-interprogram-paste-before-kill t))
-#+end_src
-
-** Kill dired buffers instead of quitting them
-- https://www.emacswiki.org/emacs/DiredReuseDirectoryBuffer says:
-  Starting with Emacs 28.1, you can customize option ‘dired-kill-when-opening-new-dired-buffer’ to non-`nil`, to kill the current Dired buffer when you create a new one.
-#+begin_src emacs-lisp
-  (use-package emacs
-    :config
-    (setq dired-kill-when-opening-new-dired-buffer t))
 #+end_src
 
 ** Window numbering (with winum)
