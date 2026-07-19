@@ -23,7 +23,7 @@
 
 ** Some localizations for the calendar
 #+begin_src emacs-lisp
-  (use-package emacs
+  (use-package calendar
     :config
     (setq calendar-week-start-day 1
   	calendar-day-name-array ["Sonntag"
@@ -47,14 +47,11 @@
   				   "Dezember"]
   	calendar-intermonth-text
   	'(propertize
-     	  (format "%2d"
-     		  (car
-     		   (calendar-iso-from-absolute
-                      (calendar-absolute-from-gregorian (list month day year)))))
-     	  'font-lock-face 'font-lock-function-name-face))
-
-    (setq solar-n-hemi-seasons
-  	'("Frühlingsanfang" "Sommeranfang" "Herbstanfang" "Winteranfang"))
+  	  (format "%2d"
+  		  (car
+  		   (calendar-iso-from-absolute
+  		    (calendar-absolute-from-gregorian (list month day year)))))
+  	  'font-lock-face 'font-lock-function-name-face))
 
     ;; for M-x sunrise-sunset
     (setq calendar-latitude 51.6)
@@ -62,15 +59,15 @@
 
     (setq holiday-general-holidays
   	'((holiday-fixed 1 1 "Neujahr")
-            (holiday-fixed 5 1 "1. Mai / Tag der Arbeit")
+  	  (holiday-fixed 5 1 "1. Mai / Tag der Arbeit")
             (holiday-fixed 10 3 "Tag der Deutschen Einheit")))
 
     ;; Feiertage für Bayern, weitere auskommentiert
     (setq holiday-christian-holidays
   	'(;;(holiday-fixed 1 6 "Heilige Drei Könige")
-            (holiday-easter-etc -48 "Rosenmontag")
-            ;; (holiday-easter-etc -3 "Gründonnerstag")
-            (holiday-easter-etc  -2 "Karfreitag")
+  	  (holiday-easter-etc -48 "Rosenmontag")
+  	  ;; (holiday-easter-etc -3 "Gründonnerstag")
+  	  (holiday-easter-etc  -2 "Karfreitag")
             (holiday-easter-etc   0 "Ostersonntag")
             (holiday-easter-etc  +1 "Ostermontag")
             (holiday-easter-etc +39 "Christi Himmelfahrt")
@@ -87,6 +84,12 @@
             (holiday-float 12 0 -1 "4. Advent" 24)
             (holiday-fixed 12 25 "1. Weihnachtstag")
             (holiday-fixed 12 26 "2. Weihnachtstag"))))
+
+  (use-package solar
+    :config
+    (setq solar-n-hemi-seasons
+  	'("Frühlingsanfang" "Sommeranfang" "Herbstanfang" "Winteranfang")))
+
 #+end_src
 * File handling
 ** dired variables: trash, listings and dialogs
