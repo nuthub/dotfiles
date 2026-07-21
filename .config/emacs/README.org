@@ -801,6 +801,31 @@ An alternative to /smartparens/ is /paren/.
     (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 #+end_src
 
+** tree-sitter
+- Getting started: https://www.masteringemacs.org/article/how-to-get-started-tree-sitter
+- A lot tree-sitter-grammars are available as guix packages
+- to see, which ts-enabled major mode emacs knows, run ~C-h a "-ts-mode"$~
+
+#+begin_src  emacs-lisp
+  (use-package treesit
+    :config
+    (setq treesit-extra-load-path
+  	  (list
+  	   "/run/current-system/profile/lib/tree-sitter/"
+  	   "~/.guix-home/profile/lib/tree-sitter/"
+  	   "~/.guix-profile/lib/tree-sitter/")))
+#+end_src
+
+- treesit-auto tries to automatically load a tree-sitter major mode, when available:
+
+#+begin_src emacs-lisp
+  (use-package treesit-auto
+    :after treesit
+    :config
+    ;; (treesit-auto-install 'prompt) ; if I wouldn't use the guix packaged versions
+  (global-treesit-auto-mode))
+#+end_src
+
 ** openwith
 
 #+begin_src emacs-lisp
@@ -855,37 +880,29 @@ Opens a terminal in the directory that matches the active buffer. Even works ove
     (global-set-key (kbd "C-<f5>") #'terminal-here-launch))
 #+end_src
 
-** tree-sitter
-- Getting started: https://www.masteringemacs.org/article/how-to-get-started-tree-sitter
-- A lot tree-sitter-grammars are available as guix packages
-- to see, which ts-enabled major mode emacs knows, run ~C-h a "-ts-mode"$~
-
-#+begin_src  emacs-lisp
-  (use-package treesit
-    :config
-    (setq treesit-extra-load-path
-  	  (list
-  	   "/run/current-system/profile/lib/tree-sitter/"
-  	   "~/.guix-home/profile/lib/tree-sitter/"
-  	   "~/.guix-profile/lib/tree-sitter/")))
-#+end_src
-
-- treesit-auto tries to automatically load a tree-sitter major mode, when available:
-
-#+begin_src emacs-lisp
-  (use-package treesit-auto
-    :after treesit
-    :config
-    ;; (treesit-auto-install 'prompt) ; if I wouldn't use the guix packaged versions
-  (global-treesit-auto-mode))
-#+end_src
-
 * Org mode
 ** Org Mode basics: Look&Feel, task management, capture templates, LaTex export
+*** Setup org / org-mode-map key bindings
+#+begin_src emacs-lisp
+  (defun jf/org-timestamp-inactive ()
+    (interactive)
+    (org-time-stamp nil t))
+
+  (use-package org
+    ;; the bind may defer the package loading, see documentation (C-h f use-package RET)
+    :bind (:map org-mode-map
+                ("C-c C-<left>" . org-promote-subtree)
+                ("C-c C-<right>" . org-demote-subtree)
+                ("C-c ," . jf/org-timestamp-inactive)
+  	      ("C-<f6>" . jf/clone-indirect-buffer-and-narrow-to-subtree)))
+#+end_src
+
 *** Org's basics & Look & Feel
 
 #+begin_src emacs-lisp
-  (defun jf/org-setup-look-and-feel ()
+  (use-package org
+    ;;  defun jf/org-setup-look-and-feel ()
+    :config
     (set-face-underline 'org-ellipsis nil)
     (setq org-ellipsis " …")
     (setq org-clock-sound "~/Music/alarm.wav")
@@ -898,12 +915,12 @@ Opens a terminal in the directory that matches the active buffer. Even works ove
     (setq org-num-skip-tags (list "ignore" "noexport" "unnumbered"))
     (setq org-goto-interface 'outline-path-completion)
     (add-hook 'org-mode-hook (lambda ()
-       			     (visual-line-mode 1)
-  			     ;;(flycheck-mode -1)
-  			     (variable-pitch-mode 1)))
-    ;; Force to fixed-pitch certain elements in org mode, when I switch to variable-pitch-mode
-    ;; To find the face at point, use 'C-u C-x =' (~what-cursor-position~ with prefix)
+         			     (visual-line-mode 1)
+    			     ;;(flycheck-mode -1)
+    			     (variable-pitch-mode 1)))
     (custom-theme-set-faces
+     ;; Force to fixed-pitch certain elements in org mode, when I switch to variable-pitch-mode
+     ;; To find the face at point, use 'C-u C-x =' ( ~what-cursor-position~ with prefix)
      'user
      '(org-block ((t (:inherit fixed-pitch))))
      '(org-block-begin-line ((t (:inherit shadow fixed-pitch))))
@@ -925,18 +942,20 @@ Opens a terminal in the directory that matches the active buffer. Even works ove
      '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
      '(org-target ((t (:inherit (fixed-pitch)))))
      '(org-todo ((t (:inherit (fixed-pitch)))))
-     '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
-    
-    ;; beautiful bullets
-    (use-package org-superstar
-      :config
-      (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))))
+     '(org-verbatim ((t (:inherit (shadow fixed-pitch)))))))
+
+  ;; beautiful bullets
+  (use-package org-superstar
+    :config
+    (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
 #+end_src
 
 *** Task Management, Agenda, Archive, Refiling
 
 #+begin_src emacs-lisp
-  (defun jf/org-setup-task-management-and-agenda ()
+  (use-package org
+  ;;defun jf/org-setup-task-management-and-agenda ()
+    :config
     ;; Task management
     (setq org-directory "~/org")
     (setq org-default-notes-file (concat org-directory "/inbox.org"))
@@ -1023,25 +1042,12 @@ Opens a terminal in the directory that matches the active buffer. Even works ove
     (setq org-archive-location (concat org-directory "/archive/archive-" (format-time-string "%Y" (current-time)) ".org::datetree/")))
 #+end_src
 
-*** Safe elisp org-links
-
-#+begin_src emacs-lisp
-  (defun jf/org-setup-safe-elisp-links ()
-    (setq org-confirm-elisp-link-whitelist
-  	'("(khalel-edit-calendar-event)"
-  	  "(progn (khalel-run-vdirsyncer) (khalel-import-events))"
-  	  "(org-roam-dailies-goto-yesterday)"
-  	  "(mu4e)"
-  	  "(org-agenda-list)"))
-
-    (setq org-confirm-elisp-link-not-regexp
-  	(mapconcat 'identity org-confirm-elisp-link-whitelist "\\|")))
-#+end_src
-
 *** Org capture templates
 
 #+begin_src emacs-lisp
-  (defun jf/org-setup-capture-templates ()
+  (use-package org
+    ;;defun jf/org-setup-capture-templates ()
+    :config
     (setq org-capture-templates
   	'(
   	  ("t" "Todo" entry (file "~/org/agenda/inbox.org")
@@ -1058,7 +1064,9 @@ Opens a terminal in the directory that matches the active buffer. Even works ove
 *** LaTeX export classes + beamer support
 
 #+begin_src emacs-lisp
-  (defun jf/org-setup-latex-export ()
+  (use-package org
+    ;;defun jf/org-setup-latex-export ()
+    :config
     ;; use luatex as LaTeX Compiler
     (setq org-latex-compiler "lualatex")
 
@@ -1141,7 +1149,9 @@ Opens a terminal in the directory that matches the active buffer. Even works ove
 
 *** Org babel
 #+begin_src emacs-lisp
-  (defun jf/org-setup-babel ()
+  (use-package org
+    ;;  defun jf/org-setup-babel ()
+    :config
     (org-babel-do-load-languages
      'org-babel-load-languages
      '((dot . t)
@@ -1153,11 +1163,12 @@ Opens a terminal in the directory that matches the active buffer. Even works ove
        (latex . t))))
 #+end_src
 
-*** Display PDF images inline
+*** UNUSED Display PDF images inline
 
 #+begin_src emacs-lisp
-  (defun jf/org-setup-display-pdf-inline ()
-
+  (use-package org
+    ;;  defun jf/org-setup-display-pdf-inline ()
+    :config
     ;; Display PDF files inline
     ;; taken from https://stackoverflow.com/questions/15407485/inline-pdf-images-in-org-mode
 
@@ -1218,27 +1229,19 @@ Opens a terminal in the directory that matches the active buffer. Even works ove
                       (push ov org-inline-image-overlays)))))))))))
 #+end_src
 
-*** Finally setup org / org-mode-map key bindings
-#+begin_src emacs-lisp
-  (defun jf/org-timestamp-inactive ()
-    (interactive)
-    (org-time-stamp nil t))
+*** UNUSED Safe elisp org-links
 
-  (use-package org
-    ;; the bind may defer the package loading, see documentation (C-h f use-package RET)
-    :bind (:map org-mode-map
-                ("C-c C-<left>" . org-promote-subtree)
-                ("C-c C-<right>" . org-demote-subtree)
-                ("C-c ," . jf/org-timestamp-inactive)
-  	      ("C-<f6>" . jf/clone-indirect-buffer-and-narrow-to-subtree))
-    :config
-    (jf/org-setup-look-and-feel)
-    (jf/org-setup-task-management-and-agenda)
-    (jf/org-setup-safe-elisp-links)
-    (jf/org-setup-capture-templates)
-    (jf/org-setup-latex-export)
-    (jf/org-setup-babel)
-    (jf/org-setup-display-pdf-inline))
+#+begin_src emacs-lisp
+  (defun jf/org-setup-safe-elisp-links ()
+    (setq org-confirm-elisp-link-whitelist
+  	'("(khalel-edit-calendar-event)"
+  	  "(progn (khalel-run-vdirsyncer) (khalel-import-events))"
+  	  "(org-roam-dailies-goto-yesterday)"
+  	  "(mu4e)"
+  	  "(org-agenda-list)"))
+
+    (setq org-confirm-elisp-link-not-regexp
+  	(mapconcat 'identity org-confirm-elisp-link-whitelist "\\|")))
 #+end_src
 
 ** Org mode exports: syntax highlighting with engrave-faces
