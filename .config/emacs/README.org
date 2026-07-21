@@ -897,7 +897,6 @@ Opens a terminal in the directory that matches the active buffer. Even works ove
     (setq org-num-skip-unnumbered t)
     (setq org-num-skip-tags (list "ignore" "noexport" "unnumbered"))
     (setq org-goto-interface 'outline-path-completion)
-    (setq org-cite-global-bibliography '("~/Documents/Literatur/Literatur.bib"))
     (add-hook 'org-mode-hook (lambda ()
        			     (visual-line-mode 1)
   			     ;;(flycheck-mode -1)
@@ -1481,8 +1480,8 @@ htmlize is used by org to export to HTML.
 
 Worth a try to use: EU translation service: https://translation.ec.europa.eu/tools-and-resources/ai-translation-and-language-tools_en
 
-** citar & citar-embark & citar-org-roam
-
+** Citations
+*** Citar
 Allows to browse bibtex file(s), insert citations, open files, links and notes. It's a helm-bibtext replacement.
 #+begin_src emacs-lisp
   (use-package citar
@@ -1490,23 +1489,32 @@ Allows to browse bibtex file(s), insert citations, open files, links and notes. 
     :after org
     :bind
     (:map minibuffer-local-map ("M-b" . citar-insert-preset))
-    (:map org-mode-map :package org ("C-c b" . #'org-cite-insert))
     :hook
     (LaTeX-mode . citar-capf-setup)
     (org-mode . citar-capf-setup)
     :config
-    (setq org-cite-global-bibliography '("~/Documents/Literatur/Literatur.bib"))
-    (setq org-cite-insert-processor 'citar)
-    (setq org-cite-follow-processor 'citar)
-    (setq org-cite-activate-processor 'citar)
-    ;; (setq org-cite-export-processors '((latex biblatex) (t basic)))
-    (setq citar-bibliography org-cite-global-bibliography)
+    (setq citar-bibliography '("~/Documents/Literatur/Literatur.bib"))
     (setq citar-library-paths '("~/Documents/Literatur/bibtex-pdfs"))
     (setq citar-notes-paths '("~/org/roam/bib"))
     (setq citar-at-point-function 'embark-act))
 #+end_src
 
-Embark integration is provided by /citar-embark/. Press C-. (or RET in org buffers) on any citation key to see possible actions.
+*** Org cite
+org cite handles citations in org buffers
+#+begin_src emacs-lisp
+  (use-package oc
+    :after org citar
+    :bind
+    (:map org-mode-map :package org ("C-c b" . #'org-cite-insert))
+    :config
+    (setq org-cite-global-bibliography citar-bibliography)
+    (setq org-cite-insert-processor 'citar)
+    (setq org-cite-follow-processor 'citar)
+    (setq org-cite-activate-processor 'citar))
+#+end_src
+
+*** citar-embark
+Embark integration is provided by ~citar-embark~. Press C-. (or RET in org buffers) on any citation key to see possible actions.
 #+begin_src emacs-lisp
   (use-package citar-embark
     :after citar embark
@@ -1515,10 +1523,11 @@ Embark integration is provided by /citar-embark/. Press C-. (or RET in org buffe
     (citar-embark-mode))
 #+end_src
 
+*** citar-org-roam
 The package /citar-org-roam/ provides usage of org roam to take bibliographical notes.
 #+begin_src emacs-lisp
   (use-package citar-org-roam
-    :after (citar org-roam)
+    :after citar org-roam
     :config
     (setq citar-org-roam-capture-template-key "n")
     (setq citar-org-roam-subdir "bib")
