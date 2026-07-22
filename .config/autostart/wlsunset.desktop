@@ -1,0 +1,4 @@
+[Desktop Entry]
+Exec=wlsunset -l 51.6 -L 7.1 -d 900 -t 3500 -T 5700
+Name=wlsunset
+Type=Application
