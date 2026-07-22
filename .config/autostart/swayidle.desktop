@@ -1,0 +1,4 @@
+[Desktop Entry]
+Exec=swayidle -w
+Name=swayidle for sway
+Type=Application
