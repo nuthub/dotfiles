@@ -1478,13 +1478,13 @@ htmlize is used by org to export to HTML.
   	 ))
     (setq gt-preset-translators
   	`((minibuffer . ,(gt-translator
-  			  :engines (gt-deepl-engine)
+  			  :engines (gt-google-engine)
   			  :render (gt-render)))
   	  (insert . ,(gt-translator
-  		      :engines (gt-deepl-engine)
+  		      :engines (gt-google-engine)
   		      :render (gt-insert-render)))
   	  (buffer . ,(gt-translator
-  		      :engines (gt-deepl-engine)
+  		      :engines (gt-google-engine)
   		      :render (gt-buffer-render))))))
 #+end_src
 
