@@ -669,6 +669,23 @@ CLOSED: [2026-07-13 Mon 23:19]
     (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
 #+end_src
 
+** yasnippets (snippet expansion)
+Snippet expansion
+- default key for expansion is <TAB>
+- company does not show snippets for completion-at-point, but there is ongoing work
+  what about corfu?
+
+#+begin_src emacs-lisp
+  (use-package yasnippet
+    :config
+    (yas-global-mode))
+#+end_src
+
+Snippets aren't included in the base package. Therefore, they need to be loaded separately.
+#+begin_src emacs-lisp
+  (use-package yasnippet-snippets)
+#+end_src
+
 ** Flymake / Flycheck
 - Flymake is built-in, flycheck is not
 - Flymake is GNU / FSF, flycheck is not
@@ -739,23 +756,6 @@ There are several minor modes for live preview of Markdown (or HTML):
     :config (setq grip-command 'auto) ;; auto, grip, go-grip or mdopen
     :bind (:map markdown-mode-command-map
                 ("g" . grip-mode)))
-#+end_src
-
-** yasnippets (snippet expansion)
-Snippet expansion
-- default key for expansion is <TAB>
-- company does not show snippets for completion-at-point, but there is ongoing work
-  what about corfu?
-
-#+begin_src emacs-lisp
-  (use-package yasnippet
-    :config
-    (yas-global-mode))
-#+end_src
-
-Snippets aren't included in the base package. Therefore, they need to be loaded separately.
-#+begin_src emacs-lisp
-  (use-package yasnippet-snippets)
 #+end_src
 
 ** vundo (vs. undo-tree)
