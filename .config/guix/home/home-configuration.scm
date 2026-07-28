@@ -8,7 +8,6 @@
              (gnu home services fontutils)
              (gnu home services pm)
 	     (gnu home services mcron)
-;;	     (gnu home services niri)
              (gnu home services shells)
 	     (gnu home services shepherd)
 	     (gnu home services sound))
@@ -88,15 +87,11 @@
 	     "xorg-server-xwayland"
 	     "xwayland-satellite"
 	     "xdg-utils" "xdg-user-dirs"
-	     ;; sway and niri need gtk
+	     ;; sway
+	     ;; sway needs/likes gtk + wlr portals
 	     "xdg-desktop-portal-gtk"
-	     ;; sway likes wlr
 	     "xdg-desktop-portal-wlr"
-	     ;; niri likes gnome
-	     "xdg-desktop-portal-gnome"
-	     ;; sway+niri
 	     "sway"
-	     "niri"
 	     "dex"
 	     "waybar"
 	     "swaybg"

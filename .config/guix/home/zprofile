@@ -17,11 +17,3 @@ if [ -z "$WAYLAND_DISPLAY" ] && [ -n "$XDG_VTNR" ] && [ "$XDG_VTNR" -eq 1 ] ; th
     exec sway > .sway.log 2>&1
 fi
 
-# If running from tty2 start niri
-if [ -z "$WAYLAND_DISPLAY" ] && [ -n "$XDG_VTNR" ] && [ "$XDG_VTNR" -eq 2 ] ; then
-    ## some of the wayland env variables are explained here: https://discourse.ubuntu.com/t/environment-variables-for-wayland-hackers/12750
-    export XDG_CURRENT_DESKTOP=niri
-    ## actually start niri (dbus session not necessary, it's started by a guix home shepherd service
-    exec niri --session > .niri.log 2>&1
-fi
-
