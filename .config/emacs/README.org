@@ -346,6 +346,7 @@ CLOSED: [2026-04-07 Tue 12:54]
 #+begin_src emacs-lisp
   (use-package winum
     :init
+    (setq winum-scope 'frame-local)
     (setq winum-keymap
   	(let ((map (make-sparse-keymap)))
   	  (define-key map (kbd "M-0") 'winum-select-window-0-or-10)
