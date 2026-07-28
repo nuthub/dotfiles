@@ -20,10 +20,10 @@
 
  (channel
   (name 'nutguix)
-  (url "https://github.com/nuthub/nutguix")
+  (url "https://codeberg.org/nutcase/nutguix")
   ;; to test local changes, either commit (without push) and make a `guix pull' with the following location
-  ;; or better: do a `guix install <package> -L ~/git/nutguix'
   ;;(url (string-append "file://" (getenv "HOME") "/git/nutguix"))
+  ;; or better: do a `guix install <package> -L ~/git/nutguix'
   (branch "main")
   (introduction (make-channel-introduction
 		 "1fe9a666b2e6c3398a5057f861986d3183bdab2a"
