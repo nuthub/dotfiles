@@ -1063,92 +1063,6 @@ Opens a terminal in the directory that matches the active buffer. Even works ove
              "* TODO %?\n- Link: %a"))))
 #+end_src
 
-*** LaTeX export classes + beamer support
-
-#+begin_src emacs-lisp
-  (use-package org
-    ;;defun jf/org-setup-latex-export ()
-    :config
-    ;; use luatex as LaTeX Compiler
-    (setq org-latex-compiler "lualatex")
-
-    ;; Include e set (or known email address)
-    (setq org-export-with-email t)
-
-    ;; compile latex in foreground to directly retrieve compilation errors
-    (setq org-export-in-background nil)
-
-    ;; use emacs's font-locking for syntax highlighting in LaTeX exports
-    (setq org-latex-src-block-backend 'engraved)
-
-    ;; ox-latex: Add KomaScript to the known classes
-    (with-eval-after-load 'ox-latex
-      (add-to-list 'org-latex-classes '("scrbook"
-  				      "\\documentclass[11pt]{scrbook}"
-  				      ("\\chapter{%s}" . "\\chapter*{%s}")
-                                        ("\\section{%s}" . "\\section*{%s}")
-                                        ("\\subsection{%s}" . "\\subsection*{%s}")
-                                        ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                                        ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                                        ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
-    (with-eval-after-load 'ox-latex
-      (add-to-list 'org-latex-classes '("scrartcl"
-                                        "\\documentclass[11pt]{scrartcl}"
-                                        ("\\section{%s}" . "\\section*{%s}")
-                                        ("\\subsection{%s}" . "\\subsection*{%s}")
-                                        ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-                                        ("\\paragraph{%s}" . "\\paragraph*{%s}")
-                                        ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
-    (with-eval-after-load 'ox-latex
-      (add-to-list 'org-latex-classes '("moderncv"
-    				      "\\documentclass{moderncv}"
-    				      ("\\section{%s}" . "\\section*{%s}")
-    				      ("\\subsection{%s}" . "\\subsection{%s}"))))
-    (with-eval-after-load 'ox-latex
-      (add-to-list 'org-latex-classes '("ceurart"
-    				      "\\documentclass{ceurart}
-  \\sloppy
-  \\usepackage{listings}
-  \\lstset{breaklines=true}
-  % Default Packages
-  \[NO-DEFAULT-PACKAGES]
-  \\usepackage{amsmath}
-  \\usepackage{fontspec}
-  \\usepackage{graphicx}
-  \\usepackage{longtable}
-  \\usepackage{wrapfig}
-  \\usepackage{rotating}
-  \\usepackage[normalem]{ulem}
-  \\usepackage{hyperref}
-  % Packages
-  \[PACKAGES]
-  % Extra Packages
-  \[EXTRA]"
-  				      ("\\section{%s}" . "\\section*{%s}")
-    				      ("\\subsection{%s}" . "\\subsection{%s}")
-  				      ("\\subsubsection{%s}" . "\\subsubsection{%s}")
-  				      ("\\paragraph{%s}" . "\\paragraph{%s}"))))
-    ;; beamer export setup
-    (add-to-list 'org-export-backends 'beamer)
-    (setq org-beamer-environments-extra
-      	'(("onlyenv" "O" "\\begin{onlyenv}%a" "\\end{onlyenv}")))
-
-    ;; koma-letter
-    (eval-after-load 'ox '(require 'ox-koma-letter))
-    (eval-after-load 'ox-koma-letter
-      '(progn
-         (add-to-list 'org-latex-classes
-                      '("my-koma-letter"
-            	      "\\documentclass[11pt,parskip,DIV=15,fromalign=right]\{scrlttr2\}
-            \\usepackage[german]{babel}
-            \\renewcommand{\\familydefault}{\\sfdefault}
-                   \[DEFAULT-PACKAGES]
-                   \[PACKAGES]
-                   \[EXTRA]"))
-
-         (setq org-koma-letter-default-class "my-koma-letter"))))
-#+end_src
-
 *** Org babel
 #+begin_src emacs-lisp
   (use-package org
@@ -1318,6 +1232,97 @@ Visualize the org roam graph in browser.
     :config
     (add-to-list 'org-modules 'org-habit t)
     (setq org-habit-graph-column 60))
+#+end_src
+
+** LaTeX export classes + beamer support
+
+#+begin_src emacs-lisp
+  (use-package org
+    ;;defun jf/org-setup-latex-export ()
+    :config
+    ;; use luatex as LaTeX Compiler
+    (setq org-latex-compiler "lualatex")
+
+    ;; Include e set (or known email address)
+    (setq org-export-with-email t)
+
+    ;; compile latex in foreground to directly retrieve compilation errors
+    (setq org-export-in-background nil)
+
+    ;; use emacs's font-locking for syntax highlighting in LaTeX exports
+    (setq org-latex-src-block-backend 'engraved)
+
+    ;; using capt-of and fontspec causes errors [2026-07-25 Sat]
+    (setq org-latex-default-packages-alist
+    	'((#1="" "amsmath" t ("lualatex" "xelatex"))
+    	  (#1# "fontspec" t ("lualatex" "xelatex"))
+    	  ("AUTO" "inputenc" t ("pdflatex"))
+    	  ("T1" "fontenc" t ("pdflatex"))
+    	  (#1# "graphicx" t)
+    	  (#1# "longtable" nil)
+    	  (#1# "wrapfig" nil)
+    	  (#1# "rotating" nil)
+    	  ("normalem" "ulem" t)
+    	  (#1# "amsmath" t ("pdflatex"))
+    	  (#1# "amssymb" t ("pdflatex"))
+  	  ;; (#1# "capt-of" nil)
+    	  (#1# "hyperref" nil)))
+
+    ;; ox-latex: Add KomaScript to the known classes
+    (with-eval-after-load 'ox-latex
+      (add-to-list 'org-latex-classes '("scrbook"
+    				      "\\documentclass[11pt]{scrbook}"
+    				      ("\\chapter{%s}" . "\\chapter*{%s}")
+                                        ("\\section{%s}" . "\\section*{%s}")
+                                        ("\\subsection{%s}" . "\\subsection*{%s}")
+                                        ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                                        ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                                        ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+    (with-eval-after-load 'ox-latex
+      (add-to-list 'org-latex-classes '("scrartcl"
+                                        "\\documentclass[11pt]{scrartcl}"
+                                        ("\\section{%s}" . "\\section*{%s}")
+                                        ("\\subsection{%s}" . "\\subsection*{%s}")
+                                        ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                                        ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                                        ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+    (with-eval-after-load 'ox-latex
+      (add-to-list 'org-latex-classes '("moderncv"
+      				      "\\documentclass{moderncv}"
+      				      ("\\section{%s}" . "\\section*{%s}")
+      				      ("\\subsection{%s}" . "\\subsection{%s}"))))
+    (with-eval-after-load 'ox-latex
+      (add-to-list 'org-latex-classes '("ceurart"
+      				      "\\documentclass{ceurart}
+    \\sloppy
+    \\usepackage{listings}
+    \\lstset{breaklines=true}
+    \[DEFAULT-PACKAGES]
+    \[PACKAGES]
+    \[EXTRA]"
+    				      ("\\section{%s}" . "\\section*{%s}")
+      				      ("\\subsection{%s}" . "\\subsection{%s}")
+    				      ("\\subsubsection{%s}" . "\\subsubsection{%s}")
+    				      ("\\paragraph{%s}" . "\\paragraph{%s}"))))
+    ;; beamer export setup
+    (add-to-list 'org-export-backends 'beamer)
+    (setq org-beamer-environments-extra
+        	'(("onlyenv" "O" "\\begin{onlyenv}%a" "\\end{onlyenv}")))
+
+    ;; koma-letter
+    (eval-after-load 'ox '(require 'ox-koma-letter))
+    (eval-after-load 'ox-koma-letter
+      '(progn
+         (add-to-list 'org-latex-classes
+                      '("my-koma-letter"
+              	      "\\documentclass[11pt,parskip,DIV=15,fromalign=right]\{scrlttr2\}
+              \\usepackage[german]{babel}
+              \\renewcommand{\\familydefault}{\\sfdefault}
+                     \[DEFAULT-PACKAGES]
+                     \[PACKAGES]
+                     \[EXTRA]"))
+
+         (setq org-koma-letter-default-class "my-koma-letter"))))
 #+end_src
 
 ** HTML Export
