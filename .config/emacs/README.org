@@ -688,11 +688,12 @@ CLOSED: [2026-04-29 Wed 15:23]
  
 *** flymake
 #+begin_src emacs-lisp
-  (use-package emacs
+  (use-package flymake ; built-in
     :config
     (add-hook 'prog-mode-hook #'flymake-mode)
-    (add-hook 'mu4e-compose-mode-hook #'flymake-mode)
-    (add-hook 'org-mode-hook #'flymake-mode))
+    ;; flymake-languagetool requires flymake-mode
+    ;; (add-hook 'org-mode-hook #'flymake-mode)
+    (add-hook 'mu4e-compose-mode-hook #'flymake-mode))
 #+end_src
 
 ** embark & embark-consult
@@ -2402,8 +2403,3 @@ Best option would be to fix ~tramp-process-running-p~ upstream. An emacs lisp ve
     (global-set-key (kbd "<f12>") 'jf/my-menu))
 #+end_src
 
-* Epilog
-
-# Local Variables:
-# eval: (flymake-mode -1)
-# End:
