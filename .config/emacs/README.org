@@ -1005,13 +1005,7 @@ Opens a terminal in the directory that matches the active buffer. Even works ove
     (setq org-agenda-include-diary nil)
     (setq org-agenda-custom-commands
           '(("p" "Planning"
-    	   ((agenda "" ((org-agenda-overriding-header "Deadlines")
-    			(org-agenda-span 'year)
-    			(org-agenda-time-grid nil)
-    			(org-agenda-show-all-dates nil)
-    			(org-agenda-entry-types '(:deadline))
-    			(org-deadline-warning-days 0)))
-    	    (todo "" ((org-agenda-overriding-header "Inbox Items")
+    	   ((todo "" ((org-agenda-overriding-header "Inbox Items")
     		      (org-agenda-files '("~/org/agenda/inbox.org"))))
     	    (todo "CNCL|DONE" ((org-agenda-overriding-header "Archivable Items")))
     	    (todo "WAIT" ((org-agenda-overriding-header "Waiting Items")))))
