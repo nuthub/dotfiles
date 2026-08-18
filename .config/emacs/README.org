@@ -1610,13 +1610,15 @@ Search for literature in literature databases like arxiv and dblp
 #+begin_src emacs-lisp
   (use-package transient
     ;; :ensure (:wait t) :demand t ; without this wait, I get errors by packages that depend on transient
+    :after (org org-pomodoro mu4e ement citar biblio magit forgejo gptel)
     :config
     (transient-define-prefix jf/my-menu ()
       "Mein benutzerdefiniertes Menü."
       [["Org"
         ("o a" "Agenda" org-agenda-list)
         ("o d" "Deadlines" (lambda () (interactive) (org-agenda nil "d")))
-        ("o p" "Planning" (lambda () (interactive) (org-agenda nil "p")))]
+        ("o p" "Planning" (lambda () (interactive) (org-agenda nil "p")))
+        ("o g" "GTD file" (lambda () (interactive) (find-file "~/org/agenda/gtd.org")))]
        ["Pomodoro"
         ("p s" "Start/Stop Pomodoro" (lambda () (interactive) (org-pomodoro)))
         ("p g" "Go to current item" org-clock-goto)]
