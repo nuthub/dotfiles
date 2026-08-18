@@ -1067,7 +1067,6 @@ Opens a terminal in the directory that matches the active buffer. Even works ove
 ** Org babel
 #+begin_src emacs-lisp
   (use-package org
-    ;;  defun jf/org-setup-babel ()
     :config
     (org-babel-do-load-languages
      'org-babel-load-languages
@@ -1097,15 +1096,8 @@ Build a second brain with org-roam.
            ("C-c n i" . org-roam-node-insert)
            ("C-c n c" . org-roam-capture)
            ("C-c n g" . org-roam-graph)
-           ;; Dailies
-           ("C-c n j" . org-roam-dailies-capture-date)
            :map org-mode-map
-           ("C-M-i" . completion-at-point)
-           :map org-roam-dailies-map
-           ("Y" . org-roam-dailies-capture-yesterday)
-           ("T" . org-roam-dailies-capture-tomorrow))
-    :bind-keymap
-    ("C-c n d" . org-roam-dailies-map)
+           ("C-M-i" . completion-at-point))
     :config
     ;; (setq org-roam-database-connector 'sqlite-builtin) ;; emacs 29 and newer
     (setq org-roam-directory (expand-file-name "~/org/roam/"))
@@ -1123,17 +1115,31 @@ Build a second brain with org-roam.
                                                  "%(expand-file-name (or citar-org-roam-subdir \"\") org-roam-directory)/${citar-citekey}.org"
                                                  "#+title: [${citar-citekey}] ${note-title}\n#+filetags: literature_note\n\n")
                                         :unnarrowed t)))
-    (require 'org-roam-dailies) ;; Ensure the keymap is available
-    (setq org-roam-dailies-directory "dailies/")
-    (setq org-roam-dailies-capture-templates '(
-                                               ("d" "default" entry "* %?"
-                                                :target
-                                                (file+head "%<%Y-%m-%d_%A>.org" "#+title: %<%Y-%m-%d (%A)>\n#+filetags: daily\n\n- Links: [[id:b3cb74b2-a385-4132-a55e-8cf561eed9fc][Journaling]]\n* Träume\n* \n* Emotionen\n** Drei Dinge, für die ich dankbar bin\n1. \n2. \n3. "))))
+    
     (org-roam-db-autosync-mode)
     (org-roam-setup)
     (org-roam-update-org-id-locations))
 #+end_src
 
+** Org roam dailies
+#+begin_src emacs-lisp
+  (use-package org-roam-dailies
+    :bind (("C-c n j" . org-roam-dailies-capture-date)
+           :map org-roam-dailies-map
+           ("Y" . org-roam-dailies-capture-yesterday)
+           ("T" . org-roam-dailies-capture-tomorrow))
+    :bind-keymap
+    ("C-c n d" . org-roam-dailies-map)
+    :config
+    ;;(require 'org-roam-dailies) ;; Ensure the keymap is available
+    (setq org-roam-dailies-directory "dailies/")
+    (setq org-roam-dailies-capture-templates '(
+                                               ("d" "default" entry "* %?"
+                                                :target
+                                                (file+head "%<%Y-%m-%d_%A>.org" "#+title: %<%Y-%m-%d (%A)>\n#+filetags: daily\n\n- Links: [[id:b3cb74b2-a385-4132-a55e-8cf561eed9fc][Journaling]]\n* Träume\n* \n* Emotionen\n")))))
+#+end_src
+
+** Org roam UI
 Visualize the org roam graph in browser.
 #+begin_src emacs-lisp
   (use-package org-roam-ui
