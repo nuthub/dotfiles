@@ -691,6 +691,16 @@ Snippets aren't included in the base package. Therefore, they need to be loaded 
 - Flymake is GNU / FSF, flycheck is not
 - Comparison: https://www.flycheck.org/en/latest/user/flycheck-versus-flymake.html
   
+*** flymake
+#+begin_src emacs-lisp
+  (use-package flymake ; built-in
+    :config
+    (add-hook 'prog-mode-hook #'flymake-mode)
+    ;; flymake-languagetool requires flymake-mode
+    ;; (add-hook 'org-mode-hook #'flymake-mode)
+    (add-hook 'mu4e-compose-mode-hook #'flymake-mode))
+#+end_src
+
 *** COMMENT Syntax check with flycheck
 CLOSED: [2026-04-29 Wed 15:23]
 
@@ -703,16 +713,6 @@ CLOSED: [2026-04-29 Wed 15:23]
     )
 #+end_src
  
-*** flymake
-#+begin_src emacs-lisp
-  (use-package flymake ; built-in
-    :config
-    (add-hook 'prog-mode-hook #'flymake-mode)
-    ;; flymake-languagetool requires flymake-mode
-    ;; (add-hook 'org-mode-hook #'flymake-mode)
-    (add-hook 'mu4e-compose-mode-hook #'flymake-mode))
-#+end_src
-
 ** embark & embark-consult
 #+begin_src emacs-lisp
   (use-package embark
