@@ -52,10 +52,10 @@ input type:touchpad {
 #
 # Start a terminal
 
-bindsym $mod+Return exec alacritty
+bindsym $mod+Return exec emacsclient -c -a "" -e '(vterm t)'
 
 # Start an emacs terminal
-bindsym $mod+Ctrl+Return exec emacsclient -c -a "" -e '(vterm)'
+bindsym $mod+Ctrl+Return exec alacritty
 # create new emacs frame
 bindsym $mod+Shift+Return exec emacsclient -c -a "" -e '(jf/show-welcome-buffer)'
 # open browser
@@ -145,6 +145,17 @@ bindsym $mod+Shift+7 move container to workspace $ws7
 bindsym $mod+Shift+8 move container to workspace $ws8
 bindsym $mod+Shift+9 move container to workspace $ws9
 bindsym $mod+Shift+0 move container to workspace $ws10
+
+# additional key bindings of workspace management
+bindsym $mod+Prior workspace prev_on_output
+bindsym $mod+Next workspace next_on_output
+#bindsym $mod+Tab workspace next_on_output
+#bindsym $mod+Shift+Tab workspace prev_on_output
+bindsym $mod+Escape workspace back_and_forth
+# move workspace to neighbouring output
+bindsym $mod+o move workspace to output right
+bindsym $mod+Shift+o move workspace to output left
+
 #
 # Layout stuff:
 #
@@ -224,16 +235,6 @@ bindsym $mod+Delete exec rofi-system-menu.sh
 bindsym Control+mod1+Delete exec ~/.local/bin/lockscreen.sh
 # Screenshots
 bindsym Print exec screenshot.sh -r
-
-# additional key bindings of workspace management
-bindsym $mod+Prior workspace prev_on_output
-bindsym $mod+Next workspace next_on_output
-#bindsym $mod+Tab workspace next_on_output
-#bindsym $mod+Shift+Tab workspace prev_on_output
-bindsym $mod+Escape workspace back_and_forth
-# move workspace to neighbouring output
-bindsym $mod+o move workspace to output right
-bindsym $mod+Shift+o move workspace to output left
 
 # Clipboard
 # exec wl-paste --watch cliphist store
