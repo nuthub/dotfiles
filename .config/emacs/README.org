@@ -1675,7 +1675,9 @@ This shows modified/added/deleted lines directly in the editor.
 #+begin_src emacs-lisp
   (use-package forgejo
     :config
-    (setq forgejo-hosts '(("https://codeberg.org")))
+    (setq forgejo-hosts '(
+  			("https://codeberg.org")
+  			("https://github.com")))
     (setq forgejo-watch-rules
      '(("*" . "author:nutcase")))
     (setq forgejo-watch-filter-default nil)); "read:no"))
