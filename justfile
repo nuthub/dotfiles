@@ -28,6 +28,10 @@ guix-system-reconfigure:
 guix-home-reconfigure:
 	guix home reconfigure ~/.config/guix/home/home-configuration.scm
 
+# Create a new user profile generation based on the manifest
+guix-user-reconfigure:
+	guix package -L ~/.config/guix/packages -L ~/git/nutguix -m ~/.config/guix/user/manifest.scm
+
 # Pull latest Guix
 guix-pull:
 	guix pull

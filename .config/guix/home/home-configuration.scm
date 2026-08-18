@@ -56,7 +56,6 @@
 	     "make" "perl" "texinfo" ; building auctex for elpaca needs these
 
 	     ;; Programming languages
-	     
 	     "openjdk@25:jdk" ; java-lsp wants this, otherwise I'd just use it in guix shells only
 	     "efibootmgr"
 	     "bind:utils" ; for dig
@@ -92,17 +91,17 @@
 	     "xdg-desktop-portal-gtk"
 	     "xdg-desktop-portal-wlr"
 	     "sway"
-	     "dex"
+	     "swayidle"
+	     "swaylock"
 	     "waybar"
 	     "swaybg"
+	     "dex"
 	     "rofi"
-	     "swaylock"
-	     "swayidle"
 	     "dunst" ; alternatives: "mako" "swaynotificationcenter"
 	     "libnotify" ; for notify-send command
 	     ;; compatibility
 	     "qt5ct" "qtwayland@5" ; at least nextcloud-client needs this (2024-11-28)
-	     "qt6ct"; "qtwayland@6"
+	     "qt6ct" ; "qtwayland@6"
 	     ;; output management
 	     "wdisplays"
 	     "kanshi" ; automatically switch displays
@@ -190,30 +189,25 @@
 	     "hicolor-icon-theme" ; waybar/privacy uses icons from here
 	     ;; Cursors
 	     "xcursor-themes" "bibata-cursor-theme"
+
 	     ;; Office
 	     "aspell"
 	     "aspell-dict-de"
 	     "aspell-dict-en" ; aspell or hunspell? Good question
-	     "texlive-scheme-medium"
-	     "emacs-org-texlive-collection"
-	     "texlive-amsfonts" ;; should be included in "emacs-org-texlive-collection", used for [-] in check lists
-	     "texlive-latexmk" ; should be in emacs-org-texlive-collection
-	     "texlive-biber"
-	     "texlive-collection-latexextra"
-	     "texlive-collection-fontsextra" ;; beamer theme koblenz needs opensans
-	     "texlive-collection-pictures"
-	     "pandoc"
-	     "ghostscript" ;; for e.g. ps2pdf
-	     "stapler"
-	     "mupdf" "poppler"
-	     ;; PDFPC packages + gstreamer packages for embedding videos in presentations
+
+	     ;; PDFPC + gstreamer packages for playong embedded videos
 	     "pdfpc"
-	     "texlive-pdfpc"
 	     "gstreamer" "gst-plugins-base" "gst-plugins-good"
 	     "gst-plugins-bad" "gst-plugins-ugly"
-	     ;; "modern" office
-	     "libreoffice")))
- 
+
+	     ;; Further document processing
+	     "pandoc"
+	     "ghostscript" ; for e.g. ps2pdf
+	     "stapler"
+	     "mupdf" "poppler"
+
+	     ;; Finally a "modern" office
+	     "libreoffice"))) 
 
  ;; Below is the list of Home services.  To search for available
  ;; services, run 'guix home search KEYWORD' in a terminal.
