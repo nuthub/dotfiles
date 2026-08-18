@@ -274,10 +274,13 @@
    (service home-pipewire-service-type)
    ;; Guix home writes an own fonts.conf anyways to include fonts installed on home profile.
    ;; Therefore, I need to hook into that and can't use my own fonts.conf from dotfiles.
+   ;;
    ;; Additionally, I set the same fonts via gsettings, emacs uses them:
-   ;; gsettings set org.gnome.desktop.interface document-font-name='Noto Serif 11'
+   ;; gsettings set org.gnome.desktop.interface document-font-name 'Noto Serif 11'
    ;; gsettings set org.gnome.desktop.interface font-name 'Noto Sans 11'
    ;; gsettings set org.gnome.desktop.interface monospace-font-name 'Fira Code 11'
+   ;; This is set with other gsettings in ~/.local/share/[dark|light]-mode.d/gsettings.sh,
+   ;; although the fonts are independent from light / dark mode.
    (simple-service 'default-fonts
 		   home-fontconfig-service-type
 		   (list
