@@ -243,7 +243,11 @@ bindsym $mod+y exec cliphist list | rofi -dmenu -display-columns 2 -p "cliphist"
 # Emoji chooser
 bindsym $mod+i exec rofi-emoji
 
-bindsym $mod+t exec darkman toggle
+# Toggle dark / light mode
+bindsym $mod+Shift+t exec darkman toggle
+
+# Toggle bluetooth
+bindsym $mod+Shift+b exec bluetooth-toggle.sh
 
 # window rules
 # to get app_ids use $ swaymsg -t get_tree | grep app_id
