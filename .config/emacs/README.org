@@ -289,6 +289,13 @@ This is from https://xenodium.com/bending-emacs-episode-2
     (setq-default scroll-conservatively 100))
 #+end_src
 
+** Context menu
+#+begin_src emacs-lisp
+  (use-package mouse
+    :config
+    (context-menu-mode))
+#+end_src
+
 ** Theme
 I use the Modus Themes. To switch between light (operandi) and dark (vivendi) theme, auto-dark is used. Switching between light and dark is then possible by one of the following commands:
 - ~gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark~ or 
