@@ -147,8 +147,8 @@ bindsym $mod+Shift+9 move container to workspace $ws9
 bindsym $mod+Shift+0 move container to workspace $ws10
 
 # additional key bindings of workspace management
-bindsym $mod+Prior workspace prev_on_output
-bindsym $mod+Next workspace next_on_output
+#bindsym $mod+Prior workspace prev_on_output
+#bindsym $mod+Next workspace next_on_output
 #bindsym $mod+Tab workspace next_on_output
 #bindsym $mod+Shift+Tab workspace prev_on_output
 bindsym $mod+Escape workspace back_and_forth
