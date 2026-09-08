@@ -416,7 +416,6 @@ In emacs 31 there is an alternative: https://www.reddit.com/r/emacs/comments/1k7
   	    #'display-fill-column-indicator-mode))
 #+end_src
 
-
 ** which-key (included in emacs 30)
 This helps to figure out the next keystrokes
 #+begin_src emacs-lisp
@@ -917,7 +916,6 @@ Opens a terminal in the directory that matches the active buffer. Even works ove
 
 #+begin_src emacs-lisp
   (use-package org
-    ;;  defun jf/org-setup-look-and-feel ()
     :config
     (set-face-underline 'org-ellipsis nil)
     (setq org-ellipsis " …")
@@ -967,10 +965,8 @@ Opens a terminal in the directory that matches the active buffer. Even works ove
 #+end_src
 
 ** Task Management, Agenda, Archive, Refiling
-
 #+begin_src emacs-lisp
   (use-package org
-  ;;defun jf/org-setup-task-management-and-agenda ()
     :config
     ;; Task management
     (setq org-directory "~/org")
@@ -1056,7 +1052,6 @@ Opens a terminal in the directory that matches the active buffer. Even works ove
 
 #+begin_src emacs-lisp
   (use-package org
-    ;;defun jf/org-setup-capture-templates ()
     :config
     (setq org-capture-templates
   	'(
@@ -1349,7 +1344,6 @@ htmlize is used by org to export to HTML.
 
 #+begin_src emacs-lisp
   (use-package org
-    ;;  defun jf/org-setup-display-pdf-inline ()
     :config
     ;; Display PDF files inline
     ;; taken from https://stackoverflow.com/questions/15407485/inline-pdf-images-in-org-mode
@@ -1631,10 +1625,7 @@ Search for literature in literature databases like arxiv and dblp
         ("p g" "Go to current item" org-clock-goto)]
        ["Mail"
         ("m" "mu4e" mu4e-transient-menu)]]
-      [["Matrix"
-        ("e c" "Connect" ement-connect)
-        ("e r" "List Rooms" ement-room-list)]
-       ["Writing"
+      [["Writing"
         ("w c" "Citar" citar-open)
         ("w b" "Biblio" biblio-lookup)]
        ["Projects"
@@ -1643,8 +1634,7 @@ Search for literature in literature databases like arxiv and dblp
         ("f w" "Forgejo Watch List" forgejo-watch-list)]
        ["AI"
         ("a i" "gptel" gptel)
-        ("a m" "gptel menu" gptel-menu)]
-       ]))
+        ("a m" "gptel menu" gptel-menu)]]))
 #+end_src
 
 ** magit: Git support
