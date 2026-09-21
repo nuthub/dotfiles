@@ -264,7 +264,7 @@
 			  (respawn? #t)
 			  (respawn-delay 60)
 			  (start #~(make-forkexec-constructor
-			   	    '("goimapnotify")))
+			   	    '("goimapnotify" "-wait" "5"))) ; wait in config is ignored (2026-09-18 with 2.5.4)
 			  (stop #~(make-kill-destructor)))))
    (simple-service 'pimsync home-shepherd-service-type
 		   (list (shepherd-service
