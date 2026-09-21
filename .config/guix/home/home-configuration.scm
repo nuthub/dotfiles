@@ -308,8 +308,8 @@
 		    #~(job "0,10,20,30,40,50 * * * *" "mbsync -a")))))
    (service home-darkman-service-type
             (home-darkman-configuration
-             (latitude 51.4)
-             (longitude 7.1)))
+             (latitude 51.4) (longitude 7.1))) ; Recklinghausen
+	     ;; (latitude 51.6) (longitude 3.5))) ; Oostkapelle
    (service home-batsignal-service-type)
    (service home-dbus-service-type)
    (service home-pipewire-service-type)
