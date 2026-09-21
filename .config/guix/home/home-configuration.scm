@@ -32,29 +32,55 @@
 	     "mailutils" ; rottlog seems to need this
 	     "git" "git:send-email" "git:gui" "git-delta"
 	     ;; emacs & related
-	     "emacs-pgtk" "emacs-pdf-tools" "emacs-vterm" "python-proselint" "gnuplot" ; enchant is needed by jinx; "emacs-pgtk-xwidgets"
 	     "isync" "mu" "goimapnotify" "emacs-mu4e-walk"
+	     "emacs-pgtk" "emacs-pdf-tools" "emacs-vterm" "emacs-eat"
 	     "emacs-guix" "emacs-geiser" "emacs-geiser-guile"
-	     "emacs-org-superstar" "emacs-rainbow-delimiters"
+	     "emacs-org-superstar" "emacs-org-contrib" "emacs-ox-hugo" "emacs-org-pomodoro" "emacs-org-roam" "emacs-org-roam-ui" 
+	     "emacs-rainbow-delimiters"
+	     "emacs-modus-themes"
+	     "emacs-exiftool"
 	     "emacs-vertico" "emacs-orderless" "emacs-consult" "emacs-corfu" "emacs-marginalia" "emacs-embark" "emacs-vundo" "emacs-aggressive-indent"
 	     "emacs-openwith" "emacs-terminal-here"
 	     "emacs-frames-only-mode" "emacs-winum"
 	     "emacs-highlight-indent-guides" "emacs-yasnippet" "emacs-yasnippet-snippets"
 	     "emacs-khalel" "emacs-khardel"
-	     "emacs-org-roam" "emacs-org-roam-ui" "emacs-nerd-icons" "emacs-nerd-icons-corfu" "emacs-nerd-icons-dired" "emacs-ligature" "emacs-auto-dark" "emacs-minions" "emacs-smartparens"
-	     "emacs-magit" "emacs-forgejo" "emacs-agitjo" "emacs-git-gutter" "emacs-git-gutter-fringe" 
+	     "emacs-nerd-icons" "emacs-nerd-icons-corfu" "emacs-nerd-icons-dired" "emacs-ligature" "emacs-auto-dark" "emacs-minions" "emacs-smartparens"
+	     "emacs-magit" "emacs-forgejo" "emacs-agitjo" "emacs-git-gutter" "emacs-git-gutter-fringe"
 	     "emacs-dired-open-with"
+	     "emacs-treesit-auto" "emacs-combobulate"
+	     "emacs-lsp-mode" "emacs-lsp-ui"
 	     "emacs-all-the-icons" "emacs-all-the-icons-dired" "emacs-all-the-icons-completion"
 	     "emacs-olivetti" "emacs-gt" "emacs-jinx" "enchant" "emacs-flymake-languagetool"
 	     "emacs-citar" "emacs-citar-org-roam" "emacs-biblio" "emacs-auctex"
-	     "emacs-gnuplot"
-	     "emacs-engrave-faces" "emacs-org-appear" "emacs-htmlize" "emacs-org-contrib" "emacs-ox-hugo" "emacs-org-pomodoro"
-	     "emacs-web-mode" "emacs-php-mode" "emacs-markdown-mode" "emacs-grip-mode" "emacs-yaml-mode" "emacs-plantuml-mode" "emacs-nov"
+	     "emacs-gnuplot" "gnuplot"
+	     "emacs-engrave-faces"
+	     "emacs-htmlize"
 	     "emacs-gptel" "emacs-posframe" "emacs-gptel-quick"
 	     "emacs-ement"
 	     "grip" ; needed for grip-mode (Markdown Preview by GitHub)
-	     "make" "perl" "texinfo" ; building auctex for elpaca needs these
-
+	     ;; "make" "perl" "texinfo" ; building auctex for elpaca needs these
+	     "emacs-web-mode" "emacs-php-mode" "emacs-markdown-mode" "emacs-grip-mode" "emacs-yaml-mode" "emacs-plantuml-mode" "emacs-nov"
+	     "emacs-ttl-mode" ; "emacs-ttl-ts-mode"
+	     "emacs-cypher-ts-mode"
+	     ;; Tree-Sitter grammars
+	     ;; for emacs-treesit a grammar is a requirement but not sufficient
+	     ;; there needs to be a corresponding major mode (~-ts-mode~)
+	     "tree-sitter-css"
+	     "tree-sitter-go"
+	     "tree-sitter-html"
+	     "tree-sitter-java"
+	     "tree-sitter-javascript"
+	     "tree-sitter-json"
+	     ;; "tree-sitter-cypher" ; no quix package yet
+	     "tree-sitter-just" ; not yet in guix, PR pending
+	     "emacs-just-ts-mode" 
+	     "tree-sitter-markdown"
+	     "tree-sitter-plantuml"
+	     "tree-sitter-python"
+	     "tree-sitter-rust"
+	     "tree-sitter-toml"
+	     "tree-sitter-typescript"
+	     "tree-sitter-yaml"
 	     ;; Programming languages
 	     "openjdk@25:jdk" ; java-lsp wants this, otherwise I'd just use it in guix shells only
 	     "efibootmgr"
