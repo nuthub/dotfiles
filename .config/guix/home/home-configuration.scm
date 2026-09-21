@@ -266,6 +266,21 @@
 			  (start #~(make-forkexec-constructor
 			   	    '("goimapnotify" "-wait" "5"))) ; wait in config is ignored (2026-09-18 with 2.5.4)
 			  (stop #~(make-kill-destructor)))))
+   (simple-service 'languagetool home-shepherd-service-type
+		   (list (shepherd-service
+                          (documentation "Run the LanguageTool server.")
+			  (provision '(languagetool))
+                          (auto-start? #t)
+			  (respawn? #t)
+			  (respawn-delay 60)
+			  (start #~(make-forkexec-constructor
+			   	    '("java" "-cp"
+				      "/home/flake/opt/LanguageTool/languagetool-server.jar"
+				      "org.languagetool.server.HTTPServer"
+				      "--config" "/home/flake/opt/LanguageTool/server.properties"
+				      "--port" "8081"
+				      "--allow-origin" "\"*\"")))
+			  (stop #~(make-kill-destructor)))))
    (simple-service 'pimsync home-shepherd-service-type
 		   (list (shepherd-service
                           (documentation "Run the pimsync daemon.")
