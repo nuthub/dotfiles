@@ -184,7 +184,7 @@
 	     "mpv" "imv"
 	     "gimp"
 	     "imagemagick" "optipng"
-	     "wf-recorder" "obs" "handbrake" "cheese" ; obs-wlrobs is not necessary, if pipewire is running
+	     "wf-recorder" "obs" "handbrake" "snapshot" ; obs-wlrobs is not necessary, if pipewire is running ; snapshot replaces cheese
 
 	     ;; Virtualization & Containerization
 	     "qemu" "virt-manager" "ovmf-x86-64"
