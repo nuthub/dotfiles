@@ -38,8 +38,9 @@
    "texlive-float"
    "texlive-pdfcol"
 
-   ;; additional texlive packages
+   ;; additional texlive packages regularly used
    "texlive-biber"
+   "texlive-csquotes"
 
    ;; beamerthemekoblenz needs opensans
    "texlive-opensans" 
@@ -49,7 +50,10 @@
 
    ;;CEUR template needs apacite
    "texlive-apacite"
-
+   
+   ;; for my CV
+   "texlive-moderncv" "texlive-academicons"
+   
    ;; my org-latex-examples need these
    "texlive-blindtext"
    "texlive-acronym"
