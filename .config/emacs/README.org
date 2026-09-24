@@ -1817,19 +1817,18 @@ There are three different packages:
   (use-package yaml-mode)
 #+end_src
 
-** ttl-mode
-
-turtle-mode not available in elpa(ca)
-#+begin_src emacs-lisp :tangle no
-  (use-package turtle-mode :ensure t
-    :config
-    (add-to-list 'auto-mode-alist '("\\.n3"  . turtle-mode))
-    (add-to-list 'auto-mode-alist '("\\.ttl" . turtle-mode)))
+** Turtle mode
+my own turtle mode based on tree-sitter grammar
+#+begin_src emacs-lisp
+  (use-package ttl-ts-mode
+    ;; ifI want to use the cloned repository:
+    ;; :load-path "~/git/ttl-ts-mode"
+    )
 #+end_src
 
 ttl-mode is available in elpa(ca)
 #+begin_src emacs-lisp
-  (use-package ttl-mode :ensure t
+  (use-package ttl-mode
     :config
     (add-to-list 'auto-mode-alist '("\\.n3"  . ttl-mode))
     (add-to-list 'auto-mode-alist '("\\.ttl" . ttl-mode)))

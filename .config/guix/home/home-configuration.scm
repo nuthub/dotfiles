@@ -60,7 +60,7 @@
 	     "grip" ; needed for grip-mode (Markdown Preview by GitHub)
 	     ;; "make" "perl" "texinfo" ; building auctex for elpaca needs these
 	     "emacs-web-mode" "emacs-php-mode" "emacs-markdown-mode" "emacs-grip-mode" "emacs-yaml-mode" "emacs-plantuml-mode" "emacs-nov"
-	     "emacs-ttl-mode" ; "emacs-ttl-ts-mode"
+	     "emacs-ttl-mode" "emacs-ttl-ts-mode"
 	     "emacs-cypher-ts-mode"
 	     ;; Tree-Sitter grammars
 	     ;; for emacs-treesit a grammar is a requirement but not sufficient
