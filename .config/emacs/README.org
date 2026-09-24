@@ -1923,7 +1923,8 @@ CLOSED: [2026-07-28 Tue 22:11]
 #+end_src
 
 ** eglot + eglot-java
-+The built-in LSP client. It seems that more Java people are using lsp-java and not eglot+
+- The built-in LSP client. It seems that more Java people are using lsp-java and not eglot (2026).
+- ~project-rootfile~ can help to identify modular project sub roots. Unfortunately, ~project-rootfile~ makes tramp via SSH mostly unusable, therefore I did remove it from my config. Probably the variable ~project-vc-extra-root-markers~ and the like can also help.
 
 #+begin_src emacs-lisp
   (use-package eglot-java :ensure t
@@ -1938,12 +1939,7 @@ CLOSED: [2026-07-28 Tue 22:11]
       (define-key eglot-java-mode-map (kbd "C-c l R") #'eglot-java-project-build-refresh)))
 #+end_src
 
-This can probably replaced by using the variable ~project-vc-extra-root-markers~
 #+begin_src emacs-lisp
-  (use-package project-rootfile :ensure t
-    :after eglot
-    :config
-    (add-to-list 'project-find-functions #'project-rootfile-try-detect))
 #+end_src
 
 * Some convenience functions
