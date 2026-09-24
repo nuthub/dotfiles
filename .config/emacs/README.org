@@ -1922,24 +1922,32 @@ CLOSED: [2026-07-28 Tue 22:11]
     (setq ement-save-sessions t))
 #+end_src
 
-** eglot + eglot-java
-- The built-in LSP client. It seems that more Java people are using lsp-java and not eglot (2026).
-- ~project-rootfile~ can help to identify modular project sub roots. Unfortunately, ~project-rootfile~ makes tramp via SSH mostly unusable, therefore I did remove it from my config. Probably the variable ~project-vc-extra-root-markers~ and the like can also help.
+** lsp-mode
+- ~lsp-mode~ is the built-in LSP client.
+- Java: It seems that Java people are (still) using lsp-java and not eglot (2026). Development of ~eglot-java~ seems [[https://github.com/yveszoundi/eglot-java/commits/main/][a bit stalled]] (no commits between [2025-05-27 Tue] and [2026-09-24 Thu]).
+- ~project-rootfile~ can help to identify modular project sub roots. This was useful for ~eglot-java~ (which I don't use anyways). ~project-rootfile~ makes tramp via SSH very slow/mostly unusable. Therefore, I did remove it from my config. Probably the variable ~project-vc-extra-root-markers~ and the like can also help.
 
+*** LSP mode itself
 #+begin_src emacs-lisp
-  (use-package eglot-java :ensure t
-    :config
-    (add-hook 'java-mode-hook 'eglot-java-mode)
-    (with-eval-after-load 'eglot-java
-      (define-key eglot-java-mode-map (kbd "C-c l n") #'eglot-java-file-new)
-      (define-key eglot-java-mode-map (kbd "C-c l x") #'eglot-java-run-main)
-      (define-key eglot-java-mode-map (kbd "C-c l t") #'eglot-java-run-test)
-      (define-key eglot-java-mode-map (kbd "C-c l N") #'eglot-java-project-new)
-      (define-key eglot-java-mode-map (kbd "C-c l T") #'eglot-java-project-build-task)
-      (define-key eglot-java-mode-map (kbd "C-c l R") #'eglot-java-project-build-refresh)))
+  (use-package lsp-mode
+    :init
+    ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+    ;; (setq lsp-keymap-prefix "C-c l")
+    :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+  	 ;; (cypher-mode . lsp)
+  	 ;; (just-mode . lsp)
+  	 (php-mode . lsp)
+  	 ;; (python-mode . lsp)
+  	 ;; (java-mode . lsp)
+  	 ;; if you want which-key integration
+  	 (lsp-mode . lsp-enable-which-key-integration))
+    :commands lsp)
 #+end_src
 
+*** UI integrations for lsp-mode: emacs-lsp.github.io/lsp-ui 
+
 #+begin_src emacs-lisp
+  (use-package lsp-ui)
 #+end_src
 
 * Some convenience functions
