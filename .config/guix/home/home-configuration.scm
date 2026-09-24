@@ -44,7 +44,7 @@
 	     "emacs-frames-only-mode" "emacs-winum"
 	     "emacs-highlight-indent-guides" "emacs-yasnippet" "emacs-yasnippet-snippets"
 	     "emacs-khalel" "emacs-khardel"
-	     "emacs-nerd-icons" "emacs-nerd-icons-corfu" "emacs-nerd-icons-dired" "emacs-ligature" "emacs-auto-dark" "emacs-minions" "emacs-smartparens"
+	     "emacs-nerd-icons" "emacs-nerd-icons-corfu" "emacs-nerd-icons-dired" "emacs-ligature" "emacs-auto-dark" "emacs-smartparens"
 	     "emacs-magit" "emacs-forgejo" "emacs-agitjo" "emacs-git-gutter" "emacs-git-gutter-fringe"
 	     "emacs-dired-open-with"
 	     "emacs-treesit-auto" "emacs-combobulate"

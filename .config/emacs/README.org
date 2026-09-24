@@ -391,10 +391,19 @@ Emacs 28+ supports to globally default to ~y-or-n-p~ instead of ~yes-or-no-p~.
     (setq use-short-answers t))
 #+end_src
 
-** Minions
+** Hide minor mode indicators (requires Emacs 31+)
+- Alternatives: "diminish" and "minions" not part of Emacs
+#+begin_src emacs-lisp
+  (use-package emacs
+    :config
+    (setq mode-line-collapse-minor-modes t))
+#+end_src
+
+** COMMENT Minions (alternative to diminish), not required with emacs 31+
+CLOSED: [2026-09-07 Mon 11:24]
 This minor mode hides all minor mode indicators from mode line and provides a menu instead.
 In emacs 31 there is an alternative: https://www.reddit.com/r/emacs/comments/1k7zxjv/fyi_modelinecollapseminormodes/
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package minions
     :config
     (add-hook 'emacs-startup-hook #'minions-mode))
