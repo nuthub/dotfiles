@@ -131,6 +131,20 @@ Open a file with a registered application (from mimeapps.list)
     (global-set-key (kbd "C-<f6>") 'jf/xdg-open-with))
 #+end_src
 
+** openwith
+#+begin_src emacs-lisp
+  (use-package openwith
+    :config
+    (setq openwith-associations
+          (list
+           (list (openwith-make-extension-regexp
+                  '("epub" "mobi"))
+                 "koreader"
+                 '(file))))
+    :init
+    (openwith-mode 1))
+#+end_src
+
 ** Keep folders clean
 
 #+begin_src emacs-lisp
