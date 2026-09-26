@@ -2464,19 +2464,6 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
     (setq message-confirm-send t))
 #+end_src
 
-** Detach article advice
-
-#+begin_src emacs-lisp
-  (use-package mu4e
-    :config
-    (defun jf/detach-mu4e-article-view-advice ()
-      "This advice is used to open a detached article view in a new frame and to delete the original window. This improves my workflow."
-      (make-frame)
-      (delete-window))
-    (advice-add 'mu4e-view-detach :after #'jf/detach-mu4e-article-view-advice)
-    (define-key mu4e-view-mode-map (kbd "C-<f6>") 'mu4e-view-detach))
-#+end_src
-
 ** mu4e-walk (move mail addresses in compose buffer)
 
 #+begin_src elisp
