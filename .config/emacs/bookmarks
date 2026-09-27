@@ -2,7 +2,13 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("gtd.org"
+(("b7-docker"
+  (filename . "/ssh:b7:/opt/docker/")
+  (front-context-string . "alte-docker\n  dr")
+  (rear-context-string . "0K Jan 17 10:33 ")
+  (position . 161)
+  (last-modified 27128 38449 370863 222000))
+("gtd.org"
  (filename . "~/org/agenda/gtd.org")
  (front-context-string . "#+STARTUP: inden")
  (rear-context-string)
@@ -21,11 +27,11 @@
  (position . 1)
  (last-modified 27071 55294 420180 728000))
 ("config-guix-system"
- (filename . "~/.config/guix/systems/base-system.scm")
+ (filename . "~/.config/guix/system/base-system.scm")
  (front-context-string . ";; This is my op")
  (rear-context-string)
  (position . 1)
- (last-modified 26416 35905 130594 47000))
+ (last-modified 27094 16623 453396 546000))
 ("config-guix-home"
  (filename . "~/.config/guix/home/home-configuration.scm")
  (front-context-string . ";; This \"home-en")
@@ -74,10 +80,11 @@
  (position . 84592)
  (last-modified 26506 4516 250187 404000))
 ("org-inbox"
- (filename . "~/org/inbox.org")
+ (filename . "~/org/agenda/inbox.org")
  (front-context-string . "#+STARTUP: conte")
  (rear-context-string)
- (position . 1))
+ (position . 1)
+ (last-modified 27090 22509 999244 898000))
 ("config-emacs"
  (filename . "~/.dotfiles/.config/emacs/README.org")
  (front-context-string . "#+TITLE: Emacs C")

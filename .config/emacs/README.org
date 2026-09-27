@@ -11,7 +11,7 @@
 #+end_src
 
 * Basic personal information
-  
+
 ** This is used to identify myself, and to find my own GnuPG key
   
 #+begin_src emacs-lisp
@@ -91,6 +91,60 @@
   	'("Frühlingsanfang" "Sommeranfang" "Herbstanfang" "Winteranfang")))
 
 #+end_src
+* Buffer handling
+** Buffer list
+#+begin_src emacs-lisp
+  (use-package ibuffer
+    :config
+    (setq ibuffer-display-summary t)
+    (setq ibuffer-use-header-line 'title)
+    (setq ibuffer-use-other-window nil)
+    (setq ibuffer-show-empty-filter-groups nil)
+    (setq ibuffer-default-sorting-mode 'filename/process) ; or 'recency
+    (setq ibuffer-saved-filter-groups
+  	'(("Main"
+             ;; ("Modified" (predicate buffer-modified-p (current-buffer)))
+  	   ;; ("Directories" (mode . dired-mode))
+  	   ("Agenda" (or
+  		      (name . "^\\*Org Agenda\\*$")
+  		      (name . "gtd.org")
+  		      (name . "someday.org")
+  		      (name . "tickler.org")
+  		      (name . "inbox.org")
+  		      (name . "calendar.org")))
+             ("Org" (mode . org-mode))
+  	   ("Mail" (or
+  		    (mode . mu4e-main-mode)
+  		    (mode . mu4e-view-mode)
+  		    (mode . mu4e-headers-mode)
+  		    (name . "^\\*mu4e-last-update\\*$")))
+  	   ("Terminals" (mode . vterm-mode))
+             ("Emacs" (or
+                       (mode . emacs-lisp-mode)
+                       (name . "^\\*Help\\*$")
+                       (name . "^\\*Warnings\\*$")
+                       (name . "^\\*Custom.*")
+                       (name . "^\\*Welcome*")
+                       (name . "^\\*Org Agenda\\*$")
+                       (name . "^\\*info\\*$")
+                       (name . "^\\*scratch\\*$")
+  		     (name . "^\\*Calendar\\*$")
+                       (name . "^\\*Backtrace\\*$")
+                       (name . "^\\*Messages\\*$"))))))
+    :bind
+    ("C-x C-b" . ibuffer)
+    :hook
+    (ibuffer-mode . (lambda ()
+  		    (ibuffer-switch-to-saved-filter-groups "Main"))))
+#+end_src
+
+** Revert buffer
+#+begin_src emacs-lisp
+  (use-package emacs
+    :bind
+    ("C-c r" . revert-buffer))
+#+end_src
+
 * File handling
 ** dired variables: trash, listings and dialogs
 Make use of system's trash and use y-or-n-p instead of yes-or-no-p
@@ -100,7 +154,9 @@ Make use of system's trash and use y-or-n-p instead of yes-or-no-p
     (setq delete-by-moving-to-trash t)
     (setq dired-deletion-confirmer #'y-or-n-p)
     (setq dired-recursive-copies 'always)
-    (setq dired-listing-switches "-Dalh --group-directories-first --time-style=long-iso"))
+    (setq dired-listing-switches "-Dalh --group-directories-first --time-style=long-iso")
+      ;; Kill dired buffers instead of quitting them
+    (setq dired-kill-when-opening-new-dired-buffer t))
 #+end_src
 
 ** nerd icons for dired
@@ -110,25 +166,14 @@ Make use of system's trash and use y-or-n-p instead of yes-or-no-p
     (dired-mode . nerd-icons-dired-mode))
 #+end_src
 
-** TODO xdg-open-with / dired-open-with
+** dired-open-with
 Open a file with a registered application (from mimeapps.list)
 #+begin_src emacs-lisp
   (use-package dired-open-with
     :after dired
-    :config
-    (define-key dired-mode-map "o" #'dired-open-with)
-
-    (defun jf/xdg-open-with ()
-      "Open the current buffer's file with an XDG app."
-      (interactive)
-      (unless (buffer-file-name)
-        (error "Buffer does not visit a file."))
-      (let* ((path (file-truename (buffer-file-name)))
-    	   (apps (dired-open-with--applications-for-file path))
-    	   (app (dired-open-with--completing-read apps))
-    	   (cmd (dired-open-with--xdg-format-exec (gethash "Exec" app) path)))
-        (dired-open-with--start-process cmd)))
-    (global-set-key (kbd "C-<f6>") 'jf/xdg-open-with))
+    :bind (:map dired-mode-map
+  	      ("o" . dired-open-with)
+  	      ("C-<f6>" . dired-open-with)))
 #+end_src
 
 ** openwith
@@ -185,73 +230,91 @@ Confirmation dialog is annoying, when files are opened externally, e.g. via dire
     (setq large-file-warning-threshold nil))
 #+end_src
 
-** Kill dired buffers instead of quitting them
-- https://www.emacswiki.org/emacs/DiredReuseDirectoryBuffer says:
-  Starting with Emacs 28.1, you can customize option ‘dired-kill-when-opening-new-dired-buffer’ to non-`nil`, to kill the current Dired buffer when you create a new one.
+* Look & feel
+** General appearance
+
 #+begin_src emacs-lisp
   (use-package emacs
     :config
-    (setq dired-kill-when-opening-new-dired-buffer t))
+    (menu-bar-mode -1) ; switch off menu bar
+    (tool-bar-mode -1) ; switch off tool bar
+    (scroll-bar-mode -1) ; switch off scroll bar
+    (column-number-mode t) ; show column number next to line number
+    (global-hl-line-mode -1) ; highlight the current line
+    (setq visible-bell t)
+    (setq inhibit-startup-screen t)) ;; don't show splash
 #+end_src
 
-* Look & feel
 ** Startup / Welcome buffer
 This is from https://xenodium.com/bending-emacs-episode-2
 #+begin_src emacs-lisp
-  (setq jf/welcome-image "~/.nuts.png")
+  (use-package emacs
+    :preface
+    (setq jf-welcome-image "~/.nuts.png")
 
-  (defun jf/show-welcome-buffer ()
-    "Show *Welcome* buffer."
-    (with-current-buffer (get-buffer-create "*Welcome*")
-      (setq truncate-lines t)
-      (setq cursor-type nil)
-      (read-only-mode +1)
-      (jf/refresh-welcome-buffer)
-      (local-set-key (kbd "q") 'kill-current-buffer)
-      (add-hook 'window-size-change-functions
-                (lambda (_frame)
-                  (jf/refresh-welcome-buffer)) nil t)
-      (add-hook 'window-configuration-change-hook
-                #'jf/refresh-welcome-buffer nil t)
-      (switch-to-buffer (current-buffer))))
+    (defun jf-show-welcome-buffer ()
+      "Show *Welcome* buffer."
+      (with-current-buffer (get-buffer-create "*Welcome*")
+        (setq truncate-lines t)
+        (setq cursor-type nil)
+        (read-only-mode +1)
+        (jf-refresh-welcome-buffer)
+        (local-set-key (kbd "q") 'kill-current-buffer)
+        (add-hook 'window-size-change-functions
+                  (lambda (_frame)
+                    (jf-refresh-welcome-buffer)) nil t)
+        (add-hook 'window-configuration-change-hook
+                  #'jf-refresh-welcome-buffer nil t)
+        (switch-to-buffer (current-buffer))))
 
-  (defun jf/refresh-welcome-buffer ()
-    "Refresh *Welcome* buffer content for WINDOW."
-    (when-let* ((inhibit-read-only t)
-                (welcome-buffer (get-buffer "*Welcome*"))
-                (window (get-buffer-window welcome-buffer))
-                (image-path jf/welcome-image)
-                (image (create-image image-path nil nil :max-height 300))
-                (image-height (cdr (image-size image)))
-                (image-width (car (image-size image)))
-                (top-margin (floor (/ (- (window-height window) image-height) 2)))
-                (left-margin (floor (/ (- (window-width window) image-width) 2)))
-                (title "Glück Auf!")
-  	      (proper-title (propertize title 'face '(:height 1.2))))
-      (with-current-buffer welcome-buffer
-        (erase-buffer)
-        (setq mode-line-format nil)
-        (goto-char (point-min))
-        (insert (make-string top-margin ?\n))
-        (insert (make-string left-margin ?\ ))
-        (insert-image image)
-        (insert "\n\n\n")
-        (insert (make-string (- (floor (/ (- (window-width window) (string-width proper-title)) 2)) 1) ?\ ))
-        (insert proper-title))))
-
-  (jf/show-welcome-buffer)
+    (defun jf-refresh-welcome-buffer ()
+      "Refresh *Welcome* buffer content for WINDOW."
+      (when-let* ((inhibit-read-only t)
+                  (welcome-buffer (get-buffer "*Welcome*"))
+                  (window (get-buffer-window welcome-buffer))
+                  (image-path jf-welcome-image)
+                  (image (create-image image-path nil nil :max-height 300))
+                  (image-height (cdr (image-size image)))
+                  (image-width (car (image-size image)))
+                  (top-margin (floor (/ (- (window-height window) image-height) 2)))
+                  (left-margin (floor (/ (- (window-width window) image-width) 2)))
+                  (title "Glück Auf!")
+    		(proper-title (propertize title 'face '(:height 1.2))))
+        (with-current-buffer welcome-buffer
+          (erase-buffer)
+          (setq mode-line-format nil)
+          (goto-char (point-min))
+          (insert (make-string top-margin ?\n))
+          (insert (make-string left-margin ?\ ))
+          (insert-image image)
+          (insert "\n\n\n")
+          (insert (make-string (- (floor (/ (- (window-width window) (string-width proper-title)) 2)) 1) ?\ ))
+          (insert proper-title))))
+    :config
+    (jf-show-welcome-buffer))
 #+end_src
 
 ** Font
-
 - I set my default fonts via guix home, which generates a ~~/.config/fontconfig/fonts.conf~.
 - Furthermore, I set the same fonts via ~gsettings~ / ~dconf~
-- To let emacs dynamically respect font changes in dconf, I set ~font-use-system-font~ to ~non-nil~:
+- To let emacs dynamically respect font changes in dconf, I set ~font-use-system-font~ to ~non-nil~
+ => No need to define the fonts to use in Emacs anymore
 
 #+begin_src emacs-lisp
   (use-package emacs
     :config
     (setq font-use-system-font t))
+#+end_src
+
+Dynamic scale up and scale down
+#+begin_src emacs-lisp
+  (use-package emacs
+    :config
+    (setq text-scale-mode-step 1.1)
+    :bind
+    ;; Increase / decrease text scale
+    ("C--" . text-scale-decrease)
+    ("C-+" . text-scale-increase))
 #+end_src
 
 ** Ligatures
@@ -279,18 +342,23 @@ This is from https://xenodium.com/bending-emacs-episode-2
     (global-ligature-mode 't))
 #+end_src
 
-** General appearance
-
+** Theme
+I use the Modus Themes. To switch between light (operandi) and dark (vivendi) theme, auto-dark is used. Switching between light and dark is then possible by one of the following commands:
+- ~gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark~ or 
+- ~gsettings set org.gnome.desktop.interface color-scheme 'prefer-light'~, respectively
+- This is a somewhat weird package loading. For the reason see https://github.com/LionyxML/auto-dark-emacs/issues/71#issuecomment-3363091706
+  
 #+begin_src emacs-lisp
-  (use-package emacs
+  (use-package auto-dark
+    :preface
+    (defun jf-server-auto-dark (frame)
+      (with-selected-frame frame
+        (when (display-graphic-p)
+  	(auto-dark-mode 1)
+  	(remove-hook 'after-make-frame-functions #'jf-server-auto-dark))))
+    :hook (after-make-frame-functions . jf-server-auto-dark)
     :config
-    (menu-bar-mode -1) ; switch off menu bar
-    (tool-bar-mode -1) ; switch off tool bar
-    (scroll-bar-mode -1) ; switch off scroll bar
-    (column-number-mode t) ; show column number next to line number
-    (global-hl-line-mode -1) ; highlight the current line
-    (setq visible-bell t)
-    (setq inhibit-startup-screen t)) ;; don't show splash
+    (setq auto-dark-themes '((modus-vivendi) (modus-operandi))))
 #+end_src
 
 ** Smooth scrolling
@@ -303,6 +371,14 @@ This is from https://xenodium.com/bending-emacs-episode-2
     (setq-default scroll-conservatively 100))
 #+end_src
 
+** Use Short Answers
+Emacs 28+ supports to globally default to ~y-or-n-p~ instead of ~yes-or-no-p~.
+#+begin_src emacs-lisp
+  (use-package emacs
+    :config
+    (setq use-short-answers t))
+#+end_src
+
 ** Context menu
 #+begin_src emacs-lisp
   (use-package mouse
@@ -310,47 +386,11 @@ This is from https://xenodium.com/bending-emacs-episode-2
     (context-menu-mode))
 #+end_src
 
-** Theme
-I use the Modus Themes. To switch between light (operandi) and dark (vivendi) theme, auto-dark is used. Switching between light and dark is then possible by one of the following commands:
-- ~gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark~ or 
-- ~gsettings set org.gnome.desktop.interface color-scheme 'prefer-light'~, respectively
-- This is a somewhat weird package loading. For the reason see https://github.com/LionyxML/auto-dark-emacs/issues/71#issuecomment-3363091706
-  
-#+begin_src emacs-lisp
-  (defun jf/server-auto-dark (frame)
-    (with-selected-frame frame
-      (when (display-graphic-p)
-        (auto-dark-mode 1)
-        (remove-hook 'after-make-frame-functions #'jf/server-auto-dark))))
-
-  (use-package auto-dark
-    :config
-    (setq auto-dark-themes '((modus-vivendi) (modus-operandi)))
-    (add-hook 'after-make-frame-functions #'jf/server-auto-dark))
-
-#+end_src
-
-** COMMENT Spacious Padding
-CLOSED: [2026-04-07 Tue 12:54]
-
-#+begin_src emacs-lisp :tangle no
-  (use-package spacious-padding
-    :config
-    (setq spacious-padding-widths
-  	'( :internal-border-width 15
-  	   :header-line-width 4
-  	   :mode-line-width 6
-  	   :tab-width 4
-  	   :right-divider-width 30
-  	   :scroll-bar-width 8))
-    (spacious-padding-mode 1))
-#+end_src
-
 ** Visual line mode in text-mode
 #+begin_src emacs-lisp
   (use-package emacs
-    :config
-    (add-hook 'text-mode-hook (lambda () (visual-line-mode 1))))
+    :hook
+    (text-mode-hook . (lambda () (visual-line-mode 1))))
 #+end_src
 
 ** System Clipboard to kill ring
@@ -383,30 +423,12 @@ CLOSED: [2026-04-07 Tue 12:54]
     (winum-mode))
 #+end_src
 
-** Use Short Answers
-Emacs 28+ supports to globally default to ~y-or-n-p~ instead of ~yes-or-no-p~.
-#+begin_src emacs-lisp
-  (use-package emacs
-    :config
-    (setq use-short-answers t))
-#+end_src
-
 ** Hide minor mode indicators (requires Emacs 31+)
 - Alternatives: "diminish" and "minions" not part of Emacs
 #+begin_src emacs-lisp
   (use-package emacs
     :config
     (setq mode-line-collapse-minor-modes t))
-#+end_src
-
-** COMMENT Minions (alternative to diminish), not required with emacs 31+
-CLOSED: [2026-09-07 Mon 11:24]
-This minor mode hides all minor mode indicators from mode line and provides a menu instead.
-In emacs 31 there is an alternative: https://www.reddit.com/r/emacs/comments/1k7zxjv/fyi_modelinecollapseminormodes/
-#+begin_src emacs-lisp :tangle no
-  (use-package minions
-    :config
-    (add-hook 'emacs-startup-hook #'minions-mode))
 #+end_src
 
 ** Show search result counts in modeline
@@ -418,25 +440,24 @@ In emacs 31 there is an alternative: https://www.reddit.com/r/emacs/comments/1k7
     (setq isearch-lazy-highlight t))
 #+end_src
 
-** Line numbers on the left
-   
+** Line numbers on the left   
 =display-line-numbers-mode= is a built in minor mode
 
 #+begin_src emacs-lisp
   (use-package display-line-numbers ; built-in
+    :hook
+    (prog-mode-hook .display-line-numbers-mode)
     :config
-    (global-display-line-numbers-mode 0)
-    (add-hook 'prog-mode-hook
-  	    #'display-line-numbers-mode))
+    (global-display-line-numbers-mode 0))
 #+end_src
 
 ** Show Fill Column Indicator
 #+begin_src emacs-lisp
   (use-package display-fill-column-indicator ; built-in
+    :hook
+    (prog-mode-hook . display-fill-column-indicator-mode)
     :config
-    (setq fill-column 80)
-    (add-hook 'prog-mode-hook
-  	    #'display-fill-column-indicator-mode))
+    (setq fill-column 80))
 #+end_src
 
 ** which-key (included in emacs 30)
@@ -473,20 +494,68 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
     :config (all-the-icons-completion-mode))
 #+end_src
 
-* Minor modes & common packages
-** Vertico
-(Vertical) Completion framework: Vertico is the successor of selectrum.
-#+begin_src emacs-lisp
+* Completion
+** Minibuffer completion
+I try to use built-in packages to reduce external dependencies
+- Emacs has ~icomplete-vertical-mode~, which provides most of vertico's functionalities. See
+  - https://rahuljuliato.com/posts/completions-buffer-is-now-enough
+  - https://www.youtube.com/watch?v=yH0Gan6xMTo
+  - [[https://www.reddit.com/r/emacs/comments/11b24xd/comment/j9vv94v/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button][Discussion on Reddit]]
 
-  (defun crm-indicator (args)
-    (cons (format "[CRM%s] %s"
-                  (replace-regexp-in-string
-                   "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
-                   crm-separator)
-                  (car args))
-          (cdr args)))
+#+begin_src emacs-lisp
+  (use-package emacs
+    :hook
+    ((completion-list-mode . (lambda () (setq truncate-lines t))))
+    :config
+    (setq completion-show-help nil)
+    (setq completion-auto-help 'visible)
+    (setq completion-auto-select nil)
+    (setq minibuffer-visible-completions 'up-down)
+    (setq completion-eager-update t)
+    (setq completion-eager-display 'auto)
+    (setq completions-sort 'historical)
+    (setq completions-format 'one-column)
+    (setq completions-max-height 15)
+    (setq completions-detailed t)
+    ;; (setq completion-styles '(basic flex))  ; orderless config overwrites this
+    ;; (setq completions-group t)
+    ;; (setq completion-ignore-case t)
+    ;; (setq read-buffer-completion-ignore-case t)
+    ;; (setq read-file-name-completion-ignore-case t)
+    ;; (setq bookmark-completion-ignore-case t)
+    (icomplete-vertical-mode)
+    (icomplete-mode 0))
+#+end_src
+
+*** Marginalia 
+
+Enriches selection lists (and completion minibuffers, e.g. consult) with additional information.
+#+begin_src emacs-lisp
+  ;; Enable rich annotations using the Marginalia package
+  (use-package marginalia
+    :bind (:map minibuffer-local-map
+                ("M-A" . marginalia-cycle))
+    ;; The :init configuration is always executed (Not lazy!)
+    :init
+    ;; Must be in the :init section of use-package such that the mode gets
+    ;; enabled right away. Note that this forces loading the package.
+    (marginalia-mode))
+#+end_src
+*** COMMENT Vertico
+CLOSED: [2026-09-19 Sat 09:37]
+- (Vertical) Completion framework: Vertico is the successor of selectrum.
+#+begin_src emacs-lisp :tangle no
+  ;; (defun crm-indicator (args;; )
+  ;; 		      (cons (format "[CRM%s] %s"
+  ;; 				    (replace-regexp-in-string
+  ;; 				     "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
+  ;; 				     crm-separator)
+  ;; 				    (car args))
+  ;; 			    (cdr args)))
 
   (use-package vertico
+    :hook
+    (minibuffer-setup-hook . cursor-intangible-mode)
     :config
     ;; Different scroll margin
     ;;(setq vertico-scroll-margin 0)
@@ -496,34 +565,115 @@ You must run 'M-x all-the-icons-install-fonts' to actually download the icons to
     ;; (setq vertico-resize t)
     ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
     (setq vertico-cycle t)
-
     ;; Add prompt indicator to `completing-read-multiple'.
     ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
-    (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
-
+    ;;      (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
     ;; Do not allow the cursor in the minibuffer prompt
     (setq minibuffer-prompt-properties
           '(read-only t cursor-intangible t face minibuffer-prompt))
-    (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
-
     ;; Enable recursive minibuffers
     (setq enable-recursive-minibuffers t)
-
     (vertico-mode))
+#+end_src
+
+** COMMENT In buffer completion (Emacs built-in)
+CLOSED: [2026-09-19 Sat 09:39]
+#+begin_src emacs-lisp :tangle no
+  (use-package emacs
+    :config    
+    (setq completion-auto-select t)
+    ;; Enable indentation+completion using the TAB key.
+    ;; `completion-at-point' is often bound to M-TAB.
+    (setq tab-always-indent 'complete))
+#+end_src
+
+*** COMMENT Company
+CLOSED: [2026-07-13 Mon 23:19]
+#+begin_src emacs-lisp :tangle no
+  (use-package company
+    :hook
+    (after-init-hook .global-company-mode))
+#+end_src
+
+*** COMMENT Corfu (COmpletion in Region FUnction)
+CLOSED: [2026-09-12 Sat 21:46]
+Corfu itself: 
+#+begin_src emacs-lisp
+  (use-package corfu
+    :config
+    ;; Optional customizations
+    ;; (setq corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+    (setq corfu-auto t)                 ;; Enable auto completion
+    ;; (setq corfu-separator ?\s)          ;; Orderless field separator
+    ;; (setq corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
+    ;; (setq corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+    ;; (setq corfu-preview-current nil)    ;; Disable current candidate preview
+    ;; (setq corfu-preselect 'prompt)      ;; Preselect the prompt
+    ;; (setq corfu-on-exact-match nil)     ;; Configure handling of exact matches
+    ;; (setq corfu-scroll-margin 5)        ;; Use scroll margin
+    (setq corfu-auto-delay 0.5)
+    
+    ;; TAB cycle if there are only few candidates
+    (setq completion-cycle-threshold 3)
+
+    ;; Enable indentation+completion using the TAB key.
+    ;; `completion-at-point' is often bound to M-TAB.
+    (setq tab-always-indent 'complete)
+    
+    ;; Enable Corfu globally.  This is recommended since Dabbrev can
+    ;; be used globally (M-/).  See also the customization variable
+    ;; `global-corfu-modes' to exclude certain modes.
+    (global-corfu-mode))
+#+end_src
+
+Nerd Icons for corfu:
+#+begin_src emacs-lisp
+  (use-package nerd-icons-corfu
+    :after corfu
+    :config
+    (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
 #+end_src
 
 ** Orderless
 - This package provides an orderless completion style that divides the pattern into space-separated components, and matches candidates that match all of the components in any order. [[https://github.com/oantolin/orderless]]
-- Alternative: prescient.el
+- Alternative: builtin completion-styles or prescient.el
 #+begin_src emacs-lisp
   (use-package orderless
-    :init
-    ;; Configure a custom style dispatcher (see the Consult wiki)
-    ;; (setq orderless-style-dispatchers '(+orderless-dispatch)
-    ;;       orderless-component-separator #'orderless-escapable-split-on-space)
-    (setq completion-styles '(orderless basic)
-          completion-category-defaults nil
-          completion-category-overrides '((file (styles partial-completion)))))
+    :custom
+     (completion-styles '(orderless basic))
+     (completion-category-overrides '((file (styles partial-completion))))
+     (completion-pcm-leading-wildcard t)) ;; Emacs 31: partial-completion behaves like substring
+#+end_src
+
+** Snippet expansion
+- default key for expansion is <TAB>
+- company does not show snippets for completion-at-point, but there is ongoing work
+- what about corfu?
+
+#+begin_src emacs-lisp
+  (use-package yasnippet
+    :config
+    (yas-global-mode))
+#+end_src
+
+Snippets aren't included in the base package, they need to be loaded separately.
+#+begin_src emacs-lisp
+  (use-package yasnippet-snippets)
+#+end_src
+
+* Minor modes & common packages
+** Flymake / Flycheck
+- Flymake is built-in, flycheck is not
+- Flymake is GNU / FSF, flycheck is not
+- Comparison: https://www.flycheck.org/en/latest/user/flycheck-versus-flymake.html
+  
+#+begin_src emacs-lisp
+  (use-package flymake ; built-in
+    :hook
+    (prog-mode-hook . flymake-mode)
+    ;; flymake-languagetool requires flymake-mode
+    ;; (org-mode-hook . flymake-mode)
+    (mu4e-compose-mode-hook . flymake-mode))
 #+end_src
 
 ** Consult
@@ -536,6 +686,7 @@ Completion allows you to quickly select an item from a list of candidates.
     :bind (;; C-c bindings (mode-specific-map)
   	 ("C-c M-x" . consult-mode-command)
   	 ("C-c h" . consult-history)
+  	 ("C-c j" . consult-org-heading)
   	 ("C-c k" . consult-kmacro)
   	 ;; ("C-c m" . consult-man) ; I use it for mu4e / my transient menu
   	 ("C-c i" . consult-info)
@@ -587,7 +738,7 @@ Completion allows you to quickly select an item from a list of candidates.
 
     ;; Enable automatic preview at point in the *Completions* buffer. This is
     ;; relevant when you use the default completion UI.
-    :hook (completion-list-mode . consult-preview-at-point-mode)
+    ;;    :hook (completion-list-mode . consult-preview-at-point-mode)
 
     ;; The :init configuration is always executed (Not lazy)
     :init
@@ -633,115 +784,6 @@ Completion allows you to quickly select an item from a list of candidates.
     )
 #+end_src
 
-** Marginalia
-
-Enriches selection lists (and completion minibuffers, e.g. consult) with additional information.
-
-#+begin_src emacs-lisp
-  ;; Enable rich annotations using the Marginalia package
-  (use-package marginalia
-    :bind (:map minibuffer-local-map
-                ("M-A" . marginalia-cycle))
-    ;; The :init configuration is always executed (Not lazy!)
-    :init
-    ;; Must be in the :init section of use-package such that the mode gets
-    ;; enabled right away. Note that this forces loading the package.
-    (marginalia-mode))
-#+end_src
-
-** In buffer completion
-
-*** COMMENT Company
-CLOSED: [2026-07-13 Mon 23:19]
-#+begin_src emacs-lisp :tangle no
-  (use-package company
-    :config
-    (add-hook 'after-init-hook 'global-company-mode))
-#+end_src
-
-*** Corfu (COmpletion in Region FUnction)
-
-**** Corfu itself
-#+begin_src emacs-lisp
-  (use-package corfu
-    :config
-    ;; Optional customizations
-    ;; (setq corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
-    (setq corfu-auto t)                 ;; Enable auto completion
-    ;; (setq corfu-separator ?\s)          ;; Orderless field separator
-    ;; (setq corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
-    ;; (setq corfu-quit-no-match nil)      ;; Never quit, even if there is no match
-    ;; (setq corfu-preview-current nil)    ;; Disable current candidate preview
-    ;; (setq corfu-preselect 'prompt)      ;; Preselect the prompt
-    ;; (setq corfu-on-exact-match nil)     ;; Configure handling of exact matches
-    ;; (setq corfu-scroll-margin 5)        ;; Use scroll margin
-    (setq corfu-auto-delay 0.5)
-    
-    ;; TAB cycle if there are only few candidates
-    (setq completion-cycle-threshold 3)
-
-    ;; Enable indentation+completion using the TAB key.
-    ;; `completion-at-point' is often bound to M-TAB.
-    (setq tab-always-indent 'complete)
-    
-    ;; Enable Corfu globally.  This is recommended since Dabbrev can
-    ;; be used globally (M-/).  See also the customization variable
-    ;; `global-corfu-modes' to exclude certain modes.
-    (global-corfu-mode))
-#+end_src
-
-**** Nerd Icons for corfu
-#+begin_src emacs-lisp
-  (use-package nerd-icons-corfu
-    :after corfu
-    :config
-    (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
-#+end_src
-
-** yasnippets (snippet expansion)
-Snippet expansion
-- default key for expansion is <TAB>
-- company does not show snippets for completion-at-point, but there is ongoing work
-  what about corfu?
-
-#+begin_src emacs-lisp
-  (use-package yasnippet
-    :config
-    (yas-global-mode))
-#+end_src
-
-Snippets aren't included in the base package. Therefore, they need to be loaded separately.
-#+begin_src emacs-lisp
-  (use-package yasnippet-snippets)
-#+end_src
-
-** Flymake / Flycheck
-- Flymake is built-in, flycheck is not
-- Flymake is GNU / FSF, flycheck is not
-- Comparison: https://www.flycheck.org/en/latest/user/flycheck-versus-flymake.html
-  
-*** flymake
-#+begin_src emacs-lisp
-  (use-package flymake ; built-in
-    :config
-    (add-hook 'prog-mode-hook #'flymake-mode)
-    ;; flymake-languagetool requires flymake-mode
-    ;; (add-hook 'org-mode-hook #'flymake-mode)
-    (add-hook 'mu4e-compose-mode-hook #'flymake-mode))
-#+end_src
-
-*** COMMENT Syntax check with flycheck
-CLOSED: [2026-04-29 Wed 15:23]
-
-#+begin_src emacs-lisp :tangle no
-  (use-package flycheck
-    :config
-    (setq flycheck-emacs-lisp-load-path 'inherit)
-    (add-hook 'elpaca-after-init-hook #'global-flycheck-mode)
-    ;;(add-hook 'prog-mode-hook 'flycheck-mode)
-    )
-#+end_src
- 
 ** embark & embark-consult
 #+begin_src emacs-lisp
   (use-package embark
@@ -751,18 +793,18 @@ CLOSED: [2026-04-29 Wed 15:23]
      ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
 
     :init
-
     ;; Optionally replace the key help with a completing-read interface
     (setq prefix-help-command #'embark-prefix-help-command)
-
     :config
-
     ;; Hide the mode line of the Embark live/completions buffers
     (add-to-list 'display-buffer-alist
                  '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
                    nil
                    (window-parameters (mode-line-format . none)))))
+#+end_src
 
+~embark-consult~ applies embark to consult minibuffers
+#+begin_src emacs-lisp
   ;; Consult users will also want the embark-consult package.
   (use-package embark-consult
     :after (embark consult)
@@ -793,7 +835,8 @@ The package /undo-tree/ contains more features than vundo, e.g. timestamps, diff
 The global keybinding 'C-x u' is set below.
 
 #+begin_src emacs-lisp
-  (use-package vundo)
+    (use-package vundo
+      :bind ("C-x u" . vundo))
 #+end_src
 
 ** Indentation and parenthesis
@@ -808,28 +851,34 @@ The global keybinding 'C-x u' is set below.
 *** Indentation guides
 #+begin_src emacs-lisp
   (use-package highlight-indent-guides
+    :hook
+    (prog-mode-hook . highlight-indent-guides-mode)
     :config
-    (setq highlight-indent-guides-method 'character)
-    (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
+    (setq highlight-indent-guides-method 'character))
 #+end_src
 
 *** Smart paranthesis & Highlight (rainbowishly) parenthesis
 
-An alternative to /smartparens/ is /paren/.
+~paren~ highlights matching parentheses.
+#+begin_src emacs-lisp
+  (use-package emacs
+    :config
+    (show-paren-mode t))
+#+end_src
 
+~smartparens~ is smart about dealing with pairs of parentheses.
 #+begin_src emacs-lisp
   (use-package smartparens
     :config
-    (progn
-      (require 'smartparens-config)
-      (smartparens-global-mode t)
-      (show-paren-mode t)))
+    (require 'smartparens-config)
+    (smartparens-global-mode t))
 #+end_src
 
+~rainbox-delimiters~ colors matching parentheses more distinguishable.
 #+begin_src emacs-lisp
   (use-package rainbow-delimiters
-    :config
-    (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+    :hook
+    (prog-mode-hook . rainbow-delimiters-mode))
 #+end_src
 
 ** tree-sitter
@@ -840,6 +889,8 @@ An alternative to /smartparens/ is /paren/.
 #+begin_src  emacs-lisp
   (use-package treesit
     :config
+    (setq treesit-auto-install-grammar 'ask) ; emacs 31+
+    (setq treesit-enabled-modes t)           ; emacs 31+
     (setq treesit-extra-load-path
   	  (list
   	   "/run/current-system/profile/lib/tree-sitter/"
@@ -903,42 +954,80 @@ An alternative to /smartparens/ is /paren/.
     (add-to-list
      'frames-only-mode-kill-frame-when-buffer-killed-buffer-list
      '(regexp . "\\*vterm\\*.*"))
-    (frames-only-mode))
-  ;; for some reason, frames-only-mode overrides what I set earlier.
-  ;;(setq org-agenda-window-setup 'reorganize-frame))
+    (frames-only-mode)
+    ;; for some reason, frames-only-mode overrides what I set earlier.
+    (setq org-agenda-window-setup 'current-window)
+    ;; Open org agenda files in its own frame (this changed in org 9.8.10)
+    ;; see https://lists.gnu.org/archive/html/emacs-orgmode/2026-09/msg00175.html
+    (advice-add 'org-agenda-goto :after #'jf-turn-current-window-into-frame))
 #+end_src
 
+A function that turns a window in a splitted frame into its own frame:
+(from https://emacs.stackexchange.com/a/7120)
+Alternative: tear-off-window
+#+begin_src emacs-lisp
+  (use-package emacs
+    :preface
+    (defun jf-turn-current-window-into-frame ()
+      (interactive)
+      (let ((buffer (current-buffer)))
+        (unless (one-window-p)
+  	(delete-window))
+        (display-buffer-pop-up-frame buffer nil))))
+#+end_src
+
+* Terminals
+** vterm
+
+#+begin_src emacs-lisp
+  (use-package vterm
+    :config
+    (setq vterm-max-scrollback 100000))
+#+end_src
+
+** ghostel
+- https://github.com/dakra/ghostel
+- ghostty is not available in guix yet
 ** terminal-here
 Opens a terminal in the directory that matches the active buffer. Even works over tramp (e.g. ssh).
 
 #+begin_src emacs-lisp
   (use-package terminal-here
+    :bind ("C-<f5>" . terminal-here-launch)
     :config
-    (setq terminal-here-linux-terminal-command 'alacritty)
+    (setq terminal-here-linux-terminal-command 'vterm))
     ;; (global-set-key (kbd "C-<f6>") #'terminal-here-project-launch) ; I use C-<f6> for open-with
-    (global-set-key (kbd "C-<f5>") #'terminal-here-launch))
 #+end_src
 
 * Org mode
 ** Setup org / org-mode-map key bindings
 #+begin_src emacs-lisp
-  (defun jf/org-timestamp-inactive ()
-    (interactive)
-    (org-time-stamp nil t))
-
   (use-package org
+    :preface
+    (defun jf-org-timestamp-inactive ()
+      (interactive)
+      (org-time-stamp nil t))
     ;; the bind may defer the package loading, see documentation (C-h f use-package RET)
-    :bind (:map org-mode-map
-                ("C-c C-<left>" . org-promote-subtree)
-                ("C-c C-<right>" . org-demote-subtree)
-                ("C-c ," . jf/org-timestamp-inactive)
-  	      ("C-<f6>" . jf/clone-indirect-buffer-and-narrow-to-subtree)))
+    :bind
+     ("C-c a" . org-agenda)
+     ("C-c c" . org-capture)
+     ("C-c l" . org-store-link)
+     ("C-c o" . org-switchb)
+     (:map org-mode-map
+  	 ("C-c C-<left>" . org-promote-subtree)
+  	 ("C-c C-<right>" . org-demote-subtree)
+  	 ("C-c ," . jf-org-timestamp-inactive)
+  	 ("C-<f6>" . jf-clone-indirect-buffer-and-narrow-to-subtree)))
 #+end_src
 
 ** Org's basics & Look & Feel
-
 #+begin_src emacs-lisp
   (use-package org
+    :hook
+    (org-mode-hook . (lambda ()
+  		     (visual-line-mode 1)
+  		     ;;(flycheck-mode -1)
+  		     (variable-pitch-mode 1)))
     :config
     (set-face-underline 'org-ellipsis nil)
     (setq org-ellipsis " …")
@@ -951,10 +1040,6 @@ Opens a terminal in the directory that matches the active buffer. Even works ove
     (setq org-num-skip-unnumbered t)
     (setq org-num-skip-tags (list "ignore" "noexport" "unnumbered"))
     (setq org-goto-interface 'outline-path-completion)
-    (add-hook 'org-mode-hook (lambda ()
-         			     (visual-line-mode 1)
-    			     ;;(flycheck-mode -1)
-    			     (variable-pitch-mode 1)))
     (custom-theme-set-faces
      ;; Force to fixed-pitch certain elements in org mode, when I switch to variable-pitch-mode
      ;; To find the face at point, use 'C-u C-x =' ( ~what-cursor-position~ with prefix)
@@ -980,16 +1065,23 @@ Opens a terminal in the directory that matches the active buffer. Even works ove
      '(org-target ((t (:inherit (fixed-pitch)))))
      '(org-todo ((t (:inherit (fixed-pitch)))))
      '(org-verbatim ((t (:inherit (shadow fixed-pitch)))))))
+#+end_src
 
-  ;; beautiful bullets
+** Beautiful bullets
+#+begin_src emacs-lisp
   (use-package org-superstar
-    :config
-    (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
+    :hook
+    (org-mode-hook . (lambda () (org-superstar-mode 1))))
 #+end_src
 
 ** Task Management, Agenda, Archive, Refiling
 #+begin_src emacs-lisp
   (use-package org
+    :bind
+    ;; Open GTD file
+    ("C-c t" . (lambda ()
+  	       (interactive)
+  	       (find-file "~/org/agenda/gtd.org")))
     :config
     ;; Task management
     (setq org-directory "~/org")
@@ -1104,6 +1196,19 @@ Opens a terminal in the directory that matches the active buffer. Even works ove
        (latex . t))))
 #+end_src
 
+** Focus on Sub Tree (clone and narrow)
+#+begin_src emacs-lisp
+  (use-package org
+    :config
+    (defun jf-clone-indirect-buffer-and-narrow-to-subtree ()
+      "Create an indirect cloned buffer and narrow to org subtree in the clone."
+      (interactive)
+      (clone-indirect-buffer
+       (concat "<org subtree> " (nth 4 (org-heading-components)))
+       t)
+      (org-narrow-to-subtree)))
+#+end_src
+
 ** Syntax highlighting with engrave-faces
 For syntax highlighted source code blocks, I use the font-locking mode of emacs. The package engrave-faces contains LaTeX, Ansi and HTML faces.
 
@@ -1116,6 +1221,7 @@ Build a second brain with org-roam.
 #+begin_src emacs-lisp
   (use-package org-roam
     :after org
+    :defer 30
     :bind (("C-c n l" . org-roam-buffer-toggle)
            ("C-c n f" . org-roam-node-find)
            ("C-c n i" . org-roam-node-insert)
@@ -1149,12 +1255,12 @@ Build a second brain with org-roam.
 ** Org roam dailies
 #+begin_src emacs-lisp
   (use-package org-roam-dailies
+    :bind-keymap
+    ("C-c n d" . org-roam-dailies-map)
     :bind (("C-c n j" . org-roam-dailies-capture-date)
            :map org-roam-dailies-map
            ("Y" . org-roam-dailies-capture-yesterday)
            ("T" . org-roam-dailies-capture-tomorrow))
-    :bind-keymap
-    ("C-c n d" . org-roam-dailies-map)
     :config
     ;;(require 'org-roam-dailies) ;; Ensure the keymap is available
     (setq org-roam-dailies-directory "dailies/")
@@ -1169,6 +1275,8 @@ Visualize the org roam graph in browser.
 #+begin_src emacs-lisp
   (use-package org-roam-ui
     :after org-roam
+    :bind
+    ("C-c n u" . org-roam-ui-open)
     :config
     (setq org-roam-ui-sync-theme t
   	org-roam-ui-follow t
@@ -1206,7 +1314,7 @@ Visualize the org roam graph in browser.
 *** Beamer support
 #+begin_src emacs-lisp
   (use-package org
-  :config
+    :config
     (add-to-list 'org-export-backends 'beamer)
     (setq org-beamer-environments-extra
         	'(("onlyenv" "O" "\\begin{onlyenv}%a" "\\end{onlyenv}"))))
@@ -1294,6 +1402,53 @@ htmlize is used by org to export to HTML.
 ** org-pomodoro
 #+begin_src emacs-lisp
   (use-package org-pomodoro
+    :preface
+    (defun jf-org-pomodoro-waybar-string (text tooltip class)
+      (format
+       "{\"text\": \"%s\", \"tooltip\": \"%s\", \"class\": \"%s\" }"
+       text tooltip class))
+    (defun jf-org-pomodoro-waybar-shortened-clock-heading ()
+      (substring-no-properties org-clock-heading
+  			     0
+  			     (min (length org-clock-heading) 19)))
+    (defun jf-org-pomodoro-text-time ()
+      "Return status info about org-pomodoro and if org-pomodoro is not running, try to print info about org-clock.
+     If either org-pomodoro or org-clock aren't active, print \"No Active Task \" "
+      (interactive)
+      (cond ((equal :none org-pomodoro-state)
+             (if (org-clock-is-active)
+                 (format "Clocked task: %d minutes - %s"
+                         (org-clock-get-clocked-time)
+  		       (jf-org-pomodoro-waybar-shortened-clock-heading)
+                         "No Active task")
+  	     (jf-org-pomodoro-waybar-string
+  	      nil
+  	      nil
+  	      nil)))
+  	  ((equal :pomodoro org-pomodoro-state)
+  	   (jf-org-pomodoro-waybar-string (format "%s • %s (%d)"
+  						  (jf-org-pomodoro-waybar-shortened-clock-heading)
+  						  (org-pomodoro-format-seconds)
+  						  org-pomodoro-count)
+  					  (jf-org-pomodoro-waybar-shortened-clock-heading)
+  					  "work"))
+  	  ((equal :overtime org-pomodoro-state)
+  	   (jf-org-pomodoro-waybar-string (format "Overtime • %s (%d)"
+  						  (org-pomodoro-format-seconds)
+  						  org-pomodoro-count)
+  					  (jf-org-pomodoro-waybar-shortened-clock-heading)
+  					  "overtime"))
+  	  ((equal :short-break org-pomodoro-state)
+  	   (jf-org-pomodoro-waybar-string (format "Short Break • %s (%d)"
+  						  (org-pomodoro-format-seconds)
+  						  org-pomodoro-count)
+  					  (jf-org-pomodoro-waybar-shortened-clock-heading)
+  					  "short-break"))
+  	  ((equal :long-break org-pomodoro-state)
+  	   (jf-org-pomodoro-waybar-string (format "Long Break • %s"
+  						  (org-pomodoro-format-seconds))
+  					  (jf-org-pomodoro-waybar-shortened-clock-heading)
+  					  "long-break"))))
     :config
     (setq org-pomodoro-length 50)
     (setq org-pomodoro-short-break-length 10)
@@ -1313,134 +1468,7 @@ htmlize is used by org to export to HTML.
     ;; (org-pomodoro-play-sound :tick)
     (setq org-pomodoro-manual-break t)
     (setq org-pomodoro-keep-killed-pomodoro-time t)
-    (setq org-pomodoro-clock-break t)
-    (defun jf/org-pomodoro-waybar-string (text tooltip class)
-      (format
-       "{\"text\": \"%s\", \"tooltip\": \"%s\", \"class\": \"%s\" }"
-       text tooltip class))
-    (defun jf/org-pomodoro-waybar-shortened-clock-heading ()
-      (substring-no-properties
-       org-clock-heading
-       0
-       (min (length org-clock-heading) 19)))
-    (defun jf/org-pomodoro-text-time ()
-      "Return status info about org-pomodoro and if org-pomodoro is not running, try to print info about org-clock.
-     If either org-pomodoro or org-clock aren't active, print \"No Active Task \" "
-      (interactive)
-      (cond ((equal :none org-pomodoro-state)
-             (if (org-clock-is-active)
-                 (format "Clocked task: %d minutes - %s"
-                         (org-clock-get-clocked-time)
-  		       (jf/org-pomodoro-waybar-shortened-clock-heading)
-                         "No Active task")
-  	     (jf/org-pomodoro-waybar-string
-  	      nil
-  	      nil
-  	      nil)))
-  	  ((equal :pomodoro org-pomodoro-state)
-  	   (jf/org-pomodoro-waybar-string (format "%s • %s (%d)"
-  						  (jf/org-pomodoro-waybar-shortened-clock-heading)
-  						  (org-pomodoro-format-seconds)
-  						  org-pomodoro-count)
-  					  (jf/org-pomodoro-waybar-shortened-clock-heading)
-  					  "work"))
-  	  ((equal :overtime org-pomodoro-state)
-  	   (jf/org-pomodoro-waybar-string (format "Overtime • %s (%d)"
-  						  (org-pomodoro-format-seconds)
-  						  org-pomodoro-count)
-  					  (jf/org-pomodoro-waybar-shortened-clock-heading)
-  					  "overtime"))
-  	  ((equal :short-break org-pomodoro-state)
-  	   (jf/org-pomodoro-waybar-string (format "Short Break • %s (%d)"
-  						  (org-pomodoro-format-seconds)
-  						  org-pomodoro-count)
-  					  (jf/org-pomodoro-waybar-shortened-clock-heading)
-  					  "short-break"))
-  	  ((equal :long-break org-pomodoro-state)
-  	   (jf/org-pomodoro-waybar-string (format "Long Break • %s"  
-  						  (org-pomodoro-format-seconds))
-  					  (jf/org-pomodoro-waybar-shortened-clock-heading)
-  					  "long-break")))))
-#+end_src
-
-** UNUSED Display PDF images inline
-
-#+begin_src emacs-lisp
-  (use-package org
-    :config
-    ;; Display PDF files inline
-    ;; taken from https://stackoverflow.com/questions/15407485/inline-pdf-images-in-org-mode
-
-    (add-to-list 'image-file-name-extensions "pdf")
-
-    (setq org-image-actual-width 600)
-
-    (setq org-imagemagick-display-command "convert -density 600 \"%s\" -thumbnail \"%sx%s>\" \"%s\"")
-    (defun org-display-inline-images (&optional include-linked refresh beg end)
-      "Display inline images.
-    Normally only links without a description part are inlined, because this
-    is how it will work for export.  When INCLUDE-LINKED is set, also links
-    with a description part will be inlined.  This
-    can be nice for a quick
-    look at those images, but it does not reflect what exported files will look
-    like.
-    When REFRESH is set, refresh existing images between BEG and END.
-    This will create new image displays only if necessary.
-    BEG and END default to the buffer boundaries."
-      (interactive "P")
-      (unless refresh
-        (org-remove-inline-images)
-        (if (fboundp 'clear-image-cache) (clear-image-cache)))
-      (save-excursion
-        (save-restriction
-  	(widen)
-  	(setq beg (or beg (point-min)) end (or end (point-max)))
-  	(goto-char beg)
-  	(let ((re (concat "\\[\\[\\(\\(file:\\)\\|\\([./~]\\)\\)\\([^]\n]+?"
-                            (substring (org-image-file-name-regexp) 0 -2)
-                            "\\)\\]" (if include-linked "" "\\]")))
-                old file ov img)
-            (while (re-search-forward re end t)
-              (setq old (get-char-property-and-overlay (match-beginning 1)
-                                                       'org-image-overlay)
-    		  file (expand-file-name
-  			(concat (or (match-string 3) "") (match-string 4))))
-              (when (file-exists-p file)
-                (let ((file-thumb (format "%s%s_thumb.png" (file-name-directory file) (file-name-base file))))
-  		(if (file-exists-p file-thumb)
-                      (let ((thumb-time (nth 5 (file-attributes file-thumb 'string)))
-                            (file-time (nth 5 (file-attributes file 'string))))
-                        (if (time-less-p thumb-time file-time)
-    			  (shell-command (format org-imagemagick-display-command
-    						 file org-image-actual-width org-image-actual-width file-thumb) nil nil)))
-                    (shell-command (format org-imagemagick-display-command
-  					 file org-image-actual-width org-image-actual-width file-thumb) nil nil))
-  		(if (and (car-safe old) refresh)
-                      (image-refresh (overlay-get (cdr old) 'display))
-                    (setq img (save-match-data (create-image file-thumb)))
-                    (when img
-                      (setq ov (make-overlay (match-beginning 0) (match-end 0)))
-                      (overlay-put ov 'display img)
-                      (overlay-put ov 'face 'default)
-                      (overlay-put ov 'org-image-overlay t)
-                      (overlay-put ov 'modification-hooks
-  				 (list 'org-display-inline-remove-overlay))
-                      (push ov org-inline-image-overlays)))))))))))
-#+end_src
-
-** UNUSED Safe elisp org-links
-
-#+begin_src emacs-lisp
-  (defun jf/org-setup-safe-elisp-links ()
-    (setq org-confirm-elisp-link-whitelist
-  	'("(khalel-edit-calendar-event)"
-  	  "(progn (khalel-run-vdirsyncer) (khalel-import-events))"
-  	  "(org-roam-dailies-goto-yesterday)"
-  	  "(mu4e)"
-  	  "(org-agenda-list)"))
-
-    (setq org-confirm-elisp-link-not-regexp
-  	(mapconcat 'identity org-confirm-elisp-link-whitelist "\\|")))
+    (setq org-pomodoro-clock-break t))
 #+end_src
 
 * Writing
@@ -1453,9 +1481,11 @@ htmlize is used by org to export to HTML.
   (use-package jinx
     :config
     (setq jinx-languages "en_US de_DE")
-    (add-hook 'emacs-startup-hook #'global-jinx-mode)
-    (keymap-global-set "M-$" #'jinx-correct)
-    (keymap-global-set "C-M-$" #'jinx-languages))
+    :hook
+    (emacs-startup-hook . global-jinx-mode)
+    :bind
+    (("M-$" . jinx-correct)
+  	 ("C-M-$" . jinx-languages)))
 #+end_src
 
 ** LanguageTool
@@ -1469,32 +1499,33 @@ htmlize is used by org to export to HTML.
 
 #+begin_src emacs-lisp
   (use-package flymake-languagetool
-    :hook ((text-mode       . flymake-languagetool-load)
-         (latex-mode      . flymake-languagetool-load)
-         (org-mode        . flymake-languagetool-load)
-         (markdown-mode   . flymake-languagetool-load)
-         (mu4e-compose-mode . flymake-languagetool-load))
-    :config
-    ;; Local Server Configuration
-    (setq flymake-languagetool-server-jar "/home/flake/.languagetool/languagetool-server.jar"))
-    ;; (setq flymake-languagetool-server-jar nil)
-    ;; (setq flymake-languagetool-language nil)
-    ;;(setq flymake-languagetool-url "https://api.languagetool.org")
-    ;; (setq flymake-languagetool-url "http://localhost:8081"))
+    :hook ((text-mode         . flymake-languagetool-load)
+           (latex-mode        . flymake-languagetool-load)
+           (org-mode          . flymake-languagetool-load)
+           (markdown-mode     . flymake-languagetool-load)
+  	 (mu4e-compose-mode . flymake-languagetool-load))
+    :init
+    ;; LanguageTools API Remote Server Configuration
+    (setq flymake-languagetool-server-jar nil)
+    (setq flymake-languagetool-url "http://localhost:8081"))
 #+end_src
 
-** Translations
+** Translations with gt.el
+
+- [[https://github.com/lorniu/gt.el/issues/111#issuecomment-4801142239][DeepL support currently broken]] and gt.el package [[https://github.com/lorniu/gt.el/commits/master/][looks unmaintained]]
+- Worth a try to use: EU translation service: https://translation.ec.europa.eu/tools-and-resources/ai-translation-and-language-tools_en
+
 #+begin_src emacs-lisp
   (use-package gt
+    :bind
+    ("C-x C-t" . gt-translate)
     :config
     (setq gt-langs '(en de nl))
     (setq gt-taker-prompt t)
     (setq gt-default-translator
   	(gt-translator
   	 :taker (gt-taker :text 'sentence :prompt t)
-  	 :engines (gt-google-engine)
-  	 ;; :render (gt-render)
-  	 ))
+  	 :engines (gt-google-engine)))
     (setq gt-preset-translators
   	`((minibuffer . ,(gt-translator
   			  :engines (gt-google-engine)
@@ -1507,8 +1538,6 @@ htmlize is used by org to export to HTML.
   		      :render (gt-buffer-render))))))
 #+end_src
 
-Worth a try to use: EU translation service: https://translation.ec.europa.eu/tools-and-resources/ai-translation-and-language-tools_en
-
 ** Citations
 *** Citar
 Allows to browse bibtex file(s), insert citations, open files, links and notes. It's a helm-bibtext replacement.
@@ -1517,6 +1546,7 @@ Allows to browse bibtex file(s), insert citations, open files, links and notes. 
     :no-require
     :after org
     :bind
+    ("C-c b" . citar-open)
     (:map minibuffer-local-map ("M-b" . citar-insert-preset))
     :hook
     (LaTeX-mode . citar-capf-setup)
@@ -1567,28 +1597,48 @@ The package /citar-org-roam/ provides usage of org roam to take bibliographical 
 
 #+begin_src emacs-lisp
   (use-package gptel
+    :bind
+    ("C-c RET" . gptel-send)
     :config
     (setq gptel-default-mode 'org-mode)
-    (setq gptel-model 'mistral-large-2512
+    (setq gptel-model 'mistral-large-small
   	gptel-backend
-  	(gptel-make-openai "MistralLeChat"  ;Any name you want
+  	(gptel-make-openai "MistralLeChat"  ; Any name you want
   	  :host "api.mistral.ai"
   	  :endpoint "/v1/chat/completions"
-  	  :protocol "https"
   	  :key (auth-info-password
   		(nth 0 (auth-source-search
   			:host "api.mistral.ai")))
-  	  :models '("mistral-large-2512"))) ; see https://docs.mistral.ai/getting-started/models
+  	  ;; see https://docs.mistral.ai/getting-started/models
+  	  :models '("mistral-medium-latest")))
     (gptel-make-gemini "Gemini"
       :stream t
       :key (auth-info-password
             (nth 0 (auth-source-search
                     :host "generativelanguage.googleapis.com"))))
+    (gptel-make-openai "academiccloud (GWDG)"
+        :host "chat-ai.academiccloud.de"
+        :endpoint "/v1/chat/completions"
+        :models '("mistral-medium-3.5-128b"
+  		"meta-llama-3.1-8b-instruct" ; didn't work
+  		"openai-gpt-oss-120b") ; didn't work
+        :key (auth-info-password
+  	    (nth 0 (auth-source-search
+  		    :host "chat-ai.academiccloud.de"))))
     (gptel-make-anthropic "Claude"
       :stream t
       :key (auth-info-password
             (nth 0 (auth-source-search
                     :host "anthropic.com"))))
+    ;; (gptel-make-openai "EduKI RLP"
+    ;;   :host "kisski.gwdg.de"
+    ;;   :endpoint "/en/leistungen/2-02-llm-service/"
+    ;;   ;;:host "chat.edu-ki-rlp.de"
+    ;;   ;;:endpoint "/api/v1"
+    ;;   :protocol "https"
+    ;;   :key (auth-info-password
+    ;;         (nth 0 (auth-source-search
+    ;;                 :host "edu-ki-rlp.de"))))
     (add-to-list 'gptel-directives
                  '(dreams . "I want you to act as a dream interpreter. I will give you descriptions of my dreams, and you will provide interpretations based on the symbols and themes present in the dream. Do not provide personal opinions or assumptions about the dreamer. Provide only factual interpretations based on the information given. Provide your interpretation in German language.")))
 #+end_src
@@ -1609,68 +1659,39 @@ Search for literature in literature databases like arxiv and dblp
   (use-package biblio)
 #+end_src
 
-* AucTeX
-- https://github.com/progfolio/elpaca/issues/245
-- https://github.com/progfolio/elpaca/wiki/auctex
-
-#+begin_src emacs-lisp
-  (use-package tex
-    :config
-    (setq TeX-auto-save t)
-    (setq TeX-parse-self t)
-    (setq-default TeX-master nil)
-    (setq-default TeX-engine 'luatex)
-    ;; synctex
-    (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
-    (setq TeX-source-correlate-method 'synctex)
-    (setq TeX-source-correlate-start-server t)
-    ;; pdf tools
-    (setq TeX-view-program-selection '((output-pdf "PDF Tools")))
-    (setq TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view))))
-#+end_src
-
-* Other major modes
-** Transient
-#+begin_src emacs-lisp
-  (use-package transient
-    ;; :ensure (:wait t) :demand t ; without this wait, I get errors by packages that depend on transient
-    :after (org org-pomodoro mu4e ement citar biblio magit forgejo gptel)
-    :config
-    (transient-define-prefix jf/my-menu ()
-      "Mein benutzerdefiniertes Menü."
-      [["Org"
-        ("o a" "Agenda" org-agenda-list)
-        ("o d" "Deadlines" (lambda () (interactive) (org-agenda nil "d")))
-        ("o p" "Planning" (lambda () (interactive) (org-agenda nil "p")))
-        ("o g" "GTD file" (lambda () (interactive) (find-file "~/org/agenda/gtd.org")))]
-       ["Pomodoro"
-        ("p s" "Start/Stop Pomodoro" (lambda () (interactive) (org-pomodoro)))
-        ("p g" "Go to current item" org-clock-goto)]
-       ["Mail"
-        ("m" "mu4e" mu4e-transient-menu)]]
-      [["Writing"
-        ("w c" "Citar" citar-open)
-        ("w b" "Biblio" biblio-lookup)]
-       ["Projects"
-        ("g g" "Magit" magit-status)
-        ("f p" "Forgejo PR List" forgejo-pull-list)
-        ("f w" "Forgejo Watch List" forgejo-watch-list)]
-       ["AI"
-        ("a i" "gptel" gptel)
-        ("a m" "gptel menu" gptel-menu)]]))
-#+end_src
-
-** magit: Git support
+* Version Control
+** magit itself
 
 #+begin_src emacs-lisp
   (use-package magit
+    :bind
+    (("C-c g" . magit-status))
     :config
     ;; gpg signing is at transient level 5, default was to show up to level 4
     (setq transient-default-level 5)
     (setq magit-diff-refine-hunk 'all)
+    ;; add magit to project actions (C-x p m)
     (with-eval-after-load 'project
       (define-key project-prefix-map "m" #'magit-project-status)
       (add-to-list 'project-switch-commands '(magit-project-status "Magit") t)))
+#+end_src
+
+** Agitjo: AGit workflow with magit
+
+#+begin_src emacs-lisp
+  (use-package agitjo
+    :config (agitjo-setup "#"))
+#+end_src
+
+** Forgejo support
+#+begin_src emacs-lisp
+  (use-package forgejo
+    :config
+    (setq forgejo-hosts '(
+  			("https://codeberg.org")))
+    (setq forgejo-watch-rules
+     '(("*" . "author:nutcase")))
+    (setq forgejo-watch-filter-default nil)); "read:no"))
 #+end_src
 
 ** git-gutter + fringe
@@ -1691,49 +1712,58 @@ This shows modified/added/deleted lines directly in the editor.
   (use-package git-gutter-fringe)
 #+end_src
 
-** Forgejo support
+* AucTeX
+- https://github.com/progfolio/elpaca/issues/245
+- https://github.com/progfolio/elpaca/wiki/auctex
+
 #+begin_src emacs-lisp
-  (use-package forgejo
+  (use-package tex
     :config
-    (setq forgejo-hosts '(
-  			("https://codeberg.org")
-  			("https://github.com")))
-    (setq forgejo-watch-rules
-     '(("*" . "author:nutcase")))
-    (setq forgejo-watch-filter-default nil)); "read:no"))
+    (setq TeX-auto-save t)
+    (setq TeX-parse-self t)
+    (setq-default TeX-master nil)
+    (setq-default TeX-engine 'luatex)
+    (setq TeX-source-correlate-method 'synctex)
+    (setq TeX-source-correlate-start-server t)
+    ;; pdf tools
+    (setq TeX-view-program-selection '((output-pdf "PDF Tools")))
+    (setq TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view)))
+    :hook
+    ;; synctex
+    (LaTeX-mode-hook . TeX-source-correlate-mode))
 #+end_src
 
-** Agitjo: AGit workflow with magit
-
+* Other major modes
+** Prog mode
 #+begin_src emacs-lisp
-  (use-package agitjo
-    :config (agitjo-setup "#"))
+  (use-package emacs
+    :bind
+    ;; Comment / Uncomment Region
+    ("C-x C-," . comment-region)
+    ("C-x C-." . uncomment-region))
 #+end_src
 
 ** pdf-tools
 
 #+begin_src emacs-lisp
   (use-package pdf-tools
+    :bind (:map pdf-view-mode-map
+  	      ("G" . pdf-view-last-page)
+  	      ("e" . pdf-view-goto-page)
+  	      ("r" . pdf-view-revert-buffer)
+  	      ("a" . pdf-annot-add-text-annotation)
+  	      ("d" . pdf-annot-delete)
+  	      ("h" . pdf-annot-add-highlight-markup-annotation)
+  	      ("~" . pdf-annot-add-squiggly-markup-annotation)
+  	      ("u" . pdf-annot-add-underline-markup-annotation)
+  	      ("O" . pdf-annot-add-strikeout-markup-annotation)
+  	      ("s a" . pdf-view-auto-slice-minor-mode))
+    ;; :hook (pdf-view-mode-hook . pdf-view-roll-minor-mode) ; still buggy
     :config
     (require 'pdf-occur) ;; if I don't require pdf-occur before pdf-tools-install, I get a warning at startup
     (pdf-loader-install)
-    (setq-default pdf-view-display-size 'fit-page)
-    (setopt pdf-view-continuous nil)
-    ;; nice, but too buggy [2026-03-18 Wed]
-    ;; (add-hook 'pdf-view-mode-hook #'pdf-view-roll-minor-mode)
-    ;; (define-key pdf-view-mode-map (kbd "g") nil)
-    ;; (define-key pdf-view-mode-map (kbd "g g") 'pdf-view-first-page)
-    ;; (define-key pdf-view-mode-map (kbd "z") 'jf/open-current-buffer-in-pdfpc)
-    (define-key pdf-view-mode-map (kbd "G") 'pdf-view-last-page)
-    (define-key pdf-view-mode-map (kbd "e") 'pdf-view-goto-page)
-    ;; (define-key pdf-view-mode-map (kbd "r") 'pdf-view-revert-buffer)
-    (define-key pdf-view-mode-map (kbd "a") 'pdf-annot-add-text-annotation)
-    (define-key pdf-view-mode-map (kbd "d") 'pdf-annot-delete)
-    (define-key pdf-view-mode-map (kbd "h") 'pdf-annot-add-highlight-markup-annotation)
-    (define-key pdf-view-mode-map (kbd "~") 'pdf-annot-add-squiggly-markup-annotation)
-    (define-key pdf-view-mode-map (kbd "u") 'pdf-annot-add-underline-markup-annotation)
-    (define-key pdf-view-mode-map (kbd "O") 'pdf-annot-add-strikeout-markup-annotation)
-    (define-key pdf-view-mode-map (kbd "s a") 'pdf-view-auto-slice-minor-mode))
+    ;; (setopt pdf-view-continuous nil)) ; buggy [2026-03-18 Wed]
+    (setq-default pdf-view-display-size 'fit-page))
 #+end_src
     
 Parts of this configuration (e.g. key bindings) are from https://emacselements.com/pdf-tools-settings.html.
@@ -1743,42 +1773,32 @@ SCHEDULED: <2026-04-06 Mon>
 see https://github.com/vedang/pdf-tools/issues/339
 
 #+begin_src emacs-lisp
-  (defun +fix-pdf-view-image-size (&optional displayed-p window page)
-    "Return the size in pixel of the current image in WINDOW.
+  (use-package pdf-tools
+    :preface
+    (defun +fix-pdf-view-image-size (&optional displayed-p window page)
+      "Return the size in pixel of the current image in WINDOW.
 
-  If DISPLAYED-P is non-nil, return the size of the displayed
-  image.  These values may be different, if slicing is used.
+ If DISPLAYED-P is non-nil, return the size of the displayed
+ image.  These values may be different, if slicing is used.
 
-  If PAGE is non-nil return its size instead of current page."
-    (let ((display-prop (if pdf-view-roll-minor-mode
-                            (progn (setq window (if (windowp window) window (selected-window)))
-                                   (setq page (or page (pdf-view-current-page window)))
-                                   (unless (memq page (image-mode-window-get 'displayed-pages window))
-                                     (pdf-view-display-page page window))
-                                   (overlay-get (pdf-roll-page-overlay page window) 'display))
-                          (image-get-display-property))))
-      (if (eq (car display-prop) 'image)
-          (image-size display-prop t)
-        (if displayed-p
-            (image-display-size display-prop t)
-          (image-size (nth 1 display-prop) t)))))
-
-  (advice-add 'pdf-view-image-size :override #'+fix-pdf-view-image-size)
-
-#+end_src
-
-** Terminals
-*** vterm
-
-#+begin_src emacs-lisp
-  (use-package vterm
+ If PAGE is non-nil return its size instead of current page."
+      (let ((display-prop (if pdf-view-roll-minor-mode
+                              (progn (setq window (if (windowp window) window (selected-window)))
+                                     (setq page (or page (pdf-view-current-page window)))
+                                     (unless (memq page (image-mode-window-get 'displayed-pages window))
+                                       (pdf-view-display-page page window))
+                                     (overlay-get (pdf-roll-page-overlay page window) 'display))
+                            (image-get-display-property))))
+        (if (eq (car display-prop) 'image)
+            (image-size display-prop t)
+  	(if displayed-p
+              (image-display-size display-prop t)
+            (image-size (nth 1 display-prop) t)))))
     :config
-    (setq vterm-max-scrollback 100000))
+    (advice-add 'pdf-view-image-size :override #'+fix-pdf-view-image-size))
+
 #+end_src
 
-*** ghostel
-- https://github.com/dakra/ghostel
-- ghostty is not available in guix yet
 ** gnuplot
 #+begin_src emacs-lisp
   (use-package gnuplot)
@@ -1793,7 +1813,6 @@ There are three different packages:
 
 #+begin_src emacs-lisp
   (use-package just-ts-mode)
-  ;; (use-package justl :ensure t)
 #+end_src
 
 ** web-mode & php-mode
@@ -1802,6 +1821,9 @@ There are three different packages:
   (use-package web-mode
     :config
     (add-to-list 'auto-mode-alist '("\\.jinja2\\'" . web-mode)))
+#+end_src
+
+#+begin_src emacs-lisp
   (use-package php-mode)
 #+end_src
 
@@ -1817,11 +1839,11 @@ There are three different packages:
   (use-package yaml-mode)
 #+end_src
 
-** Turtle mode
+** Turtle (ts) mode
 my own turtle mode based on tree-sitter grammar
 #+begin_src emacs-lisp
   (use-package ttl-ts-mode
-    ;; ifI want to use the cloned repository:
+    ;; if I want to use the cloned repository:
     ;; :load-path "~/git/ttl-ts-mode"
     )
 #+end_src
@@ -1851,13 +1873,6 @@ ttl-mode is available in elpa(ca)
     (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode)))
 #+end_src
 
-** COMMENT Platform.io
-CLOSED: [2024-04-30 Tue 22:41]
-Currently not in use, but pulls projectile as dependency. Therefore, I deactivated it
-#+begin_src emacs-lisp :tangle no
-   (use-package platformio-mode)
-#+end_src
-
 ** GUIX
 
 #+begin_src emacs-lisp
@@ -1876,8 +1891,7 @@ Currently not in use, but pulls projectile as dependency. Therefore, I deactivat
 #+end_src
 
 ** cypher (ts) mode
-
-*** Cypher major mode, tree-sitter enabled (authored by myself)
+*** Tree-sitter based
 - Major mode: https://codeberg.org/nutcase/cypher-ts-mode
 - Tree sitter grammar: https://github.com/taekwombo/tree-sitter-cypher
   
@@ -1885,8 +1899,7 @@ Currently not in use, but pulls projectile as dependency. Therefore, I deactivat
   (use-package cypher-ts-mode)
 #+end_src
 
-*** COMMENT Original cypher mode: I don't use it anymore
-CLOSED: [2026-07-28 Tue 22:11]
+*** Original cypher mode: I don't use it anymore
 - Keywords from https://neo4j.com/docs/cypher-manual/current/syntax/keywords/
 #+begin_src emacs-lisp :tangle no
   (use-package cypher-mode
@@ -1973,17 +1986,6 @@ CLOSED: [2026-07-28 Tue 22:11]
 #+end_src
 
 * Some convenience functions
-** Focus on Sub Tree (clone and narrow)
-#+begin_src emacs-lisp
-  (defun jf/clone-indirect-buffer-and-narrow-to-subtree ()
-    "Create an indirect cloned buffer and narrow to org subtree in the clone."
-    (interactive)
-    (clone-indirect-buffer
-     (concat "<org subtree> " (nth 4 (org-heading-components)))
-     t)
-    (org-narrow-to-subtree))
-#+end_src
-
 ** TODO Synchronization between JabRef keywords and org-roam nodes
 #+begin_src emacs-lisp :tangle no
   (use-package org-roam-citation-keyword-nodes
@@ -1996,22 +1998,26 @@ CLOSED: [2026-07-28 Tue 22:11]
 ** Revert a buffer visiting a file that is optionally created
 I use this to trigger a reload of my generated calendar file after it has been rewritten.
 #+begin_src emacs-lisp
-  (defun jf/revert-file-visiting-buffer (filename)
-    "Reverts open buffer visiting FILENAME. If no buffer is visiting FILENAME, a buffer is created that visits FILENAME."
-    (save-excursion
-      (or (find-buffer-visiting filename)
-  	(find-file filename))
-      (set-buffer (find-buffer-visiting filename))
-      (revert-buffer nil t)
-      (message (concat filename " reverted"))))
+  (use-package emacs
+    :config
+    (defun jf-revert-file-visiting-buffer (filename)
+      "Reverts open buffer visiting FILENAME. If no buffer is visiting FILENAME, a buffer is created that visits FILENAME."
+      (save-excursion
+        (or (find-buffer-visiting filename)
+  	  (find-file filename))
+        (set-buffer (find-buffer-visiting filename))
+        (revert-buffer nil t)
+        (message (concat filename " reverted")))))
 #+end_src
 
 ** Smarter navigation to the beginning of a line
 from https://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
 
 #+begin_src emacs-lisp
-  (defun smarter-move-beginning-of-line (arg)
-    "Move point back to indentation of beginning of line.
+  (use-package emacs
+    :config
+    (defun smarter-move-beginning-of-line (arg)
+      "Move point back to indentation of beginning of line.
 
   Move point to the first non-whitespace character on this line.
   If point is already there, move to the beginning of the line.
@@ -2020,64 +2026,113 @@ from https://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-
 
   If ARG is not nil or 1, move forward ARG - 1 lines first.  If
   point reaches the beginning or end of the buffer, stop there."
-    (interactive "^p")
-    (setq arg (or arg 1))
+      (interactive "^p")
+      (setq arg (or arg 1))
 
-    ;; Move lines first
-    (when (/= arg 1)
-      (let ((line-move-visual nil))
-        (forward-line (1- arg))))
+      ;; Move lines first
+      (when (/= arg 1)
+        (let ((line-move-visual nil))
+  	(forward-line (1- arg))))
 
-    (let ((orig-point (point)))
-      (back-to-indentation)
-      (when (= orig-point (point))
-        (move-beginning-of-line 1))))
-
-  ;; remap C-a to `smarter-move-beginning-of-line'
-  (global-set-key (kbd "C-a")
-                  'smarter-move-beginning-of-line)
+      (let ((orig-point (point)))
+        (back-to-indentation)
+        (when (= orig-point (point))
+  	(move-beginning-of-line 1))))
+    :bind
+    ;; remap C-a to `smarter-move-beginning-of-line'
+    ("C-a" . smarter-move-beginning-of-line))
 #+end_src
 
+** My transient menu
+#+begin_src emacs-lisp
+  (use-package transient
+    :preface
+    (transient-define-prefix jf-my-menu ()
+      "Mein benutzerdefiniertes Menü."
+      [["Org"
+        ("o a" "Agenda" org-agenda-list)
+        ("o d" "Deadlines" (lambda () (interactive) (org-agenda nil "d")))
+        ("o p" "Planning" (lambda () (interactive) (org-agenda nil "p")))
+        ("o g" "GTD file" (lambda () (interactive) (find-file "~/org/agenda/gtd.org")))]
+       ["Pomodoro"
+        ("p s" "Start/Stop Pomodoro" (lambda () (interactive) (org-pomodoro)))
+        ("p g" "Go to current item" org-clock-goto)]
+       ["Mail"
+        ("m" "mu4e" mu4e-transient-menu)]]
+      [["Writing"
+        ("w c" "Citar" citar-open)
+        ("w b" "Biblio" biblio-lookup)]
+       ["Projects"
+        ("g g" "Magit" magit-status)
+        ("f p" "Forgejo PR List" forgejo-pull-list)
+        ("f w" "Forgejo Watch List" forgejo-watch-list)]
+       ["AI"
+        ("a i" "gptel" gptel)
+        ("a m" "gptel menu" gptel-menu)]])
+    :bind
+    ([f12] . jf-my-menu))
+#+end_src
+** jf-xdg-open-with: dired-open-with from within a buffer visiting a file
+#+begin_src emacs-lisp
+  (use-package dired-open-with
+    :config
+    (defun jf-xdg-open-with ()
+      "Open the current buffer's file with an XDG app."
+      (interactive)
+      (unless (buffer-file-name)
+        (error "Buffer does not visit a file"))
+      (let* ((path (file-truename (buffer-file-name)))
+    	   (apps (dired-open-with--applications-for-file path))
+    	   (app (dired-open-with--completing-read apps))
+    	   (cmd (dired-open-with--xdg-format-exec (gethash "Exec" app) path)))
+        (dired-open-with--start-process cmd)))
+    :bind
+    ("C-<f6>" . jf-xdg-open-with))
+#+end_src
 ** Open PDF file in pdfpc
 #+begin_src emacs-lisp
-  (defun jf/open-current-buffer-in-pdfpc (no-close)
-    "Open current buffer's file in pdfpc.
+  (use-package emacs
+    :config
+    (defun jf-open-current-buffer-in-pdfpc (no-close)
+      "Open current buffer's file in pdfpc.
 
   Return nil if current buffer doesn't visit a PDF file.
   With prefix argument NO-CLOSE, don't kill buffer or delete frame."
-    (interactive "P")
-    (let* ((pdfpc (executable-find "pdfpc"))
-           (file-name (buffer-file-name))
-           (extension (file-name-extension file-name)))
-      (unless (string= extension "pdf")
-        (user-error "Buffer does not visit a PDF file."))
-      (unless pdfpc
-        (user-error "Could not find pdfpc executable."))
-      (start-process "pdfpc-process" nil pdfpc file-name)
-      (unless no-close
-        (kill-buffer)
-        (delete-frame))))
+      (interactive "P")
+      (let* ((pdfpc (executable-find "pdfpc"))
+             (file-name (buffer-file-name))
+             (extension (file-name-extension file-name)))
+        (unless (string= extension "pdf")
+  	(user-error "Buffer does not visit a PDF file"))
+        (unless pdfpc
+  	(user-error "Could not find pdfpc executable"))
+        (start-process "pdfpc-process" nil pdfpc file-name)
+        (unless no-close
+  	(kill-buffer)
+  	(delete-frame)))))
 #+end_src
 
 ** Open automounted drives
 From https://mbork.pl/2024-02-17_Opening_external_drives_in_Dired
 #+begin_src emacs-lisp
-  (defcustom jf/automount-directory (format "/run/media/%s" user-login-name)
-    "Directory under which drives are automounted.")
+  (use-package emacs
+    :config
+    (defcustom jf-automount-directory (format "/run/media/%s" user-login-name)
+      "Directory under which drives are automounted.")
 
-  (defun jf/automount-open-in-dired ()
-    "Open the automounted drive in Dired.
+    (defun jf-automount-open-in-dired ()
+      "Open the automounted drive in Dired.
   If there is more than one, let the user choose."
-    (interactive)
-    (let ((dirs (directory-files jf/automount-directory nil "^[^.]")))
-      (dired (file-name-concat
-              jf/automount-directory
-              (cond ((null dirs)
-                     (error "No drives mounted at the moment"))
-                    ((= (length dirs) 1)
-                     (car dirs))
-                    (t
-                     (completing-read "Open in dired: " dirs nil t)))))))
+      (interactive)
+      (let ((dirs (directory-files jf-automount-directory nil "^[^.]")))
+        (dired (file-name-concat
+                jf-automount-directory
+                (cond ((null dirs)
+                       (error "No drives mounted at the moment"))
+                      ((= (length dirs) 1)
+                       (car dirs))
+                      (t
+                       (completing-read "Open in dired: " dirs nil t))))))))
 #+end_src
 
 * Calendar & Contact syncing
@@ -2146,15 +2201,29 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
      -m ~/Mail
 #+end_src
 
-** TODO Setup mu4e itself
+** Setup mu4e itself
 #+begin_src emacs-lisp
   (use-package mu4e
-    :if (string-prefix-p "nutbook" (system-name))
+    :bind (("C-c m" . mu4e)
+  	 (:map mu4e-view-mode-map
+  	       ("C--" . nil) ; remove key binding
+  	       ("C-+" . nil) ; remove key binding
+  	       ("K" . (lambda ()
+  			"Switch between text and HTML view (from https://www.topbug.net/blog/2024/12/28/quickly-switch-between-html-and-plain-text-in-mu4e/)"
+  			(interactive)
+  			(gnus-article-jump-to-part 1)
+  			(gnus-article-press-button)
+  			(gnus-article-press-button))))
+  	 (:map mu4e-headers-mode-map
+  	       ("C--" . nil) ; remove key binding
+  	       ("C-+" . nil))) ; remove key binding
+    :hook
+    ;; use variable pitch mode in article view
+    ((mu4e-view-mode-hook . variable-pitch-mode)
+     ;; enable gnus dired mode, which allows to add multiple files a message buffer
+     (dired-mode-hook . turn-on-gnus-dired-mode))
+
     :config
-    (define-key mu4e-view-mode-map (kbd "C--") nil t) ; remove key binding
-    (define-key mu4e-view-mode-map (kbd "C-+") nil t) ; remove key binding
-    (define-key mu4e-headers-mode-map (kbd "C--") nil t) ; remove key binding
-    (define-key mu4e-headers-mode-map (kbd "C-+") nil t) ; remove key binding
     (setq mu4e-read-option-use-builtin nil)
     (setq mu4e-completing-read-function 'completing-read)
     (setq mu4e-change-filenames-when-moving t)
@@ -2163,20 +2232,8 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
     ;; appearance
     (setq mu4e-confirm-quit t)
     (setq mu4e-notification-support t)
-    (setq mu4e-headers-time-format "%H:%M")
-    (setq mu4e-headers-date-format "%F %H:%M")
-    (setq mu4e-headers-fields
-          '((:human-date . 18)
-            (:flags . 6)
-            (:from-or-to . 25)
-            (:subject . 125)
-            (:maildir . 15)
-            (:mailing-list . 10)))
+    (setq mu4e-modeline-support t) ; this distracts me sometimes. I can just quit mu4e and modeline is clean again
     (setq mu4e-use-fancy-chars t)
-    (setq mu4e-view-show-images t)
-    (setq mu4e-view-show-addresses t)
-    (setq gnus-visible-headers (concat gnus-visible-headers
-                                       "\\|^User-Agent:"))
 
     ;;
     ;; receiving mails
@@ -2190,7 +2247,16 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
     ;;    (setq mu4e-index-lazy-check t) ;; attempt to avoid slow reindexing
 
     ;;
-    ;; headers view 
+    ;; headers view
+    (setq mu4e-headers-time-format "%H:%M")
+    (setq mu4e-headers-date-format "%F %H:%M")
+    (setq mu4e-headers-fields
+          '((:human-date . 18)
+            (:flags . 6)
+            (:from-or-to . 25)
+            (:subject . 125)
+            (:maildir . 15)
+            (:mailing-list . 10)))
     (setq mu4e-org-link-query-in-headers-mode nil)
     (setq mu4e-headers-include-related nil)
 
@@ -2216,27 +2282,16 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
     (setq message-cite-function 'message-cite-original) ;; alternative: 'message-cite-original-without-signature
     ;; this adds the date of a cited mail:
     (setq message-citation-line-function 'message-insert-formatted-citation-line)
-    ;; enable gnus dired mode, which allows to add multiple files a message buffer
-    (add-hook 'dired-mode-hook 'turn-on-gnus-dired-mode)
-    ;; gpg sign all mails when sending
-    ;; (add-hook 'message-send-hook
-    ;;           (lambda()
-    ;;             (mml-secure-sign)))
 
     ;;
-    ;; viewing mails    
+    ;; viewing mails
+    (setq mu4e-view-show-images t)
+    (setq mu4e-view-show-addresses t)
+    (setq gnus-visible-headers (concat gnus-visible-headers
+                                       "\\|^User-Agent:"))
     ;; don't colorize HTML mails, since they are hard to read sometimes
     ;; is not respected anymore?
     (setq shr-use-colors nil)
-    ;; use variable pitch mode in article view
-    (add-hook 'mu4e-view-mode-hook 'variable-pitch-mode)
-    ;; switch between text and HTML view (from https://www.topbug.net/blog/2024/12/28/quickly-switch-between-html-and-plain-text-in-mu4e/)
-    (keymap-set mu4e-view-mode-map (kbd "K")
-    	      (lambda ()
-    		(interactive)
-    		(gnus-article-jump-to-part 1)
-    		(gnus-article-press-button)
-    		(gnus-article-press-button)))
     ;; prefer to read text mails (from https://github.com/doomemacs/doomemacs/issues/4820#issuecomment-892736800)
     (with-eval-after-load "mm-decode"
       (add-to-list 'mm-discouraged-alternatives "text/html")
@@ -2308,11 +2363,25 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
                     (mu4e-drafts-folder  . "/w/Drafts")
                     (mu4e-sent-folder  . "/w/Sent")
                     (mu4e-refile-folder  . "/w/Archives")
-                    (mu4e-trash-folder  . "/w/Trash")))))
+                    (mu4e-trash-folder  . "/w/Trash")))))) ; end of use-package mu4e
+#+end_src
 
-    ;;
-    ;; Calendar support
-    (require 'mu4e-icalendar)) ; end of use-package mu4e
+** GPG signing
+#+begin_src emacs-lisp
+  (use-package mu4e
+    ;; :hook
+    ;; gpg sign all mails when sending
+    ;; (message-send-hook . (lambda() (mml-secure-sign)))
+    :config
+    ;; When signing mails with openpgp (or gnupg), use the key associated with the sender address
+    (setq mml-secure-openpgp-sign-with-sender t))
+#+end_src
+
+** ICal support
+#+begin_src emacs-lisp
+  (use-package mu4e
+    :config
+    (require 'mu4e-icalendar))
 #+end_src
 
 ** Contacts handling (blacklist for now)
@@ -2320,7 +2389,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
   (use-package mu4e
     :config
     ;; Load my mail blacklist
-    (defun jf/load-mail-blacklist ()
+    (defun jf-load-mail-blacklist ()
       (interactive)
       (setq jf-mail-blacklist
   	  (split-string
@@ -2329,69 +2398,70 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
   	     (buffer-substring-no-properties
   	      (point-min)
   	      (point-max))))))
-    (jf/load-mail-blacklist)
+    (jf-load-mail-blacklist)
 
     ;; define my contact process function
-    (defun jf/my-contact-processor (contact)
+    (defun jf-my-contact-processor (contact)
       (cond
        ((cl-some (lambda (str) (string-match str contact)) jf-mail-blacklist) nil)
        (t contact)))
 
     ;; register the function with mu4e
-    (setq mu4e-contact-process-function 'jf/my-contact-processor))
+    (setq mu4e-contact-process-function 'jf-my-contact-processor))
 #+end_src
 
-** When signing mails with openpgp (or gnupg), use the key associated with the sender address
+** Advise detach function (for some reason fires twice)
 #+begin_src emacs-lisp
   (use-package mu4e
     :config
-    (setq mml-secure-openpgp-sign-with-sender t))
+    (defun jf-detach-mu4e-article-view-advice ()
+      "This advice is used to open a detached article view in a new frame and to delete the original window. This improves my workflow."
+      (make-frame)
+      (delete-window))
+    (advice-add 'mu4e-view-detach :after #'jf-detach-mu4e-article-view-advice))
+    ;;(define-key mu4e-view-mode-map (kbd "C-<f6>") 'mu4e-view-detach))
 #+end_src
 
 ** Before sending an email, I'd like to check some things
 #+begin_src emacs-lisp
   (use-package mu4e
-    :config
-    ;; 1. let me confirm every message
-    (setq message-confirm-send t)
-    ;; 2. let me confirm/decline to send an email with empty subject
-    (defun jf/message-warn-if-no-subject() 
+    :preface
+    (defun jf-message-warn-if-no-subject()
+      "If subject of curent message is empty, require confirmation"
       (or (message-field-value "Subject")
-  	(yes-or-no-p "Really send without Subject? ")
-  	(keyboard-quit)))
-    (add-hook 'message-send-hook #'jf/message-warn-if-no-subject)
-    ;; 3. warn if no attachment can be found, although there should be one.
-    ;; this is from https://github.com/munen/emacs.d/?tab=readme-ov-file#check-for-supposed-attachments-prior-to-sending-them
-    ;; I moved the functions in my own namespace and slightly modified them
-    (defun jf/message-attachment-present-p ()
+    	(yes-or-no-p "Really send without Subject? ")
+    	(keyboard-quit)))
+
+    (defun jf-message-warn-if-no-attachments ()
+      "Check if there is an attachment in the message if I claim it.
+  from https://github.com/munen/emacs.d/?tab=readme-ov-file#check-for-supposed-attachments-prior-to-sending-them"
+      (when (and (save-excursion
+  		 (save-restriction
+    		   (widen)
+    		   (goto-char (point-min))
+    		   (re-search-forward (regexp-opt '("we send"
+  						    "i send"
+  						    "attach"
+  						    "anbei"
+  						    "angehängt"
+  						    "anhang"))
+  				      nil t)))
+    	       (not (jf-message-attachment-present-p)))
+        (unless (y-or-n-p "No attachment.  Send the message?")
+  	(keyboard-quit))))
+
+    (defun jf-message-attachment-present-p ()
       "Return t if a non-gpg attachment is found in the current message."
       (save-excursion
         (save-restriction
   	(widen)
   	(goto-char (point-min))
   	(when (search-forward "<#part type" nil t) t))))
-
-    (setq jf/message-attachment-regexp
-  	;; if lower case letters are used, the search is case insensitive
-  	(regexp-opt '("we send"
-                        "i send"
-                        "attach"
-                        "anbei"
-                        "angehängt"
-                        "anhang")))
-
-    (defun jf/message-warn-if-no-attachments ()
-      "Check if there is an attachment in the message if I claim it."
-      (when (and (save-excursion
-  		 (save-restriction
-    		   (widen)
-    		   (goto-char (point-min))
-    		   (re-search-forward jf/message-attachment-regexp nil t)))
-    	       (not (jf/message-attachment-present-p)))
-        (unless (y-or-n-p "No attachment. Send the message?")
-  	(keyboard-quit))))
-
-    (add-hook 'message-send-hook #'jf/message-warn-if-no-attachments))
+    :hook ((message-send-hook . jf-message-warn-if-no-subject)
+  	 (message-send-hook . jf-message-warn-if-no-attachments))
+    :config
+    ;; let me confirm every message before sending
+    (setq message-confirm-send t))
 #+end_src
 
 ** Detach article advice
@@ -2412,8 +2482,8 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
 #+begin_src elisp
   (use-package mu4e-walk
     :after mu4e
-    :config
-    (add-hook 'mu4e-compose-mode-hook 'mu4e-walk-add-keybindings-compose-mode))
+    :hook
+    (mu4e-compose-mode-hook . mu4e-walk-add-keybindings-compose-mode))
 #+end_src
 
 * Guix fixes
@@ -2434,48 +2504,8 @@ On my Guix system, the process for ~gvfsd-fuse~ is running as ~.gvfsd-fuse-real~
 #+end_src
 
 Best option would be to fix ~tramp-process-running-p~ upstream. An emacs lisp version of ~pidof~ or ~pgrep~ would make it easier.
-
-* Global key bindings
-#+begin_src emacs-lisp
-  (use-package emacs
-    :config
-    ;; Increase / decrease text scale
-    (setq text-scale-mode-step 1.1)
-    (global-set-key (kbd "C--") 'text-scale-decrease)
-    (global-set-key (kbd "C-+") 'text-scale-increase)
-    ;; Comment / Uncomment Region
-    (global-set-key (kbd "C-x C-,") 'comment-region)
-    (global-set-key (kbd "C-x C-.") 'uncomment-region)
-    ;; Revert buffer
-    (global-set-key (kbd "C-c r") 'revert-buffer)
-    ;; Translate with deepl
-    ;; (global-set-key (kbd "C-x C-t") 'txl-translate-region-or-paragraph)
-    (global-set-key (kbd "C-x C-t") 'gt-translate)
-    ;; vundo
-    (global-set-key (kbd "C-x u") 'vundo)
-    ;; Open GTD file
-    (global-set-key (kbd "C-c t")
-  		  (lambda ()
-  		    (interactive)
-  		    (find-file "~/org/agenda/gtd.org")))
-    ;; Org mode
-    (global-set-key (kbd "C-c a") 'org-agenda)
-    (global-set-key (kbd "C-c c") 'org-capture)
-    (global-set-key (kbd "C-c l") 'org-store-link)
-    (global-set-key (kbd "C-c o") 'org-switchb)
-    (global-set-key (kbd "C-c n u") 'org-roam-ui-open)
-    (global-set-key (kbd "C-c j") 'consult-org-heading)
-    ;; Magit
-    (global-set-key (kbd "C-c g") 'magit-status)
-    ;; Mu4e
-    ;; in conflict with 'consult-man
-    (global-set-key (kbd "C-c m") 'mu4e)
-    ;; gptel
-    (define-key org-mode-map (kbd "C-c RET") nil)
-    (global-set-key (kbd "C-c RET") 'gptel-send)
-    ;; citar-open in non org/latex buffers
-    (global-set-key (kbd "C-c b") 'citar-open)
-    ;; Bind my transient menu
-    (global-set-key (kbd "<f12>") 'jf/my-menu))
+* File footer
+#+begin_src elisp
+  (provide 'README)
+  ;;; README.el ends here
 #+end_src
-

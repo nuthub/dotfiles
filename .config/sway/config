@@ -57,7 +57,7 @@ bindsym $mod+Return exec emacsclient -c -a "" -e '(vterm t)'
 # Start an emacs terminal
 bindsym $mod+Ctrl+Return exec alacritty
 # create new emacs frame
-bindsym $mod+Shift+Return exec emacsclient -c -a "" -e '(jf/show-welcome-buffer)'
+bindsym $mod+Shift+Return exec emacsclient -c -a "" -e '(jf-show-welcome-buffer)'
 # open browser
 bindsym $mod+b exec firefox
 
