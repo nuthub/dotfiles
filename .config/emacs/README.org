@@ -1593,6 +1593,12 @@ The package /citar-org-roam/ provides usage of org roam to take bibliographical 
     (citar-org-roam-mode))
 #+end_src
 
+** Biblio
+Search for literature in literature databases like arxiv and dblp
+#+begin_src emacs-lisp
+  (use-package biblio)
+#+end_src
+
 ** gptel + gptel-quick
 
 #+begin_src emacs-lisp
@@ -1651,12 +1657,6 @@ gptel-quick for simple explanations in a popup.
     :config
     (setq gptel-quick-display 'postframe)
     (keymap-set embark-general-map "?" #'gptel-quick))
-#+end_src
-
-** Biblio
-Search for literature in literature databases like arxiv and dblp
-#+begin_src emacs-lisp
-  (use-package biblio)
 #+end_src
 
 * Version Control
@@ -1819,8 +1819,7 @@ There are three different packages:
 
 #+begin_src emacs-lisp
   (use-package web-mode
-    :config
-    (add-to-list 'auto-mode-alist '("\\.jinja2\\'" . web-mode)))
+    :mode "\\.jinja2\\'")
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1845,15 +1844,13 @@ my own turtle mode based on tree-sitter grammar
   (use-package ttl-ts-mode
     ;; if I want to use the cloned repository:
     ;; :load-path "~/git/ttl-ts-mode"
-    )
+    :mode "\\.ttl")
 #+end_src
 
 ttl-mode is available in elpa(ca)
 #+begin_src emacs-lisp
   (use-package ttl-mode
-    :config
-    (add-to-list 'auto-mode-alist '("\\.n3"  . ttl-mode))
-    (add-to-list 'auto-mode-alist '("\\.ttl" . ttl-mode)))
+    :mode "\\.n3")
 #+end_src
 
 ** plantuml-mode
@@ -1869,8 +1866,7 @@ ttl-mode is available in elpa(ca)
 ** nov.el (eBook Reader)
 #+begin_src emacs-lisp
   (use-package nov
-    :config
-    (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode)))
+    :mode "\\.epub\\'")
 #+end_src
 
 ** GUIX
