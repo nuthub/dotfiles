@@ -390,7 +390,7 @@ Emacs 28+ supports to globally default to ~y-or-n-p~ instead of ~yes-or-no-p~.
 #+begin_src emacs-lisp
   (use-package emacs
     :hook
-    (text-mode-hook . (lambda () (visual-line-mode 1))))
+    (text-mode . (lambda () (visual-line-mode 1))))
 #+end_src
 
 ** System Clipboard to kill ring
@@ -446,7 +446,7 @@ Emacs 28+ supports to globally default to ~y-or-n-p~ instead of ~yes-or-no-p~.
 #+begin_src emacs-lisp
   (use-package display-line-numbers ; built-in
     :hook
-    (prog-mode-hook .display-line-numbers-mode)
+    (prog-mode . display-line-numbers-mode)
     :config
     (global-display-line-numbers-mode 0))
 #+end_src
@@ -455,7 +455,7 @@ Emacs 28+ supports to globally default to ~y-or-n-p~ instead of ~yes-or-no-p~.
 #+begin_src emacs-lisp
   (use-package display-fill-column-indicator ; built-in
     :hook
-    (prog-mode-hook . display-fill-column-indicator-mode)
+    (prog-mode . display-fill-column-indicator-mode)
     :config
     (setq fill-column 80))
 #+end_src
@@ -555,7 +555,7 @@ CLOSED: [2026-09-19 Sat 09:37]
 
   (use-package vertico
     :hook
-    (minibuffer-setup-hook . cursor-intangible-mode)
+    (minibuffer-setup . cursor-intangible-mode)
     :config
     ;; Different scroll margin
     ;;(setq vertico-scroll-margin 0)
@@ -592,7 +592,7 @@ CLOSED: [2026-07-13 Mon 23:19]
 #+begin_src emacs-lisp :tangle no
   (use-package company
     :hook
-    (after-init-hook .global-company-mode))
+    (after-init . global-company-mode))
 #+end_src
 
 *** COMMENT Corfu (COmpletion in Region FUnction)
@@ -670,10 +670,10 @@ Snippets aren't included in the base package, they need to be loaded separately.
 #+begin_src emacs-lisp
   (use-package flymake ; built-in
     :hook
-    (prog-mode-hook . flymake-mode)
+    (prog-mode . flymake-mode)
     ;; flymake-languagetool requires flymake-mode
     ;; (org-mode-hook . flymake-mode)
-    (mu4e-compose-mode-hook . flymake-mode))
+    (mu4e-compose-mode . flymake-mode))
 #+end_src
 
 ** Consult
@@ -852,7 +852,7 @@ The global keybinding 'C-x u' is set below.
 #+begin_src emacs-lisp
   (use-package highlight-indent-guides
     :hook
-    (prog-mode-hook . highlight-indent-guides-mode)
+    (prog-mode . highlight-indent-guides-mode)
     :config
     (setq highlight-indent-guides-method 'character))
 #+end_src
@@ -878,7 +878,7 @@ The global keybinding 'C-x u' is set below.
 #+begin_src emacs-lisp
   (use-package rainbow-delimiters
     :hook
-    (prog-mode-hook . rainbow-delimiters-mode))
+    (prog-mode . rainbow-delimiters-mode))
 #+end_src
 
 ** tree-sitter
@@ -956,6 +956,7 @@ The global keybinding 'C-x u' is set below.
      '(regexp . "\\*vterm\\*.*"))
     (frames-only-mode)
     ;; for some reason, frames-only-mode overrides what I set earlier.
+    ;; this is where the agenda opens, not where headings open via org-agenda-goto
     (setq org-agenda-window-setup 'current-window)
     ;; Open org agenda files in its own frame (this changed in org 9.8.10)
     ;; see https://lists.gnu.org/archive/html/emacs-orgmode/2026-09/msg00175.html
@@ -1000,31 +1001,11 @@ Opens a terminal in the directory that matches the active buffer. Even works ove
 #+end_src
 
 * Org mode
-** Setup org / org-mode-map key bindings
-#+begin_src emacs-lisp
-  (use-package org
-    :preface
-    (defun jf-org-timestamp-inactive ()
-      (interactive)
-      (org-time-stamp nil t))
-    ;; the bind may defer the package loading, see documentation (C-h f use-package RET)
-    :bind
-     ("C-c a" . org-agenda)
-     ("C-c c" . org-capture)
-     ("C-c l" . org-store-link)
-     ("C-c o" . org-switchb)
-     (:map org-mode-map
-  	 ("C-c C-<left>" . org-promote-subtree)
-  	 ("C-c C-<right>" . org-demote-subtree)
-  	 ("C-c ," . jf-org-timestamp-inactive)
-  	 ("C-<f6>" . jf-clone-indirect-buffer-and-narrow-to-subtree)))
-#+end_src
-
 ** Org's basics & Look & Feel
 #+begin_src emacs-lisp
   (use-package org
     :hook
-    (org-mode-hook . (lambda ()
+    (org-mode . (lambda ()
   		     (visual-line-mode 1)
   		     ;;(flycheck-mode -1)
   		     (variable-pitch-mode 1)))
@@ -1071,7 +1052,21 @@ Opens a terminal in the directory that matches the active buffer. Even works ove
 #+begin_src emacs-lisp
   (use-package org-superstar
     :hook
-    (org-mode-hook . (lambda () (org-superstar-mode 1))))
+    (org-mode . (lambda () (org-superstar-mode 1))))
+#+end_src
+
+** Key bindings
+#+begin_src emacs-lisp
+  (use-package org
+    :bind
+     ("C-c a" . org-agenda)
+     ("C-c c" . org-capture)
+     ("C-c l" . org-store-link)
+     ("C-c o" . org-switchb)
+     (:map org-mode-map
+  	 ("C-c C-<left>" . org-promote-subtree)
+  	 ("C-c C-<right>" . org-demote-subtree)
+  	 ("C-c ," . org-timestamp-inactive)))
 #+end_src
 
 ** Task Management, Agenda, Archive, Refiling
@@ -1199,14 +1194,16 @@ Opens a terminal in the directory that matches the active buffer. Even works ove
 ** Focus on Sub Tree (clone and narrow)
 #+begin_src emacs-lisp
   (use-package org
-    :config
+    :preface
     (defun jf-clone-indirect-buffer-and-narrow-to-subtree ()
       "Create an indirect cloned buffer and narrow to org subtree in the clone."
       (interactive)
       (clone-indirect-buffer
        (concat "<org subtree> " (nth 4 (org-heading-components)))
        t)
-      (org-narrow-to-subtree)))
+      (org-narrow-to-subtree))
+    :bind
+    ("C-<f6>" . jf-clone-indirect-buffer-and-narrow-to-subtree))
 #+end_src
 
 ** Syntax highlighting with engrave-faces
@@ -1482,10 +1479,10 @@ htmlize is used by org to export to HTML.
     :config
     (setq jinx-languages "en_US de_DE")
     :hook
-    (emacs-startup-hook . global-jinx-mode)
+    (emacs-startup . global-jinx-mode)
     :bind
     (("M-$" . jinx-correct)
-  	 ("C-M-$" . jinx-languages)))
+     ("C-M-$" . jinx-languages)))
 #+end_src
 
 ** LanguageTool
@@ -1730,7 +1727,7 @@ This shows modified/added/deleted lines directly in the editor.
     (setq TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view)))
     :hook
     ;; synctex
-    (LaTeX-mode-hook . TeX-source-correlate-mode))
+    (LaTeX-mode . TeX-source-correlate-mode))
 #+end_src
 
 * Other major modes
@@ -1758,7 +1755,7 @@ This shows modified/added/deleted lines directly in the editor.
   	      ("u" . pdf-annot-add-underline-markup-annotation)
   	      ("O" . pdf-annot-add-strikeout-markup-annotation)
   	      ("s a" . pdf-view-auto-slice-minor-mode))
-    ;; :hook (pdf-view-mode-hook . pdf-view-roll-minor-mode) ; still buggy
+    ;; :hook (pdf-view-mode . pdf-view-roll-minor-mode) ; still buggy
     :config
     (require 'pdf-occur) ;; if I don't require pdf-occur before pdf-tools-install, I get a warning at startup
     (pdf-loader-install)
@@ -2215,9 +2212,9 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
   	       ("C-+" . nil))) ; remove key binding
     :hook
     ;; use variable pitch mode in article view
-    ((mu4e-view-mode-hook . variable-pitch-mode)
+    ((mu4e-view-mode . variable-pitch-mode)
      ;; enable gnus dired mode, which allows to add multiple files a message buffer
-     (dired-mode-hook . turn-on-gnus-dired-mode))
+     (dired-mode . turn-on-gnus-dired-mode))
 
     :config
     (setq mu4e-read-option-use-builtin nil)
@@ -2367,7 +2364,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
   (use-package mu4e
     ;; :hook
     ;; gpg sign all mails when sending
-    ;; (message-send-hook . (lambda() (mml-secure-sign)))
+    ;; (message-send . (lambda() (mml-secure-sign)))
     :config
     ;; When signing mails with openpgp (or gnupg), use the key associated with the sender address
     (setq mml-secure-openpgp-sign-with-sender t))
@@ -2453,8 +2450,8 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
   	(widen)
   	(goto-char (point-min))
   	(when (search-forward "<#part type" nil t) t))))
-    :hook ((message-send-hook . jf-message-warn-if-no-subject)
-  	 (message-send-hook . jf-message-warn-if-no-attachments))
+    :hook ((message-send . jf-message-warn-if-no-subject)
+  	 (message-send . jf-message-warn-if-no-attachments))
     :config
     ;; let me confirm every message before sending
     (setq message-confirm-send t))
@@ -2466,7 +2463,7 @@ mu (including mu4e) needs to be installed via package manager, e.g. yay mu-git
   (use-package mu4e-walk
     :after mu4e
     :hook
-    (mu4e-compose-mode-hook . mu4e-walk-add-keybindings-compose-mode))
+    (mu4e-compose-mode . mu4e-walk-add-keybindings-compose-mode))
 #+end_src
 
 * Guix fixes
