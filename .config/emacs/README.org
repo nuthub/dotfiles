@@ -1478,6 +1478,8 @@ htmlize is used by org to export to HTML.
   (use-package jinx
     :config
     (setq jinx-languages "en_US de_DE")
+    ;; [2026-09-29 Tue] if I don't set this, M-TAB complains while completing an org link [[...]]
+    (setq ispell-alternate-dictionary "/home/flake/.config/enchant/de.dic") 
     :hook
     (emacs-startup . global-jinx-mode)
     :bind
