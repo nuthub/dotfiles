@@ -1283,12 +1283,14 @@ Visualize the org roam graph in browser.
 
 ** LaTeX export
 *** General
+To automatically run ~latexmk~ on ~.tex~ update (export to file), you can use ~latexmk -pvc -pdf -view=none document.tex~. See https://pragmaticemacs.wordpress.com/2016/01/26/speed-up-pdf-export-from-org-mode-with-latexmk/ 
 #+begin_src emacs-lisp
   (use-package org
     :config
     ;; use luatex as LaTeX Compiler
     (setq org-latex-compiler "lualatex")
-
+    (setq org-latex-pdf-process (list "latexmk -%latex %f"))
+    
     ;; compile latex in foreground to directly retrieve compilation errors
     (setq org-export-in-background nil)
 
@@ -1297,7 +1299,13 @@ Visualize the org roam graph in browser.
 
     ;; use emacs's font-locking for syntax highlighting in LaTeX exports
     ;; engraved needs the package fvextra
-    (setq org-latex-src-block-backend 'engraved))
+    (setq org-latex-src-block-backend 'engraved)
+
+    ;; smart quotes
+    (setq org-export-with-smart-quotes t)
+    
+    ;; allow to set own label names (vie property NAME or CUSTOM_ID)
+    (setq org-latex-prefer-user-labels t))
 #+end_src
 
 *** Beamer support
