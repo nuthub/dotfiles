@@ -119,7 +119,8 @@
   		    (mode . mu4e-headers-mode)
   		    (name . "^\\*mu4e-last-update\\*$")))
   	   ("Terminals" (mode . vterm-mode))
-             ("Emacs" (or
+  	   ("Magit" (name . "^Magit"))
+  	   ("Emacs" (or
                        (mode . emacs-lisp-mode)
                        (name . "^\\*Help\\*$")
                        (name . "^\\*Warnings\\*$")
