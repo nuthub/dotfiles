@@ -1175,9 +1175,9 @@ Opens a terminal in the directory that matches the active buffer. Even works ove
     (org-babel-do-load-languages
      'org-babel-load-languages
      '((dot . t)
-       (emacs-lisp .t)
-       (java .t)
-       (plantuml .t)
+       (emacs-lisp . t)
+       (java . t)
+       (plantuml . t)
        (shell . t)
        (sqlite . t)
        (latex . t))))
@@ -1828,18 +1828,20 @@ There are three different packages:
 #+end_src
 
 ** Turtle (ts) mode
-my own turtle mode based on tree-sitter grammar
-#+begin_src emacs-lisp
-  (use-package ttl-ts-mode
-    ;; if I want to use the cloned repository:
-    ;; :load-path "~/git/ttl-ts-mode"
-    :mode "\\.ttl")
-#+end_src
-
-ttl-mode is available in elpa(ca)
-#+begin_src emacs-lisp
+- There is ttl-mode (also on MELPA), which I dont' use that
+  #+begin_src emacs-lisp :tangle no
   (use-package ttl-mode
     :mode "\\.n3")
+#+end_src
+
+- I wrote my own turtle mode based on a tree-sitter grammar and use this
+#+begin_src emacs-lisp
+    (use-package ttl-ts-mode
+      ;; if I want to use the cloned repository:
+      ;; :load-path "~/git/ttl-ts-mode"
+      :mode "\\.ttl"
+      ;; let org-src use the ts variant of ttl major mode
+      (add-to-list 'org-src-lang-modes '("ttl" . ttl-ts)))
 #+end_src
 
 ** plantuml-mode
