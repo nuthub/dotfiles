@@ -1477,56 +1477,6 @@ htmlize is used by org to export to HTML.
      ("C-M-$" . jinx-languages)))
 #+end_src
 
-** LanguageTool
-- Download is somewhat hidden: https://languagetool.org/download/
-- There are different Emacs integrations:
-  - https://github.com/emacs-languagetool/flymake-languagetool (Flymake is part of Emacs)
-  - https://github.com/emacs-languagetool/flycheck-languagetool (Flycheck is not Emacs built in)
-    - https://github.com/PillFall/languagetool.el
-  - https://github.com/mhayashi1120/Emacs-langtool
-  - any maybe more
-
-#+begin_src emacs-lisp
-  (use-package flymake-languagetool
-    :hook ((text-mode         . flymake-languagetool-load)
-           (latex-mode        . flymake-languagetool-load)
-           (org-mode          . flymake-languagetool-load)
-           (markdown-mode     . flymake-languagetool-load)
-  	 (mu4e-compose-mode . flymake-languagetool-load))
-    :init
-    ;; LanguageTools API Remote Server Configuration
-    (setq flymake-languagetool-server-jar nil)
-    (setq flymake-languagetool-url "http://localhost:8081"))
-#+end_src
-
-** Translations with gt.el
-
-- [[https://github.com/lorniu/gt.el/issues/111#issuecomment-4801142239][DeepL support currently broken]] and gt.el package [[https://github.com/lorniu/gt.el/commits/master/][looks unmaintained]]
-- Worth a try to use: EU translation service: https://translation.ec.europa.eu/tools-and-resources/ai-translation-and-language-tools_en
-
-#+begin_src emacs-lisp
-  (use-package gt
-    :bind
-    ("C-x C-t" . gt-translate)
-    :config
-    (setq gt-langs '(en de nl))
-    (setq gt-taker-prompt t)
-    (setq gt-default-translator
-  	(gt-translator
-  	 :taker (gt-taker :text 'sentence :prompt t)
-  	 :engines (gt-google-engine)))
-    (setq gt-preset-translators
-  	`((minibuffer . ,(gt-translator
-  			  :engines (gt-google-engine)
-  			  :render (gt-render)))
-  	  (insert . ,(gt-translator
-  		      :engines (gt-google-engine)
-  		      :render (gt-insert-render)))
-  	  (buffer . ,(gt-translator
-  		      :engines (gt-google-engine)
-  		      :render (gt-buffer-render))))))
-#+end_src
-
 ** Citations
 *** Citar
 Allows to browse bibtex file(s), insert citations, open files, links and notes. It's a helm-bibtext replacement.
@@ -1586,66 +1536,6 @@ The package /citar-org-roam/ provides usage of org roam to take bibliographical 
 Search for literature in literature databases like arxiv and dblp
 #+begin_src emacs-lisp
   (use-package biblio)
-#+end_src
-
-** gptel + gptel-quick
-
-#+begin_src emacs-lisp
-  (use-package gptel
-    :bind
-    ("C-c RET" . gptel-send)
-    :config
-    (setq gptel-default-mode 'org-mode)
-    (setq gptel-model 'mistral-large-small
-  	gptel-backend
-  	(gptel-make-openai "MistralLeChat"  ; Any name you want
-  	  :host "api.mistral.ai"
-  	  :endpoint "/v1/chat/completions"
-  	  :key (auth-info-password
-  		(nth 0 (auth-source-search
-  			:host "api.mistral.ai")))
-  	  ;; see https://docs.mistral.ai/getting-started/models
-  	  :models '("mistral-medium-latest")))
-    (gptel-make-gemini "Gemini"
-      :stream t
-      :key (auth-info-password
-            (nth 0 (auth-source-search
-                    :host "generativelanguage.googleapis.com"))))
-    (gptel-make-openai "academiccloud (GWDG)"
-        :host "chat-ai.academiccloud.de"
-        :endpoint "/v1/chat/completions"
-        :models '("mistral-medium-3.5-128b"
-  		"meta-llama-3.1-8b-instruct" ; didn't work
-  		"openai-gpt-oss-120b") ; didn't work
-        :key (auth-info-password
-  	    (nth 0 (auth-source-search
-  		    :host "chat-ai.academiccloud.de"))))
-    (gptel-make-anthropic "Claude"
-      :stream t
-      :key (auth-info-password
-            (nth 0 (auth-source-search
-                    :host "anthropic.com"))))
-    ;; (gptel-make-openai "EduKI RLP"
-    ;;   :host "kisski.gwdg.de"
-    ;;   :endpoint "/en/leistungen/2-02-llm-service/"
-    ;;   ;;:host "chat.edu-ki-rlp.de"
-    ;;   ;;:endpoint "/api/v1"
-    ;;   :protocol "https"
-    ;;   :key (auth-info-password
-    ;;         (nth 0 (auth-source-search
-    ;;                 :host "edu-ki-rlp.de"))))
-    (add-to-list 'gptel-directives
-                 '(dreams . "I want you to act as a dream interpreter. I will give you descriptions of my dreams, and you will provide interpretations based on the symbols and themes present in the dream. Do not provide personal opinions or assumptions about the dreamer. Provide only factual interpretations based on the information given. Provide your interpretation in German language.")))
-#+end_src
-
-gptel-quick for simple explanations in a popup.
-#+begin_src emacs-lisp
-  (use-package posframe)
-  (use-package gptel-quick
-    :after gptel postframe embark
-    :config
-    (setq gptel-quick-display 'postframe)
-    (keymap-set embark-general-map "?" #'gptel-quick))
 #+end_src
 
 * Version Control
@@ -1720,6 +1610,115 @@ This shows modified/added/deleted lines directly in the editor.
     :hook
     ;; synctex
     (LaTeX-mode . TeX-source-correlate-mode))
+#+end_src
+
+* AI integration
+** LanguageTool
+- Download is somewhat hidden: https://languagetool.org/download/
+- There are different Emacs integrations:
+  - https://github.com/emacs-languagetool/flymake-languagetool (Flymake is part of Emacs)
+  - https://github.com/emacs-languagetool/flycheck-languagetool (Flycheck is not Emacs built in)
+    - https://github.com/PillFall/languagetool.el
+  - https://github.com/mhayashi1120/Emacs-langtool
+  - any maybe more
+
+#+begin_src emacs-lisp
+  (use-package flymake-languagetool
+    :hook ((text-mode         . flymake-languagetool-load)
+           (latex-mode        . flymake-languagetool-load)
+           (org-mode          . flymake-languagetool-load)
+           (markdown-mode     . flymake-languagetool-load)
+  	 (mu4e-compose-mode . flymake-languagetool-load))
+    :init
+    ;; LanguageTools API Remote Server Configuration
+    (setq flymake-languagetool-server-jar nil)
+    (setq flymake-languagetool-url "http://localhost:8081"))
+#+end_src
+** gptel + gptel-quick
+
+#+begin_src emacs-lisp
+  (use-package gptel
+    :config
+    (setq gptel-default-mode 'org-mode)
+    (setq gptel-model 'mistral-large-small)
+    (setq gptel-backend 
+  	(gptel-make-openai "academiccloud (GWDG)"
+  	  :host "chat-ai.academiccloud.de"
+  	  :endpoint "/v1/chat/completions"
+  	  :stream t
+  	  :models '("mistral-medium-3.5-128b"
+  		    "meta-llama-3.1-8b-instruct"
+  		    "openai-gpt-oss-120b")
+  	  :key (auth-info-password
+  		(nth 0 (auth-source-search
+  			:host "chat-ai.academiccloud.de")))))
+    (gptel-make-openai "MistralLeChat"  ; Any name you want
+      :host "api.mistral.ai"
+      :endpoint "/v1/chat/completions"
+      :key (auth-info-password
+  	  (nth 0 (auth-source-search
+  		  :host "api.mistral.ai")))
+      ;; see https://docs.mistral.ai/getting-started/models
+      :models '("mistral-medium-latest"))
+    (gptel-make-gemini "Gemini"
+      :stream t
+      :key (auth-info-password
+            (nth 0 (auth-source-search
+                    :host "generativelanguage.googleapis.com"))))
+    (gptel-make-anthropic "Claude"
+      :stream t
+      :key (auth-info-password
+            (nth 0 (auth-source-search
+                    :host "anthropic.com"))))
+    ;; (gptel-make-openai "EduKI RLP"
+    ;;   :host "kisski.gwdg.de"
+    ;;   :endpoint "/en/leistungen/2-02-llm-service/"
+    ;;   ;;:host "chat.edu-ki-rlp.de"
+    ;;   ;;:endpoint "/api/v1"
+    ;;   :protocol "https"
+    ;;   :key (auth-info-password
+    ;;         (nth 0 (auth-source-search
+    ;;                 :host "edu-ki-rlp.de"))))
+    (add-to-list 'gptel-directives
+                 '(dreams . "I want you to act as a dream interpreter. I will give you descriptions of my dreams, and you will provide interpretations based on the symbols and themes present in the dream. Do not provide personal opinions or assumptions about the dreamer. Provide only factual interpretations based on the information given. Provide your interpretation in German language.")))
+#+end_src
+
+gptel-quick for simple explanations in a popup.
+#+begin_src emacs-lisp
+  (use-package posframe)
+  (use-package gptel-quick
+    :after gptel postframe embark
+    :config
+    (setq gptel-quick-display 'postframe)
+    (keymap-set embark-general-map "?" #'gptel-quick))
+#+end_src
+
+** Translations with gt.el
+
+- [[https://github.com/lorniu/gt.el/issues/111#issuecomment-4801142239][DeepL support currently broken]] and gt.el package [[https://github.com/lorniu/gt.el/commits/master/][looks unmaintained]]
+- Worth a try to use: EU translation service: https://translation.ec.europa.eu/tools-and-resources/ai-translation-and-language-tools_en
+
+#+begin_src emacs-lisp
+  (use-package gt
+    :bind
+    ("C-x C-t" . gt-translate)
+    :config
+    (setq gt-langs '(en de nl))
+    (setq gt-taker-prompt t)
+    (setq gt-default-translator
+  	(gt-translator
+  	 :taker (gt-taker :text 'sentence :prompt t)
+  	 :engines (gt-google-engine)))
+    (setq gt-preset-translators
+  	`((minibuffer . ,(gt-translator
+  			  :engines (gt-google-engine)
+  			  :render (gt-render)))
+  	  (insert . ,(gt-translator
+  		      :engines (gt-google-engine)
+  		      :render (gt-insert-render)))
+  	  (buffer . ,(gt-translator
+  		      :engines (gt-google-engine)
+  		      :render (gt-buffer-render))))))
 #+end_src
 
 * Other major modes
