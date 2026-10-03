@@ -892,21 +892,12 @@ The global keybinding 'C-x u' is set below.
     :config
     (setq treesit-auto-install-grammar 'ask) ; emacs 31+
     (setq treesit-enabled-modes t)           ; emacs 31+
+    (add-to-list 'treesit-major-mode-remap-alist '(ttl-mode . ttl-ts-mode))
     (setq treesit-extra-load-path
   	  (list
   	   "/run/current-system/profile/lib/tree-sitter/"
   	   "~/.guix-home/profile/lib/tree-sitter/"
   	   "~/.guix-profile/lib/tree-sitter/")))
-#+end_src
-
-- treesit-auto tries to automatically load a tree-sitter major mode, when available:
-
-#+begin_src emacs-lisp
-  (use-package treesit-auto
-    :after treesit
-    :config
-    ;; (treesit-auto-install 'prompt) ; if I wouldn't use the guix packaged versions
-  (global-treesit-auto-mode))
 #+end_src
 
 ** openwith
