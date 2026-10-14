@@ -950,23 +950,15 @@ The global keybinding 'C-x u' is set below.
     ;; for some reason, frames-only-mode overrides what I set earlier.
     ;; this is where the agenda opens, not where headings open via org-agenda-goto
     (setq org-agenda-window-setup 'current-window)
-    ;; Open org agenda files in its own frame (this changed in org 9.8.10)
+    ;; Open org agenda files in its own frame with TAB key
+    ;; (this changed in org 9.8.10)
     ;; see https://lists.gnu.org/archive/html/emacs-orgmode/2026-09/msg00175.html
-    (advice-add 'org-agenda-goto :after #'jf-turn-current-window-into-frame))
-#+end_src
-
-A function that turns a window in a splitted frame into its own frame:
-(from https://emacs.stackexchange.com/a/7120)
-Alternative: tear-off-window
-#+begin_src emacs-lisp
-  (use-package emacs
-    :preface
-    (defun jf-turn-current-window-into-frame ()
-      (interactive)
-      (let ((buffer (current-buffer)))
-        (unless (one-window-p)
-  	(delete-window))
-        (display-buffer-pop-up-frame buffer nil))))
+    (add-to-list 'display-buffer-alist
+  	       '((lambda (buffer action)
+  		   (with-current-buffer buffer
+  		     (org-agenda-file-p)))
+  		 (display-buffer-reuse-window
+  		 display-buffer-pop-up-frame))))
 #+end_src
 
 * Terminals
