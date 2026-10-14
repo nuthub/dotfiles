@@ -5,4 +5,4 @@
 
 initdir=~/.config/emacs.minimal-khalel
 emacs --init-directory=$initdir --batch --script $initdir/init.el -e 'khalel-import-events'
-emacsclient -e '(jf-revert-file-visiting-buffer "~/org/agenda/calendar.org")'
+emacsclient -e '(jf-revert-buffer-visiting-file "~/org/agenda/calendar.org")'

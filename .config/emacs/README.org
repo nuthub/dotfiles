@@ -1281,7 +1281,8 @@ To automatically run ~latexmk~ on ~.tex~ update (export to file), you can use ~l
     :config
     ;; use luatex as LaTeX Compiler
     (setq org-latex-compiler "lualatex")
-    (setq org-latex-pdf-process (list "latexmk -%latex %f"))
+    (setq org-latex-pdf-process
+  	(list "latexmk -%latex -interaction=nonstopmode -output-directory=%o %f"))
     
     ;; compile latex in foreground to directly retrieve compilation errors
     (setq org-export-in-background nil)
@@ -1984,11 +1985,13 @@ There are three different packages:
 #+end_src
 
 ** Revert a buffer visiting a file that is optionally created
-I use this to trigger a reload of my generated calendar file after it has been rewritten.
+I use this to 
+- trigger a reload of my generated calendar file after it has been rewritten.
+- trigger (by latexmk) a reload of an updated PDF file 
 #+begin_src emacs-lisp
   (use-package emacs
     :config
-    (defun jf-revert-file-visiting-buffer (filename)
+    (defun jf-revert-buffer-visiting-file (filename)
       "Reverts open buffer visiting FILENAME. If no buffer is visiting FILENAME, a buffer is created that visits FILENAME."
       (save-excursion
         (or (find-buffer-visiting filename)
@@ -1997,6 +2000,16 @@ I use this to trigger a reload of my generated calendar file after it has been r
         (revert-buffer nil t)
         (message (concat filename " reverted")))))
 #+end_src
+
+My $HOME/.latexmkrc looks like the following:
+#+begin_example shell
+# (optional:) $pdf_previewer = "emacsclient -nc %S";
+$pdf_previewer = "";
+$pdf_update_method = 4;
+$pdf_update_command = "emacsclient -n -e '(jf-revert-buffer-visiting-file %S)'";
+#+end_example
+
+I run ~latexmk~ in continous preview mode: ~latexmk -pvc -pdflua <basename>~
 
 ** Smarter navigation to the beginning of a line
 from https://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
