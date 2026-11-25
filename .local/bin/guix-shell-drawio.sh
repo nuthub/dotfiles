@@ -1,9 +1,8 @@
 #!/bin/sh
 guix shell --container --network --emulate-fhs \
-     --share=$HOME \
-     --preserve='^DISPLAY$' --expose=/dev/dri --expose=/sys/dev --expose=/sys/devices \
+     --preserve='^WAYLAND_DISPLAY$|^XDG_' --expose=$XDG_RUNTIME_DIR \
      --preserve='^DBUS_' --expose=/var/run/dbus \
+     --share=$HOME \
      --development ungoogled-chromium \
-     -e '(list (@@ (gnu packages commencement) gcc) "lib")' \
-     zlib coreutils \
+     zlib coreutils gcc-toolchain\
      -- ~/opt/drawio/AppRun $@
