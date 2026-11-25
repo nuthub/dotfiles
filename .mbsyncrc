@@ -15,7 +15,7 @@ Expunge Both
 IMAPStore private-remote
 Host nuthost.de
 User julian@flake.de
-PassCmd "grep nuthost.de ~/.authinfo | awk 'FNR == 1 {print $6}'"
+PassCmd "pass nuthost.de/julian@flake.de"
 Trash Trash
 
 MaildirStore private-local
@@ -37,7 +37,7 @@ IMAPStore work-remote
 Host imap.uni-koblenz.de
 TLSType IMAPS
 User flake
-PassCmd "grep uni-koblenz.de ~/.authinfo | awk 'FNR == 1 {print $6}'"
+PassCmd "pass uni-koblenz.de/flake@uni-koblenz.de"
 Trash Trash
 
 MaildirStore work-local

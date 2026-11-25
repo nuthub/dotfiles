@@ -7,9 +7,10 @@ configurations:
    tlsOptions:
      rejectUnauthorized: false
    username: julian@flake.de
-   passwordCmd: "grep nuthost.de ~/.authinfo | awk 'FNR == 1 {print $6}'"
+   passwordCmd: "pass nuthost.de/julian@flake.de"
    onNewMailPost: "emacsclient -e '(mu4e-update-index)'"
    onDeletedMailPost: "emacsclient -e '(mu4e-update-index)'"
+   wait: 10
    boxes:
      -
        mailbox: INBOX
@@ -23,9 +24,10 @@ configurations:
    tlsOptions:
      rejectUnauthorized: false
    username: flake
-   passwordCmd: "grep uni-koblenz.de ~/.authinfo | awk 'FNR == 1 {print $6}'"
+   passwordCmd: "pass uni-koblenz.de/flake@uni-koblenz.de"
    onNewMailPost: "emacsclient -e '(mu4e-update-index)'"
    onDeletedMailPost: "emacsclient -e '(mu4e-update-index)'"
+   wait: 10
    boxes:
      -
        mailbox: INBOX

@@ -147,6 +147,7 @@
 	     ;; other desktop related
 	     "tumbler" ; D-BUS thumbnail service
 	     "gnome-keyring" ; used by nextcloud client
+	     "password-store" "emacs-pass" "emacs-password-store" "rbw"
 
 	     ;; connectivity / media
 	     "pipewire"
