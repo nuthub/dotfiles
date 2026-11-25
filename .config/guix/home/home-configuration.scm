@@ -175,9 +175,9 @@
 	     "lxqt-policykit"
 
 	     ;; my desktop apps
-	     "gvfs" "nemo" "file-roller" "baobab"
-	     "firefox" "librewolf"
-	     "icecat" "ungoogled-chromium-wayland" ; https://codeberg.org/guix/guix/issues/1465#issuecomment-5928124
+	     "gvfs" "thunar" "file-roller" "baobab"
+	     "firefox"
+	     ;; "librewolf" "icecat" "ungoogled-chromium-wayland" ; https://codeberg.org/guix/guix/issues/1465#issuecomment-5928124
 	     "icedove-wayland" ; thunderbird
 	     "aqbanking" "gnucash"
 
@@ -351,5 +351,3 @@
 		    '(alias (family "icon")
 			    (prefer (family "Symbols Nerd Font")
 				    (family "Font Awesome 6 Free"))))))))
-
-
