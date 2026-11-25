@@ -3,9 +3,9 @@
 .cache
 .last-package-update-day
 .org-id-locations
+README.el
 auto-save-list/
 custom.el
-README.el
 eln-cache/
 elpa/
 elpaca/
@@ -13,6 +13,7 @@ eshell/
 history
 image-dired/
 network-security.data
+projects/
 straight/
 tmp/
 tramp
