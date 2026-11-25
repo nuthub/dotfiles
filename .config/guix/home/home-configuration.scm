@@ -47,7 +47,8 @@
 	     "emacs-nerd-icons" "emacs-nerd-icons-corfu" "emacs-nerd-icons-dired" "emacs-ligature" "emacs-auto-dark" "emacs-smartparens"
 	     "emacs-magit" "emacs-forgejo" "emacs-agitjo" "emacs-git-gutter" "emacs-git-gutter-fringe"
 	     "emacs-dired-open-with"
-	     "emacs-treesit-auto" "emacs-combobulate"
+	     "emacs-consult-xdg-recent-files"
+	     "emacs-treesit-auto" "emacs-combobulate" "gcc-toolchain" ; treesitter grammars need to be compiled
 	     "emacs-lsp-mode" "emacs-lsp-ui"
 	     "emacs-all-the-icons" "emacs-all-the-icons-dired" "emacs-all-the-icons-completion"
 	     "emacs-olivetti" "emacs-gt" "emacs-jinx" "enchant" "emacs-flymake-languagetool"
@@ -60,7 +61,7 @@
 	     "grip" ; needed for grip-mode (Markdown Preview by GitHub)
 	     ;; "make" "perl" "texinfo" ; building auctex for elpaca needs these
 	     "emacs-web-mode" "emacs-php-mode" "emacs-markdown-mode" "emacs-grip-mode" "emacs-yaml-mode" "emacs-plantuml-mode" "emacs-nov"
-	     "emacs-ttl-mode" "emacs-ttl-ts-mode"
+	     "emacs-ttl-ts-mode" "emacs-sparql-mode"
 	     "emacs-cypher-ts-mode"
 	     ;; Tree-Sitter grammars
 	     ;; for emacs-treesit a grammar is a requirement but not sufficient

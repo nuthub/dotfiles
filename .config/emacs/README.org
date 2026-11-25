@@ -11,7 +11,6 @@
 #+end_src
 
 * Basic personal information
-
 ** This is used to identify myself, and to find my own GnuPG key
   
 #+begin_src emacs-lisp
@@ -1562,7 +1561,6 @@ The package /citar-org-roam/ provides usage of org roam to take bibliographical 
     (setq bibtex-dialect 'biblatex))
 #+end_src
 
-
 ** Biblio
 Search for literature in literature databases like arxiv and dblp
 #+begin_src emacs-lisp
@@ -1866,12 +1864,13 @@ There are three different packages:
 
 - I wrote my own turtle mode based on a tree-sitter grammar and use this
 #+begin_src emacs-lisp
-    (use-package ttl-ts-mode
-      ;; if I want to use the cloned repository:
-      ;; :load-path "~/git/ttl-ts-mode"
-      :mode "\\.ttl"
-      ;; let org-src use the ts variant of ttl major mode
-      (add-to-list 'org-src-lang-modes '("ttl" . ttl-ts)))
+  (use-package ttl-ts-mode
+    ;; if I want to use the cloned repository:
+    ;; :load-path "~/git/ttl-ts-mode"
+    :mode "\\.ttl"
+    :config
+    ;; let org-src use the ts variant of ttl major mode
+    (add-to-list 'org-src-lang-modes '("ttl" . ttl-ts)))
 #+end_src
 
 ** plantuml-mode
