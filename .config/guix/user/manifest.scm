@@ -43,23 +43,31 @@
    "texlive-csquotes"
 
    ;; beamerthemekoblenz needs opensans
-   "texlive-opensans" 
+   "texlive-opensans" "texlive-fontaxes"
 
    ;; beamerthemenuthouse needs these
    "texlive-fontawesome" "texlive-fira"
 
+   ;;Placing footnotes in multi-column layout (and beamer slides)
+   ;; package tools contains more than that
+   "texlive-tools"
+   
    ;;CEUR template needs apacite
    "texlive-apacite"
    
    ;; for my CV
    "texlive-moderncv" "texlive-academicons"
-   
+
    ;; my org-latex-examples need these
    "texlive-blindtext"
    "texlive-acronym"
    "texlive-bigfoot"
    "texlive-biblatex"
 
+   ;; TODO notes
+   "texlive-todonotes"
+   "texlive-marginnote"
+   
    ;; PDFPC packages
    ;; for adding speaker-notes
    "texlive-pdfpc"
