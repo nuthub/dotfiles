@@ -14,7 +14,7 @@ P: poweroff" | rofi \
 
 case $command in
     "l: lockscreen")
-	lockscreen.sh
+	swaylock
 	exit 0
 	;;
     "s: suspend")

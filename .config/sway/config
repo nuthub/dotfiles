@@ -235,7 +235,7 @@ bindsym XF86MonBrightnessDown exec brightness.sh down
 # System menu
 bindsym $mod+Delete exec rofi-system-menu.sh
 # Screenlock
-bindsym Control+mod1+Delete exec ~/.local/bin/lockscreen.sh
+bindsym Control+mod1+Delete exec swaylock
 # Screenshots
 bindsym Print exec screenshot.sh -r
 

@@ -1,0 +1,6 @@
+image=~/.lockscreen.png
+scaling=center
+indicator-radius=100
+show-failed-attempts
+ignore-empty-password
+daemonize
