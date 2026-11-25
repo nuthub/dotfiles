@@ -784,6 +784,28 @@ Completion allows you to quickly select an item from a list of candidates.
     )
 #+end_src
 
+XDG recent files: https://github.com/hrehfeld/consult-xdg-recent-files
+#+begin_src emacs-lisp
+  (use-package consult-xdg-recent-files
+    :after consult
+    :config
+    ;; (setq consult-buffer-sources
+    ;; 	'(consult-source-buffer
+    ;; 	  consult-source-hidden-buffer
+    ;; 	  consult-source-modified-buffer
+    ;; 	  consult-source-other-buffer
+    ;; 	  consult-source-recent-file
+    ;; 	  consult-xdg-recent-files--source-system-file
+    ;; 	  consult-source-buffer-register
+    ;; 	  consult-source-file-register
+    ;; 	  consult-source-bookmark
+    ;; 	  consult-source-project-buffer-hidden
+    ;; 	  consult-source-project-recent-file-hidden
+    ;; 	  consult-source-project-root-hidden))
+    (add-to-list 'consult-buffer-sources consult-xdg-recent-files--source-system-file))
+#+end_src
+
+
 ** embark & embark-consult
 #+begin_src emacs-lisp
   (use-package embark
