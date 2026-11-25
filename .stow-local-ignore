@@ -1,5 +1,7 @@
+README.org
 \.git
 \.gitignore
+\.gitmodules
 ^/.*~
 img
 \.lockscreen.xcf
