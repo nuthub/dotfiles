@@ -656,6 +656,7 @@ Nerd Icons for corfu:
 ** Snippet expansion
 - default key for expansion is <TAB>
 - company does not show snippets for completion-at-point, but there is ongoing work
+- tempel is an alternative to yasnippet
 - what about corfu?
 
 #+begin_src emacs-lisp
@@ -1529,6 +1530,28 @@ htmlize is used by org to export to HTML.
      ("C-M-$" . jinx-languages)))
 #+end_src
 
+** LanguageTool
+- Download is somewhat hidden: https://languagetool.org/download/
+- There are different Emacs integrations:
+  - https://github.com/emacs-languagetool/flymake-languagetool (Flymake is part of Emacs)
+  - https://github.com/emacs-languagetool/flycheck-languagetool (Flycheck is not Emacs built in)
+    - https://github.com/PillFall/languagetool.el
+  - https://github.com/mhayashi1120/Emacs-langtool
+  - any maybe more
+
+#+begin_src emacs-lisp
+  (use-package flymake-languagetool
+    :hook ((text-mode         . flymake-languagetool-load)
+           (latex-mode        . flymake-languagetool-load)
+           (org-mode          . flymake-languagetool-load)
+           (markdown-mode     . flymake-languagetool-load)
+  	 (mu4e-compose-mode . flymake-languagetool-load))
+    :init
+    ;; LanguageTools API Remote Server Configuration
+    (setq flymake-languagetool-server-jar nil)
+    (setq flymake-languagetool-url "http://localhost:8081"))
+#+end_src
+
 ** Citations
 *** Citar
 Allows to browse bibtex file(s), insert citations, open files, links and notes. It's a helm-bibtext replacement.
@@ -1672,27 +1695,6 @@ This shows modified/added/deleted lines directly in the editor.
 #+end_src
 
 * AI integration
-** LanguageTool
-- Download is somewhat hidden: https://languagetool.org/download/
-- There are different Emacs integrations:
-  - https://github.com/emacs-languagetool/flymake-languagetool (Flymake is part of Emacs)
-  - https://github.com/emacs-languagetool/flycheck-languagetool (Flycheck is not Emacs built in)
-    - https://github.com/PillFall/languagetool.el
-  - https://github.com/mhayashi1120/Emacs-langtool
-  - any maybe more
-
-#+begin_src emacs-lisp
-  (use-package flymake-languagetool
-    :hook ((text-mode         . flymake-languagetool-load)
-           (latex-mode        . flymake-languagetool-load)
-           (org-mode          . flymake-languagetool-load)
-           (markdown-mode     . flymake-languagetool-load)
-  	 (mu4e-compose-mode . flymake-languagetool-load))
-    :init
-    ;; LanguageTools API Remote Server Configuration
-    (setq flymake-languagetool-server-jar nil)
-    (setq flymake-languagetool-url "http://localhost:8081"))
-#+end_src
 ** gptel + gptel-quick
 
 #+begin_src emacs-lisp
@@ -1747,6 +1749,7 @@ gptel-quick for simple explanations in a popup.
 
 ** Translations with gt.el
 
+- The project ~gt.el~ seems to be dead
 - [[https://github.com/lorniu/gt.el/issues/111#issuecomment-4801142239][DeepL support currently broken]] and gt.el package [[https://github.com/lorniu/gt.el/commits/master/][looks unmaintained]]
 - Worth a try to use: EU translation service: https://translation.ec.europa.eu/tools-and-resources/ai-translation-and-language-tools_en
 
